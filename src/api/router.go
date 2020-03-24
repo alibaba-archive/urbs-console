@@ -16,11 +16,13 @@ func init() {
 // APIs ..
 type APIs struct {
 	Canary *Canary
+	User   *User
 }
 
 func newAPIs(blls *bll.Blls) *APIs {
 	return &APIs{
 		Canary: &Canary{blls: blls},
+		User:   &User{blls: blls},
 	}
 }
 
@@ -32,6 +34,10 @@ func newRouters(apis *APIs) []*gear.Router {
 	routerV1.Use(tracing.New())
 
 	routerV1.Get("/canary", apis.Canary.Get)
+
+	// ***** user ******
+	// 批量添加用户
+	routerV1.Post("/users:batch", apis.User.BatchAdd)
 
 	return []*gear.Router{routerV1}
 }

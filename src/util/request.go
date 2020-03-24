@@ -32,6 +32,9 @@ func Request(ctx context.Context, url string, method string, header http.Header,
 			return err
 		}
 	}
+	if header == nil {
+		header = http.Header{}
+	}
 	header.Set("Content-Type", "application/json")
 	requestId, _ := ctx.Value("X-Request-ID").(string)
 	if requestId == "" {

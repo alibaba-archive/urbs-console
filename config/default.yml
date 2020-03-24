@@ -1,2 +1,8 @@
+addr: ":8080"
+tls:
+    cert_path: ""
+    key_path: ""
+urbs_setting:
+    addr: ""    
 logger:
     level: "info"

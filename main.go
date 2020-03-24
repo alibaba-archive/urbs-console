@@ -23,11 +23,11 @@ func main() {
 	app := api.NewApp()
 	ctx := gear.ContextWithSignal(context.Background())
 	host := "http://" + conf.Config.SrvAddr
-	if conf.Config.CertFile != "" && conf.Config.KeyFile != "" {
+	if conf.Config.TLS.CertPath != "" && conf.Config.TLS.KeyPath != "" {
 		host = "https://" + conf.Config.SrvAddr
 	}
 
 	logger.Default.Infof("Urbs-Console start %s", host)
 	logger.Default.Err("Urbs-Console closed %v", app.ListenWithContext(
-		ctx, conf.Config.SrvAddr, conf.Config.CertFile, conf.Config.KeyFile))
+		ctx, conf.Config.SrvAddr, conf.Config.TLS.CertPath, conf.Config.TLS.KeyPath))
 }

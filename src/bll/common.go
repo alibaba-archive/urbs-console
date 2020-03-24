@@ -7,9 +7,13 @@ func init() {
 }
 
 // Blls ...
-type Blls struct{}
+type Blls struct {
+	User *User
+}
 
 // NewBlls ...
 func NewBlls() *Blls {
-	return &Blls{}
+	return &Blls{
+		User: &User{},
+	}
 }
