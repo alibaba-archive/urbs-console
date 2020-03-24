@@ -8,12 +8,14 @@ func init() {
 
 // Blls ...
 type Blls struct {
-	User *User
+	User  *User
+	Group *Group
 }
 
 // NewBlls ...
 func NewBlls() *Blls {
 	return &Blls{
-		User: &User{},
+		User:  &User{},
+		Group: &Group{},
 	}
 }
