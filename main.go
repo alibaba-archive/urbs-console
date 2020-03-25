@@ -27,6 +27,6 @@ func main() {
 		host = "https://" + conf.Config.SrvAddr
 	}
 	logger.Default.Infof("Urbs-Console start %s, %s, %s", host, conf.Config.TLS.CertPath, conf.Config.TLS.KeyPath)
-	logger.Default.Err("Urbs-Console closed %v", app.ListenWithContext(
+	logger.Default.Errf("Urbs-Console closed %v", app.ListenWithContext(
 		ctx, conf.Config.SrvAddr, conf.Config.TLS.CertPath, conf.Config.TLS.KeyPath))
 }

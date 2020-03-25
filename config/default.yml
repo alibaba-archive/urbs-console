@@ -6,3 +6,5 @@ urbs_setting:
     addr: ""    
 logger:
     level: "info"
+user_auth:
+    keys: ["0x1a29b38"]

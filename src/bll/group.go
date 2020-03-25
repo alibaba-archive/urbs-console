@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/teambition/urbs-console/src/conf"
+	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/logger"
-	"github.com/teambition/urbs-console/src/schema/urbssetting"
 	"github.com/teambition/urbs-console/src/tpl"
 	"github.com/teambition/urbs-console/src/util"
 )

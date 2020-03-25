@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -12,17 +11,17 @@ import (
 	"github.com/teambition/gear"
 )
 
-// RequestGet 对外发起请求
+// RequestGet ...
 func RequestGet(ctx context.Context, url string, header http.Header, out interface{}) (err error) {
 	return Request(ctx, url, http.MethodGet, header, nil, out)
 }
 
-// RequestPost 对外发起请求
+// RequestPost ...
 func RequestPost(ctx context.Context, url string, header http.Header, body interface{}, out interface{}) (err error) {
 	return Request(ctx, url, http.MethodPost, header, body, out)
 }
 
-// Request 对外发起请求
+// Request ...
 func Request(ctx context.Context, url string, method string, header http.Header, body interface{}, out interface{}) error {
 	var err error
 	bs := []byte{}
@@ -52,16 +51,16 @@ func Request(ctx context.Context, url string, method string, header http.Header,
 	req.Header = header
 	resp, err := httpClient.Do(req)
 	if err != nil {
-		return err
+		return gear.ErrBadRequest.WithMsg(err.Error())
 	}
 	defer resp.Body.Close()
 
 	respBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return gear.ErrBadRequest.WithCode(resp.StatusCode).WithMsg(err.Error())
 	}
 	if resp.StatusCode >= 300 {
-		return errors.New(string(respBody))
+		return gear.ErrBadRequest.WithCode(resp.StatusCode).WithMsg(err.Error())
 	}
 	if out != nil {
 		err = json.Unmarshal(respBody, out)

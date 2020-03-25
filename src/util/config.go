@@ -37,6 +37,10 @@ func ReadConfig(v interface{}, path ...string) {
 	})
 }
 
+const (
+	defaultConfigPath = "src/github.com/teambition/urbs-console/config/default.yml"
+)
+
 func getConfigFilePath(path ...string) (string, error) {
 	// 优先使用的环境变量
 	filePath := os.Getenv("CONFIG_FILE_PATH")
@@ -47,7 +51,8 @@ func getConfigFilePath(path ...string) (string, error) {
 	}
 
 	if filePath == "" {
-		return "", fmt.Errorf("config file not specified")
+		// 使用默认配置
+		filePath = filepath.Join(os.Getenv("GOPATH"), filepath.FromSlash(defaultConfigPath))
 	}
 
 	return filePath, nil

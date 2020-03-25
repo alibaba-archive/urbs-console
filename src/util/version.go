@@ -26,10 +26,10 @@ func PrintVersion() {
 // GetVersion ...
 func GetVersion() []byte {
 	v := map[string]string{
-		"Name":      Name,
-		"Version":   Version,
-		"BuildTime": BuildTime,
-		"GitSHA1":   GitSHA1,
+		"name":      Name,
+		"version":   Version,
+		"buildTime": BuildTime,
+		"gitSHA1":   GitSHA1,
 	}
 	d, _ := json.MarshalIndent(v, "", "    ")
 	return d

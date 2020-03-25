@@ -1,6 +1,8 @@
 package api
 
 import (
+	"strings"
+
 	"github.com/go-http-utils/cookie"
 	"github.com/teambition/gear"
 	"github.com/teambition/urbs-console/src/bll"
@@ -22,7 +24,18 @@ func (a *Canary) Get(ctx *gear.Context) error {
 		Path:     "/",
 		HTTPOnly: true,
 	}
-	ctx.Cookies.Set("X-Canary", "label="+label, option)
+	ctx.Cookies.Set("X-Canary", label, option)
 	ctx.Cookies.Set("tb_gateway", "traefik", option)
-	return ctx.OkJSON(struct{}{})
+
+	schema := ctx.Req.URL.Scheme
+	if schema == "" {
+		schema = "http"
+	}
+	redirectURL := schema + "://"
+	if option.Domain != "" {
+		redirectURL += strings.TrimPrefix(option.Domain, ".")
+	} else {
+		redirectURL += ctx.Req.Host
+	}
+	return ctx.Redirect(redirectURL)
 }

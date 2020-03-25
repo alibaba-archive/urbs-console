@@ -1,6 +1,9 @@
 package bll
 
-import "github.com/teambition/urbs-console/src/util"
+import (
+	"github.com/teambition/urbs-console/src/service"
+	"github.com/teambition/urbs-console/src/util"
+)
 
 func init() {
 	util.DigProvide(NewBlls)
@@ -13,9 +16,9 @@ type Blls struct {
 }
 
 // NewBlls ...
-func NewBlls() *Blls {
+func NewBlls(services *service.Services) *Blls {
 	return &Blls{
-		User:  &User{},
+		User:  &User{services: services},
 		Group: &Group{},
 	}
 }
