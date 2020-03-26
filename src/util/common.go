@@ -7,6 +7,8 @@ import (
 	"os"
 	"runtime"
 	"time"
+
+	"github.com/teambition/urbs-console/src/util/request"
 )
 
 var (
@@ -30,4 +32,7 @@ func init() {
 		Timeout:   time.Second * 3,
 		Transport: tr,
 	}
+
+	request.SetHttpClient(httpClient)
+	request.SetUserAgent(UserAgent)
 }

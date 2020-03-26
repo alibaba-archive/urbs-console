@@ -3,8 +3,9 @@ tls:
     cert_path: ""
     key_path: ""
 urbs_setting:
-    addr: ""    
+    addr: ""
+    auth_keys: []   
 logger:
     level: "info"
 user_auth:
-    keys: ["0x1a29b38"]
+    keys: ["a29b3a29b3a29b30x1a29b38"]

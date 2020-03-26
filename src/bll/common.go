@@ -19,6 +19,6 @@ type Blls struct {
 func NewBlls(services *service.Services) *Blls {
 	return &Blls{
 		User:  &User{services: services},
-		Group: &Group{},
+		Group: &Group{services: services},
 	}
 }

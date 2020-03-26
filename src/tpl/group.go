@@ -4,7 +4,7 @@ import "github.com/teambition/gear"
 
 // GroupsBody ...
 type GroupsBody struct {
-	Groups []GroupBody `json:"groups"`
+	Groups []*GroupBody `json:"groups"`
 }
 
 // GroupBody ...

@@ -1,13 +1,12 @@
 package service
 
 import (
-	"context"
 	"net/http"
 	"time"
 
 	"github.com/teambition/gear-auth/jwt"
 	"github.com/teambition/urbs-console/src/conf"
-	"github.com/teambition/urbs-console/src/util"
+	"github.com/teambition/urbs-console/src/util/request"
 )
 
 // GroupMember ...
@@ -35,12 +34,12 @@ func (a *GroupMember) List(groupId string, skip int, pageSize int) (*ListGroupMe
 			body[k] = skip
 		}
 	}
-	resp := new(ListGroupMembersResp)
-	err = util.RequestPost(context.Background(), conf.Config.GroupMember.URL, header, body, resp)
-	if err != nil {
+	result := new(ListGroupMembersResp)
+	resp, err := request.Post(conf.Config.GroupMember.URL).Header(header).Body(body).Result(result).Do()
+	if err := HanderResponse(resp, err); err != nil {
 		return nil, err
 	}
-	return resp, nil
+	return result, nil
 }
 
 // ListGroupMembersResp ...
@@ -51,5 +50,6 @@ type ListGroupMembersResp struct {
 
 // Member ....
 type Member struct {
-	UserID string `json:"_userId"`
+	UserID string `json:"_userId"` // 兼容 Teambition，后面要去掉
+	UID    string `json:"uid"`
 }

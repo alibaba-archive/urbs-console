@@ -3,6 +3,7 @@ package bll
 import (
 	"context"
 
+	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/service"
 )
 
@@ -18,4 +19,9 @@ func (a *User) BatchAdd(ctx context.Context, users []string) error {
 		return err
 	}
 	return nil
+}
+
+// ListLables ...
+func (a *User) ListLables(ctx context.Context, args *urbssetting.UIDPaginationURL) (*urbssetting.LabelsInfoRes, error) {
+	return a.services.UrbsSetting.UserListLables(ctx, args)
 }

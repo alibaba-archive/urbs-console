@@ -1,10 +1,16 @@
 package service
 
 import (
+	"context"
+	"encoding/json"
 	"net/http"
+	"time"
 
+	"github.com/teambition/gear"
+	"github.com/teambition/gear-auth/jwt"
 	"github.com/teambition/urbs-console/src/conf"
 	"github.com/teambition/urbs-console/src/util"
+	"github.com/teambition/urbs-console/src/util/request"
 )
 
 func init() {
@@ -34,7 +40,42 @@ func NewServices() *Services {
 }
 
 // UrbsSettingHeader ...
-func UrbsSettingHeader() http.Header {
+func UrbsSettingHeader(ctx context.Context) http.Header {
 	header := http.Header{}
+	requestId, _ := ctx.Value("X-Request-ID").(string)
+	if requestId == "" {
+		if gearCtx, ok := ctx.(*gear.Context); ok {
+			requestId = gearCtx.GetHeader(gear.HeaderXRequestID)
+		}
+	}
+	header.Set("X-Request-ID", requestId)
+	header.Set("Authorization", "Bearer "+genToken())
 	return header
+}
+
+// HanderResponse ...
+func HanderResponse(response *request.Response, err error) error {
+	if err != nil {
+		return gear.ErrBadRequest.WithMsg(err.Error())
+	}
+	if !response.OK() {
+		gearErr := new(gear.Error)
+		json.Unmarshal(response.Content, gearErr)
+		if gearErr.Err != "" {
+			return gearErr.WithCode(response.StatusCode)
+		}
+		return gear.ErrBadRequest.WithCode(response.StatusCode).WithMsg(response.String())
+	}
+	return nil
+}
+
+func genToken() string {
+	j := jwt.New([]byte(conf.Config.UrbsSetting.AuthKeys[0]))
+	m := make(map[string]interface{})
+	m["name"] = "urbs-console"
+	token, err := j.Sign(m, time.Hour)
+	if err != nil {
+		panic(err)
+	}
+	return token
 }

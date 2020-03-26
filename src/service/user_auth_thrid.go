@@ -7,7 +7,7 @@ import (
 	"github.com/teambition/gear"
 	"github.com/teambition/gear-auth/jwt"
 	"github.com/teambition/urbs-console/src/conf"
-	"github.com/teambition/urbs-console/src/util"
+	"github.com/teambition/urbs-console/src/util/request"
 )
 
 // UserAuthThrid ...
@@ -32,8 +32,8 @@ func (a *UserAuthThrid) Verify(ctx *gear.Context) error {
 			body[k], _ = ctx.Cookies.Get(v)
 		}
 	}
-	err = util.RequestPost(ctx, conf.Config.UserAuth.UserAuthThrid.URL, header, nil, nil)
-	if err != nil {
+	resp, err := request.Post(conf.Config.UserAuth.UserAuthThrid.URL).Header(header).Body(body).Do()
+	if err := HanderResponse(resp, err); err != nil {
 		return err
 	}
 	return nil

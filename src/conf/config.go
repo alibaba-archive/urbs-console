@@ -60,7 +60,8 @@ type GroupMember struct {
 
 // UrbsSetting ...
 type UrbsSetting struct {
-	Addr string `json:"addr" yaml:"addr"`
+	Addr     string   `json:"addr" yaml:"addr"`
+	AuthKeys []string `json:"auth_keys" yaml:"auth_keys"`
 }
 
 // Config ...

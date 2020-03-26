@@ -2,32 +2,35 @@ package bll
 
 import (
 	"context"
-	"fmt"
 
-	"github.com/teambition/urbs-console/src/conf"
 	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/logger"
+	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/tpl"
-	"github.com/teambition/urbs-console/src/util"
 )
 
 // Group ...
 type Group struct {
+	services *service.Services
 }
 
 // BatchAdd ...
-func (a *Group) BatchAdd(ctx context.Context, groups []tpl.GroupBody) error {
-	url := fmt.Sprintf("/v1/groups:batch/%s", conf.Config.UrbsSetting.Addr)
-	resp := new(tpl.BoolRes)
-	err := util.RequestPost(ctx, url, nil, groups, resp)
-	if err != nil {
-		return err
+func (a *Group) BatchAdd(ctx context.Context, groups []*tpl.GroupBody) error {
+	gb := make([]*urbssetting.GroupBody, len(groups))
+	for i, g := range groups {
+		gb[i] = &urbssetting.GroupBody{
+			UID:  g.UID,
+			Kind: g.Kind,
+			Desc: g.Desc,
+		}
 	}
-	for _, group := range groups {
-		memberAPI := fmt.Sprintf("%s/v1/groups/%s/members:batch", conf.Config.UrbsSetting.Addr, group.UID)
-		body := new(urbssetting.UsersBody)
-		// TODO: 拉取成员
-		err := util.RequestPost(ctx, memberAPI, nil, body, resp)
+	_, err := a.services.UrbsSetting.GroupBatchAdd(ctx, gb)
+	if err != nil {
+		return nil
+	}
+	for _, g := range gb {
+		users := []string{}
+		_, err := a.services.UrbsSetting.GroupBatchAddMembers(ctx, g.UID, users)
 		if err != nil {
 			logger.Err(ctx, err.Error())
 		}
