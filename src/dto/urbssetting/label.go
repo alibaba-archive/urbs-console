@@ -2,12 +2,6 @@ package urbssetting
 
 import "time"
 
-// LabelBody ...
-type LabelBody struct {
-	Name string `json:"name"`
-	Desc string `json:"desc"`
-}
-
 // LabelsInfoRes ...
 type LabelsInfoRes struct {
 	SuccessResponseType
@@ -29,9 +23,8 @@ type LabelInfo struct {
 	OfflineAt *time.Time `json:"offline_at"`
 }
 
-// LabelUpdateBody ...
-type LabelUpdateBody struct {
-	Desc     *string   `json:"desc"`
-	Channels *[]string `json:"channels"`
-	Clients  *[]string `json:"clients"`
+// LabelInfoRes ...
+type LabelInfoRes struct {
+	SuccessResponseType
+	Result LabelInfo `json:"result"` // 空数组也保留
 }

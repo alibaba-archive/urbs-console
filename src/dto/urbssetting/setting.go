@@ -20,15 +20,6 @@ type MySetting struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-// MySettingsQueryURL ...
-type MySettingsQueryURL struct {
-	Pagination
-	UID     string `json:"uid" param:"uid"`
-	Product string `json:"product" query:"product"`
-	Channel string `json:"channel" query:"channel"`
-	Client  string `json:"client" query:"client"`
-}
-
 // SettingsInfoRes ...
 type SettingsInfoRes struct {
 	SuccessResponseType
@@ -56,12 +47,4 @@ type SettingInfo struct {
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
 	OfflineAt *time.Time `json:"offline_at"`
-}
-
-// SettingUpdateBody ...
-type SettingUpdateBody struct {
-	Desc     *string   `json:"desc"`
-	Channels *[]string `json:"channels"`
-	Clients  *[]string `json:"clients"`
-	Values   *[]string `json:"values"`
 }

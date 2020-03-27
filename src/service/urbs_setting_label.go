@@ -6,11 +6,12 @@ import (
 
 	"github.com/teambition/urbs-console/src/conf"
 	"github.com/teambition/urbs-console/src/dto/urbssetting"
+	"github.com/teambition/urbs-console/src/tpl"
 	"github.com/teambition/urbs-console/src/util/request"
 )
 
 // LabelList ...
-func (a *UrbsSetting) LabelList(ctx context.Context, args *urbssetting.ProductPaginationURL) (*urbssetting.LabelsInfoRes, error) {
+func (a *UrbsSetting) LabelList(ctx context.Context, args *tpl.ProductPaginationURL) (*urbssetting.LabelsInfoRes, error) {
 	url := fmt.Sprintf("%s/v1/products/%s/labels?skip=%d&pageSize=%d", conf.Config.UrbsSetting.Addr, args.Product, args.Skip, args.PageSize)
 
 	result := new(urbssetting.LabelsInfoRes)
@@ -24,12 +25,12 @@ func (a *UrbsSetting) LabelList(ctx context.Context, args *urbssetting.ProductPa
 }
 
 // LabelCreate ...
-func (a *UrbsSetting) LabelCreate(ctx context.Context, product string, labelBody *urbssetting.LabelBody) (*urbssetting.BoolRes, error) {
+func (a *UrbsSetting) LabelCreate(ctx context.Context, product string, args *tpl.LabelBody) (*urbssetting.LabelInfoRes, error) {
 	url := fmt.Sprintf("%s/v1/products/%s/labels", conf.Config.UrbsSetting.Addr, product)
 
-	result := new(urbssetting.BoolRes)
+	result := new(urbssetting.LabelInfoRes)
 
-	resp, err := request.Post(url).Header(UrbsSettingHeader(ctx)).Body(labelBody).Result(result).Do()
+	resp, err := request.Post(url).Header(UrbsSettingHeader(ctx)).Body(args).Result(result).Do()
 
 	if err := HanderResponse(resp, err); err != nil {
 		return nil, err
@@ -38,11 +39,11 @@ func (a *UrbsSetting) LabelCreate(ctx context.Context, product string, labelBody
 }
 
 // LabelUpdate ...
-func (a *UrbsSetting) LabelUpdate(ctx context.Context, product string, label string, body *urbssetting.LabelUpdateBody) (*urbssetting.LabelsInfoRes, error) {
+func (a *UrbsSetting) LabelUpdate(ctx context.Context, product string, label string, body *tpl.LabelUpdateBody) (*urbssetting.LabelInfoRes, error) {
 
 	url := fmt.Sprintf("%s/v1/products/%s/labels/%s", conf.Config.UrbsSetting.Addr, product, label)
 
-	result := new(urbssetting.LabelsInfoRes)
+	result := new(urbssetting.LabelInfoRes)
 
 	resp, err := request.Put(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
 
@@ -53,11 +54,11 @@ func (a *UrbsSetting) LabelUpdate(ctx context.Context, product string, label str
 }
 
 // LabelDelete ...
-func (a *UrbsSetting) LabelDelete(ctx context.Context, product string, label string) (*urbssetting.BoolRes, error) {
+func (a *UrbsSetting) LabelDelete(ctx context.Context, product string, label string) (*tpl.BoolRes, error) {
 
 	url := fmt.Sprintf("%s/v1/products/%s/labels/%s", conf.Config.UrbsSetting.Addr, product, label)
 
-	result := new(urbssetting.BoolRes)
+	result := new(tpl.BoolRes)
 
 	resp, err := request.Delete(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 
@@ -68,11 +69,11 @@ func (a *UrbsSetting) LabelDelete(ctx context.Context, product string, label str
 }
 
 // LabelOffline ...
-func (a *UrbsSetting) LabelOffline(ctx context.Context, product string, label string) (*urbssetting.BoolRes, error) {
+func (a *UrbsSetting) LabelOffline(ctx context.Context, product string, label string) (*tpl.BoolRes, error) {
 
 	url := fmt.Sprintf("%s/v1/products/%s/labels/%s:offline", conf.Config.UrbsSetting.Addr, product, label)
 
-	result := new(urbssetting.BoolRes)
+	result := new(tpl.BoolRes)
 
 	resp, err := request.Put(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 
@@ -83,11 +84,11 @@ func (a *UrbsSetting) LabelOffline(ctx context.Context, product string, label st
 }
 
 // LabelAssign ...
-func (a *UrbsSetting) LabelAssign(ctx context.Context, product string, label string, body *urbssetting.UsersGroupsBody) (*urbssetting.BoolRes, error) {
+func (a *UrbsSetting) LabelAssign(ctx context.Context, product string, label string, body *tpl.UsersGroupsBody) (*tpl.BoolRes, error) {
 
 	url := fmt.Sprintf("%s/v1/products/%s/labels/%s:assign", conf.Config.UrbsSetting.Addr, product, label)
 
-	result := new(urbssetting.BoolRes)
+	result := new(tpl.BoolRes)
 
 	resp, err := request.Post(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
 

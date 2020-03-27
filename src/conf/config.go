@@ -1,6 +1,7 @@
 package conf
 
 import (
+	"github.com/teambition/gear/logging"
 	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/util"
 )
@@ -53,7 +54,7 @@ type UserAuthThrid struct {
 // GroupMember ...
 type GroupMember struct {
 	URL     string                 `json:"url" yaml:"url"`
-	Keys    []string               `json:"keys" yaml:"keys"`
+	Key     string                 `json:"keys" yaml:"key"`
 	TokenKV map[string]interface{} `json:"token_kv" yaml:"token_kv"`
 	BodyKK  map[string]string      `json:"body_kk" yaml:"body_kk"`
 }
@@ -74,5 +75,7 @@ func (c *ConfigTpl) Validate() error {
 	}
 	logger.SetLevel(c.Logger.Level)
 	logger.SetJSONLog()
+
+	logging.Default().SetJSONLog().SetLevel(logging.Level(logger.Level()))
 	return nil
 }

@@ -6,11 +6,12 @@ import (
 
 	"github.com/teambition/urbs-console/src/conf"
 	"github.com/teambition/urbs-console/src/dto/urbssetting"
+	"github.com/teambition/urbs-console/src/tpl"
 	"github.com/teambition/urbs-console/src/util/request"
 )
 
 // GroupListLables ...
-func (a *UrbsSetting) GroupListLables(ctx context.Context, args *urbssetting.UIDPaginationURL) (*urbssetting.LabelsInfoRes, error) {
+func (a *UrbsSetting) GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.LabelsInfoRes, error) {
 	url := fmt.Sprintf("%s/v1/groups/%s/labels?skip=%d&pageSize=%d", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize)
 
 	result := new(urbssetting.LabelsInfoRes)
@@ -24,7 +25,7 @@ func (a *UrbsSetting) GroupListLables(ctx context.Context, args *urbssetting.UID
 }
 
 // GroupListSettings ...
-func (a *UrbsSetting) GroupListSettings(ctx context.Context, args *urbssetting.UIDProductURL) (*urbssetting.MySettingsRes, error) {
+func (a *UrbsSetting) GroupListSettings(ctx context.Context, args *tpl.UIDProductURL) (*urbssetting.MySettingsRes, error) {
 	url := fmt.Sprintf("%s/v1/groups/%s/settings?product=%s&skip=%d&pageSize=%d", conf.Config.UrbsSetting.Addr, args.UID, args.Product, args.Skip, args.PageSize)
 
 	result := new(urbssetting.MySettingsRes)
@@ -38,7 +39,7 @@ func (a *UrbsSetting) GroupListSettings(ctx context.Context, args *urbssetting.U
 }
 
 // GroupList ...
-func (a *UrbsSetting) GroupList(ctx context.Context, args *urbssetting.GroupsURL) (*urbssetting.GroupsRes, error) {
+func (a *UrbsSetting) GroupList(ctx context.Context, args *tpl.GroupsURL) (*urbssetting.GroupsRes, error) {
 	url := fmt.Sprintf("%s/v1/groups?kind=%s&skip=%d&pageSize=%d", conf.Config.UrbsSetting.Addr, args.Kind, args.Skip, args.PageSize)
 
 	result := new(urbssetting.GroupsRes)
@@ -52,10 +53,10 @@ func (a *UrbsSetting) GroupList(ctx context.Context, args *urbssetting.GroupsURL
 }
 
 // GroupCheckExists ...
-func (a *UrbsSetting) GroupCheckExists(ctx context.Context, uid string) (*urbssetting.BoolRes, error) {
+func (a *UrbsSetting) GroupCheckExists(ctx context.Context, uid string) (*tpl.BoolRes, error) {
 	url := fmt.Sprintf("%s/v1/groups/%s:exists", conf.Config.UrbsSetting.Addr, uid)
 
-	result := new(urbssetting.BoolRes)
+	result := new(tpl.BoolRes)
 
 	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 
@@ -66,13 +67,13 @@ func (a *UrbsSetting) GroupCheckExists(ctx context.Context, uid string) (*urbsse
 }
 
 // GroupBatchAdd ...
-func (a *UrbsSetting) GroupBatchAdd(ctx context.Context, groups []*urbssetting.GroupBody) (*urbssetting.BoolRes, error) {
+func (a *UrbsSetting) GroupBatchAdd(ctx context.Context, groups []*tpl.GroupBody) (*tpl.BoolRes, error) {
 	url := fmt.Sprintf("%s/v1/groups:batch", conf.Config.UrbsSetting.Addr)
 
-	body := new(urbssetting.GroupsBody)
+	body := new(tpl.GroupsBody)
 	body.Groups = groups
 
-	result := new(urbssetting.BoolRes)
+	result := new(tpl.BoolRes)
 
 	resp, err := request.Post(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
 	if err := HanderResponse(resp, err); err != nil {
@@ -82,7 +83,7 @@ func (a *UrbsSetting) GroupBatchAdd(ctx context.Context, groups []*urbssetting.G
 }
 
 // GroupUpdate ...
-func (a *UrbsSetting) GroupUpdate(ctx context.Context, uid string, body *urbssetting.GroupUpdateBody) (*urbssetting.GroupRes, error) {
+func (a *UrbsSetting) GroupUpdate(ctx context.Context, uid string, body *tpl.GroupUpdateBody) (*urbssetting.GroupRes, error) {
 	url := fmt.Sprintf("%s/v1/groups:batch", conf.Config.UrbsSetting.Addr)
 
 	result := new(urbssetting.GroupRes)
@@ -95,10 +96,10 @@ func (a *UrbsSetting) GroupUpdate(ctx context.Context, uid string, body *urbsset
 }
 
 // GroupDelete ...
-func (a *UrbsSetting) GroupDelete(ctx context.Context, uid string) (*urbssetting.BoolRes, error) {
+func (a *UrbsSetting) GroupDelete(ctx context.Context, uid string) (*tpl.BoolRes, error) {
 	url := fmt.Sprintf("%s/v1/groups/%s", conf.Config.UrbsSetting.Addr, uid)
 
-	result := new(urbssetting.BoolRes)
+	result := new(tpl.BoolRes)
 
 	resp, err := request.Delete(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 	if err := HanderResponse(resp, err); err != nil {
@@ -108,7 +109,7 @@ func (a *UrbsSetting) GroupDelete(ctx context.Context, uid string) (*urbssetting
 }
 
 // GroupListMembers ...
-func (a *UrbsSetting) GroupListMembers(ctx context.Context, args *urbssetting.UIDPaginationURL) (*urbssetting.GroupMembersRes, error) {
+func (a *UrbsSetting) GroupListMembers(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.GroupMembersRes, error) {
 	url := fmt.Sprintf("%s/v1/groups/%s/members?skip=%d&pageSize=%d", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize)
 
 	result := new(urbssetting.GroupMembersRes)
@@ -121,13 +122,13 @@ func (a *UrbsSetting) GroupListMembers(ctx context.Context, args *urbssetting.UI
 }
 
 // GroupBatchAddMembers ...
-func (a *UrbsSetting) GroupBatchAddMembers(ctx context.Context, groupId string, users []string) (*urbssetting.BoolRes, error) {
+func (a *UrbsSetting) GroupBatchAddMembers(ctx context.Context, groupId string, users []string) (*tpl.BoolRes, error) {
 	url := fmt.Sprintf("%s/v1/groups/%s/members:batch", conf.Config.UrbsSetting.Addr, groupId)
 
 	body := new(urbssetting.UsersBody)
 	body.Users = users
 
-	result := new(urbssetting.BoolRes)
+	result := new(tpl.BoolRes)
 
 	resp, err := request.Post(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
 	if err := HanderResponse(resp, err); err != nil {
@@ -137,10 +138,10 @@ func (a *UrbsSetting) GroupBatchAddMembers(ctx context.Context, groupId string, 
 }
 
 // GroupRemoveMembers ...
-func (a *UrbsSetting) GroupRemoveMembers(ctx context.Context, args *urbssetting.GroupMembersURL) (*urbssetting.BoolRes, error) {
+func (a *UrbsSetting) GroupRemoveMembers(ctx context.Context, args *tpl.GroupMembersURL) (*tpl.BoolRes, error) {
 	url := fmt.Sprintf("%s/v1/groups/%s/members", conf.Config.UrbsSetting.Addr, args.UID)
 
-	result := new(urbssetting.BoolRes)
+	result := new(tpl.BoolRes)
 
 	resp, err := request.Delete(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 	if err := HanderResponse(resp, err); err != nil {
@@ -150,10 +151,10 @@ func (a *UrbsSetting) GroupRemoveMembers(ctx context.Context, args *urbssetting.
 }
 
 // GroupRemoveLable ...
-func (a *UrbsSetting) GroupRemoveLable(ctx context.Context, args *urbssetting.UIDHIDURL) (*urbssetting.BoolRes, error) {
+func (a *UrbsSetting) GroupRemoveLable(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error) {
 	url := fmt.Sprintf("%s/v1/groups/%s/labels/%s", conf.Config.UrbsSetting.Addr, args.UID, args.HID)
 
-	result := new(urbssetting.BoolRes)
+	result := new(tpl.BoolRes)
 
 	resp, err := request.Delete(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 	if err := HanderResponse(resp, err); err != nil {
@@ -163,10 +164,10 @@ func (a *UrbsSetting) GroupRemoveLable(ctx context.Context, args *urbssetting.UI
 }
 
 // GroupRollbackSetting ...
-func (a *UrbsSetting) GroupRollbackSetting(ctx context.Context, args *urbssetting.UIDHIDURL) (*urbssetting.BoolRes, error) {
+func (a *UrbsSetting) GroupRollbackSetting(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error) {
 	url := fmt.Sprintf("%s/v1/groups/%s/settings/%s:rollback", conf.Config.UrbsSetting.Addr, args.UID, args.HID)
 
-	result := new(urbssetting.BoolRes)
+	result := new(tpl.BoolRes)
 
 	resp, err := request.Put(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 	if err := HanderResponse(resp, err); err != nil {
@@ -176,10 +177,10 @@ func (a *UrbsSetting) GroupRollbackSetting(ctx context.Context, args *urbssettin
 }
 
 // GroupRemoveSetting ...
-func (a *UrbsSetting) GroupRemoveSetting(ctx context.Context, args *urbssetting.UIDHIDURL) (*urbssetting.BoolRes, error) {
+func (a *UrbsSetting) GroupRemoveSetting(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error) {
 	url := fmt.Sprintf("%s/v1/groups/%s/settings/%s", conf.Config.UrbsSetting.Addr, args.UID, args.HID)
 
-	result := new(urbssetting.BoolRes)
+	result := new(tpl.BoolRes)
 
 	resp, err := request.Delete(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 	if err := HanderResponse(resp, err); err != nil {

@@ -25,8 +25,3 @@ type Module struct {
 	Desc      string     `gorm:"column:description" json:"desc"`      // varchar(1022) 功能模块描述
 	Status    int64      `gorm:"column:status" json:"status"`         // -1 下线弃用，0 未使用，大于 0 为有效配置项数
 }
-
-// ModuleUpdateBody ...
-type ModuleUpdateBody struct {
-	Desc *string `json:"desc"`
-}

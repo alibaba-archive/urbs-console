@@ -46,9 +46,14 @@ func UrbsSettingHeader(ctx context.Context) http.Header {
 	if requestId == "" {
 		if gearCtx, ok := ctx.(*gear.Context); ok {
 			requestId = gearCtx.GetHeader(gear.HeaderXRequestID)
+			if requestId == "" {
+				requestId = gearCtx.Res.Header().Get(gear.HeaderXRequestID)
+			}
 		}
 	}
-	header.Set("X-Request-ID", requestId)
+	if requestId != "" {
+		header.Set("X-Request-ID", requestId)
+	}
 	header.Set("Authorization", "Bearer "+genToken())
 	return header
 }
@@ -62,9 +67,10 @@ func HanderResponse(response *request.Response, err error) error {
 		gearErr := new(gear.Error)
 		json.Unmarshal(response.Content, gearErr)
 		if gearErr.Err != "" {
+			gearErr.Msg = "urbs-setting: " + gearErr.Msg
 			return gearErr.WithCode(response.StatusCode)
 		}
-		return gear.ErrBadRequest.WithCode(response.StatusCode).WithMsg(response.String())
+		return gear.ErrBadRequest.WithCode(response.StatusCode).WithMsg("urbs-setting: " + response.String())
 	}
 	return nil
 }

@@ -1,19 +1,11 @@
-package urbssetting
+package schema
 
+// schema 模块不要引入官方库以外的其它模块或内部模块
 import (
 	"time"
-
-	"github.com/teambition/urbs-console/src/schema"
 )
 
-// ProductsRes ...
-type ProductsRes struct {
-	SuccessResponseType
-	Result []Product `json:"result"`
-}
-
-// Product 详见 ./sql/schema.sql table `urbs_product`
-// 产品线
+// Product 产品线
 type Product struct {
 	ID        int64      `gorm:"column:id" json:"-"`
 	CreatedAt time.Time  `gorm:"column:created_at" json:"created_at"`
@@ -23,10 +15,4 @@ type Product struct {
 	Name      string     `gorm:"column:name" json:"name"`             // varchar(63) 产品线名称，表内唯一
 	Desc      string     `gorm:"column:description" json:"desc"`      // varchar(1022) 产品线描述
 	Status    int64      `gorm:"column:status" json:"status"`         // -1 下线弃用，0 未使用，大于 0 为有效功能模块数
-}
-
-// ProductRes ...
-type ProductRes struct {
-	SuccessResponseType
-	Result schema.Product `json:"result"`
 }

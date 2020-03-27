@@ -9,6 +9,7 @@ import (
 
 	"github.com/teambition/gear"
 	"github.com/teambition/gear/middleware/requestid"
+	"github.com/teambition/urbs-console/src/middleware"
 	"github.com/teambition/urbs-console/src/util"
 )
 
@@ -42,7 +43,7 @@ func NewApp() *gear.App {
 		}
 		return nil
 	})
-
+	app.Use(middleware.Logger)
 	app.Use(requestid.New())
 
 	err := util.DigInvoke(func(routers []*gear.Router) error {

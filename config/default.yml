@@ -4,8 +4,15 @@ tls:
     key_path: ""
 urbs_setting:
     addr: ""
-    auth_keys: []   
+    auth_keys: ["a29b3a29b3a29b30x1a29b38"]   
 logger:
     level: "info"
 user_auth:
     keys: ["a29b3a29b3a29b30x1a29b38"]
+group_member:
+    url: ""
+    key: ""
+    token_kv:
+        appId: ""
+    body_kk:  # 调获取群组成员 API，body 的映射参数。
+        groupId: "_organizationId"  # groupId 是系统的群组Id，作 body 里参数时映射成 _organizationId 名称

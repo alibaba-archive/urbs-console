@@ -2,24 +2,6 @@ package urbssetting
 
 import "time"
 
-// GroupsBody ...
-type GroupsBody struct {
-	Groups []*GroupBody `json:"groups"`
-}
-
-// GroupBody ...
-type GroupBody struct {
-	UID  string `json:"uid"`
-	Kind string `json:"kind"`
-	Desc string `json:"desc"`
-}
-
-// GroupsURL ...
-type GroupsURL struct {
-	Pagination
-	Kind string `json:"kind" query:"kind"`
-}
-
 // GroupsRes ...
 type GroupsRes struct {
 	SuccessResponseType
@@ -55,17 +37,4 @@ type GroupMember struct {
 type GroupMembersRes struct {
 	SuccessResponseType
 	Result []*GroupMember `json:"result"`
-}
-
-// GroupMembersURL ...
-type GroupMembersURL struct {
-	UID    string `json:"uid" param:"uid"`
-	User   string `json:"user" query:"user"`       // 根据用户 uid 删除一个成员
-	SyncLt int64  `json:"sync_lt" query:"sync_lt"` // 或根据 sync_lt 删除同步时间小于指定值的所有成员
-}
-
-// GroupUpdateBody ...
-type GroupUpdateBody struct {
-	Desc   *string `json:"desc"`
-	SyncAt *int64  `json:"sync_at"`
 }

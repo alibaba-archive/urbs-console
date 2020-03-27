@@ -8,6 +8,7 @@ import (
 	context "context"
 	gomock "github.com/golang/mock/gomock"
 	urbssetting "github.com/teambition/urbs-console/src/dto/urbssetting"
+	tpl "github.com/teambition/urbs-console/src/tpl"
 	reflect "reflect"
 )
 
@@ -35,7 +36,7 @@ func (m *MockUrbsSettingInterface) EXPECT() *MockUrbsSettingInterfaceMockRecorde
 }
 
 // ProductList mocks base method
-func (m *MockUrbsSettingInterface) ProductList(ctx context.Context, args *urbssetting.Pagination) (*urbssetting.ProductsRes, error) {
+func (m *MockUrbsSettingInterface) ProductList(ctx context.Context, args *tpl.Pagination) (*urbssetting.ProductsRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ProductList", ctx, args)
 	ret0, _ := ret[0].(*urbssetting.ProductsRes)
@@ -50,10 +51,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ProductList(ctx, args interface{
 }
 
 // ProductCreate mocks base method
-func (m *MockUrbsSettingInterface) ProductCreate(ctx context.Context, body *urbssetting.NameDescBody) (*urbssetting.ProductsRes, error) {
+func (m *MockUrbsSettingInterface) ProductCreate(ctx context.Context, body *tpl.NameDescBody) (*urbssetting.ProductRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ProductCreate", ctx, body)
-	ret0, _ := ret[0].(*urbssetting.ProductsRes)
+	ret0, _ := ret[0].(*urbssetting.ProductRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -65,10 +66,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ProductCreate(ctx, body interfac
 }
 
 // ProductUpdate mocks base method
-func (m *MockUrbsSettingInterface) ProductUpdate(ctx context.Context, product string, body *urbssetting.ProductUpdateBody) (*urbssetting.ProductsRes, error) {
+func (m *MockUrbsSettingInterface) ProductUpdate(ctx context.Context, product string, body *tpl.ProductUpdateBody) (*urbssetting.ProductRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ProductUpdate", ctx, product, body)
-	ret0, _ := ret[0].(*urbssetting.ProductsRes)
+	ret0, _ := ret[0].(*urbssetting.ProductRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -80,10 +81,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ProductUpdate(ctx, product, body
 }
 
 // ProductOffline mocks base method
-func (m *MockUrbsSettingInterface) ProductOffline(ctx context.Context, product string) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) ProductOffline(ctx context.Context, product string) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ProductOffline", ctx, product)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -95,10 +96,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ProductOffline(ctx, product inte
 }
 
 // ProductDelete mocks base method
-func (m *MockUrbsSettingInterface) ProductDelete(ctx context.Context, product string) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) ProductDelete(ctx context.Context, product string) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ProductDelete", ctx, product)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -110,7 +111,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ProductDelete(ctx, product inter
 }
 
 // ModuleList mocks base method
-func (m *MockUrbsSettingInterface) ModuleList(ctx context.Context, args *urbssetting.ProductPaginationURL) (*urbssetting.ModulesRes, error) {
+func (m *MockUrbsSettingInterface) ModuleList(ctx context.Context, args *tpl.ProductPaginationURL) (*urbssetting.ModulesRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ModuleList", ctx, args)
 	ret0, _ := ret[0].(*urbssetting.ModulesRes)
@@ -125,7 +126,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ModuleList(ctx, args interface{}
 }
 
 // ModuleCreate mocks base method
-func (m *MockUrbsSettingInterface) ModuleCreate(ctx context.Context, product string, body *urbssetting.NameDescBody) (*urbssetting.ModuleRes, error) {
+func (m *MockUrbsSettingInterface) ModuleCreate(ctx context.Context, product string, body *tpl.NameDescBody) (*urbssetting.ModuleRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ModuleCreate", ctx, product, body)
 	ret0, _ := ret[0].(*urbssetting.ModuleRes)
@@ -140,7 +141,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ModuleCreate(ctx, product, body 
 }
 
 // ModuleUpdate mocks base method
-func (m *MockUrbsSettingInterface) ModuleUpdate(ctx context.Context, product, module string, body *urbssetting.ModuleUpdateBody) (*urbssetting.ModulesRes, error) {
+func (m *MockUrbsSettingInterface) ModuleUpdate(ctx context.Context, product, module string, body *tpl.ModuleUpdateBody) (*urbssetting.ModulesRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ModuleUpdate", ctx, product, module, body)
 	ret0, _ := ret[0].(*urbssetting.ModulesRes)
@@ -155,10 +156,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ModuleUpdate(ctx, product, modul
 }
 
 // ModuleOffline mocks base method
-func (m *MockUrbsSettingInterface) ModuleOffline(ctx context.Context, product, module string) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) ModuleOffline(ctx context.Context, product, module string) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ModuleOffline", ctx, product, module)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -170,7 +171,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ModuleOffline(ctx, product, modu
 }
 
 // SettingList mocks base method
-func (m *MockUrbsSettingInterface) SettingList(ctx context.Context, args *urbssetting.ProductModulePaginationURL) (*urbssetting.SettingsInfoRes, error) {
+func (m *MockUrbsSettingInterface) SettingList(ctx context.Context, args *tpl.ProductModuleURL) (*urbssetting.SettingsInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SettingList", ctx, args)
 	ret0, _ := ret[0].(*urbssetting.SettingsInfoRes)
@@ -185,7 +186,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) SettingList(ctx, args interface{
 }
 
 // SettingCreate mocks base method
-func (m *MockUrbsSettingInterface) SettingCreate(ctx context.Context, args *urbssetting.ProductModuleURL, body *urbssetting.NameDescBody) (*urbssetting.SettingInfoRes, error) {
+func (m *MockUrbsSettingInterface) SettingCreate(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.NameDescBody) (*urbssetting.SettingInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SettingCreate", ctx, args, body)
 	ret0, _ := ret[0].(*urbssetting.SettingInfoRes)
@@ -200,7 +201,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) SettingCreate(ctx, args, body in
 }
 
 // SettingGet mocks base method
-func (m *MockUrbsSettingInterface) SettingGet(ctx context.Context, args *urbssetting.ProductModuleSettingURL) (*urbssetting.SettingInfoRes, error) {
+func (m *MockUrbsSettingInterface) SettingGet(ctx context.Context, args *tpl.ProductModuleSettingURL) (*urbssetting.SettingInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SettingGet", ctx, args)
 	ret0, _ := ret[0].(*urbssetting.SettingInfoRes)
@@ -215,7 +216,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) SettingGet(ctx, args interface{}
 }
 
 // SettingUpdate mocks base method
-func (m *MockUrbsSettingInterface) SettingUpdate(ctx context.Context, args *urbssetting.ProductModuleSettingURL, body *urbssetting.SettingUpdateBody) (*urbssetting.SettingInfoRes, error) {
+func (m *MockUrbsSettingInterface) SettingUpdate(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingUpdateBody) (*urbssetting.SettingInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SettingUpdate", ctx, args, body)
 	ret0, _ := ret[0].(*urbssetting.SettingInfoRes)
@@ -230,10 +231,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) SettingUpdate(ctx, args, body in
 }
 
 // SettingOffline mocks base method
-func (m *MockUrbsSettingInterface) SettingOffline(ctx context.Context, args *urbssetting.ProductModuleSettingURL) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) SettingOffline(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SettingOffline", ctx, args)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -245,22 +246,22 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) SettingOffline(ctx, args interfa
 }
 
 // SettingAssign mocks base method
-func (m *MockUrbsSettingInterface) SettingAssign(ctx context.Context, args *urbssetting.ProductModuleSettingURL) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) SettingAssign(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.UsersGroupsBody) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SettingAssign", ctx, args)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret := m.ctrl.Call(m, "SettingAssign", ctx, args, body)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // SettingAssign indicates an expected call of SettingAssign
-func (mr *MockUrbsSettingInterfaceMockRecorder) SettingAssign(ctx, args interface{}) *gomock.Call {
+func (mr *MockUrbsSettingInterfaceMockRecorder) SettingAssign(ctx, args, body interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SettingAssign", reflect.TypeOf((*MockUrbsSettingInterface)(nil).SettingAssign), ctx, args)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SettingAssign", reflect.TypeOf((*MockUrbsSettingInterface)(nil).SettingAssign), ctx, args, body)
 }
 
 // LabelList mocks base method
-func (m *MockUrbsSettingInterface) LabelList(ctx context.Context, args *urbssetting.ProductPaginationURL) (*urbssetting.LabelsInfoRes, error) {
+func (m *MockUrbsSettingInterface) LabelList(ctx context.Context, args *tpl.ProductPaginationURL) (*urbssetting.LabelsInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "LabelList", ctx, args)
 	ret0, _ := ret[0].(*urbssetting.LabelsInfoRes)
@@ -275,25 +276,25 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) LabelList(ctx, args interface{})
 }
 
 // LabelCreate mocks base method
-func (m *MockUrbsSettingInterface) LabelCreate(ctx context.Context, product string, groups *urbssetting.LabelBody) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) LabelCreate(ctx context.Context, product string, body *tpl.LabelBody) (*urbssetting.LabelInfoRes, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "LabelCreate", ctx, product, groups)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret := m.ctrl.Call(m, "LabelCreate", ctx, product, body)
+	ret0, _ := ret[0].(*urbssetting.LabelInfoRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // LabelCreate indicates an expected call of LabelCreate
-func (mr *MockUrbsSettingInterfaceMockRecorder) LabelCreate(ctx, product, groups interface{}) *gomock.Call {
+func (mr *MockUrbsSettingInterfaceMockRecorder) LabelCreate(ctx, product, body interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LabelCreate", reflect.TypeOf((*MockUrbsSettingInterface)(nil).LabelCreate), ctx, product, groups)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LabelCreate", reflect.TypeOf((*MockUrbsSettingInterface)(nil).LabelCreate), ctx, product, body)
 }
 
 // LabelUpdate mocks base method
-func (m *MockUrbsSettingInterface) LabelUpdate(ctx context.Context, product, label string, body *urbssetting.LabelUpdateBody) (*urbssetting.LabelsInfoRes, error) {
+func (m *MockUrbsSettingInterface) LabelUpdate(ctx context.Context, product, label string, body *tpl.LabelUpdateBody) (*urbssetting.LabelInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "LabelUpdate", ctx, product, label, body)
-	ret0, _ := ret[0].(*urbssetting.LabelsInfoRes)
+	ret0, _ := ret[0].(*urbssetting.LabelInfoRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -305,10 +306,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) LabelUpdate(ctx, product, label,
 }
 
 // LabelDelete mocks base method
-func (m *MockUrbsSettingInterface) LabelDelete(ctx context.Context, product, label string) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) LabelDelete(ctx context.Context, product, label string) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "LabelDelete", ctx, product, label)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -320,10 +321,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) LabelDelete(ctx, product, label 
 }
 
 // LabelOffline mocks base method
-func (m *MockUrbsSettingInterface) LabelOffline(ctx context.Context, product, label string) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) LabelOffline(ctx context.Context, product, label string) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "LabelOffline", ctx, product, label)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -335,10 +336,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) LabelOffline(ctx, product, label
 }
 
 // LabelAssign mocks base method
-func (m *MockUrbsSettingInterface) LabelAssign(ctx context.Context, product, label string, body *urbssetting.UsersGroupsBody) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) LabelAssign(ctx context.Context, product, label string, body *tpl.UsersGroupsBody) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "LabelAssign", ctx, product, label, body)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -350,7 +351,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) LabelAssign(ctx, product, label,
 }
 
 // UserListLables mocks base method
-func (m *MockUrbsSettingInterface) UserListLables(ctx context.Context, args *urbssetting.UIDPaginationURL) (*urbssetting.LabelsInfoRes, error) {
+func (m *MockUrbsSettingInterface) UserListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.LabelsInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UserListLables", ctx, args)
 	ret0, _ := ret[0].(*urbssetting.LabelsInfoRes)
@@ -365,10 +366,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) UserListLables(ctx, args interfa
 }
 
 // UserRefreshCached mocks base method
-func (m *MockUrbsSettingInterface) UserRefreshCached(ctx context.Context, uid string) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) UserRefreshCached(ctx context.Context, uid string) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UserRefreshCached", ctx, uid)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -380,7 +381,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) UserRefreshCached(ctx, uid inter
 }
 
 // UserListSettings mocks base method
-func (m *MockUrbsSettingInterface) UserListSettings(ctx context.Context, args *urbssetting.UIDProductURL) (*urbssetting.MySettingsRes, error) {
+func (m *MockUrbsSettingInterface) UserListSettings(ctx context.Context, args *tpl.UIDProductURL) (*urbssetting.MySettingsRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UserListSettings", ctx, args)
 	ret0, _ := ret[0].(*urbssetting.MySettingsRes)
@@ -395,7 +396,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) UserListSettings(ctx, args inter
 }
 
 // UserListSettingsUnionAll mocks base method
-func (m *MockUrbsSettingInterface) UserListSettingsUnionAll(ctx context.Context, args *urbssetting.MySettingsQueryURL) (*urbssetting.MySettingsRes, error) {
+func (m *MockUrbsSettingInterface) UserListSettingsUnionAll(ctx context.Context, args *tpl.MySettingsQueryURL) (*urbssetting.MySettingsRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UserListSettingsUnionAll", ctx, args)
 	ret0, _ := ret[0].(*urbssetting.MySettingsRes)
@@ -410,10 +411,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) UserListSettingsUnionAll(ctx, ar
 }
 
 // UserCheckExists mocks base method
-func (m *MockUrbsSettingInterface) UserCheckExists(ctx context.Context, uid string) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) UserCheckExists(ctx context.Context, uid string) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UserCheckExists", ctx, uid)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -425,10 +426,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) UserCheckExists(ctx, uid interfa
 }
 
 // UserBatchAdd mocks base method
-func (m *MockUrbsSettingInterface) UserBatchAdd(ctx context.Context, users []string) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) UserBatchAdd(ctx context.Context, users []string) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UserBatchAdd", ctx, users)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -440,10 +441,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) UserBatchAdd(ctx, users interfac
 }
 
 // UserRemoveLabled mocks base method
-func (m *MockUrbsSettingInterface) UserRemoveLabled(ctx context.Context, uid, hid string) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) UserRemoveLabled(ctx context.Context, uid, hid string) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UserRemoveLabled", ctx, uid, hid)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -455,10 +456,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) UserRemoveLabled(ctx, uid, hid i
 }
 
 // UserRollbackSetting mocks base method
-func (m *MockUrbsSettingInterface) UserRollbackSetting(ctx context.Context, uid, hid string) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) UserRollbackSetting(ctx context.Context, uid, hid string) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UserRollbackSetting", ctx, uid, hid)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -470,10 +471,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) UserRollbackSetting(ctx, uid, hi
 }
 
 // UserRemoveSetting mocks base method
-func (m *MockUrbsSettingInterface) UserRemoveSetting(ctx context.Context, uid, hid string) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) UserRemoveSetting(ctx context.Context, uid, hid string) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UserRemoveSetting", ctx, uid, hid)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -485,7 +486,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) UserRemoveSetting(ctx, uid, hid 
 }
 
 // GroupListLables mocks base method
-func (m *MockUrbsSettingInterface) GroupListLables(ctx context.Context, args *urbssetting.UIDPaginationURL) (*urbssetting.LabelsInfoRes, error) {
+func (m *MockUrbsSettingInterface) GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.LabelsInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupListLables", ctx, args)
 	ret0, _ := ret[0].(*urbssetting.LabelsInfoRes)
@@ -500,7 +501,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupListLables(ctx, args interf
 }
 
 // GroupListSettings mocks base method
-func (m *MockUrbsSettingInterface) GroupListSettings(ctx context.Context, args *urbssetting.UIDProductURL) (*urbssetting.MySettingsRes, error) {
+func (m *MockUrbsSettingInterface) GroupListSettings(ctx context.Context, args *tpl.UIDProductURL) (*urbssetting.MySettingsRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupListSettings", ctx, args)
 	ret0, _ := ret[0].(*urbssetting.MySettingsRes)
@@ -515,7 +516,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupListSettings(ctx, args inte
 }
 
 // GroupList mocks base method
-func (m *MockUrbsSettingInterface) GroupList(ctx context.Context, args *urbssetting.GroupsURL) (*urbssetting.GroupsRes, error) {
+func (m *MockUrbsSettingInterface) GroupList(ctx context.Context, args *tpl.GroupsURL) (*urbssetting.GroupsRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupList", ctx, args)
 	ret0, _ := ret[0].(*urbssetting.GroupsRes)
@@ -530,10 +531,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupList(ctx, args interface{})
 }
 
 // GroupCheckExists mocks base method
-func (m *MockUrbsSettingInterface) GroupCheckExists(ctx context.Context, uid string) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) GroupCheckExists(ctx context.Context, uid string) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupCheckExists", ctx, uid)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -545,10 +546,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupCheckExists(ctx, uid interf
 }
 
 // GroupBatchAdd mocks base method
-func (m *MockUrbsSettingInterface) GroupBatchAdd(ctx context.Context, groups []*urbssetting.GroupBody) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) GroupBatchAdd(ctx context.Context, groups []*tpl.GroupBody) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupBatchAdd", ctx, groups)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -560,7 +561,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupBatchAdd(ctx, groups interf
 }
 
 // GroupUpdate mocks base method
-func (m *MockUrbsSettingInterface) GroupUpdate(ctx context.Context, uid string, body *urbssetting.GroupUpdateBody) (*urbssetting.GroupRes, error) {
+func (m *MockUrbsSettingInterface) GroupUpdate(ctx context.Context, uid string, body *tpl.GroupUpdateBody) (*urbssetting.GroupRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupUpdate", ctx, uid, body)
 	ret0, _ := ret[0].(*urbssetting.GroupRes)
@@ -575,10 +576,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupUpdate(ctx, uid, body inter
 }
 
 // GroupDelete mocks base method
-func (m *MockUrbsSettingInterface) GroupDelete(ctx context.Context, uid string) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) GroupDelete(ctx context.Context, uid string) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupDelete", ctx, uid)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -590,7 +591,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupDelete(ctx, uid interface{}
 }
 
 // GroupListMembers mocks base method
-func (m *MockUrbsSettingInterface) GroupListMembers(ctx context.Context, args *urbssetting.UIDPaginationURL) (*urbssetting.GroupMembersRes, error) {
+func (m *MockUrbsSettingInterface) GroupListMembers(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.GroupMembersRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupListMembers", ctx, args)
 	ret0, _ := ret[0].(*urbssetting.GroupMembersRes)
@@ -605,10 +606,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupListMembers(ctx, args inter
 }
 
 // GroupBatchAddMembers mocks base method
-func (m *MockUrbsSettingInterface) GroupBatchAddMembers(ctx context.Context, groupId string, users []string) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) GroupBatchAddMembers(ctx context.Context, groupId string, users []string) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupBatchAddMembers", ctx, groupId, users)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -620,10 +621,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupBatchAddMembers(ctx, groupI
 }
 
 // GroupRemoveMembers mocks base method
-func (m *MockUrbsSettingInterface) GroupRemoveMembers(ctx context.Context, args *urbssetting.GroupMembersURL) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) GroupRemoveMembers(ctx context.Context, args *tpl.GroupMembersURL) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupRemoveMembers", ctx, args)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -635,10 +636,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupRemoveMembers(ctx, args int
 }
 
 // GroupRemoveLable mocks base method
-func (m *MockUrbsSettingInterface) GroupRemoveLable(ctx context.Context, args *urbssetting.UIDHIDURL) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) GroupRemoveLable(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupRemoveLable", ctx, args)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -650,10 +651,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupRemoveLable(ctx, args inter
 }
 
 // GroupRollbackSetting mocks base method
-func (m *MockUrbsSettingInterface) GroupRollbackSetting(ctx context.Context, args *urbssetting.UIDHIDURL) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) GroupRollbackSetting(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupRollbackSetting", ctx, args)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -665,10 +666,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupRollbackSetting(ctx, args i
 }
 
 // GroupRemoveSetting mocks base method
-func (m *MockUrbsSettingInterface) GroupRemoveSetting(ctx context.Context, args *urbssetting.UIDHIDURL) (*urbssetting.BoolRes, error) {
+func (m *MockUrbsSettingInterface) GroupRemoveSetting(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupRemoveSetting", ctx, args)
-	ret0, _ := ret[0].(*urbssetting.BoolRes)
+	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

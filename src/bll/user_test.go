@@ -5,9 +5,9 @@ import (
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
-	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/service/mock_service"
+	"github.com/teambition/urbs-console/src/tpl"
 )
 
 func TestUser(t *testing.T) {
@@ -20,10 +20,10 @@ func TestUser(t *testing.T) {
 	user := &User{services: service.NewServices()}
 	user.services.UrbsSetting = usMock
 
-	mockReturn := new(urbssetting.BoolRes)
+	mockReturn := new(tpl.BoolRes)
 	mockReturn.Result = true
 	usMock.EXPECT().UserBatchAdd(nil, []string{"123"}).Return(mockReturn, nil)
 
-	err := user.BatchAdd(nil, []string{"123"})
+	_, err := user.BatchAdd(nil, []string{"123"})
 	require.Nil(err)
 }
