@@ -1,12 +1,9 @@
 package service
 
 import (
-	"net/http"
-	"time"
-
 	"github.com/teambition/gear"
-	"github.com/teambition/gear-auth/jwt"
 	"github.com/teambition/urbs-console/src/conf"
+	"github.com/teambition/urbs-console/src/dto/thrid"
 	"github.com/teambition/urbs-console/src/util/request"
 )
 
@@ -15,24 +12,8 @@ type UserAuthThrid struct {
 }
 
 // Verify ...
-func (a *UserAuthThrid) Verify(ctx *gear.Context) error {
-	j := jwt.New(conf.Config.UserAuth.Keys)
-	token, err := j.Sign(conf.Config.UserAuth.UserAuthThrid.TokenKV, time.Hour)
-	if err != nil {
-		return err
-	}
-	header := http.Header{}
-	header.Set("Authorization", "Bearer "+token)
-
-	body := make(map[string]interface{})
-	for k, v := range conf.Config.UserAuth.UserAuthThrid.BodyKK {
-		if conf.Config.UserAuth.UserAuthThrid.From == "header" {
-			body[k] = ctx.GetHeader(v)
-		} else {
-			body[k], _ = ctx.Cookies.Get(v)
-		}
-	}
-	resp, err := request.Post(conf.Config.UserAuth.UserAuthThrid.URL).Header(header).Body(body).Do()
+func (a *UserAuthThrid) Verify(ctx *gear.Context, body *thrid.UserVerifyReq) error {
+	resp, err := request.Post(conf.Config.Thrid.UserAuth.URL).Header(genThridHeader()).Body(body).Do()
 	if err := HanderResponse(resp, err); err != nil {
 		return err
 	}

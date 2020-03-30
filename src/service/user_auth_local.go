@@ -8,13 +8,14 @@ import (
 	authjwt "github.com/teambition/gear-auth/jwt"
 	"github.com/teambition/gear/logging"
 	"github.com/teambition/urbs-console/src/conf"
+	"github.com/teambition/urbs-console/src/dto/thrid"
 	"github.com/teambition/urbs-console/src/logger"
 )
 
 func init() {
-	keys := conf.Config.UserAuth.Keys
-	if len(keys) > 0 {
-		Auther = auth.New(authjwt.StrToKeys(keys...)...)
+	key := conf.Config.Thrid.Key
+	if key != "" {
+		Auther = auth.New(authjwt.StrToKeys(key)...)
 		Auther.JWT().SetExpiresIn(time.Minute * 10)
 	} else {
 		logger.Default.Warningf("`user_auth.keys` is empty, Auth middleware will not be executed.")
@@ -29,7 +30,7 @@ type UserAuthLocal struct {
 var Auther *auth.Auth
 
 // Verify ...
-func (a *UserAuthLocal) Verify(ctx *gear.Context) error {
+func (a *UserAuthLocal) Verify(ctx *gear.Context, body *thrid.UserVerifyReq) error {
 	if Auther != nil {
 		claims, err := Auther.FromCtx(ctx)
 		if err != nil {

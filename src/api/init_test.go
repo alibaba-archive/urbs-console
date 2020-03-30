@@ -43,7 +43,7 @@ func genHeader() http.Header {
 }
 
 func genToken() string {
-	j := jwt.New([]byte(conf.Config.UserAuth.Keys[0]))
+	j := jwt.New([]byte(conf.Config.Thrid.Key))
 	m := make(map[string]interface{})
 	m["name"] = "urbs-console"
 	token, err := j.Sign(m, time.Hour)

@@ -31,7 +31,7 @@ func NewServices() *Services {
 		GroupMember: &GroupMember{},
 		UrbsSetting: &UrbsSetting{},
 	}
-	if conf.Config.UserAuth.UserAuthThrid.URL == "" {
+	if conf.Config.Thrid.UserAuth.URL == "" {
 		s.UserAuth = &UserAuthLocal{}
 	} else {
 		s.UserAuth = &UserAuthThrid{}
@@ -54,7 +54,7 @@ func UrbsSettingHeader(ctx context.Context) http.Header {
 	if requestId != "" {
 		header.Set("X-Request-ID", requestId)
 	}
-	header.Set("Authorization", "Bearer "+genToken())
+	header.Set("Authorization", "Bearer "+genToken(conf.Config.UrbsSetting.Key))
 	return header
 }
 
@@ -67,16 +67,23 @@ func HanderResponse(response *request.Response, err error) error {
 		gearErr := new(gear.Error)
 		json.Unmarshal(response.Content, gearErr)
 		if gearErr.Err != "" {
-			gearErr.Msg = "urbs-setting: " + gearErr.Msg
+
+			gearErr.Msg = response.Response.Request.URL.Path + " " + gearErr.Msg
 			return gearErr.WithCode(response.StatusCode)
 		}
-		return gear.ErrBadRequest.WithCode(response.StatusCode).WithMsg("urbs-setting: " + response.String())
+		return gear.ErrBadRequest.WithCode(response.StatusCode).WithMsg(response.Response.Request.URL.Path + " " + response.String())
 	}
 	return nil
 }
 
-func genToken() string {
-	j := jwt.New([]byte(conf.Config.UrbsSetting.AuthKeys[0]))
+func genThridHeader() http.Header {
+	header := http.Header{}
+	header.Set("Authorization", "Bearer "+genToken(conf.Config.Thrid.Key))
+	return header
+}
+
+func genToken(key string) string {
+	j := jwt.New([]byte(key))
 	m := make(map[string]interface{})
 	m["name"] = "urbs-console"
 	token, err := j.Sign(m, time.Hour)

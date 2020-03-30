@@ -111,6 +111,7 @@ func (a *Request) Do() (*Response, error) {
 		}
 	}
 	response := &Response{
+		Response:   resp,
 		StatusCode: resp.StatusCode,
 		Content:    respBody,
 	}
@@ -119,6 +120,7 @@ func (a *Request) Do() (*Response, error) {
 
 // Response ...
 type Response struct {
+	Response   *http.Response
 	StatusCode int
 	Content    []byte
 }

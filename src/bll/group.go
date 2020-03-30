@@ -2,6 +2,7 @@ package bll
 
 import (
 	"context"
+	"time"
 
 	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/logger"
@@ -51,6 +52,16 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 	skip := 0
 	pageSize := 1000
 	count := 0
+	now := time.Now().Unix()
+	// 更新同步时间
+	groupUpdateBody := new(tpl.GroupUpdateBody)
+	groupUpdateBody.SyncAt = &now
+	_, err := a.services.UrbsSetting.GroupUpdate(ctx, uid, groupUpdateBody)
+	if err != nil {
+		logger.Err(ctx, "groupUpdate", "error", err.Error())
+		return err
+	}
+	// 同步成员
 	for {
 		resp, err := a.services.GroupMember.List(uid, skip, pageSize)
 		if err != nil {
@@ -61,7 +72,7 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 
 		users := make([]string, len(resp.Members))
 		for i, r := range resp.Members {
-			users[i] = r.GetUID()
+			users[i] = r.UID
 		}
 		_, err = a.services.UrbsSetting.GroupBatchAddMembers(ctx, uid, users)
 		if err != nil {
@@ -72,6 +83,14 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 			continue
 		}
 		break
+	}
+	// 删除旧的成员
+	args := new(tpl.GroupMembersURL)
+	args.UID = uid
+	args.SyncLt = now
+	_, err = a.services.UrbsSetting.GroupRemoveMembers(ctx, args)
+	if err != nil {
+		logger.Err(ctx, "groupRemoveMembers", "error", err.Error())
 	}
 	logger.Info(ctx, "batchAddMember", "count", count, "uid", uid)
 	return nil

@@ -57,7 +57,7 @@ func newRouters(apis *APIs) []*gear.Router {
 		if strings.HasPrefix(ctx.Req.URL.Path, "/v1/canary") {
 			return nil
 		}
-		return apis.Services.UserAuth.Verify(ctx)
+		return apis.Services.UserAuth.Verify(ctx, nil)
 	})
 	routerV1.Get("/canary", apis.Canary.Get)
 

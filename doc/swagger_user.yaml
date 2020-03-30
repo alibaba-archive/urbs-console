@@ -1,0 +1,62 @@
+  # User API
+  /v1/users/{uid}/settings:unionAll:
+    get:
+      tags:
+        - User
+      summary: 接口返回 user 的 settings，按照 setting 设置时间反序，支持分页，包含了 user 从属的 group 的 settings
+      parameters:
+        - in: header
+          name: Authorization
+          description: '请求 JWT token, 格式如: `Bearer xxx`'
+          required: false
+          schema:
+            type: string
+        - in: path
+          name: uid
+          description: 用户 UID，当 uid 对应用户不存在时，该接口会返回空列表
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: product
+          description: 产品名称，当 product 对应产品不存在时，该接口会返回空列表
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: client
+          description: 产品名称，当 client 对应产品不存在时，该接口会返回空列表
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: pageSize
+          description: 分页大小，默认为 10，(1-1000]
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+            example: 20
+        - in: query
+          name: pageToken
+          description: 分页请求标记，来自于响应结果的 nextPageToken
+          required: false
+          schema:
+            title: pageToken
+            type: string
+            default: ""
+            example: ""             
+      responses:
+        '200':
+          description: 请求成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MySettingsRes'
+        '404':
+          description: 请求失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'

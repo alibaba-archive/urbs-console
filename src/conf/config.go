@@ -14,21 +14,14 @@ func init() {
 	}
 }
 
-// Logger logger config
-type Logger struct {
-	Level string `json:"level" yaml:"level"`
-}
-
 // ConfigTpl ...
 type ConfigTpl struct {
 	SrvAddr     string      `json:"addr" yaml:"addr"`
 	TLS         TlsConfig   `json:"tls" yaml:"tls"`
 	Logger      Logger      `json:"logger" yaml:"logger"`
 	UrbsSetting UrbsSetting `json:"urbs_setting" yaml:"urbs_setting"`
-	// 验证调用者身份
-	UserAuth UserAuth `json:"user_auth" yaml:"user_auth"`
-	// 拉取群组成员
-	GroupMember GroupMember `json:"group_member" yaml:"group_member"`
+	// 三方接口
+	Thrid Thrid `json:"thrid" yaml:"thrid"`
 }
 
 // TlsConfig the config struct for creating tls.Config.
@@ -37,32 +30,35 @@ type TlsConfig struct {
 	KeyPath  string `json:"key_path" yaml:"key_path"`
 }
 
-// UserAuth ...
-type UserAuth struct {
-	Keys          []string      `json:"keys" yaml:"keys"`
-	UserAuthThrid UserAuthThrid `json:"thrid" yaml:"thrid"`
-}
-
-// UserAuthThrid ...
-type UserAuthThrid struct {
-	URL     string                 `json:"url" yaml:"url"`
-	TokenKV map[string]interface{} `json:"token_kv" yaml:"token_kv"`
-	BodyKK  map[string]string      `json:"body_kk" yaml:"body_kk"`
-	From    string                 `json:"from" yaml:"from"`
-}
-
-// GroupMember ...
-type GroupMember struct {
-	URL     string                 `json:"url" yaml:"url"`
-	Key     string                 `json:"keys" yaml:"key"`
-	TokenKV map[string]interface{} `json:"token_kv" yaml:"token_kv"`
-	BodyKK  map[string]string      `json:"body_kk" yaml:"body_kk"`
+// Logger logger config
+type Logger struct {
+	Level string `json:"level" yaml:"level"`
 }
 
 // UrbsSetting ...
 type UrbsSetting struct {
-	Addr     string   `json:"addr" yaml:"addr"`
-	AuthKeys []string `json:"auth_keys" yaml:"auth_keys"`
+	Addr string `json:"addr" yaml:"addr"`
+	Key  string `json:"key" yaml:"key"`
+}
+
+// Thrid ...
+type Thrid struct {
+	Key string `json:"key" yaml:"key"`
+	// 验证调用者身份接口
+	UserAuth UserAuth `json:"user_auth" yaml:"user_auth"`
+	// 群组成员接口
+	GroupMember GroupMember `json:"group_member" yaml:"group_member"`
+}
+
+// UserAuth ...
+type UserAuth struct {
+	URL        string   `json:"url" yaml:"url"`
+	CookieKeys []string `json:"cookie_keys" yaml:"cookie_keys"`
+}
+
+// GroupMember ...
+type GroupMember struct {
+	URL string `json:"url" yaml:"url"`
 }
 
 // Config ...

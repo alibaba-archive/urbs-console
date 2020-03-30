@@ -35,9 +35,6 @@ func (a *Label) Offline(ctx context.Context, productName, labelName string) (*tp
 
 // Assign 把标签批量分配给用户或群组
 func (a *Label) Assign(ctx context.Context, productName, labelName string, body *tpl.UsersGroupsBody) (*tpl.BoolRes, error) {
-	if len(body.Groups) > 0 {
-
-	}
 	return a.services.UrbsSetting.LabelAssign(ctx, productName, labelName, body)
 }
 
