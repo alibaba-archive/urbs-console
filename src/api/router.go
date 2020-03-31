@@ -1,12 +1,11 @@
 package api
 
 import (
-	"strings"
-
 	"github.com/teambition/gear"
 	tracing "github.com/teambition/gear-tracing"
 
 	"github.com/teambition/urbs-console/src/bll"
+	"github.com/teambition/urbs-console/src/middleware"
 	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/util"
 )
@@ -53,22 +52,25 @@ func newRouters(apis *APIs) []*gear.Router {
 		Root: "/v1",
 	})
 	routerV1.Use(tracing.New())
-	routerV1.Use(func(ctx *gear.Context) error {
-		if strings.HasPrefix(ctx.Req.URL.Path, "/v1/canary") {
-			return nil
-		}
-		return apis.Services.UserAuth.Verify(ctx, nil)
-	})
+
+	ignoreURLs := []string{"/v1/canary"}
+	memberURLs := []string{"/v1/users/settings:unionAll"}
+
+	routerV1.Use(middleware.Auth(apis.Services, ignoreURLs, memberURLs))
+
 	routerV1.Get("/canary", apis.Canary.Get)
 
 	// ***** user ******
-	// // 读取指定用户的灰度标签，支持条件筛选
+	// 读取指定用户的功能配置项，支持条件筛选，数据用于客户端
+	routerV1.Get("/users/settings:unionAll", apis.User.ListSettingsUnionAllClient)
+
+	// 读取指定用户的灰度标签，支持条件筛选
 	routerV1.Get("/users/:uid/labels", apis.User.ListLables)
 	// 强制刷新指定用户的灰度标签列表缓存
 	routerV1.Put("/users/:uid/labels:cache", apis.User.RefreshCachedLables)
 	// 读取指定用户的功能配置项，支持条件筛选
 	routerV1.Get("/users/:uid/settings", apis.User.ListSettings)
-	// 读取指定用户的功能配置项，支持条件筛选，数据用于客户端
+	// 读取指定用户的功能配置项，支持条件筛选
 	routerV1.Get("/users/:uid/settings:unionAll", apis.User.ListSettingsUnionAll)
 	// 查询指定用户是否存在
 	routerV1.Get("/users/:uid+:exists", apis.User.CheckExists)

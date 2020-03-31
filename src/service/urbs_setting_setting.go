@@ -30,7 +30,7 @@ func (a *UrbsSetting) SettingCreate(ctx context.Context, args *tpl.ProductModule
 
 	result := new(urbssetting.SettingInfoRes)
 
-	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+	resp, err := request.Post(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
 
 	if err := HanderResponse(resp, err); err != nil {
 		return nil, err

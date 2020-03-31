@@ -1,6 +1,8 @@
 package tpl
 
 import (
+	"crypto/rand"
+	"fmt"
 	"regexp"
 	"sort"
 
@@ -34,6 +36,12 @@ type SuccessResponseType struct {
 type BoolRes struct {
 	SuccessResponseType
 	Result bool `json:"result"`
+}
+
+// StringRes ...
+type StringRes struct {
+	SuccessResponseType
+	Result string `json:"result"`
 }
 
 // NameDescBody ...
@@ -155,4 +163,26 @@ func (t *UIDHIDURL) Validate() error {
 		return gear.ErrBadRequest.WithMsgf("invalid hid: %s", t.HID)
 	}
 	return nil
+}
+func randBytes(size int) []byte {
+	b := make([]byte, size)
+	if _, err := rand.Read(b); err != nil {
+		panic("crypto-go: rand.Read() failed, " + err.Error())
+	}
+	return b
+}
+
+// RandUID for testing
+func RandUID() string {
+	return fmt.Sprintf("uid-%x", randBytes(8))
+}
+
+// RandName for testing
+func RandName() string {
+	return fmt.Sprintf("name-%x", randBytes(8))
+}
+
+// RandLabel for testing
+func RandLabel() string {
+	return fmt.Sprintf("label-%x", randBytes(8))
 }

@@ -26,6 +26,9 @@ func NewBlls(services *service.Services) *Blls {
 		User:    &User{services: services},
 		Group:   &Group{services: services},
 		Product: &Product{services: services},
+
 		Label:   &Label{services: services},
+		Module:  &Module{services: services},
+		Setting: &Setting{services: services},
 	}
 }

@@ -14,7 +14,7 @@ type GroupMember struct {
 }
 
 // List ...
-func (a *GroupMember) List(groupId string, skip int, pageSize int) (*ListGroupMembersResp, error) {
+func (a *GroupMember) List(groupId string, pageToken string, pageSize int) (*ListGroupMembersResp, error) {
 	groupUrl := strings.Replace(conf.Config.Thrid.GroupMember.URL, "{groupId}", groupId, -1)
 	httpUrl, err := url.Parse(groupUrl)
 	if err != nil {
@@ -22,7 +22,7 @@ func (a *GroupMember) List(groupId string, skip int, pageSize int) (*ListGroupMe
 	}
 	q := httpUrl.Query()
 	q.Add("pageSize", strconv.Itoa(pageSize))
-	q.Add("skip", strconv.Itoa(skip))
+	q.Add("pageToken", pageToken)
 	httpUrl.RawQuery = q.Encode()
 
 	result := new(ListGroupMembersResp)
@@ -35,7 +35,8 @@ func (a *GroupMember) List(groupId string, skip int, pageSize int) (*ListGroupMe
 
 // ListGroupMembersResp ...
 type ListGroupMembersResp struct {
-	Members []*Member `json:"result"`
+	Members       []*Member `json:"result"`
+	NextPageToken string    `json:"nextPageToken"`
 }
 
 // Member ....

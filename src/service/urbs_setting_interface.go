@@ -27,7 +27,7 @@ type UrbsSettingInterface interface {
 	// 指定产品创建功能模块
 	ModuleCreate(ctx context.Context, product string, body *tpl.NameDescBody) (*urbssetting.ModuleRes, error)
 	// 更新指定产品功能模块
-	ModuleUpdate(ctx context.Context, product string, module string, body *tpl.ModuleUpdateBody) (*urbssetting.ModulesRes, error)
+	ModuleUpdate(ctx context.Context, product string, module string, body *tpl.ModuleUpdateBody) (*urbssetting.ModuleRes, error)
 	// 下线指定产品功能模块
 	ModuleOffline(ctx context.Context, product string, module string) (*tpl.BoolRes, error)
 

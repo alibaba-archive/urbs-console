@@ -106,12 +106,10 @@ func (a *Request) Do() (*Response, error) {
 	}
 	if a.result != nil {
 		err = json.Unmarshal(respBody, a.result)
-		if err != nil {
-			return nil, err
-		}
 	}
 	response := &Response{
 		Response:   resp,
+		Err:        err,
 		StatusCode: resp.StatusCode,
 		Content:    respBody,
 	}
@@ -121,6 +119,7 @@ func (a *Request) Do() (*Response, error) {
 // Response ...
 type Response struct {
 	Response   *http.Response
+	Err        error
 	StatusCode int
 	Content    []byte
 }

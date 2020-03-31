@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/require"
 	"github.com/teambition/gear"
 	"github.com/teambition/gear-auth/jwt"
 	"github.com/teambition/urbs-console/src/conf"
@@ -21,8 +22,9 @@ func TestMain(m *testing.M) {
 }
 
 type TestTools struct {
-	App  *gear.App
-	Host string
+	App     *gear.App
+	Host    string
+	Require *require.Assertions
 }
 
 func SetUpTestTools() (tt *TestTools, cleanup func()) {

@@ -24,7 +24,7 @@ func (a *Module) Create(ctx context.Context, product string, body *tpl.NameDescB
 }
 
 // Update 更新指定产品功能模块
-func (a *Module) Update(ctx context.Context, product string, module string, body *tpl.ModuleUpdateBody) (*urbssetting.ModulesRes, error) {
+func (a *Module) Update(ctx context.Context, product string, module string, body *tpl.ModuleUpdateBody) (*urbssetting.ModuleRes, error) {
 	return a.services.UrbsSetting.ModuleUpdate(ctx, product, module, body)
 }
 

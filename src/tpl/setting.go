@@ -71,3 +71,23 @@ func (t *SettingUpdateBody) Validate() error {
 	}
 	return nil
 }
+
+// MySettingsQueryURLClient ...
+type MySettingsQueryURLClient struct {
+	Pagination
+	Product string `json:"product" query:"product"`
+	Channel string `json:"channel" query:"channel"`
+	Client  string `json:"client" query:"client"`
+}
+
+// Validate 实现 gear.BodyTemplate。
+func (t *MySettingsQueryURLClient) Validate() error {
+	if !validNameReg.MatchString(t.Product) {
+		return gear.ErrBadRequest.WithMsgf("invalid product name: %s", t.Product)
+	}
+
+	if err := t.Pagination.Validate(); err != nil {
+		return err
+	}
+	return nil
+}

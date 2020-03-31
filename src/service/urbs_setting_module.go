@@ -30,7 +30,7 @@ func (a *UrbsSetting) ModuleCreate(ctx context.Context, product string, body *tp
 
 	result := new(urbssetting.ModuleRes)
 
-	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
+	resp, err := request.Post(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
 
 	if err := HanderResponse(resp, err); err != nil {
 		return nil, err
@@ -39,10 +39,10 @@ func (a *UrbsSetting) ModuleCreate(ctx context.Context, product string, body *tp
 }
 
 // ModuleUpdate ...
-func (a *UrbsSetting) ModuleUpdate(ctx context.Context, product string, module string, body *tpl.ModuleUpdateBody) (*urbssetting.ModulesRes, error) {
+func (a *UrbsSetting) ModuleUpdate(ctx context.Context, product string, module string, body *tpl.ModuleUpdateBody) (*urbssetting.ModuleRes, error) {
 	url := fmt.Sprintf("%s/v1/products/%s/modules/%s", conf.Config.UrbsSetting.Addr, product, module)
 
-	result := new(urbssetting.ModulesRes)
+	result := new(urbssetting.ModuleRes)
 
 	resp, err := request.Put(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
 

@@ -140,3 +140,20 @@ func (a *User) RemoveSetting(ctx *gear.Context) error {
 	}
 	return ctx.OkJSON(res)
 }
+
+// ListSettingsUnionAllClient 返回 user 的 settings，按照 setting 设置时间反序，支持分页
+// 包含了 user 从属的 group 的 settings
+func (a *User) ListSettingsUnionAllClient(ctx *gear.Context) error {
+	req := tpl.MySettingsQueryURL{
+		UID: GetUid(ctx),
+	}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	res, err := a.blls.User.ListSettingsUnionAll(ctx, &req)
+	if err != nil {
+		return err
+	}
+
+	return ctx.OkJSON(res)
+}

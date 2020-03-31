@@ -20,8 +20,7 @@ func init() {
 // Services ...
 type Services struct {
 	UrbsSetting UrbsSettingInterface
-
-	UserAuth    UserAuth
+	UserAuth    *UserAuth
 	GroupMember *GroupMember
 }
 
@@ -30,11 +29,7 @@ func NewServices() *Services {
 	s := &Services{
 		GroupMember: &GroupMember{},
 		UrbsSetting: &UrbsSetting{},
-	}
-	if conf.Config.Thrid.UserAuth.URL == "" {
-		s.UserAuth = &UserAuthLocal{}
-	} else {
-		s.UserAuth = &UserAuthThrid{}
+		UserAuth:    &UserAuth{},
 	}
 	return s
 }

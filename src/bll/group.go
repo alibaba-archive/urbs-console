@@ -49,7 +49,6 @@ func (a *Group) BatchAdd(ctx context.Context, groups []*tpl.GroupBody) error {
 
 // BatchAddMember ...
 func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
-	skip := 0
 	pageSize := 1000
 	count := 0
 	now := time.Now().Unix()
@@ -61,13 +60,15 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 		logger.Err(ctx, "groupUpdate", "error", err.Error())
 		return err
 	}
+	nextPageToken := ""
 	// 同步成员
 	for {
-		resp, err := a.services.GroupMember.List(uid, skip, pageSize)
+		resp, err := a.services.GroupMember.List(uid, nextPageToken, pageSize)
 		if err != nil {
 			logger.Err(ctx, err.Error(), "uid", uid)
 			break
 		}
+		nextPageToken = resp.NextPageToken
 		count += len(resp.Members)
 
 		users := make([]string, len(resp.Members))
@@ -79,7 +80,6 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 			logger.Err(ctx, err.Error(), "uid", uid)
 		}
 		if len(resp.Members) >= pageSize {
-			skip += len(resp.Members)
 			continue
 		}
 		break

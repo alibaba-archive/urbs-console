@@ -6,8 +6,10 @@ import (
 	"net/http"
 	"os"
 	"runtime"
+	"strings"
 	"time"
 
+	"github.com/teambition/gear"
 	"github.com/teambition/urbs-console/src/util/request"
 )
 
@@ -35,4 +37,17 @@ func init() {
 
 	request.SetHttpClient(httpClient)
 	request.SetUserAgent(UserAgent)
+}
+
+const (
+	headerAuthorize = "Authorization"
+	schemaBearer    = "Bearer "
+)
+
+// TokenExtractor ...
+func TokenExtractor(ctx *gear.Context) (token string) {
+	if val := ctx.Get(headerAuthorize); strings.HasPrefix(val, schemaBearer) {
+		token = val[7:]
+	}
+	return
 }

@@ -15,7 +15,6 @@ type Setting struct {
 
 // List 读取指定产品功能模块的配置项
 func (a *Setting) List(ctx context.Context, args *tpl.ProductModuleURL) (*urbssetting.SettingsInfoRes, error) {
-
 	return a.services.UrbsSetting.SettingList(ctx, args)
 }
 

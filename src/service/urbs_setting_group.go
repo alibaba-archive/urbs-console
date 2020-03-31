@@ -84,7 +84,7 @@ func (a *UrbsSetting) GroupBatchAdd(ctx context.Context, groups []*tpl.GroupBody
 
 // GroupUpdate ...
 func (a *UrbsSetting) GroupUpdate(ctx context.Context, uid string, body *tpl.GroupUpdateBody) (*urbssetting.GroupRes, error) {
-	url := fmt.Sprintf("%s/v1/groups:batch", conf.Config.UrbsSetting.Addr)
+	url := fmt.Sprintf("%s/v1/groups/%s", conf.Config.UrbsSetting.Addr, uid)
 
 	result := new(urbssetting.GroupRes)
 

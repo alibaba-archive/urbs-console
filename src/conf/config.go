@@ -52,8 +52,8 @@ type Thrid struct {
 
 // UserAuth ...
 type UserAuth struct {
-	URL        string   `json:"url" yaml:"url"`
-	CookieKeys []string `json:"cookie_keys" yaml:"cookie_keys"`
+	URL       string `json:"url" yaml:"url"`
+	CookieKey string `json:"cookie_key" yaml:"cookie_key"`
 }
 
 // GroupMember ...

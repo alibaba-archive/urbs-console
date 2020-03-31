@@ -141,10 +141,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ModuleCreate(ctx, product, body 
 }
 
 // ModuleUpdate mocks base method
-func (m *MockUrbsSettingInterface) ModuleUpdate(ctx context.Context, product, module string, body *tpl.ModuleUpdateBody) (*urbssetting.ModulesRes, error) {
+func (m *MockUrbsSettingInterface) ModuleUpdate(ctx context.Context, product, module string, body *tpl.ModuleUpdateBody) (*urbssetting.ModuleRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ModuleUpdate", ctx, product, module, body)
-	ret0, _ := ret[0].(*urbssetting.ModulesRes)
+	ret0, _ := ret[0].(*urbssetting.ModuleRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
