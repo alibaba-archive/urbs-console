@@ -85,7 +85,7 @@ components:
         module:
           type: string
           description: 产品模块名称
-          example: teambition
+          example: newHomePage
         name:
           type: string
           description: 模块配置名称
@@ -119,7 +119,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Version'  # User API
-  /v1/users/{uid}/settings:unionAll:
+  /v1/users/settings:unionAll:
     get:
       tags:
         - User
@@ -127,28 +127,36 @@ paths:
       parameters:
         - in: header
           name: Authorization
-          description: '请求 JWT token, 格式如: `Bearer xxx`'
+          description: '请求者的 JWT token, 格式如: `Bearer xxx`'
           required: false
           schema:
             type: string
-        - in: path
-          name: uid
-          description: 用户 UID，当 uid 对应用户不存在时，该接口会返回空列表
+        - in: cookie
+          name: 配置文件中 thrid.user_auth.cookie_key 的值
+          description: '带请求者身份的 Cookie 的名称'
+          required: false
+          schema:
+            type: string            
+        - in: query
+          name: product
+          description: 产品名称，当 product 对应产品不存在时，该接口会返回空列表
           required: true
           schema:
             type: string
         - in: query
-          name: product
-          description: 产品名称，当 product 对应产品不存在时，该接口会返回空列表
-          required: false
-          schema:
-            type: string
-        - in: query
           name: client
-          description: 产品名称，当 client 对应产品不存在时，该接口会返回空列表
+          description: 客户端标识
           required: false
           schema:
             type: string
+            example:  web、ios、android、windows、macos
+        - in: query
+          name: channel
+          description: 客户端渠道
+          required: false
+          schema:
+            type: string
+            example: stable、beta、dev
         - in: query
           name: pageSize
           description: 分页大小，默认为 10，(1-1000]
@@ -174,9 +182,3 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MySettingsRes'
-        '404':
-          description: 请求失败
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'

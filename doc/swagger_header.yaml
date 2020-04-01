@@ -83,7 +83,7 @@ components:
         module:
           type: string
           description: 产品模块名称
-          example: teambition
+          example: newHomePage
         name:
           type: string
           description: 模块配置名称

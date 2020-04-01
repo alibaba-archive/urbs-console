@@ -83,30 +83,31 @@ User 用户相关接口
 
 ```shell
 # You can also use wget
-curl -X GET http://urbs-console:8080/v1/users/{uid}/settings:unionAll \
+curl -X GET http://urbs-console:8080/v1/users/settings:unionAll?product=string \
   -H 'Accept: application/json' \
   -H 'Authorization: string'
 
 ```
 
 ```http
-GET http://urbs-console:8080/v1/users/{uid}/settings:unionAll HTTP/1.1
+GET http://urbs-console:8080/v1/users/settings:unionAll?product=string HTTP/1.1
 Host: urbs-console:8080
 Accept: application/json
 Authorization: string
 
 ```
 
-`GET /v1/users/{uid}/settings:unionAll`
+`GET /v1/users/settings:unionAll`
 
 <h3 id="接口返回-user-的-settings，按照-setting-设置时间反序，支持分页，包含了-user-从属的-group-的-settings-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|Authorization|header|string|false|请求 JWT token, 格式如: `Bearer xxx`|
-|uid|path|string|true|用户 UID，当 uid 对应用户不存在时，该接口会返回空列表|
-|product|query|string|false|产品名称，当 product 对应产品不存在时，该接口会返回空列表|
-|client|query|string|false|产品名称，当 client 对应产品不存在时，该接口会返回空列表|
+|Authorization|header|string|false|请求者的 JWT token, 格式如: `Bearer xxx`|
+|配置文件中 thrid.user_auth.cookie_key 的值|cookie|string|false|带请求者身份的 Cookie 的名称|
+|product|query|string|true|产品名称，当 product 对应产品不存在时，该接口会返回空列表|
+|client|query|string|false|客户端标识|
+|channel|query|string|false|客户端渠道|
 |pageSize|query|integer(int32)|false|分页大小，默认为 10，(1-1000]|
 |pageToken|query|string|false|分页请求标记，来自于响应结果的 nextPageToken|
 
@@ -121,7 +122,7 @@ Authorization: string
   "result": [
     {
       "hid": "AwAAAAAAAAB25V_QnbhCuRwF",
-      "module": "teambition",
+      "module": "newHomePage",
       "name": "beta",
       "value": "string",
       "last_value": "string",
@@ -137,7 +138,6 @@ Authorization: string
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|请求成功|[MySettingsRes](#schemamysettingsres)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|请求失败|[ErrorResponse](#schemaerrorresponse)|
 
 <aside class="success">
 This operation does not require authentication
@@ -267,7 +267,7 @@ totalSize
   "result": [
     {
       "hid": "AwAAAAAAAAB25V_QnbhCuRwF",
-      "module": "teambition",
+      "module": "newHomePage",
       "name": "beta",
       "value": "string",
       "last_value": "string",
@@ -297,7 +297,7 @@ totalSize
 ```json
 {
   "hid": "AwAAAAAAAAB25V_QnbhCuRwF",
-  "module": "teambition",
+  "module": "newHomePage",
   "name": "beta",
   "value": "string",
   "last_value": "string",
