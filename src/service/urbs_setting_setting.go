@@ -12,7 +12,7 @@ import (
 
 // SettingList ...
 func (a *UrbsSetting) SettingList(ctx context.Context, args *tpl.ProductModuleURL) (*urbssetting.SettingsInfoRes, error) {
-	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings?skip=%d&pageSize=%d", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Skip, args.PageSize)
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Skip, args.PageSize, args.PageToken)
 
 	result := new(urbssetting.SettingsInfoRes)
 

@@ -12,7 +12,7 @@ import (
 
 // ModuleList ...
 func (a *UrbsSetting) ModuleList(ctx context.Context, args *tpl.ProductPaginationURL) (*urbssetting.ModulesRes, error) {
-	url := fmt.Sprintf("%s/v1/products/%s/modules?skip=%d&pageSize=%d", conf.Config.UrbsSetting.Addr, args.Product, args.Skip, args.PageSize)
+	url := fmt.Sprintf("%s/v1/products/%s/modules?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Skip, args.PageSize, args.PageToken)
 
 	result := new(urbssetting.ModulesRes)
 

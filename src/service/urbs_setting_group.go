@@ -12,7 +12,7 @@ import (
 
 // GroupListLables ...
 func (a *UrbsSetting) GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.LabelsInfoRes, error) {
-	url := fmt.Sprintf("%s/v1/groups/%s/labels?skip=%d&pageSize=%d", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize)
+	url := fmt.Sprintf("%s/v1/groups/%s/labels?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken)
 
 	result := new(urbssetting.LabelsInfoRes)
 
@@ -26,7 +26,7 @@ func (a *UrbsSetting) GroupListLables(ctx context.Context, args *tpl.UIDPaginati
 
 // GroupListSettings ...
 func (a *UrbsSetting) GroupListSettings(ctx context.Context, args *tpl.UIDProductURL) (*urbssetting.MySettingsRes, error) {
-	url := fmt.Sprintf("%s/v1/groups/%s/settings?product=%s&skip=%d&pageSize=%d", conf.Config.UrbsSetting.Addr, args.UID, args.Product, args.Skip, args.PageSize)
+	url := fmt.Sprintf("%s/v1/groups/%s/settings?product=%s&skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Product, args.Skip, args.PageSize, args.PageToken)
 
 	result := new(urbssetting.MySettingsRes)
 
@@ -40,7 +40,7 @@ func (a *UrbsSetting) GroupListSettings(ctx context.Context, args *tpl.UIDProduc
 
 // GroupList ...
 func (a *UrbsSetting) GroupList(ctx context.Context, args *tpl.GroupsURL) (*urbssetting.GroupsRes, error) {
-	url := fmt.Sprintf("%s/v1/groups?kind=%s&skip=%d&pageSize=%d", conf.Config.UrbsSetting.Addr, args.Kind, args.Skip, args.PageSize)
+	url := fmt.Sprintf("%s/v1/groups?kind=%s&skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Kind, args.Skip, args.PageSize, args.PageToken)
 
 	result := new(urbssetting.GroupsRes)
 
@@ -110,7 +110,7 @@ func (a *UrbsSetting) GroupDelete(ctx context.Context, uid string) (*tpl.BoolRes
 
 // GroupListMembers ...
 func (a *UrbsSetting) GroupListMembers(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.GroupMembersRes, error) {
-	url := fmt.Sprintf("%s/v1/groups/%s/members?skip=%d&pageSize=%d", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize)
+	url := fmt.Sprintf("%s/v1/groups/%s/members?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken)
 
 	result := new(urbssetting.GroupMembersRes)
 

@@ -145,18 +145,16 @@ paths:
             type: string
         - in: query
           name: client
-          description: 客户端标识
+          description: 客户端标识，例如 web、ios、android、windows、macos
           required: false
           schema:
             type: string
-            example:  web、ios、android、windows、macos
         - in: query
           name: channel
-          description: 客户端渠道
+          description: 客户端渠道，例如 stable、beta、dev
           required: false
           schema:
             type: string
-            example: stable、beta、dev
         - in: query
           name: pageSize
           description: 分页大小，默认为 10，(1-1000]

@@ -12,7 +12,7 @@ import (
 
 // LabelList ...
 func (a *UrbsSetting) LabelList(ctx context.Context, args *tpl.ProductPaginationURL) (*urbssetting.LabelsInfoRes, error) {
-	url := fmt.Sprintf("%s/v1/products/%s/labels?skip=%d&pageSize=%d", conf.Config.UrbsSetting.Addr, args.Product, args.Skip, args.PageSize)
+	url := fmt.Sprintf("%s/v1/products/%s/labels?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Skip, args.PageSize, args.PageToken)
 
 	result := new(urbssetting.LabelsInfoRes)
 

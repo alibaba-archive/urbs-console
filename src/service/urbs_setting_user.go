@@ -12,7 +12,7 @@ import (
 
 // UserListLables ...
 func (a *UrbsSetting) UserListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.LabelsInfoRes, error) {
-	url := fmt.Sprintf("%s/v1/users/%s/labels?skip=%d&pageSize=%d", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize)
+	url := fmt.Sprintf("%s/v1/users/%s/labels?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken)
 
 	result := new(urbssetting.LabelsInfoRes)
 
@@ -38,7 +38,7 @@ func (a *UrbsSetting) UserRefreshCached(ctx context.Context, uid string) (*tpl.B
 
 // UserListSettings ...
 func (a *UrbsSetting) UserListSettings(ctx context.Context, args *tpl.UIDProductURL) (*urbssetting.MySettingsRes, error) {
-	url := fmt.Sprintf("%s/v1/users/%s/settings?skip=%d&pageSize=%d&product=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.Product)
+	url := fmt.Sprintf("%s/v1/users/%s/settings?skip=%d&pageSize=%d&pageToken=%s&product=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Product)
 
 	result := new(urbssetting.MySettingsRes)
 
@@ -51,7 +51,7 @@ func (a *UrbsSetting) UserListSettings(ctx context.Context, args *tpl.UIDProduct
 
 // UserListSettingsUnionAll ...
 func (a *UrbsSetting) UserListSettingsUnionAll(ctx context.Context, args *tpl.MySettingsQueryURL) (*urbssetting.MySettingsRes, error) {
-	url := fmt.Sprintf("%s/v1/users/%s/settings:unionAll?skip=%d&pageSize=%d&product=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.Product)
+	url := fmt.Sprintf("%s/v1/users/%s/settings:unionAll?skip=%d&pageSize=%d&pageToken=%s&product=%s&client=%s&channel=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Product, args.Client, args.Channel)
 
 	result := new(urbssetting.MySettingsRes)
 

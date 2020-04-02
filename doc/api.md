@@ -106,8 +106,8 @@ Authorization: string
 |Authorization|header|string|false|请求者的 JWT token, 格式如: `Bearer xxx`|
 |配置文件中 thrid.user_auth.cookie_key 的值|cookie|string|false|带请求者身份的 Cookie 的名称|
 |product|query|string|true|产品名称，当 product 对应产品不存在时，该接口会返回空列表|
-|client|query|string|false|客户端标识|
-|channel|query|string|false|客户端渠道|
+|client|query|string|false|客户端标识，例如 web、ios、android、windows、macos|
+|channel|query|string|false|客户端渠道，例如 stable、beta、dev|
 |pageSize|query|integer(int32)|false|分页大小，默认为 10，(1-1000]|
 |pageToken|query|string|false|分页请求标记，来自于响应结果的 nextPageToken|
 
