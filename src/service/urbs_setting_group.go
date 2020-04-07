@@ -139,7 +139,7 @@ func (a *UrbsSetting) GroupBatchAddMembers(ctx context.Context, groupId string, 
 
 // GroupRemoveMembers ...
 func (a *UrbsSetting) GroupRemoveMembers(ctx context.Context, args *tpl.GroupMembersURL) (*tpl.BoolRes, error) {
-	url := fmt.Sprintf("%s/v1/groups/%s/members", conf.Config.UrbsSetting.Addr, args.UID)
+	url := fmt.Sprintf("%s/v1/groups/%s/members?sync_lt=%d&user=%s", conf.Config.UrbsSetting.Addr, args.UID, args.SyncLt, args.User)
 
 	result := new(tpl.BoolRes)
 

@@ -21,7 +21,8 @@ type ConfigTpl struct {
 	Logger      Logger      `json:"logger" yaml:"logger"`
 	UrbsSetting UrbsSetting `json:"urbs_setting" yaml:"urbs_setting"`
 	// 三方接口
-	Thrid Thrid `json:"thrid" yaml:"thrid"`
+	Thrid         Thrid    `json:"thrid" yaml:"thrid"`
+	CorsWhiteList []string `json:"cors_white_list" yaml:"cors_white_list"`
 }
 
 // TlsConfig the config struct for creating tls.Config.

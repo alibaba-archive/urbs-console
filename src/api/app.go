@@ -6,9 +6,11 @@ import (
 	"strings"
 
 	"github.com/jinzhu/gorm"
+	"github.com/teambition/gear/middleware/cors"
 
 	"github.com/teambition/gear"
 	"github.com/teambition/gear/middleware/requestid"
+	"github.com/teambition/urbs-console/src/conf"
 	"github.com/teambition/urbs-console/src/middleware"
 	"github.com/teambition/urbs-console/src/util"
 )
@@ -45,6 +47,12 @@ func NewApp() *gear.App {
 	})
 	app.Use(middleware.Logger)
 	app.Use(requestid.New())
+
+	app.Use(cors.New(cors.Options{
+		AllowOrigins:  conf.Config.CorsWhiteList,
+		Credentials:   true,
+		ExposeHeaders: []string{gear.HeaderXRequestID},
+	}))
 
 	err := util.DigInvoke(func(routers []*gear.Router) error {
 		for _, router := range routers {
