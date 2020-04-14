@@ -37,17 +37,18 @@ func NewServices() *Services {
 // UrbsSettingHeader ...
 func UrbsSettingHeader(ctx context.Context) http.Header {
 	header := http.Header{}
-	requestId, _ := ctx.Value("X-Request-ID").(string)
+	requestId, _ := ctx.Value(gear.HeaderXRequestID).(string)
 	if requestId == "" {
 		if gearCtx, ok := ctx.(*gear.Context); ok {
 			requestId = gearCtx.GetHeader(gear.HeaderXRequestID)
 			if requestId == "" {
 				requestId = gearCtx.Res.Header().Get(gear.HeaderXRequestID)
 			}
+			header.Set("X-Canary", gearCtx.GetHeader("X-Canary"))
 		}
 	}
 	if requestId != "" {
-		header.Set("X-Request-ID", requestId)
+		header.Set(gear.HeaderXRequestID, requestId)
 	}
 	header.Set("Authorization", "Bearer "+genToken(conf.Config.UrbsSetting.Key))
 	return header
