@@ -13,7 +13,7 @@ doc:
 	widdershins --language_tabs 'shell:Shell' 'http:HTTP' --summary doc/swagger.yaml -o doc/api.md
 
 dev:
-	@CONFIG_FILE_PATH=${PWD}/config/default.yml APP_ENV=development go run main.go
+	@CONFIG_FILE_PATH=${PWD}/config/dev.yml APP_ENV=development go run main.go
 
 test:
 	@CONFIG_FILE_PATH=${PWD}/config/test.yml APP_ENV=test go test -v ./...

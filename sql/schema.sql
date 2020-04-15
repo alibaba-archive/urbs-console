@@ -11,3 +11,19 @@ CREATE TABLE IF NOT EXISTS `urbs`.`operation_log` (
   PRIMARY KEY (`id`),
   KEY `idx_object` (`object`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;
+CREATE TABLE IF NOT EXISTS `urbs`.`urbs_ac_user` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `uid` varchar(63) NOT NULL,
+  `name` varchar(128) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;
+CREATE TABLE IF NOT EXISTS `urbs`.`urbs_ac_acl` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `subject` varchar(63) NOT NULL,
+  `object` varchar(256) NOT NULL,
+  `permission` varchar(63) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `uk_subject` (`subject`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;

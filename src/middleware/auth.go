@@ -34,8 +34,11 @@ func Auth(services *service.Services, ignoreURLs []string, memberURLs []string) 
 			}
 		}
 		uid, err := services.UserAuth.Verify(ctx, body)
+		if err != nil {
+			return err
+		}
 		_ctx := context.WithValue(ctx.Context(), UidKey{}, uid)
 		ctx.WithContext(_ctx)
-		return err
+		return nil
 	}
 }

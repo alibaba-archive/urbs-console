@@ -12,11 +12,15 @@ func init() {
 // Daos ...
 type Daos struct {
 	OperationLog *OperationLog
+	UrbsAcAcl    *UrbsAcAcl
+	UrbsAcUser   *UrbsAcUser
 }
 
 // NewDaos ...
 func NewDaos(sql *service.SQL) *Daos {
 	return &Daos{
 		OperationLog: &OperationLog{DB: sql.DB},
+		UrbsAcAcl:    &UrbsAcAcl{DB: sql.DB},
+		UrbsAcUser:   &UrbsAcUser{DB: sql.DB},
 	}
 }

@@ -63,11 +63,9 @@ func HanderResponse(response *request.Response, err error) error {
 		gearErr := new(gear.Error)
 		json.Unmarshal(response.Content, gearErr)
 		if gearErr.Err != "" {
-
-			gearErr.Msg = response.Response.Request.URL.Path + " " + gearErr.Msg
 			return gearErr.WithCode(response.StatusCode)
 		}
-		return gear.ErrBadRequest.WithCode(response.StatusCode).WithMsg(response.Response.Request.URL.Path + " " + response.String())
+		return gear.ErrBadRequest.WithCode(response.StatusCode).WithMsg(response.String())
 	}
 	return nil
 }

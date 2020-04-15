@@ -1,6 +1,7 @@
 package bll
 
 import (
+	"github.com/teambition/urbs-console/src/dao"
 	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/util"
 )
@@ -18,10 +19,13 @@ type Blls struct {
 	Label   *Label
 	Module  *Module
 	Setting *Setting
+
+	OperationLog *OperationLog
+	UrbsAcAcl    *UrbsAcAcl
 }
 
 // NewBlls ...
-func NewBlls(services *service.Services) *Blls {
+func NewBlls(services *service.Services, daos *dao.Daos) *Blls {
 	return &Blls{
 		User:    &User{services: services},
 		Group:   &Group{services: services},
@@ -30,5 +34,7 @@ func NewBlls(services *service.Services) *Blls {
 		Label:   &Label{services: services},
 		Module:  &Module{services: services},
 		Setting: &Setting{services: services},
+
+		OperationLog: &OperationLog{daos: daos},
 	}
 }

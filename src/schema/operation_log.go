@@ -14,3 +14,8 @@ type OperationLog struct {
 	Content  string `gorm:"column:content"`     // 操作内容
 	Desc     string `gorm:"column:description"` // 操作说明
 }
+
+// TableName retuns table name
+func (OperationLog) TableName() string {
+	return "operation_log"
+}
