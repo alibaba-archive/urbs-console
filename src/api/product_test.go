@@ -14,7 +14,7 @@ func testProductCreate(tt *TestTools, name string) (*urbssetting.ProductRes, err
 	}
 	result := &urbssetting.ProductRes{}
 
-	res, err := request.Post(fmt.Sprintf("%s/v1/products", tt.Host)).Body(req).Result(result).Do()
+	res, err := request.Post(fmt.Sprintf("%s/api/v1/products", tt.Host)).Body(req).Result(result).Do()
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
 	tt.Require.Equal(name, result.Result.Name)

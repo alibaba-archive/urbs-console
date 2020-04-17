@@ -38,7 +38,7 @@ func testModuleCreate(tt *TestTools, product, module string) (*urbssetting.Modul
 	}
 	result := &urbssetting.ModuleRes{}
 
-	res, err := request.Post(fmt.Sprintf("%s/v1/products/%s/modules", tt.Host, product)).Body(req).Result(result).Do()
+	res, err := request.Post(fmt.Sprintf("%s/api/v1/products/%s/modules", tt.Host, product)).Body(req).Result(result).Do()
 
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
@@ -50,7 +50,7 @@ func testModuleGet(tt *TestTools, product string) (*urbssetting.ModulesRes, erro
 
 	result := &urbssetting.ModulesRes{}
 
-	res, err := request.Get(fmt.Sprintf("%s/v1/products/%s/modules", tt.Host, product)).Result(result).Do()
+	res, err := request.Get(fmt.Sprintf("%s/api/v1/products/%s/modules", tt.Host, product)).Result(result).Do()
 
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
@@ -65,7 +65,7 @@ func testModuleUpdate(tt *TestTools, product, module string) (*urbssetting.Modul
 	}
 	result := &urbssetting.ModuleRes{}
 
-	res, err := request.Put(fmt.Sprintf("%s/v1/products/%s/modules/%s", tt.Host, product, module)).Body(req).Result(result).Do()
+	res, err := request.Put(fmt.Sprintf("%s/api/v1/products/%s/modules/%s", tt.Host, product, module)).Body(req).Result(result).Do()
 
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
@@ -77,7 +77,7 @@ func testModuleOffline(tt *TestTools, product, module string) (*tpl.BoolRes, err
 
 	result := &tpl.BoolRes{}
 
-	res, err := request.Put(fmt.Sprintf("%s/v1/products/%s/modules/%s:offline", tt.Host, product, module)).Result(result).Do()
+	res, err := request.Put(fmt.Sprintf("%s/api/v1/products/%s/modules/%s:offline", tt.Host, product, module)).Result(result).Do()
 
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())

@@ -4,6 +4,7 @@ import (
 	"github.com/teambition/gear"
 	"github.com/teambition/urbs-console/src/bll"
 	"github.com/teambition/urbs-console/src/tpl"
+	"github.com/teambition/urbs-console/src/util"
 )
 
 // User ..
@@ -145,7 +146,7 @@ func (a *User) RemoveSetting(ctx *gear.Context) error {
 // 包含了 user 从属的 group 的 settings
 func (a *User) ListSettingsUnionAllClient(ctx *gear.Context) error {
 	req := tpl.MySettingsQueryURL{
-		UID: GetUid(ctx),
+		UID: util.GetUid(ctx),
 	}
 	if err := ctx.ParseURL(&req); err != nil {
 		return err

@@ -7,14 +7,19 @@ import (
 	"time"
 
 	"github.com/teambition/gear"
-	"github.com/teambition/gear-auth/jwt"
+	authjwt "github.com/teambition/gear-auth/jwt"
 	"github.com/teambition/urbs-console/src/conf"
 	"github.com/teambition/urbs-console/src/util"
 	"github.com/teambition/urbs-console/src/util/request"
 )
 
+var urbsSettingJwt *authjwt.JWT
+var thirdJwt *authjwt.JWT
+
 func init() {
 	util.DigProvide(NewServices)
+	urbsSettingJwt = authjwt.New([]byte(conf.Config.UrbsSetting.Key))
+	thirdJwt = authjwt.New([]byte(conf.Config.Thrid.Key))
 }
 
 // Services ...
@@ -50,7 +55,7 @@ func UrbsSettingHeader(ctx context.Context) http.Header {
 	if requestId != "" {
 		header.Set(gear.HeaderXRequestID, requestId)
 	}
-	header.Set("Authorization", "Bearer "+genToken(conf.Config.UrbsSetting.Key))
+	header.Set("Authorization", "Bearer "+genToken(urbsSettingJwt))
 	return header
 }
 
@@ -72,12 +77,11 @@ func HanderResponse(response *request.Response, err error) error {
 
 func genThridHeader() http.Header {
 	header := http.Header{}
-	header.Set("Authorization", "Bearer "+genToken(conf.Config.Thrid.Key))
+	header.Set("Authorization", "Bearer "+genToken(thirdJwt))
 	return header
 }
 
-func genToken(key string) string {
-	j := jwt.New([]byte(key))
+func genToken(j *authjwt.JWT) string {
 	m := make(map[string]interface{})
 	m["name"] = "urbs-console"
 	token, err := j.Sign(m, time.Hour)

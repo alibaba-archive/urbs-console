@@ -54,7 +54,7 @@ func testSettingCreate(tt *TestTools, product, module, setting string) (*urbsset
 
 	result := &urbssetting.SettingInfoRes{}
 
-	res, err := request.Post(fmt.Sprintf("%s/v1/products/%s/modules/%s/settings", tt.Host, product, module)).Body(body).Result(result).Do()
+	res, err := request.Post(fmt.Sprintf("%s/api/v1/products/%s/modules/%s/settings", tt.Host, product, module)).Body(body).Result(result).Do()
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
 	tt.Require.Equal(body.Name, result.Result.Name)
@@ -65,7 +65,7 @@ func testSettingList(tt *TestTools, product, module string) (*urbssetting.Settin
 
 	result := &urbssetting.SettingsInfoRes{}
 
-	res, err := request.Get(fmt.Sprintf("%s/v1/products/%s/modules/%s/settings", tt.Host, product, module)).Result(result).Do()
+	res, err := request.Get(fmt.Sprintf("%s/api/v1/products/%s/modules/%s/settings", tt.Host, product, module)).Result(result).Do()
 
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
@@ -77,7 +77,7 @@ func testSettingGet(tt *TestTools, product, module, setting string) (*urbssettin
 
 	result := &urbssetting.SettingInfoRes{}
 
-	res, err := request.Get(fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s", tt.Host, product, module, setting)).Result(result).Do()
+	res, err := request.Get(fmt.Sprintf("%s/api/v1/products/%s/modules/%s/settings/%s", tt.Host, product, module, setting)).Result(result).Do()
 
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
@@ -95,7 +95,7 @@ func testSettingUpdate(tt *TestTools, product, module, setting string) (*urbsset
 
 	result := &urbssetting.SettingInfoRes{}
 
-	res, err := request.Put(fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s", tt.Host, product, module, setting)).Body(body).Result(result).Do()
+	res, err := request.Put(fmt.Sprintf("%s/api/v1/products/%s/modules/%s/settings/%s", tt.Host, product, module, setting)).Body(body).Result(result).Do()
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
 
@@ -110,7 +110,7 @@ func testSettingOffline(tt *TestTools, product, module, setting string) (*tpl.Bo
 
 	result := &tpl.BoolRes{}
 
-	res, err := request.Put(fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s:offline", tt.Host, product, module, setting)).Result(result).Do()
+	res, err := request.Put(fmt.Sprintf("%s/api/v1/products/%s/modules/%s/settings/%s:offline", tt.Host, product, module, setting)).Result(result).Do()
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
 
@@ -125,7 +125,7 @@ func testSettingAssign(tt *TestTools, product, module, setting string, uid strin
 
 	result := &tpl.BoolRes{}
 
-	res, err := request.Post(fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s:assign", tt.Host, product, module, setting)).Body(body).Result(result).Do()
+	res, err := request.Post(fmt.Sprintf("%s/api/v1/products/%s/modules/%s/settings/%s:assign", tt.Host, product, module, setting)).Body(body).Result(result).Do()
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
 

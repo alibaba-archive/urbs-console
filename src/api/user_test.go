@@ -16,7 +16,7 @@ func testUserBatchCreate(tt *TestTools, uid string) {
 	}
 	result := &tpl.BoolRes{}
 
-	res, err := request.Post(fmt.Sprintf("%s/v1/users:batch", tt.Host)).Body(req).Result(result).Do()
+	res, err := request.Post(fmt.Sprintf("%s/api/v1/users:batch", tt.Host)).Body(req).Result(result).Do()
 
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
@@ -25,7 +25,7 @@ func testUserBatchCreate(tt *TestTools, uid string) {
 func testUserListLables(tt *TestTools, uid string, count int) {
 	result := &urbssetting.LabelsInfoRes{}
 
-	res, err := request.Get(fmt.Sprintf("%s/v1/users/%s/labels", tt.Host, uid)).Result(result).Do()
+	res, err := request.Get(fmt.Sprintf("%s/api/v1/users/%s/labels", tt.Host, uid)).Result(result).Do()
 
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
@@ -35,7 +35,7 @@ func testUserListLables(tt *TestTools, uid string, count int) {
 func testUserSettingAll(tt *TestTools, product string, uid string, count int) {
 	result := &urbssetting.LabelsInfoRes{}
 
-	res, err := request.Get(fmt.Sprintf("%s/v1/users/%s/settings:unionAll?product=%s", tt.Host, uid, product)).Result(result).Do()
+	res, err := request.Get(fmt.Sprintf("%s/api/v1/users/%s/settings:unionAll?product=%s", tt.Host, uid, product)).Result(result).Do()
 
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
@@ -54,12 +54,12 @@ func TestUserBatchAdd(t *testing.T) {
 		}
 		result := &tpl.BoolRes{}
 
-		resp, err := request.Post(fmt.Sprintf("%s/v1/users:batch", tt.Host)).Header(genHeader()).Body(req).Result(result).Do()
+		resp, err := request.Post(fmt.Sprintf("%s/api/v1/users:batch", tt.Host)).Header(genHeader()).Body(req).Result(result).Do()
 		assert.Nil(err)
 
 		assert.Equal(200, resp.StatusCode)
 
-		resp, err = request.Post(fmt.Sprintf("%s/v1/users:batch", tt.Host)).Body(req).Result(result).Do()
+		resp, err = request.Post(fmt.Sprintf("%s/api/v1/users:batch", tt.Host)).Body(req).Result(result).Do()
 		assert.Nil(err)
 
 		assert.Equal(200, resp.StatusCode)

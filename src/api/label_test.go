@@ -64,7 +64,7 @@ func testLabelCreate(tt *TestTools, product, labelName string) (*urbssetting.Lab
 		Name: labelName,
 	}
 
-	res, err := request.Post(fmt.Sprintf("%s/v1/products/%s/labels", tt.Host, product)).Body(body).Result(result).Do()
+	res, err := request.Post(fmt.Sprintf("%s/api/v1/products/%s/labels", tt.Host, product)).Body(body).Result(result).Do()
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
 	return result, nil
@@ -78,7 +78,7 @@ func testLabelUpdate(tt *TestTools, product, labelName string) (*urbssetting.Lab
 	}
 	result := &urbssetting.LabelInfoRes{}
 
-	res, err := request.Put(fmt.Sprintf("%s/v1/products/%s/labels/%s", tt.Host, product, labelName)).Body(body).Result(result).Do()
+	res, err := request.Put(fmt.Sprintf("%s/api/v1/products/%s/labels/%s", tt.Host, product, labelName)).Body(body).Result(result).Do()
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
 
@@ -92,7 +92,7 @@ func testLabelList(tt *TestTools, product string, count int) {
 
 	result := &urbssetting.LabelsInfoRes{}
 
-	res, err := request.Get(fmt.Sprintf("%s/v1/products/%s/labels", tt.Host, product)).Result(result).Do()
+	res, err := request.Get(fmt.Sprintf("%s/api/v1/products/%s/labels", tt.Host, product)).Result(result).Do()
 
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
@@ -105,7 +105,7 @@ func testLabelAssign(tt *TestTools, product, labelName, uid string) {
 	}
 	result := &tpl.BoolRes{}
 
-	res, err := request.Post(fmt.Sprintf("%s/v1/products/%s/labels/%s:assign", tt.Host, product, labelName)).Body(body).Result(result).Do()
+	res, err := request.Post(fmt.Sprintf("%s/api/v1/products/%s/labels/%s:assign", tt.Host, product, labelName)).Body(body).Result(result).Do()
 
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
@@ -115,7 +115,7 @@ func testLabelOffline(tt *TestTools, product, labelName string) {
 
 	result := &tpl.BoolRes{}
 
-	res, err := request.Put(fmt.Sprintf("%s/v1/products/%s/labels/%s:offline", tt.Host, product, labelName)).Result(result).Do()
+	res, err := request.Put(fmt.Sprintf("%s/api/v1/products/%s/labels/%s:offline", tt.Host, product, labelName)).Result(result).Do()
 
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())
@@ -125,7 +125,7 @@ func testLabelDelete(tt *TestTools, product, labelName string) {
 
 	result := &tpl.BoolRes{}
 
-	res, err := request.Delete(fmt.Sprintf("%s/v1/products/%s/labels/%s", tt.Host, product, labelName)).Result(result).Do()
+	res, err := request.Delete(fmt.Sprintf("%s/api/v1/products/%s/labels/%s", tt.Host, product, labelName)).Result(result).Do()
 
 	tt.Require.Nil(err)
 	tt.Require.True(res.OK())

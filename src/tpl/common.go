@@ -91,9 +91,11 @@ func StringSliceHas(sl []string, v string) bool {
 
 // UsersGroupsBody ...
 type UsersGroupsBody struct {
-	Users  []string `json:"users"`
-	Groups []string `json:"groups"`
-	Value  string   `json:"value"`
+	Users      []string `json:"users"`
+	Groups     []string `json:"groups"`
+	Value      string   `json:"value"`
+	Desc       string   `json:"description"` // 操作说明
+	Percentage int      `json:"percentage"`  // 灰度百分比
 }
 
 // Validate 实现 gear.BodyTemplate。

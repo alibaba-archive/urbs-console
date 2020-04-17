@@ -10,6 +10,10 @@ func init() {
 	util.DigProvide(NewBlls)
 }
 
+var (
+	blls *Blls
+)
+
 // Blls ...
 type Blls struct {
 	User    *User
@@ -26,7 +30,7 @@ type Blls struct {
 
 // NewBlls ...
 func NewBlls(services *service.Services, daos *dao.Daos) *Blls {
-	return &Blls{
+	blls = &Blls{
 		User:    &User{services: services},
 		Group:   &Group{services: services},
 		Product: &Product{services: services},
@@ -37,4 +41,5 @@ func NewBlls(services *service.Services, daos *dao.Daos) *Blls {
 
 		OperationLog: &OperationLog{daos: daos},
 	}
+	return blls
 }

@@ -11,6 +11,7 @@ import (
 // Setting ...
 type Setting struct {
 	services *service.Services
+	blls     *Blls
 }
 
 // List 读取指定产品功能模块的配置项
@@ -40,5 +41,6 @@ func (a *Setting) Offline(ctx context.Context, args *tpl.ProductModuleSettingURL
 
 // Assign 批量为用户或群组设置产品功能模块配置项
 func (a *Setting) Assign(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.UsersGroupsBody) (*tpl.BoolRes, error) {
+	blls.OperationLog.AddSettingAssignLog(ctx, args, body)
 	return a.services.UrbsSetting.SettingAssign(ctx, args, body)
 }

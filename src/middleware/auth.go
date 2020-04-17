@@ -11,9 +11,6 @@ import (
 	"github.com/teambition/urbs-console/src/util"
 )
 
-// UidKey ...
-type UidKey struct{}
-
 // Auth ...
 func Auth(services *service.Services, ignoreURLs []string, memberURLs []string) func(ctx *gear.Context) error {
 	return func(ctx *gear.Context) error {
@@ -37,7 +34,7 @@ func Auth(services *service.Services, ignoreURLs []string, memberURLs []string) 
 		if err != nil {
 			return err
 		}
-		_ctx := context.WithValue(ctx.Context(), UidKey{}, uid)
+		_ctx := context.WithValue(ctx.Context(), util.UidKey{}, uid)
 		ctx.WithContext(_ctx)
 		return nil
 	}
