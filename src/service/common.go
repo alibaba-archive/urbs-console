@@ -25,7 +25,7 @@ func init() {
 // Services ...
 type Services struct {
 	UrbsSetting UrbsSettingInterface
-	UserAuth    *UserAuth
+	UserAuth    UserAuthInterface
 	GroupMember *GroupMember
 }
 

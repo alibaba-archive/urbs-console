@@ -3,6 +3,7 @@ package request
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -30,6 +31,18 @@ func New() *Request {
 	return r
 }
 
+// Method ...
+func (a *Request) Method(method string) *Request {
+	a.method = method
+	return a
+}
+
+// Url ...
+func (a *Request) Url(url string) *Request {
+	a.url = url
+	return a
+}
+
 // Get ...
 func (a *Request) Get(url string) *Request {
 	a.method = http.MethodGet
@@ -55,6 +68,12 @@ func (a *Request) Put(url string) *Request {
 func (a *Request) Delete(url string) *Request {
 	a.method = http.MethodDelete
 	a.url = url
+	return a
+}
+
+// RawBody ...
+func (a *Request) RawBody(body string) *Request {
+	a.body = bytes.NewReader([]byte(body))
 	return a
 }
 
@@ -106,6 +125,9 @@ func (a *Request) Do() (*Response, error) {
 	}
 	if a.result != nil {
 		err = json.Unmarshal(respBody, a.result)
+		if err != nil {
+			return nil, fmt.Errorf("unmarshal error: %s, data: %s", err.Error(), string(respBody))
+		}
 	}
 	response := &Response{
 		Response:   resp,

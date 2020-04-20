@@ -36,10 +36,10 @@ func (m *MockUrbsSettingInterface) EXPECT() *MockUrbsSettingInterfaceMockRecorde
 }
 
 // ProductList mocks base method
-func (m *MockUrbsSettingInterface) ProductList(ctx context.Context, args *tpl.Pagination) (*urbssetting.ProductsRes, error) {
+func (m *MockUrbsSettingInterface) ProductList(ctx context.Context, args *tpl.Pagination) (*tpl.ProductsRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ProductList", ctx, args)
-	ret0, _ := ret[0].(*urbssetting.ProductsRes)
+	ret0, _ := ret[0].(*tpl.ProductsRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -51,10 +51,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ProductList(ctx, args interface{
 }
 
 // ProductCreate mocks base method
-func (m *MockUrbsSettingInterface) ProductCreate(ctx context.Context, body *tpl.NameDescBody) (*urbssetting.ProductRes, error) {
+func (m *MockUrbsSettingInterface) ProductCreate(ctx context.Context, body *tpl.NameDescBody) (*tpl.ProductRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ProductCreate", ctx, body)
-	ret0, _ := ret[0].(*urbssetting.ProductRes)
+	ret0, _ := ret[0].(*tpl.ProductRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -66,10 +66,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ProductCreate(ctx, body interfac
 }
 
 // ProductUpdate mocks base method
-func (m *MockUrbsSettingInterface) ProductUpdate(ctx context.Context, product string, body *tpl.ProductUpdateBody) (*urbssetting.ProductRes, error) {
+func (m *MockUrbsSettingInterface) ProductUpdate(ctx context.Context, product string, body *tpl.ProductUpdateBody) (*tpl.ProductRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ProductUpdate", ctx, product, body)
-	ret0, _ := ret[0].(*urbssetting.ProductRes)
+	ret0, _ := ret[0].(*tpl.ProductRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -111,10 +111,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ProductDelete(ctx, product inter
 }
 
 // ModuleList mocks base method
-func (m *MockUrbsSettingInterface) ModuleList(ctx context.Context, args *tpl.ProductPaginationURL) (*urbssetting.ModulesRes, error) {
+func (m *MockUrbsSettingInterface) ModuleList(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.ModulesInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ModuleList", ctx, args)
-	ret0, _ := ret[0].(*urbssetting.ModulesRes)
+	ret0, _ := ret[0].(*tpl.ModulesInfoRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -126,10 +126,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ModuleList(ctx, args interface{}
 }
 
 // ModuleCreate mocks base method
-func (m *MockUrbsSettingInterface) ModuleCreate(ctx context.Context, product string, body *tpl.NameDescBody) (*urbssetting.ModuleRes, error) {
+func (m *MockUrbsSettingInterface) ModuleCreate(ctx context.Context, product string, body *tpl.NameDescBody) (*tpl.ModuleInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ModuleCreate", ctx, product, body)
-	ret0, _ := ret[0].(*urbssetting.ModuleRes)
+	ret0, _ := ret[0].(*tpl.ModuleInfoRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -141,10 +141,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ModuleCreate(ctx, product, body 
 }
 
 // ModuleUpdate mocks base method
-func (m *MockUrbsSettingInterface) ModuleUpdate(ctx context.Context, product, module string, body *tpl.ModuleUpdateBody) (*urbssetting.ModuleRes, error) {
+func (m *MockUrbsSettingInterface) ModuleUpdate(ctx context.Context, product, module string, body *tpl.ModuleUpdateBody) (*tpl.ModuleInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ModuleUpdate", ctx, product, module, body)
-	ret0, _ := ret[0].(*urbssetting.ModuleRes)
+	ret0, _ := ret[0].(*tpl.ModuleInfoRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -171,10 +171,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ModuleOffline(ctx, product, modu
 }
 
 // SettingList mocks base method
-func (m *MockUrbsSettingInterface) SettingList(ctx context.Context, args *tpl.ProductModuleURL) (*urbssetting.SettingsInfoRes, error) {
+func (m *MockUrbsSettingInterface) SettingList(ctx context.Context, args *tpl.ProductModuleURL) (*tpl.SettingsInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SettingList", ctx, args)
-	ret0, _ := ret[0].(*urbssetting.SettingsInfoRes)
+	ret0, _ := ret[0].(*tpl.SettingsInfoRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -186,10 +186,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) SettingList(ctx, args interface{
 }
 
 // SettingCreate mocks base method
-func (m *MockUrbsSettingInterface) SettingCreate(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.NameDescBody) (*urbssetting.SettingInfoRes, error) {
+func (m *MockUrbsSettingInterface) SettingCreate(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.NameDescBody) (*tpl.SettingInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SettingCreate", ctx, args, body)
-	ret0, _ := ret[0].(*urbssetting.SettingInfoRes)
+	ret0, _ := ret[0].(*tpl.SettingInfoRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -201,10 +201,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) SettingCreate(ctx, args, body in
 }
 
 // SettingGet mocks base method
-func (m *MockUrbsSettingInterface) SettingGet(ctx context.Context, args *tpl.ProductModuleSettingURL) (*urbssetting.SettingInfoRes, error) {
+func (m *MockUrbsSettingInterface) SettingGet(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.SettingInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SettingGet", ctx, args)
-	ret0, _ := ret[0].(*urbssetting.SettingInfoRes)
+	ret0, _ := ret[0].(*tpl.SettingInfoRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -216,10 +216,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) SettingGet(ctx, args interface{}
 }
 
 // SettingUpdate mocks base method
-func (m *MockUrbsSettingInterface) SettingUpdate(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingUpdateBody) (*urbssetting.SettingInfoRes, error) {
+func (m *MockUrbsSettingInterface) SettingUpdate(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingUpdateBody) (*tpl.SettingInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SettingUpdate", ctx, args, body)
-	ret0, _ := ret[0].(*urbssetting.SettingInfoRes)
+	ret0, _ := ret[0].(*tpl.SettingInfoRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -261,10 +261,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) SettingAssign(ctx, args, body in
 }
 
 // LabelList mocks base method
-func (m *MockUrbsSettingInterface) LabelList(ctx context.Context, args *tpl.ProductPaginationURL) (*urbssetting.LabelsInfoRes, error) {
+func (m *MockUrbsSettingInterface) LabelList(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.LabelsInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "LabelList", ctx, args)
-	ret0, _ := ret[0].(*urbssetting.LabelsInfoRes)
+	ret0, _ := ret[0].(*tpl.LabelsInfoRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -276,10 +276,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) LabelList(ctx, args interface{})
 }
 
 // LabelCreate mocks base method
-func (m *MockUrbsSettingInterface) LabelCreate(ctx context.Context, product string, body *tpl.LabelBody) (*urbssetting.LabelInfoRes, error) {
+func (m *MockUrbsSettingInterface) LabelCreate(ctx context.Context, product string, body *tpl.LabelBody) (*tpl.LabelInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "LabelCreate", ctx, product, body)
-	ret0, _ := ret[0].(*urbssetting.LabelInfoRes)
+	ret0, _ := ret[0].(*tpl.LabelInfoRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -291,10 +291,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) LabelCreate(ctx, product, body i
 }
 
 // LabelUpdate mocks base method
-func (m *MockUrbsSettingInterface) LabelUpdate(ctx context.Context, product, label string, body *tpl.LabelUpdateBody) (*urbssetting.LabelInfoRes, error) {
+func (m *MockUrbsSettingInterface) LabelUpdate(ctx context.Context, product, label string, body *tpl.LabelUpdateBody) (*tpl.LabelInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "LabelUpdate", ctx, product, label, body)
-	ret0, _ := ret[0].(*urbssetting.LabelInfoRes)
+	ret0, _ := ret[0].(*tpl.LabelInfoRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -350,11 +350,26 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) LabelAssign(ctx, product, label,
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LabelAssign", reflect.TypeOf((*MockUrbsSettingInterface)(nil).LabelAssign), ctx, product, label, body)
 }
 
+// UserList mocks base method
+func (m *MockUrbsSettingInterface) UserList(ctx context.Context, args *tpl.Pagination) (*tpl.UsersRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UserList", ctx, args)
+	ret0, _ := ret[0].(*tpl.UsersRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UserList indicates an expected call of UserList
+func (mr *MockUrbsSettingInterfaceMockRecorder) UserList(ctx, args interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserList", reflect.TypeOf((*MockUrbsSettingInterface)(nil).UserList), ctx, args)
+}
+
 // UserListLables mocks base method
-func (m *MockUrbsSettingInterface) UserListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.LabelsInfoRes, error) {
+func (m *MockUrbsSettingInterface) UserListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.LabelsInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UserListLables", ctx, args)
-	ret0, _ := ret[0].(*urbssetting.LabelsInfoRes)
+	ret0, _ := ret[0].(*tpl.LabelsInfoRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -486,10 +501,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) UserRemoveSetting(ctx, uid, hid 
 }
 
 // GroupListLables mocks base method
-func (m *MockUrbsSettingInterface) GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.LabelsInfoRes, error) {
+func (m *MockUrbsSettingInterface) GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.LabelsInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupListLables", ctx, args)
-	ret0, _ := ret[0].(*urbssetting.LabelsInfoRes)
+	ret0, _ := ret[0].(*tpl.LabelsInfoRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

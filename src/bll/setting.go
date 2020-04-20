@@ -3,7 +3,6 @@ package bll
 import (
 	"context"
 
-	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/tpl"
 )
@@ -15,23 +14,63 @@ type Setting struct {
 }
 
 // List 读取指定产品功能模块的配置项
-func (a *Setting) List(ctx context.Context, args *tpl.ProductModuleURL) (*urbssetting.SettingsInfoRes, error) {
-	return a.services.UrbsSetting.SettingList(ctx, args)
+func (a *Setting) List(ctx context.Context, args *tpl.ProductModuleURL) (*tpl.SettingsInfoRes, error) {
+	ress, err := a.services.UrbsSetting.SettingList(ctx, args)
+	if err != nil {
+		return nil, err
+	}
+	objects := make([]string, len(ress.Result))
+	for i, setting := range ress.Result {
+		objects[i] = args.Product + args.Module + setting.Name
+	}
+	subjects, err := blls.UrbsAcAcl.FindUsersByObjects(ctx, objects)
+	if err != nil {
+		return nil, err
+	}
+	for _, setting := range ress.Result {
+		setting.Users = subjects[args.Product+args.Module+setting.Name]
+	}
+	return ress, nil
 }
 
 // Create 创建指定产品功能模块配置项
-func (a *Setting) Create(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.NameDescBody) (*urbssetting.SettingInfoRes, error) {
-	return a.services.UrbsSetting.SettingCreate(ctx, args, body)
-}
-
-// Get 读取指定产品功能模块配置项
-func (a *Setting) Get(ctx context.Context, args *tpl.ProductModuleSettingURL) (*urbssetting.SettingInfoRes, error) {
-	return a.services.UrbsSetting.SettingGet(ctx, args)
+func (a *Setting) Create(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.NameDescBody) (*tpl.SettingInfoRes, error) {
+	object := args.Product + args.Module + body.Name
+	for _, uid := range body.Uids {
+		err := blls.UrbsAcAcl.AddDefaultPermission(ctx, uid, object)
+		if err != nil {
+			return nil, err
+		}
+	}
+	res, err := a.services.UrbsSetting.SettingCreate(ctx, args, body)
+	if err != nil {
+		return nil, err
+	}
+	res.Result.Users, err = blls.UrbsAcAcl.FindUsersByObject(ctx, object)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 // Update 更新指定产品功能模块配置项
-func (a *Setting) Update(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingUpdateBody) (*urbssetting.SettingInfoRes, error) {
-	return a.services.UrbsSetting.SettingUpdate(ctx, args, body)
+func (a *Setting) Update(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingUpdateBody) (*tpl.SettingInfoRes, error) {
+	object := args.Product + args.Module + args.Setting
+	if len(body.Uids) > 0 {
+		err := blls.UrbsAcAcl.Update(ctx, body.Uids, object)
+		if err != nil {
+			return nil, err
+		}
+	}
+	res, err := a.services.UrbsSetting.SettingUpdate(ctx, args, body)
+	if err != nil {
+		return nil, err
+	}
+	res.Result.Users, err = blls.UrbsAcAcl.FindUsersByObject(ctx, object)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 // Offline 下线指定产品功能模块配置项
@@ -41,6 +80,19 @@ func (a *Setting) Offline(ctx context.Context, args *tpl.ProductModuleSettingURL
 
 // Assign 批量为用户或群组设置产品功能模块配置项
 func (a *Setting) Assign(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.UsersGroupsBody) (*tpl.BoolRes, error) {
-	blls.OperationLog.AddSettingAssignLog(ctx, args, body)
+	err := blls.OperationLog.Add(ctx, args.Product+args.Module+args.Setting, actionCreate, body)
+	if err != nil {
+		return nil, err
+	}
 	return a.services.UrbsSetting.SettingAssign(ctx, args, body)
+}
+
+// Recall ...
+func (a *Setting) Recall(ctx context.Context, product, module, setting string) error {
+	_, err := daos.OperationLog.FindOneByObject(ctx, product+module+setting)
+	if err != nil {
+		return nil
+	}
+	// call urbs-setting
+	return nil
 }

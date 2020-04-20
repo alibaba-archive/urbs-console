@@ -42,12 +42,25 @@ func init() {
 const (
 	headerAuthorize = "Authorization"
 	schemaBearer    = "Bearer "
+	schemaOAuth2    = "OAuth2 "
 )
 
 // TokenExtractor ...
 func TokenExtractor(ctx *gear.Context) (token string) {
 	if val := ctx.Get(headerAuthorize); strings.HasPrefix(val, schemaBearer) {
 		token = val[7:]
+	} else if val := ctx.Get(headerAuthorize); strings.HasPrefix(val, schemaOAuth2) {
+		token = val[7:]
 	}
 	return
+}
+
+// StringInSlice ...
+func StringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
 }

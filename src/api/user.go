@@ -12,13 +12,31 @@ type User struct {
 	blls *bll.Blls
 }
 
+// List ..
+func (a *User) List(ctx *gear.Context) error {
+	req := tpl.Pagination{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+
+	res, err := a.blls.User.List(ctx, &req)
+	if err != nil {
+		return err
+	}
+
+	return ctx.OkJSON(res)
+}
+
 // RefreshCachedLables 强制更新 user 的 labels 缓存
 func (a *User) RefreshCachedLables(ctx *gear.Context) error {
 	req := tpl.UIDURL{}
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
-
+	err := a.blls.UrbsAcAcl.CheckSuperAdmin(ctx)
+	if err != nil {
+		return err
+	}
 	res, err := a.blls.User.RefreshCachedLables(ctx, req.UID)
 	if err != nil {
 		return err
@@ -32,7 +50,10 @@ func (a *User) ListLables(ctx *gear.Context) error {
 	if err := ctx.ParseURL(req); err != nil {
 		return err
 	}
-
+	err := a.blls.UrbsAcAcl.CheckSuperAdmin(ctx)
+	if err != nil {
+		return err
+	}
 	res, err := a.blls.User.ListLables(ctx, req)
 	if err != nil {
 		return err
@@ -47,7 +68,10 @@ func (a *User) ListSettings(ctx *gear.Context) error {
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
-
+	err := a.blls.UrbsAcAcl.CheckSuperAdmin(ctx)
+	if err != nil {
+		return err
+	}
 	res, err := a.blls.User.ListSettings(ctx, &req)
 	if err != nil {
 		return err
@@ -63,7 +87,10 @@ func (a *User) ListSettingsUnionAll(ctx *gear.Context) error {
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
-
+	err := a.blls.UrbsAcAcl.CheckSuperAdmin(ctx)
+	if err != nil {
+		return err
+	}
 	res, err := a.blls.User.ListSettingsUnionAll(ctx, &req)
 	if err != nil {
 		return err
@@ -78,7 +105,10 @@ func (a *User) CheckExists(ctx *gear.Context) error {
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
-
+	err := a.blls.UrbsAcAcl.CheckSuperAdmin(ctx)
+	if err != nil {
+		return err
+	}
 	res, err := a.blls.User.CheckExists(ctx, req.UID)
 	if err != nil {
 		return err
@@ -93,7 +123,10 @@ func (a *User) BatchAdd(ctx *gear.Context) error {
 	if err := ctx.ParseBody(&req); err != nil {
 		return err
 	}
-
+	err := a.blls.UrbsAcAcl.CheckSuperAdmin(ctx)
+	if err != nil {
+		return err
+	}
 	res, err := a.blls.User.BatchAdd(ctx, req.Users)
 	if err != nil {
 		return err
@@ -108,6 +141,10 @@ func (a *User) RemoveLable(ctx *gear.Context) error {
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
+	// err := a.blls.UrbsAcAcl.CheckAdmin(ctx)
+	// if err != nil {
+	// 	return err
+	// }
 	res, err := a.blls.User.RemoveLable(ctx, req.UID, req.HID)
 	if err != nil {
 		return err
@@ -122,6 +159,10 @@ func (a *User) RollbackSetting(ctx *gear.Context) error {
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
+	err := a.blls.UrbsAcAcl.CheckSuperAdmin(ctx)
+	if err != nil {
+		return err
+	}
 	res, err := a.blls.User.RollbackSetting(ctx, req.UID, req.HID)
 	if err != nil {
 		return err
@@ -133,6 +174,10 @@ func (a *User) RollbackSetting(ctx *gear.Context) error {
 func (a *User) RemoveSetting(ctx *gear.Context) error {
 	req := tpl.UIDHIDURL{}
 	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckSuperAdmin(ctx)
+	if err != nil {
 		return err
 	}
 	res, err := a.blls.User.RemoveSetting(ctx, req.UID, req.HID)

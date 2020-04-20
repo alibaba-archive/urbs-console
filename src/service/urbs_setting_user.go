@@ -10,11 +10,24 @@ import (
 	"github.com/teambition/urbs-console/src/util/request"
 )
 
+// UserList ...
+func (a *UrbsSetting) UserList(ctx context.Context, args *tpl.Pagination) (*tpl.UsersRes, error) {
+	url := fmt.Sprintf("%s/v1/users?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Skip, args.PageSize, args.PageToken)
+
+	result := new(tpl.UsersRes)
+
+	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 // UserListLables ...
-func (a *UrbsSetting) UserListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.LabelsInfoRes, error) {
+func (a *UrbsSetting) UserListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.LabelsInfoRes, error) {
 	url := fmt.Sprintf("%s/v1/users/%s/labels?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken)
 
-	result := new(urbssetting.LabelsInfoRes)
+	result := new(tpl.LabelsInfoRes)
 
 	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 	if err := HanderResponse(resp, err); err != nil {

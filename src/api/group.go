@@ -32,7 +32,6 @@ func (a *Group) ListLables(ctx *gear.Context) error {
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
-
 	res, err := a.blls.Group.ListLables(ctx, &req)
 	if err != nil {
 		return err
@@ -62,7 +61,6 @@ func (a *Group) ListSettings(ctx *gear.Context) error {
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
-
 	res, err := a.blls.Group.ListSettings(ctx, &req)
 	if err != nil {
 		return err
@@ -77,7 +75,10 @@ func (a *Group) CheckExists(ctx *gear.Context) error {
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
-
+	err := a.blls.UrbsAcAcl.CheckSuperAdmin(ctx)
+	if err != nil {
+		return err
+	}
 	res, err := a.blls.Group.CheckExists(ctx, req.UID)
 	if err != nil {
 		return err
@@ -91,7 +92,6 @@ func (a *Group) BatchAdd(ctx *gear.Context) error {
 	if err := ctx.ParseBody(&req); err != nil {
 		return err
 	}
-
 	if err := a.blls.Group.BatchAdd(ctx, req.Groups); err != nil {
 		return err
 	}
@@ -105,7 +105,6 @@ func (a *Group) Update(ctx *gear.Context) error {
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
-
 	body := tpl.GroupUpdateBody{}
 	if err := ctx.ParseBody(&body); err != nil {
 		return err
@@ -143,7 +142,6 @@ func (a *Group) BatchAddMembers(ctx *gear.Context) error {
 	if err := ctx.ParseBody(&body); err != nil {
 		return err
 	}
-
 	res, err := a.blls.Group.BatchAddMembers(ctx, req.UID, body.Users)
 	if err != nil {
 		return err
@@ -172,7 +170,6 @@ func (a *Group) RemoveLable(ctx *gear.Context) error {
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
-
 	res, err := a.blls.Group.RemoveLable(ctx, &req)
 	if err != nil {
 		return err
@@ -187,7 +184,6 @@ func (a *Group) RollbackSetting(ctx *gear.Context) error {
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
-
 	res, err := a.blls.Group.RollbackSetting(ctx, &req)
 	if err != nil {
 		return err
@@ -201,7 +197,6 @@ func (a *Group) RemoveSetting(ctx *gear.Context) error {
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
-
 	res, err := a.blls.Group.RemoveSetting(ctx, &req)
 	if err != nil {
 		return err

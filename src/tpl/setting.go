@@ -2,6 +2,7 @@ package tpl
 
 import (
 	"github.com/teambition/gear"
+	"github.com/teambition/urbs-console/src/schema"
 )
 
 // MySettingsQueryURL ...
@@ -34,6 +35,7 @@ type SettingUpdateBody struct {
 	Channels *[]string `json:"channels"`
 	Clients  *[]string `json:"clients"`
 	Values   *[]string `json:"values"`
+	Uids     []string  `json:"uids"`
 }
 
 // Validate 实现 gear.BodyTemplate。
@@ -90,4 +92,21 @@ func (t *MySettingsQueryURLClient) Validate() error {
 		return err
 	}
 	return nil
+}
+
+// SettingInfo ...
+type SettingInfo struct {
+	schema.Setting
+	Users []*User `json:"users"`
+}
+
+// SettingInfoRes ...
+type SettingInfoRes struct {
+	Result SettingInfo `json:"result"`
+}
+
+// SettingsInfoRes ...
+type SettingsInfoRes struct {
+	SuccessResponseType
+	Result []*SettingInfo `json:"result"`
 }

@@ -4,41 +4,33 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/DavidCai1993/request"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"github.com/teambition/urbs-console/src/util/request"
 )
 
 func TestApp(t *testing.T) {
-	tt, cleanup := SetUpTestTools()
-	defer cleanup()
-
 	t.Run(`app should work`, func(t *testing.T) {
-		assert := assert.New(t)
-
-		res, err := request.Get(tt.Host).End()
+		require := require.New(t)
 		json := map[string]string{}
-		res.JSON(&json)
-
-		assert.Nil(err)
-		assert.Equal(200, res.StatusCode)
-		assert.Equal("urbs-console", json["name"])
-		assert.NotEqual("", json["version"])
-		assert.NotEqual("", json["gitSHA1"])
-		assert.NotEqual("", json["buildTime"])
+		res, err := request.Get(testHost).Result(&json).Do()
+		require.Nil(err)
+		require.Equal(200, res.StatusCode)
+		require.Equal("urbs-console", json["name"])
+		require.NotEqual("", json["version"])
+		require.NotEqual("", json["gitSHA1"])
+		require.NotEqual("", json["buildTime"])
 	})
 
 	t.Run(`"GET /version" should work`, func(t *testing.T) {
-		assert := assert.New(t)
+		require := require.New(t)
 
-		res, err := request.Get(fmt.Sprintf("%s/version", tt.Host)).End()
 		json := map[string]string{}
-		res.JSON(&json)
-
-		assert.Nil(err)
-		assert.Equal(200, res.StatusCode)
-		assert.Equal("urbs-console", json["name"])
-		assert.NotEqual("", json["version"])
-		assert.NotEqual("", json["gitSHA1"])
-		assert.NotEqual("", json["buildTime"])
+		res, err := request.Get(fmt.Sprintf("%s/version", testHost)).Result(&json).Do()
+		require.Nil(err)
+		require.Equal(200, res.StatusCode)
+		require.Equal("urbs-console", json["name"])
+		require.NotEqual("", json["version"])
+		require.NotEqual("", json["gitSHA1"])
+		require.NotEqual("", json["buildTime"])
 	})
 }

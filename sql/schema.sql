@@ -25,5 +25,5 @@ CREATE TABLE IF NOT EXISTS `urbs`.`urbs_ac_acl` (
   `object` varchar(256) NOT NULL,
   `permission` varchar(63) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `uk_subject` (`subject`)
+  UNIQUE KEY `uk_subject_object_permission` (`subject`, `object`, `permission`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;

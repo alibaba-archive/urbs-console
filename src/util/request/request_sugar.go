@@ -1,5 +1,15 @@
 package request
 
+// Method ...
+func Method(method string) *Request {
+	return New().Method(method)
+}
+
+// Url ...
+func Url(url string) *Request {
+	return New().Url(url)
+}
+
 // Get ...
 func Get(url string) *Request {
 	return New().Get(url)

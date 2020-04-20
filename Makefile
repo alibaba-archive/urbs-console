@@ -16,7 +16,21 @@ dev:
 	@CONFIG_FILE_PATH=${PWD}/config/dev.yml APP_ENV=development go run main.go
 
 test:
-	@CONFIG_FILE_PATH=${PWD}/config/test.yml APP_ENV=test go test -v ./...
+	@CONFIG_FILE_PATH=${PWD}/config/test.yml APP_ENV=test go test ./...
 
 mock:
 	mockgen -source=./src/service/urbs_setting_interface.go -destination=./src/service/mock_service/urbs_setting__mock.go
+
+.PHONY: misspell-check
+misspell-check:
+	@hash misspell > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
+		go get -u github.com/client9/misspell/cmd/misspell; \
+	fi
+	@misspell -error $(GO_FILES)
+
+.PHONY: coverhtml
+coverhtml:
+	@mkdir -p coverage
+	@CONFIG_FILE_PATH=${PWD}/config/test.yml go test -coverprofile=coverage/cover.out ./...
+	@go tool cover -html=coverage/cover.out -o coverage/coverage.html
+	@go tool cover -func=coverage/cover.out | tail -n 1

@@ -10,7 +10,7 @@ logger:
 thrid:
     key: "a29b3a29b3a29b30x1a29b38"
     user_auth: 
-        url: ""
+        url: "http://127.0.0.1:mock"
         cookie_key: ""
     group_member: 
         url: ""
@@ -22,3 +22,4 @@ mysql:
     parameters: loc=UTC&readTimeout=10s&writeTimeout=10s&timeout=10s&multiStatements=true
     max_idle_conns: 8
     max_open_conns: 64
+superAdmins: []

@@ -35,25 +35,15 @@ func (a *Setting) Create(ctx *gear.Context) error {
 	if err := ctx.ParseBody(&body); err != nil {
 		return err
 	}
-
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module)
+	if err != nil {
+		return err
+	}
 	res, err := a.blls.Setting.Create(ctx, &req, &body)
 	if err != nil {
 		return err
 	}
 
-	return ctx.OkJSON(res)
-}
-
-// Get ..
-func (a *Setting) Get(ctx *gear.Context) error {
-	req := tpl.ProductModuleSettingURL{}
-	if err := ctx.ParseURL(&req); err != nil {
-		return err
-	}
-	res, err := a.blls.Setting.Get(ctx, &req)
-	if err != nil {
-		return err
-	}
 	return ctx.OkJSON(res)
 }
 
@@ -68,7 +58,10 @@ func (a *Setting) Update(ctx *gear.Context) error {
 	if err := ctx.ParseBody(&body); err != nil {
 		return err
 	}
-
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module)
+	if err != nil {
+		return err
+	}
 	res, err := a.blls.Setting.Update(ctx, &req, &body)
 	if err != nil {
 		return err
@@ -80,6 +73,10 @@ func (a *Setting) Update(ctx *gear.Context) error {
 func (a *Setting) Offline(ctx *gear.Context) error {
 	req := tpl.ProductModuleSettingURL{}
 	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module)
+	if err != nil {
 		return err
 	}
 	res, err := a.blls.Setting.Offline(ctx, &req)
@@ -100,8 +97,42 @@ func (a *Setting) Assign(ctx *gear.Context) error {
 	if err := ctx.ParseBody(&body); err != nil {
 		return err
 	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module)
+	if err != nil {
+		return err
+	}
 
 	res, err := a.blls.Setting.Assign(ctx, &req, &body)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}
+
+// Recall ..
+func (a *Setting) Recall(ctx *gear.Context) error {
+	req := tpl.ProductModuleSettingURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module+req.Setting)
+	if err != nil {
+		return err
+	}
+	err = a.blls.Setting.Recall(ctx, req.Product, req.Module, req.Setting)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(tpl.BoolRes{Result: true})
+}
+
+// Logs 返回操作日志列表
+func (a *Setting) Logs(ctx *gear.Context) error {
+	req := &tpl.ProductModuleSettingURL{}
+	if err := ctx.ParseURL(req); err != nil {
+		return err
+	}
+	res, err := a.blls.OperationLog.List(ctx, req.Product+req.Module+req.Setting, &req.Pagination)
 	if err != nil {
 		return err
 	}

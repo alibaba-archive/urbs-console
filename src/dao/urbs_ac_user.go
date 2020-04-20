@@ -1,8 +1,9 @@
 package dao
 
 import (
+	"bytes"
 	"context"
-	"time"
+	"fmt"
 
 	"github.com/jinzhu/gorm"
 	"github.com/teambition/urbs-console/src/schema"
@@ -13,17 +14,19 @@ type UrbsAcUser struct {
 	DB *gorm.DB
 }
 
-// Add ...
-func (a *UrbsAcUser) Add(ctx context.Context, obj *schema.UrbsAcUser) error {
-	obj.CreatedAt = time.Now().UTC()
-
-	sql := "insert ignore into `urbs_ac_user` (`created_at`, `uid`, `name`) values (?, ?, ?)"
-
-	args := []interface{}{obj.CreatedAt, obj.UID, obj.Name}
-
-	_, err := a.DB.DB().Exec(sql, args...)
-
-	return err
+// BatchAdd 批量添加用户
+func (a *UrbsAcUser) BatchAdd(ctx context.Context, users []*schema.UrbsAcUser) error {
+	if len(users) == 0 {
+		return nil
+	}
+	var buf bytes.Buffer
+	fmt.Fprint(&buf, "insert ignore into `urbs_ac_user` (`uid`,`name`) values")
+	for _, user := range users {
+		fmt.Fprintf(&buf, " ('%s' ,'%s'),", user.UID, user.Name)
+	}
+	b := buf.Bytes()
+	b[len(b)-1] = ';'
+	return a.DB.Exec(string(b)).Error
 }
 
 // FindByUID ...

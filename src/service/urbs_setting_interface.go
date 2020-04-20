@@ -11,11 +11,11 @@ import (
 type UrbsSettingInterface interface {
 	// ***** product ******
 	// 读取产品列表，支持条件筛选
-	ProductList(ctx context.Context, args *tpl.Pagination) (*urbssetting.ProductsRes, error)
+	ProductList(ctx context.Context, args *tpl.Pagination) (*tpl.ProductsRes, error)
 	// 创建产品
-	ProductCreate(ctx context.Context, body *tpl.NameDescBody) (*urbssetting.ProductRes, error)
+	ProductCreate(ctx context.Context, body *tpl.NameDescBody) (*tpl.ProductRes, error)
 	// 更新产品
-	ProductUpdate(ctx context.Context, product string, body *tpl.ProductUpdateBody) (*urbssetting.ProductRes, error)
+	ProductUpdate(ctx context.Context, product string, body *tpl.ProductUpdateBody) (*tpl.ProductRes, error)
 	// 下线指定产品功能模块
 	ProductOffline(ctx context.Context, product string) (*tpl.BoolRes, error)
 	// 删除指定产品
@@ -23,23 +23,23 @@ type UrbsSettingInterface interface {
 
 	// ***** module ******
 	// 读取指定产品的功能模块
-	ModuleList(ctx context.Context, args *tpl.ProductPaginationURL) (*urbssetting.ModulesRes, error)
+	ModuleList(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.ModulesInfoRes, error)
 	// 指定产品创建功能模块
-	ModuleCreate(ctx context.Context, product string, body *tpl.NameDescBody) (*urbssetting.ModuleRes, error)
+	ModuleCreate(ctx context.Context, product string, body *tpl.NameDescBody) (*tpl.ModuleInfoRes, error)
 	// 更新指定产品功能模块
-	ModuleUpdate(ctx context.Context, product string, module string, body *tpl.ModuleUpdateBody) (*urbssetting.ModuleRes, error)
+	ModuleUpdate(ctx context.Context, product string, module string, body *tpl.ModuleUpdateBody) (*tpl.ModuleInfoRes, error)
 	// 下线指定产品功能模块
 	ModuleOffline(ctx context.Context, product string, module string) (*tpl.BoolRes, error)
 
 	// ***** setting ******
 	// 读取指定产品功能模块的配置项
-	SettingList(ctx context.Context, args *tpl.ProductModuleURL) (*urbssetting.SettingsInfoRes, error)
+	SettingList(ctx context.Context, args *tpl.ProductModuleURL) (*tpl.SettingsInfoRes, error)
 	// 创建指定产品功能模块配置项
-	SettingCreate(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.NameDescBody) (*urbssetting.SettingInfoRes, error)
+	SettingCreate(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.NameDescBody) (*tpl.SettingInfoRes, error)
 	// 读取指定产品功能模块配置项
-	SettingGet(ctx context.Context, args *tpl.ProductModuleSettingURL) (*urbssetting.SettingInfoRes, error)
+	SettingGet(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.SettingInfoRes, error)
 	// 更新指定产品功能模块配置项
-	SettingUpdate(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingUpdateBody) (*urbssetting.SettingInfoRes, error)
+	SettingUpdate(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingUpdateBody) (*tpl.SettingInfoRes, error)
 	// 下线指定产品功能模块配置项
 	SettingOffline(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.BoolRes, error)
 	// 批量为用户或群组设置产品功能模块配置项
@@ -47,11 +47,11 @@ type UrbsSettingInterface interface {
 
 	// ***** label ******
 	// 读取指定产品灰度标签
-	LabelList(ctx context.Context, args *tpl.ProductPaginationURL) (*urbssetting.LabelsInfoRes, error)
+	LabelList(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.LabelsInfoRes, error)
 	// 给指定产品创建灰度标签
-	LabelCreate(ctx context.Context, product string, body *tpl.LabelBody) (*urbssetting.LabelInfoRes, error)
+	LabelCreate(ctx context.Context, product string, body *tpl.LabelBody) (*tpl.LabelInfoRes, error)
 	// 更新指定产品灰度标签
-	LabelUpdate(ctx context.Context, product string, label string, body *tpl.LabelUpdateBody) (*urbssetting.LabelInfoRes, error)
+	LabelUpdate(ctx context.Context, product string, label string, body *tpl.LabelUpdateBody) (*tpl.LabelInfoRes, error)
 	// 删除指定产品灰度标签
 	LabelDelete(ctx context.Context, product string, label string) (*tpl.BoolRes, error)
 	// 下线指定产品灰度标签
@@ -60,8 +60,10 @@ type UrbsSettingInterface interface {
 	LabelAssign(ctx context.Context, product string, label string, body *tpl.UsersGroupsBody) (*tpl.BoolRes, error)
 
 	// ***** user ******
+	// 读取用户列表，支持条件筛选
+	UserList(ctx context.Context, args *tpl.Pagination) (*tpl.UsersRes, error)
 	// 读取指定用户的灰度标签，支持条件筛选
-	UserListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.LabelsInfoRes, error)
+	UserListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.LabelsInfoRes, error)
 	// 强制刷新指定用户的灰度标签列表缓存
 	UserRefreshCached(ctx context.Context, uid string) (*tpl.BoolRes, error)
 	// 读取指定用户的功能配置项，支持条件筛选
@@ -81,7 +83,7 @@ type UrbsSettingInterface interface {
 
 	// ***** group ******
 	// 读取指定群组的灰度标签，支持条件筛选
-	GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.LabelsInfoRes, error)
+	GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.LabelsInfoRes, error)
 	// 读取指定群组的功能配置项，支持条件筛选
 	GroupListSettings(ctx context.Context, args *tpl.UIDProductURL) (*urbssetting.MySettingsRes, error)
 	// 读取群组列表，支持条件筛选

@@ -2,12 +2,14 @@ package tpl
 
 import (
 	"github.com/teambition/gear"
+	"github.com/teambition/urbs-console/src/schema"
 )
 
 // LabelBody ...
 type LabelBody struct {
-	Name string `json:"name"`
-	Desc string `json:"desc"`
+	Name string   `json:"name"`
+	Desc string   `json:"desc"`
+	Uids []string `json:"uids"`
 }
 
 // Validate 实现 gear.BodyTemplate。
@@ -26,6 +28,7 @@ type LabelUpdateBody struct {
 	Desc     *string   `json:"desc"`
 	Channels *[]string `json:"channels"`
 	Clients  *[]string `json:"clients"`
+	Uids     []string  `json:"uids"`
 }
 
 // Validate 实现 gear.BodyTemplate。
@@ -53,4 +56,33 @@ func (t *LabelUpdateBody) Validate() error {
 		}
 	}
 	return nil
+}
+
+// LabelInfo ...
+type LabelInfo struct {
+	schema.LabelInfo
+	Users []*User `json:"users"`
+}
+
+// LabelInfoRes ...
+type LabelInfoRes struct {
+	Result LabelInfo `json:"result"`
+}
+
+// LabelsInfoRes ...
+type LabelsInfoRes struct {
+	SuccessResponseType
+	Result []*LabelInfo `json:"result"`
+}
+
+// LabelGroupsRes ...
+type LabelGroupsRes struct {
+	SuccessResponseType
+	Result []*schema.Group `json:"result"`
+}
+
+// LabelUsersRes ...
+type LabelUsersRes struct {
+	SuccessResponseType
+	Result []*schema.User `json:"result"`
 }

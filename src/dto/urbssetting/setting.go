@@ -20,18 +20,6 @@ type MySetting struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-// SettingsInfoRes ...
-type SettingsInfoRes struct {
-	SuccessResponseType
-	Result []*SettingInfo `json:"result"` // 空数组也保留
-}
-
-// SettingInfoRes ...
-type SettingInfoRes struct {
-	SuccessResponseType
-	Result *SettingInfo `json:"result"` // 空数组也保留
-}
-
 // SettingInfo ...
 type SettingInfo struct {
 	ID        int64      `json:"-"`

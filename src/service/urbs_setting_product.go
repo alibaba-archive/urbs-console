@@ -5,16 +5,15 @@ import (
 	"fmt"
 
 	"github.com/teambition/urbs-console/src/conf"
-	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/tpl"
 	"github.com/teambition/urbs-console/src/util/request"
 )
 
 // ProductCreate ...
-func (a *UrbsSetting) ProductCreate(ctx context.Context, body *tpl.NameDescBody) (*urbssetting.ProductRes, error) {
+func (a *UrbsSetting) ProductCreate(ctx context.Context, body *tpl.NameDescBody) (*tpl.ProductRes, error) {
 	url := fmt.Sprintf("%s/v1/products", conf.Config.UrbsSetting.Addr)
 
-	result := new(urbssetting.ProductRes)
+	result := new(tpl.ProductRes)
 
 	resp, err := request.Post(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
 
@@ -25,10 +24,10 @@ func (a *UrbsSetting) ProductCreate(ctx context.Context, body *tpl.NameDescBody)
 }
 
 // ProductList ...
-func (a *UrbsSetting) ProductList(ctx context.Context, args *tpl.Pagination) (*urbssetting.ProductsRes, error) {
+func (a *UrbsSetting) ProductList(ctx context.Context, args *tpl.Pagination) (*tpl.ProductsRes, error) {
 	url := fmt.Sprintf("%s/v1/products?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Skip, args.PageSize, args.PageToken)
 
-	result := new(urbssetting.ProductsRes)
+	result := new(tpl.ProductsRes)
 
 	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 
@@ -39,10 +38,10 @@ func (a *UrbsSetting) ProductList(ctx context.Context, args *tpl.Pagination) (*u
 }
 
 // ProductUpdate ...
-func (a *UrbsSetting) ProductUpdate(ctx context.Context, product string, body *tpl.ProductUpdateBody) (*urbssetting.ProductRes, error) {
+func (a *UrbsSetting) ProductUpdate(ctx context.Context, product string, body *tpl.ProductUpdateBody) (*tpl.ProductRes, error) {
 	url := fmt.Sprintf("%s/v1/products/%s", conf.Config.UrbsSetting.Addr, product)
 
-	result := new(urbssetting.ProductRes)
+	result := new(tpl.ProductRes)
 
 	resp, err := request.Put(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
 

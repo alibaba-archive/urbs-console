@@ -46,8 +46,9 @@ type StringRes struct {
 
 // NameDescBody ...
 type NameDescBody struct {
-	Name string `json:"name"`
-	Desc string `json:"desc"`
+	Name string   `json:"name"`
+	Desc string   `json:"desc"`
+	Uids []string `json:"uids"`
 }
 
 // Validate 实现 gear.BodyTemplate。
@@ -93,9 +94,10 @@ func StringSliceHas(sl []string, v string) bool {
 type UsersGroupsBody struct {
 	Users      []string `json:"users"`
 	Groups     []string `json:"groups"`
-	Value      string   `json:"value"`
 	Desc       string   `json:"description"` // 操作说明
 	Percentage int      `json:"percentage"`  // 灰度百分比
+
+	Value string `json:"value"`
 }
 
 // Validate 实现 gear.BodyTemplate。

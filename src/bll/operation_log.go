@@ -16,13 +16,14 @@ type OperationLog struct {
 	daos *dao.Daos
 }
 
+var (
+	actionCreate = "create"
+	actionDelete = "delete"
+)
+
 // List 返回操作日志列表
-func (a *OperationLog) List(ctx context.Context, req *tpl.OperationLogListReq) (*tpl.OperationLogListRes, error) {
-	objectLog := req.Product + req.Label
-	if req.Label == "" {
-		objectLog = req.Product + req.Module + req.Setting
-	}
-	logs, err := a.daos.OperationLog.FindByObject(ctx, objectLog, &req.Pagination)
+func (a *OperationLog) List(ctx context.Context, object string, req *tpl.Pagination) (*tpl.OperationLogListRes, error) {
+	logs, err := a.daos.OperationLog.FindByObject(ctx, object, req)
 	if err != nil {
 		return nil, err
 	}
@@ -45,12 +46,12 @@ func (a *OperationLog) List(ctx context.Context, req *tpl.OperationLogListReq) (
 	return res, nil
 }
 
-// AddSettingAssignLog ...
-func (a *OperationLog) AddSettingAssignLog(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.UsersGroupsBody) error {
+// Add ...
+func (a *OperationLog) Add(ctx context.Context, object string, action string, body *tpl.UsersGroupsBody) error {
 	log := &schema.OperationLog{
 		Operator: util.GetUid(ctx),
-		Object:   args.Product + args.Module + args.Setting,
-		Action:   "create",
+		Object:   object,
+		Action:   action,
 		Content:  genContent(body),
 		Desc:     body.Desc,
 	}
@@ -75,11 +76,12 @@ func genContent(body *tpl.UsersGroupsBody) string {
 }
 
 func parseLogContent(content string, log *tpl.OperationLogListItem) {
+	content = content[2:]
 
 	items := strings.Split(content, "\r\n")
 	for _, item := range items {
-		kind := item[2:4]
-		content := item[4:]
+		kind := item[0:2]
+		content := item[2:]
 		switch kind {
 		case "01": // users
 			log.Users = strings.Split(content, ",")

@@ -1,6 +1,9 @@
 package tpl
 
-import "github.com/teambition/gear"
+import (
+	"github.com/teambition/gear"
+	"github.com/teambition/urbs-console/src/schema"
+)
 
 // UsersBody ...
 type UsersBody struct {
@@ -18,4 +21,16 @@ func (t *UsersBody) Validate() error {
 		}
 	}
 	return nil
+}
+
+// UsersRes ...
+type UsersRes struct {
+	SuccessResponseType
+	Result []schema.User `json:"result"`
+}
+
+// UserRes ...
+type UserRes struct {
+	SuccessResponseType
+	Result schema.User `json:"result"`
 }

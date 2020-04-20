@@ -35,7 +35,10 @@ func (a *Module) Create(ctx *gear.Context) error {
 	if err := ctx.ParseBody(&body); err != nil {
 		return err
 	}
-
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product)
+	if err != nil {
+		return err
+	}
 	res, err := a.blls.Module.Create(ctx, req.Product, &body)
 	if err != nil {
 		return err
@@ -55,7 +58,10 @@ func (a *Module) Update(ctx *gear.Context) error {
 	if err := ctx.ParseBody(&body); err != nil {
 		return err
 	}
-
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module)
+	if err != nil {
+		return err
+	}
 	res, err := a.blls.Module.Update(ctx, req.Product, req.Module, &body)
 	if err != nil {
 		return err
@@ -67,6 +73,10 @@ func (a *Module) Update(ctx *gear.Context) error {
 func (a *Module) Offline(ctx *gear.Context) error {
 	req := tpl.ProductModuleURL{}
 	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module)
+	if err != nil {
 		return err
 	}
 	res, err := a.blls.Module.Offline(ctx, req.Product, req.Module)

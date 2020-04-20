@@ -1,6 +1,9 @@
 package tpl
 
-import "github.com/teambition/gear"
+import (
+	"github.com/teambition/gear"
+	"github.com/teambition/urbs-console/src/schema"
+)
 
 // ProductURL ...
 type ProductURL struct {
@@ -17,16 +20,13 @@ func (t *ProductURL) Validate() error {
 
 // ProductUpdateBody ...
 type ProductUpdateBody struct {
-	Desc *string `json:"desc"`
+	Desc *string  `json:"desc"`
+	Uids []string `json:"uids"`
 }
 
 // Validate 实现 gear.BodyTemplate。
 func (t *ProductUpdateBody) Validate() error {
-	if t.Desc == nil {
-		return gear.ErrBadRequest.WithMsgf("desc required")
-	}
-
-	if len(*t.Desc) > 1022 {
+	if t.Desc != nil && len(*t.Desc) > 1022 {
 		return gear.ErrBadRequest.WithMsgf("desc too long: %d", len(*t.Desc))
 	}
 	return nil
@@ -122,6 +122,51 @@ func (t *ProductModuleSettingURL) Validate() error {
 	}
 	if !validNameReg.MatchString(t.Setting) {
 		return gear.ErrBadRequest.WithMsgf("invalid setting name: %s", t.Setting)
+	}
+	return nil
+}
+
+// Product ...
+type Product struct {
+	schema.Product
+	Users []*User `json:"users"`
+}
+
+// ProductRes ...
+type ProductRes struct {
+	SuccessResponseType
+	Result Product `json:"result"`
+}
+
+// ProductsRes ...
+type ProductsRes struct {
+	SuccessResponseType
+	Result []*Product `json:"result"`
+}
+
+// User ...
+type User struct {
+	Uid  string `json:"uid"`
+	Name string `json:"name"`
+}
+
+// ProductLabelPaginationURL ...
+type ProductLabelPaginationURL struct {
+	Pagination
+	ProductURL
+	Label string `json:"label" param:"label"`
+}
+
+// Validate 实现 gear.BodyTemplate。
+func (t *ProductLabelPaginationURL) Validate() error {
+	if err := t.ProductURL.Validate(); err != nil {
+		return err
+	}
+	if !validLabelReg.MatchString(t.Label) {
+		return gear.ErrBadRequest.WithMsgf("invalid label: %s", t.Label)
+	}
+	if err := t.Pagination.Validate(); err != nil {
+		return err
 	}
 	return nil
 }

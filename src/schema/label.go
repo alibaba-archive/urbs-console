@@ -1,12 +1,6 @@
-package urbssetting
+package schema
 
 import "time"
-
-// LabelsInfoRes ...
-type LabelsInfoRes struct {
-	SuccessResponseType
-	Result []*LabelInfo `json:"result"` // 空数组也保留
-}
 
 // LabelInfo ...
 type LabelInfo struct {
@@ -21,10 +15,5 @@ type LabelInfo struct {
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
 	OfflineAt *time.Time `json:"offline_at"`
-}
-
-// LabelInfoRes ...
-type LabelInfoRes struct {
-	SuccessResponseType
-	Result LabelInfo `json:"result"` // 空数组也保留
+	Release   int64      `json:"release"`
 }

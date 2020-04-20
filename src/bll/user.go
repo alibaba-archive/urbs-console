@@ -14,8 +14,13 @@ type User struct {
 	services *service.Services
 }
 
+// List ...
+func (a *User) List(ctx context.Context, args *tpl.Pagination) (*tpl.UsersRes, error) {
+	return a.services.UrbsSetting.UserList(ctx, args)
+}
+
 // ListLables ...
-func (a *User) ListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.LabelsInfoRes, error) {
+func (a *User) ListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.LabelsInfoRes, error) {
 	return a.services.UrbsSetting.UserListLables(ctx, args)
 }
 

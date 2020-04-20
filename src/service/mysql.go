@@ -29,7 +29,6 @@ func (s *SQL) DBStats() sql.DBStats {
 // NewDB ...
 func NewDB() *SQL {
 	cfg := conf.Config.MySQL
-
 	if cfg.MaxIdleConns <= 0 {
 		cfg.MaxIdleConns = 8
 	}

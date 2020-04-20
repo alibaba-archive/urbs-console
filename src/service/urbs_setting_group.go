@@ -11,10 +11,10 @@ import (
 )
 
 // GroupListLables ...
-func (a *UrbsSetting) GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.LabelsInfoRes, error) {
+func (a *UrbsSetting) GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.LabelsInfoRes, error) {
 	url := fmt.Sprintf("%s/v1/groups/%s/labels?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken)
 
-	result := new(urbssetting.LabelsInfoRes)
+	result := new(tpl.LabelsInfoRes)
 
 	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 

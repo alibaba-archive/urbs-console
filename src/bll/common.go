@@ -11,7 +11,9 @@ func init() {
 }
 
 var (
-	blls *Blls
+	blls     *Blls
+	daos     *dao.Daos
+	services *service.Services
 )
 
 // Blls ...
@@ -26,10 +28,13 @@ type Blls struct {
 
 	OperationLog *OperationLog
 	UrbsAcAcl    *UrbsAcAcl
+	UrbsAcUser   *UrbsAcUser
 }
 
 // NewBlls ...
-func NewBlls(services *service.Services, daos *dao.Daos) *Blls {
+func NewBlls(s *service.Services, d *dao.Daos) *Blls {
+	daos = d
+	services = s
 	blls = &Blls{
 		User:    &User{services: services},
 		Group:   &Group{services: services},
@@ -39,7 +44,9 @@ func NewBlls(services *service.Services, daos *dao.Daos) *Blls {
 		Module:  &Module{services: services},
 		Setting: &Setting{services: services},
 
-		OperationLog: &OperationLog{daos: daos},
+		UrbsAcAcl:    &UrbsAcAcl{daos: d},
+		OperationLog: &OperationLog{daos: d},
+		UrbsAcUser:   &UrbsAcUser{daos: d},
 	}
 	return blls
 }

@@ -16,7 +16,7 @@ type Group struct {
 }
 
 // ListLables ...
-func (a *Group) ListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.LabelsInfoRes, error) {
+func (a *Group) ListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.LabelsInfoRes, error) {
 	return a.services.UrbsSetting.GroupListLables(ctx, args)
 }
 

@@ -23,6 +23,7 @@ type ConfigTpl struct {
 	Thrid         Thrid       `json:"thrid" yaml:"thrid"` // 三方接口
 	CorsWhiteList []string    `json:"cors_white_list" yaml:"cors_white_list"`
 	MySQL         SQL         `json:"mysql" yaml:"mysql"`
+	SuperAdmins   []string    `json:"superAdmins" yaml:"superAdmins"`
 }
 
 // TlsConfig the config struct for creating tls.Config.

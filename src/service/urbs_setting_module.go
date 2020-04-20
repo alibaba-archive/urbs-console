@@ -5,16 +5,15 @@ import (
 	"fmt"
 
 	"github.com/teambition/urbs-console/src/conf"
-	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/tpl"
 	"github.com/teambition/urbs-console/src/util/request"
 )
 
 // ModuleList ...
-func (a *UrbsSetting) ModuleList(ctx context.Context, args *tpl.ProductPaginationURL) (*urbssetting.ModulesRes, error) {
+func (a *UrbsSetting) ModuleList(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.ModulesInfoRes, error) {
 	url := fmt.Sprintf("%s/v1/products/%s/modules?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Skip, args.PageSize, args.PageToken)
 
-	result := new(urbssetting.ModulesRes)
+	result := new(tpl.ModulesInfoRes)
 
 	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 
@@ -25,10 +24,10 @@ func (a *UrbsSetting) ModuleList(ctx context.Context, args *tpl.ProductPaginatio
 }
 
 // ModuleCreate ...
-func (a *UrbsSetting) ModuleCreate(ctx context.Context, product string, body *tpl.NameDescBody) (*urbssetting.ModuleRes, error) {
+func (a *UrbsSetting) ModuleCreate(ctx context.Context, product string, body *tpl.NameDescBody) (*tpl.ModuleInfoRes, error) {
 	url := fmt.Sprintf("%s/v1/products/%s/modules", conf.Config.UrbsSetting.Addr, product)
 
-	result := new(urbssetting.ModuleRes)
+	result := new(tpl.ModuleInfoRes)
 
 	resp, err := request.Post(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
 
@@ -39,10 +38,10 @@ func (a *UrbsSetting) ModuleCreate(ctx context.Context, product string, body *tp
 }
 
 // ModuleUpdate ...
-func (a *UrbsSetting) ModuleUpdate(ctx context.Context, product string, module string, body *tpl.ModuleUpdateBody) (*urbssetting.ModuleRes, error) {
+func (a *UrbsSetting) ModuleUpdate(ctx context.Context, product string, module string, body *tpl.ModuleUpdateBody) (*tpl.ModuleInfoRes, error) {
 	url := fmt.Sprintf("%s/v1/products/%s/modules/%s", conf.Config.UrbsSetting.Addr, product, module)
 
-	result := new(urbssetting.ModuleRes)
+	result := new(tpl.ModuleInfoRes)
 
 	resp, err := request.Put(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
 

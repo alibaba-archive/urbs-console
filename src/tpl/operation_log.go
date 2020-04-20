@@ -6,7 +6,8 @@ import "github.com/teambition/gear"
 type OperationLogListReq struct {
 	Pagination
 	ProductURL
-	Label   string `json:"label" query:"label"`
+	Label string `json:"label" query:"label"`
+
 	Module  string `json:"module" query:"module"`
 	Setting string `json:"setting" query:"setting"`
 }

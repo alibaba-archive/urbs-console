@@ -5,16 +5,15 @@ import (
 	"fmt"
 
 	"github.com/teambition/urbs-console/src/conf"
-	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/tpl"
 	"github.com/teambition/urbs-console/src/util/request"
 )
 
 // LabelList ...
-func (a *UrbsSetting) LabelList(ctx context.Context, args *tpl.ProductPaginationURL) (*urbssetting.LabelsInfoRes, error) {
+func (a *UrbsSetting) LabelList(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.LabelsInfoRes, error) {
 	url := fmt.Sprintf("%s/v1/products/%s/labels?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Skip, args.PageSize, args.PageToken)
 
-	result := new(urbssetting.LabelsInfoRes)
+	result := new(tpl.LabelsInfoRes)
 
 	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 
@@ -25,10 +24,10 @@ func (a *UrbsSetting) LabelList(ctx context.Context, args *tpl.ProductPagination
 }
 
 // LabelCreate ...
-func (a *UrbsSetting) LabelCreate(ctx context.Context, product string, args *tpl.LabelBody) (*urbssetting.LabelInfoRes, error) {
+func (a *UrbsSetting) LabelCreate(ctx context.Context, product string, args *tpl.LabelBody) (*tpl.LabelInfoRes, error) {
 	url := fmt.Sprintf("%s/v1/products/%s/labels", conf.Config.UrbsSetting.Addr, product)
 
-	result := new(urbssetting.LabelInfoRes)
+	result := new(tpl.LabelInfoRes)
 
 	resp, err := request.Post(url).Header(UrbsSettingHeader(ctx)).Body(args).Result(result).Do()
 
@@ -39,11 +38,11 @@ func (a *UrbsSetting) LabelCreate(ctx context.Context, product string, args *tpl
 }
 
 // LabelUpdate ...
-func (a *UrbsSetting) LabelUpdate(ctx context.Context, product string, label string, body *tpl.LabelUpdateBody) (*urbssetting.LabelInfoRes, error) {
+func (a *UrbsSetting) LabelUpdate(ctx context.Context, product string, label string, body *tpl.LabelUpdateBody) (*tpl.LabelInfoRes, error) {
 
 	url := fmt.Sprintf("%s/v1/products/%s/labels/%s", conf.Config.UrbsSetting.Addr, product, label)
 
-	result := new(urbssetting.LabelInfoRes)
+	result := new(tpl.LabelInfoRes)
 
 	resp, err := request.Put(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
 

@@ -5,16 +5,15 @@ import (
 	"fmt"
 
 	"github.com/teambition/urbs-console/src/conf"
-	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/tpl"
 	"github.com/teambition/urbs-console/src/util/request"
 )
 
 // SettingList ...
-func (a *UrbsSetting) SettingList(ctx context.Context, args *tpl.ProductModuleURL) (*urbssetting.SettingsInfoRes, error) {
+func (a *UrbsSetting) SettingList(ctx context.Context, args *tpl.ProductModuleURL) (*tpl.SettingsInfoRes, error) {
 	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Skip, args.PageSize, args.PageToken)
 
-	result := new(urbssetting.SettingsInfoRes)
+	result := new(tpl.SettingsInfoRes)
 
 	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 
@@ -25,10 +24,10 @@ func (a *UrbsSetting) SettingList(ctx context.Context, args *tpl.ProductModuleUR
 }
 
 // SettingCreate ...
-func (a *UrbsSetting) SettingCreate(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.NameDescBody) (*urbssetting.SettingInfoRes, error) {
+func (a *UrbsSetting) SettingCreate(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.NameDescBody) (*tpl.SettingInfoRes, error) {
 	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings", conf.Config.UrbsSetting.Addr, args.Product, args.Module)
 
-	result := new(urbssetting.SettingInfoRes)
+	result := new(tpl.SettingInfoRes)
 
 	resp, err := request.Post(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
 
@@ -39,10 +38,10 @@ func (a *UrbsSetting) SettingCreate(ctx context.Context, args *tpl.ProductModule
 }
 
 // SettingGet ...
-func (a *UrbsSetting) SettingGet(ctx context.Context, args *tpl.ProductModuleSettingURL) (*urbssetting.SettingInfoRes, error) {
+func (a *UrbsSetting) SettingGet(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.SettingInfoRes, error) {
 	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting)
 
-	result := new(urbssetting.SettingInfoRes)
+	result := new(tpl.SettingInfoRes)
 
 	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 
@@ -53,10 +52,10 @@ func (a *UrbsSetting) SettingGet(ctx context.Context, args *tpl.ProductModuleSet
 }
 
 // SettingUpdate ...
-func (a *UrbsSetting) SettingUpdate(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingUpdateBody) (*urbssetting.SettingInfoRes, error) {
+func (a *UrbsSetting) SettingUpdate(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingUpdateBody) (*tpl.SettingInfoRes, error) {
 	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting)
 
-	result := new(urbssetting.SettingInfoRes)
+	result := new(tpl.SettingInfoRes)
 
 	resp, err := request.Put(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
 
