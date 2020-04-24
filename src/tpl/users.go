@@ -1,9 +1,18 @@
 package tpl
 
 import (
+	"time"
+
 	"github.com/teambition/gear"
-	"github.com/teambition/urbs-console/src/schema"
 )
+
+// UrbsSettingUser ...
+type UrbsSettingUser struct {
+	CreatedAt time.Time `json:"createdAt"`
+	UID       string    `json:"uid"`
+	ActiveAt  int64     `json:"activeAt"`
+	Labels    string    `json:"labels"`
+}
 
 // UsersBody ...
 type UsersBody struct {
@@ -26,11 +35,11 @@ func (t *UsersBody) Validate() error {
 // UsersRes ...
 type UsersRes struct {
 	SuccessResponseType
-	Result []schema.User `json:"result"`
+	Result []UrbsSettingUser `json:"result"`
 }
 
 // UserRes ...
 type UserRes struct {
 	SuccessResponseType
-	Result schema.User `json:"result"`
+	Result UrbsSettingUser `json:"result"`
 }

@@ -1,8 +1,9 @@
 package tpl
 
 import (
+	"time"
+
 	"github.com/teambition/gear"
-	"github.com/teambition/urbs-console/src/schema"
 )
 
 // ModuleUpdateBody ...
@@ -19,9 +20,19 @@ func (t *ModuleUpdateBody) Validate() error {
 	return nil
 }
 
+// Module ...
+type Module struct {
+	CreatedAt time.Time  `json:"createdAt"`
+	UpdatedAt time.Time  `json:"updatedAt"`
+	OfflineAt *time.Time `json:"offlineAt"`
+	Name      string     `json:"name"`
+	Desc      string     `json:"desc"`
+	Status    int64      `json:"status"`
+}
+
 // ModuleInfo ...
 type ModuleInfo struct {
-	schema.Module
+	Module
 	Users []*User `json:"users"`
 }
 

@@ -23,6 +23,9 @@ func Verify(services *service.Services) func(ctx *gear.Context) error {
 		if err != nil {
 			return gear.ErrUnauthorized.WithMsg(err.Error())
 		}
+		if uid == "" {
+			return gear.ErrUnauthorized.WithMsg("invalid uid")
+		}
 		_ctx := context.WithValue(ctx.Context(), util.UidKey{}, uid)
 		ctx.WithContext(_ctx)
 		return nil

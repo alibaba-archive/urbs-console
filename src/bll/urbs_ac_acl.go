@@ -18,9 +18,9 @@ type UrbsAcAcl struct {
 }
 
 // AddByReq ...
-func (a *UrbsAcAcl) AddByReq(ctx context.Context, req *tpl.UrbsAcAclAddReq) error {
+func (a *UrbsAcAcl) AddByReq(ctx context.Context, args *tpl.UrbsAcAclURL, req *tpl.UrbsAcAclAddReq) error {
 	object := req.Product + req.Label + req.Module + req.Setting
-	return a.Add(ctx, req.Uid, object, req.Permission)
+	return a.Add(ctx, args.Uid, object, req.Permission)
 }
 
 // AddDefaultPermission ...
@@ -102,7 +102,7 @@ func (a *UrbsAcAcl) FindUsersByObjects(ctx context.Context, objects []string) (m
 				Name: acl.Name, Uid: acl.Subject,
 			})
 		} else {
-			subjects[acl.Subject] = []*tpl.User{{
+			subjects[acl.Object] = []*tpl.User{{
 				Name: acl.Name, Uid: acl.Subject,
 			}}
 		}

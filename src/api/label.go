@@ -11,26 +11,26 @@ type Label struct {
 	blls *bll.Blls
 }
 
-// GetGroups ..
-func (a *Label) GetGroups(ctx *gear.Context) error {
+// ListGroups ..
+func (a *Label) ListGroups(ctx *gear.Context) error {
 	req := tpl.ProductLabelURL{}
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
-	res, err := a.blls.Label.GetGroups(ctx, req.Product, req.Label)
+	res, err := a.blls.Label.ListGroups(ctx, &req)
 	if err != nil {
 		return err
 	}
 	return ctx.OkJSON(res)
 }
 
-// GetUsers ..
-func (a *Label) GetUsers(ctx *gear.Context) error {
+// ListUsers ..
+func (a *Label) ListUsers(ctx *gear.Context) error {
 	req := tpl.ProductLabelURL{}
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
-	res, err := a.blls.Label.GetUsers(ctx, req.Product, req.Label)
+	res, err := a.blls.Label.ListUsers(ctx, &req)
 	if err != nil {
 		return err
 	}
@@ -160,15 +160,19 @@ func (a *Label) Recall(ctx *gear.Context) error {
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
+	body := tpl.RecallBody{}
+	if err := ctx.ParseBody(&body); err != nil {
+		return err
+	}
 	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Label)
 	if err != nil {
 		return err
 	}
-	err = a.blls.Label.Recall(ctx, req.Product, req.Label)
+	res, err := a.blls.Label.Recall(ctx, &req, &body)
 	if err != nil {
 		return err
 	}
-	return ctx.OkJSON(tpl.BoolRes{Result: true})
+	return ctx.OkJSON(res)
 }
 
 // Logs 返回操作日志列表

@@ -1,8 +1,9 @@
 package tpl
 
 import (
+	"time"
+
 	"github.com/teambition/gear"
-	"github.com/teambition/urbs-console/src/schema"
 )
 
 // ProductURL ...
@@ -51,13 +52,13 @@ func (t *ProductPaginationURL) Validate() error {
 
 // ProductLabelURL ...
 type ProductLabelURL struct {
-	ProductURL
+	ProductPaginationURL
 	Label string `json:"label" param:"label"`
 }
 
 // Validate 实现 gear.BodyTemplate。
 func (t *ProductLabelURL) Validate() error {
-	if err := t.ProductURL.Validate(); err != nil {
+	if err := t.ProductPaginationURL.Validate(); err != nil {
 		return err
 	}
 	if !validLabelReg.MatchString(t.Label) {
@@ -128,8 +129,14 @@ func (t *ProductModuleSettingURL) Validate() error {
 
 // Product ...
 type Product struct {
-	schema.Product
-	Users []*User `json:"users"`
+	CreatedAt time.Time  `json:"createdAt"`
+	UpdatedAt time.Time  `json:"updatedAt"`
+	DeletedAt *time.Time `json:"deletedAt"`
+	OfflineAt *time.Time `json:"offlineAt"`
+	Name      string     `json:"name"`
+	Desc      string     `json:"desc"`
+	Status    int64      `json:"status"`
+	Users     []*User    `json:"users"`
 }
 
 // ProductRes ...
@@ -169,4 +176,18 @@ func (t *ProductLabelPaginationURL) Validate() error {
 		return err
 	}
 	return nil
+}
+
+// ProductStatisticsRes ...
+type ProductStatisticsRes struct {
+	Result ProductStatistics `json:"result"`
+}
+
+// ProductStatistics ...
+type ProductStatistics struct {
+	Labels   int64 `json:"labels"`
+	Modules  int64 `json:"modules"`
+	Settings int64 `json:"settings"`
+	Release  int64 `json:"release"`
+	Status   int64 `json:"status"`
 }

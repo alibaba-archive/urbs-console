@@ -93,6 +93,8 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	// ***** product ******
 	// 读取产品列表，支持条件筛选
 	routerV1.Get("/products", checkViewer, apis.Product.List)
+	// 读取指定产品的统计数据
+	routerV1.Get("/products/:product/statistics", checkViewer, apis.Product.Statistics)
 	// 创建产品
 	routerV1.Post("/products", checkSuperAdmin, apis.Product.Create)
 	// 更新指定产品
@@ -108,9 +110,9 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	// 读取指定产品下标签发布记录
 	routerV1.Get("/products/:product/labels/:label/logs", checkViewer, apis.Label.Logs)
 	// 获取标签下群组
-	routerV1.Get("/products/:product/labels/:label/groups", checkViewer, apis.Label.GetGroups)
+	routerV1.Get("/products/:product/labels/:label/groups", checkViewer, apis.Label.ListGroups)
 	// 获取标签下用户
-	routerV1.Get("/products/:product/labels/:label/users", checkViewer, apis.Label.GetUsers)
+	routerV1.Get("/products/:product/labels/:label/users", checkViewer, apis.Label.ListUsers)
 	// 创建指定产品灰度标签
 	routerV1.Post("/products/:product/labels", apis.Label.Create)
 	// 更新指定产品灰度标签
@@ -121,7 +123,6 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	routerV1.Put("/products/:product/labels/:label+:offline", apis.Label.Offline)
 	// 批量为用户或群组设置产品灰度标签
 	routerV1.Post("/products/:product/labels/:label+:assign", apis.Label.Assign)
-
 	// 批量撤销对用户或群组设置的产品灰度标签
 	routerV1.Post("/products/:product/labels/:label+:recall", apis.Label.Recall)
 
@@ -138,8 +139,12 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	// ***** setting ******
 	// 读取指定产品功能模块的配置项
 	routerV1.Get("/products/:product/modules/:module/settings", checkViewer, apis.Setting.List)
-	// 读取发布记录
+	// 读取指定产品功能模块配置项的发布记录
 	routerV1.Get("/products/:product/modules/:module/settings/:setting/logs", checkViewer, apis.Setting.Logs)
+	// 读取指定产品功能模块配置项的群组列表
+	routerV1.Get("/products/:product/modules/:module/settings/:setting/groups", checkViewer, apis.Setting.ListGroups)
+	// 读取指定产品功能模块配置项的用户列表
+	routerV1.Get("/products/:product/modules/:module/settings/:setting/users", checkViewer, apis.Setting.ListUsers)
 	// 创建指定产品功能模块配置项
 	routerV1.Post("/products/:product/modules/:module/settings", apis.Setting.Create)
 	// 更新指定产品功能模块配置项

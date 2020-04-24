@@ -3,6 +3,7 @@ package bll
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 	"github.com/teambition/urbs-console/src/tpl"
@@ -35,6 +36,7 @@ func testModuleCreate(tt *TestTools, product, module string) (*tpl.ModuleInfoRes
 
 	tt.Require.Nil(err)
 	tt.Require.Equal(module, result.Result.Name)
+	tt.Require.True(result.Result.CreatedAt.Before(time.Now()))
 	return result, nil
 }
 
@@ -45,6 +47,7 @@ func testModuleGet(tt *TestTools, product string) (*tpl.ModulesInfoRes, error) {
 	result, err := blls.Module.List(context.Background(), args)
 	tt.Require.Nil(err)
 	tt.Require.Equal(1, len(result.Result))
+	tt.Require.True(result.Result[0].CreatedAt.Before(time.Now()))
 	return result, nil
 }
 
@@ -53,11 +56,12 @@ func testModuleUpdate(tt *TestTools, product, module string) (*tpl.ModuleInfoRes
 	req := &tpl.ModuleUpdateBody{
 		Desc: &desc,
 	}
-	res, err := blls.Module.Update(context.Background(), product, module, req)
+	result, err := blls.Module.Update(context.Background(), product, module, req)
 
 	tt.Require.Nil(err)
-	tt.Require.Equal(*req.Desc, res.Result.Desc)
-	return res, nil
+	tt.Require.Equal(*req.Desc, result.Result.Desc)
+	tt.Require.True(result.Result.CreatedAt.Before(time.Now()))
+	return result, nil
 }
 
 func testModuleOffline(tt *TestTools, product, module string) (*tpl.BoolRes, error) {

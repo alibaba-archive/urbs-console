@@ -1,8 +1,9 @@
 package tpl
 
 import (
+	"time"
+
 	"github.com/teambition/gear"
-	"github.com/teambition/urbs-console/src/schema"
 )
 
 // LabelBody ...
@@ -60,8 +61,19 @@ func (t *LabelUpdateBody) Validate() error {
 
 // LabelInfo ...
 type LabelInfo struct {
-	schema.LabelInfo
-	Users []*User `json:"users"`
+	ID        int64      `json:"-"`
+	HID       string     `json:"hid"`
+	Product   string     `json:"product"`
+	Name      string     `json:"name"`
+	Desc      string     `json:"desc"`
+	Channels  []string   `json:"channels"`
+	Clients   []string   `json:"clients"`
+	Status    int64      `json:"status"`
+	Release   int64      `json:"release"`
+	CreatedAt time.Time  `json:"createdAt"`
+	UpdatedAt time.Time  `json:"updatedAt"`
+	OfflineAt *time.Time `json:"offlineAt"`
+	Users     []*User    `json:"users"`
 }
 
 // LabelInfoRes ...
@@ -78,11 +90,24 @@ type LabelsInfoRes struct {
 // LabelGroupsRes ...
 type LabelGroupsRes struct {
 	SuccessResponseType
-	Result []*schema.Group `json:"result"`
+	Result []*Group `json:"result"`
 }
 
 // LabelUsersRes ...
 type LabelUsersRes struct {
 	SuccessResponseType
-	Result []*schema.User `json:"result"`
+	Result []*User `json:"result"`
+}
+
+// LabelReleaseInfo ...
+type LabelReleaseInfo struct {
+	Release int64    `json:"release"`
+	Users   []string `json:"users"`
+	Groups  []string `json:"groups"`
+}
+
+// LabelReleaseInfoRes ...
+type LabelReleaseInfoRes struct {
+	SuccessResponseType
+	Result LabelReleaseInfo `json:"result"` // 空数组也保留
 }

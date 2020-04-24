@@ -33,6 +33,16 @@ func (a *Setting) List(ctx context.Context, args *tpl.ProductModuleURL) (*tpl.Se
 	return ress, nil
 }
 
+// ListGroups ...
+func (a *Setting) ListGroups(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.SettingGroupsInfoRes, error) {
+	return a.services.UrbsSetting.SettingListGroups(ctx, args)
+}
+
+// ListUsers ...
+func (a *Setting) ListUsers(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.SettingUsersInfoRes, error) {
+	return a.services.UrbsSetting.SettingListUsers(ctx, args)
+}
+
 // Create 创建指定产品功能模块配置项
 func (a *Setting) Create(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.NameDescBody) (*tpl.SettingInfoRes, error) {
 	object := args.Product + args.Module + body.Name
@@ -79,8 +89,9 @@ func (a *Setting) Offline(ctx context.Context, args *tpl.ProductModuleSettingURL
 }
 
 // Assign 批量为用户或群组设置产品功能模块配置项
-func (a *Setting) Assign(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.UsersGroupsBody) (*tpl.BoolRes, error) {
-	err := blls.OperationLog.Add(ctx, args.Product+args.Module+args.Setting, actionCreate, body)
+func (a *Setting) Assign(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.UsersGroupsBody) (*tpl.SettingReleaseInfoRes, error) {
+	object := args.Product + args.Module + args.Setting
+	err := blls.OperationLog.Add(ctx, object, actionCreate, body)
 	if err != nil {
 		return nil, err
 	}
@@ -88,11 +99,11 @@ func (a *Setting) Assign(ctx context.Context, args *tpl.ProductModuleSettingURL,
 }
 
 // Recall ...
-func (a *Setting) Recall(ctx context.Context, product, module, setting string) error {
-	_, err := daos.OperationLog.FindOneByObject(ctx, product+module+setting)
+func (a *Setting) Recall(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.RecallBody) (*tpl.BoolRes, error) {
+	object := args.Product + args.Module + args.Setting
+	err := daos.OperationLog.DeleteByObject(ctx, object)
 	if err != nil {
-		return nil
+		return nil, err
 	}
-	// call urbs-setting
-	return nil
+	return a.services.UrbsSetting.SettingRecall(ctx, args, body)
 }

@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/tpl"
@@ -21,12 +20,12 @@ func (a *Group) ListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tp
 }
 
 // List ...
-func (a *Group) List(ctx context.Context, args *tpl.GroupsURL) (*urbssetting.GroupsRes, error) {
+func (a *Group) List(ctx context.Context, args *tpl.GroupsURL) (*tpl.GroupsRes, error) {
 	return a.services.UrbsSetting.GroupList(ctx, args)
 }
 
 // ListSettings ...
-func (a *Group) ListSettings(ctx context.Context, args *tpl.UIDProductURL) (*urbssetting.MySettingsRes, error) {
+func (a *Group) ListSettings(ctx context.Context, args *tpl.UIDProductURL) (*tpl.MySettingsRes, error) {
 	return a.services.UrbsSetting.GroupListSettings(ctx, args)
 }
 
@@ -97,7 +96,7 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 }
 
 // Update ...
-func (a *Group) Update(ctx context.Context, uid string, body *tpl.GroupUpdateBody) (*urbssetting.GroupRes, error) {
+func (a *Group) Update(ctx context.Context, uid string, body *tpl.GroupUpdateBody) (*tpl.GroupRes, error) {
 	return a.services.UrbsSetting.GroupUpdate(ctx, uid, body)
 }
 
@@ -107,7 +106,7 @@ func (a *Group) Delete(ctx context.Context, uid string) (*tpl.BoolRes, error) {
 }
 
 // ListMembers ...
-func (a *Group) ListMembers(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.GroupMembersRes, error) {
+func (a *Group) ListMembers(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.GroupMembersRes, error) {
 	return a.services.UrbsSetting.GroupListMembers(ctx, args)
 }
 

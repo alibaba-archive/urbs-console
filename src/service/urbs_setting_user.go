@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/teambition/urbs-console/src/conf"
-	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/tpl"
 	"github.com/teambition/urbs-console/src/util/request"
 )
@@ -50,10 +49,10 @@ func (a *UrbsSetting) UserRefreshCached(ctx context.Context, uid string) (*tpl.B
 }
 
 // UserListSettings ...
-func (a *UrbsSetting) UserListSettings(ctx context.Context, args *tpl.UIDProductURL) (*urbssetting.MySettingsRes, error) {
+func (a *UrbsSetting) UserListSettings(ctx context.Context, args *tpl.UIDProductURL) (*tpl.MySettingsRes, error) {
 	url := fmt.Sprintf("%s/v1/users/%s/settings?skip=%d&pageSize=%d&pageToken=%s&product=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Product)
 
-	result := new(urbssetting.MySettingsRes)
+	result := new(tpl.MySettingsRes)
 
 	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 	if err := HanderResponse(resp, err); err != nil {
@@ -63,10 +62,10 @@ func (a *UrbsSetting) UserListSettings(ctx context.Context, args *tpl.UIDProduct
 }
 
 // UserListSettingsUnionAll ...
-func (a *UrbsSetting) UserListSettingsUnionAll(ctx context.Context, args *tpl.MySettingsQueryURL) (*urbssetting.MySettingsRes, error) {
+func (a *UrbsSetting) UserListSettingsUnionAll(ctx context.Context, args *tpl.MySettingsQueryURL) (*tpl.MySettingsRes, error) {
 	url := fmt.Sprintf("%s/v1/users/%s/settings:unionAll?skip=%d&pageSize=%d&pageToken=%s&product=%s&client=%s&channel=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Product, args.Client, args.Channel)
 
-	result := new(urbssetting.MySettingsRes)
+	result := new(tpl.MySettingsRes)
 
 	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 	if err := HanderResponse(resp, err); err != nil {
@@ -92,7 +91,7 @@ func (a *UrbsSetting) UserCheckExists(ctx context.Context, uid string) (*tpl.Boo
 func (a *UrbsSetting) UserBatchAdd(ctx context.Context, users []string) (*tpl.BoolRes, error) {
 	url := fmt.Sprintf("%s/v1/users:batch", conf.Config.UrbsSetting.Addr)
 
-	body := new(urbssetting.UsersBody)
+	body := new(tpl.UsersBody)
 	body.Users = users
 
 	result := new(tpl.BoolRes)

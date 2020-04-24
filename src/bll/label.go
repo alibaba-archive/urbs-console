@@ -13,26 +13,14 @@ type Label struct {
 	services *service.Services
 }
 
-// GetGroups ...
-func (a *Label) GetGroups(ctx context.Context, product, label string) (*tpl.LabelGroupsRes, error) {
-	res := new(tpl.LabelGroupsRes)
-	return res, nil
+// ListGroups ...
+func (a *Label) ListGroups(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.LabelGroupsInfoRes, error) {
+	return a.services.UrbsSetting.LabelListGroups(ctx, args)
 }
 
-// GetUsers ...
-func (a *Label) GetUsers(ctx context.Context, product, label string) (*tpl.LabelUsersRes, error) {
-	res := new(tpl.LabelUsersRes)
-	return res, nil
-}
-
-// Recall ...
-func (a *Label) Recall(ctx context.Context, product, label string) error {
-	_, err := daos.OperationLog.FindOneByObject(ctx, product+label)
-	if err != nil {
-		return nil
-	}
-	// call urbs-setting
-	return nil
+// ListUsers ...
+func (a *Label) ListUsers(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.LabelUsersInfoRes, error) {
+	return a.services.UrbsSetting.LabelListUsers(ctx, args)
 }
 
 // Create ...
@@ -101,7 +89,7 @@ func (a *Label) Offline(ctx context.Context, product, label string) (*tpl.BoolRe
 }
 
 // Assign 把标签批量分配给用户或群组
-func (a *Label) Assign(ctx context.Context, product, label string, body *tpl.UsersGroupsBody) (*tpl.BoolRes, error) {
+func (a *Label) Assign(ctx context.Context, product, label string, body *tpl.UsersGroupsBody) (*tpl.LabelReleaseInfoRes, error) {
 	err := blls.OperationLog.Add(ctx, product+label, actionCreate, body)
 	if err != nil {
 		return nil, err
@@ -116,4 +104,14 @@ func (a *Label) Delete(ctx context.Context, product, label string) (*tpl.BoolRes
 		logger.Err(ctx, err.Error())
 	}
 	return a.services.UrbsSetting.LabelDelete(ctx, product, label)
+}
+
+// Recall 批量撤销对用户或群组设置的产品灰度标签
+func (a *Label) Recall(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.RecallBody) (*tpl.BoolRes, error) {
+	object := args.Product + args.Label
+	err := daos.OperationLog.DeleteByObject(ctx, object)
+	if err != nil {
+		return nil, err
+	}
+	return a.services.UrbsSetting.LabelRecall(ctx, args, body)
 }

@@ -190,3 +190,33 @@ func RandName() string {
 func RandLabel() string {
 	return fmt.Sprintf("label-%x", randBytes(8))
 }
+
+// RecallBody ...
+type RecallBody struct {
+	Release int64 `json:"release"`
+}
+
+// Validate 实现 gear.BodyTemplate。
+func (t *RecallBody) Validate() error {
+	if t.Release <= 0 {
+		return gear.ErrBadRequest.WithMsg("release required")
+	}
+	return nil
+}
+
+// HIDRuleHIDURL ...
+type HIDRuleHIDURL struct {
+	HID     string `json:"hid" param:"hid"`
+	RuleHID string `json:"ruleHID" param:"ruleHID"`
+}
+
+// Validate 实现 gear.BodyTemplate。
+func (t *HIDRuleHIDURL) Validate() error {
+	if !validHIDReg.MatchString(t.HID) {
+		return gear.ErrBadRequest.WithMsgf("invalid hid: %s", t.HID)
+	}
+	if !validHIDReg.MatchString(t.RuleHID) {
+		return gear.ErrBadRequest.WithMsgf("invalid rule hid: %s", t.RuleHID)
+	}
+	return nil
+}

@@ -74,15 +74,20 @@ func (a *Product) Update(ctx context.Context, product string, args *tpl.ProductU
 }
 
 // Offline 下线产品
-func (a *Product) Offline(ctx context.Context, productName string) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.ProductOffline(ctx, productName)
+func (a *Product) Offline(ctx context.Context, product string) (*tpl.BoolRes, error) {
+	return a.services.UrbsSetting.ProductOffline(ctx, product)
 }
 
 // Delete 逻辑删除产品
-func (a *Product) Delete(ctx context.Context, productName string) (*tpl.BoolRes, error) {
-	err := daos.UrbsAcAcl.DeleteByObject(ctx, productName)
+func (a *Product) Delete(ctx context.Context, product string) (*tpl.BoolRes, error) {
+	err := daos.UrbsAcAcl.DeleteByObject(ctx, product)
 	if err != nil {
 		logger.Err(ctx, err.Error())
 	}
-	return a.services.UrbsSetting.ProductDelete(ctx, productName)
+	return a.services.UrbsSetting.ProductDelete(ctx, product)
+}
+
+// Statistics 返回产品的统计数据
+func (a *Product) Statistics(ctx context.Context, product string) (*tpl.ProductStatisticsRes, error) {
+	return a.services.UrbsSetting.ProductStatistics(ctx, product)
 }

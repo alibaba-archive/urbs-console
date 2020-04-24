@@ -3,7 +3,6 @@ package dao
 import (
 	"context"
 	"errors"
-	"time"
 
 	"github.com/jinzhu/gorm"
 	"github.com/teambition/urbs-console/src/dto"
@@ -17,15 +16,12 @@ type UrbsAcAcl struct {
 
 // Add ...
 func (a *UrbsAcAcl) Add(ctx context.Context, obj *schema.UrbsAcAcl) error {
-	obj.CreatedAt = time.Now().UTC()
 
-	sql := "insert ignore into `urbs_ac_acl` (`created_at`, `subject`, `object`,`permission`) values (?, ?, ?, ?)"
+	sql := "insert ignore into `urbs_ac_acl` (`subject`, `object`,`permission`) values ( ?, ?, ?)"
 
-	args := []interface{}{obj.CreatedAt, obj.Subject, obj.Object, obj.Permission}
+	args := []interface{}{obj.Subject, obj.Object, obj.Permission}
 
-	_, err := a.DB.DB().Exec(sql, args...)
-
-	return err
+	return a.DB.Exec(sql, args...).Error
 }
 
 // FindOne ...
@@ -87,17 +83,23 @@ func (a *UrbsAcAcl) Delete(ctx context.Context, subject, object, permission stri
 func (a *UrbsAcAcl) DeleteNotIn(ctx context.Context, subjects []string, object string) error {
 	sql := "delete from `urbs_ac_acl` where object = ? and subject not in (?)"
 
-	args := []interface{}{object, subjects}
-
-	_, err := a.DB.DB().Exec(sql, args...)
-
-	return err
+	return a.DB.Exec(sql, object, subjects).Error
 }
 
 // FindByObjects ...
 func (a *UrbsAcAcl) FindByObjects(ctx context.Context, objects []string) ([]*dto.UrbsAcAcl, error) {
-	sql := "SELECT a.id,a.created_at,a.subject,a.object,a.permission,b.name FROM urbs_ac_acl a INNER JOIN urbs_ac_user b ON a.`subject`=b.uid WHERE a.object IN (?)"
-
+	sql := `SELECT
+				a.id,
+				a.created_at,
+				a.subject,
+				a.object,
+				a.permission,
+				b.name
+			FROM
+				urbs_ac_acl a
+				INNER JOIN urbs_ac_user b ON a.subject = b.uid 
+			WHERE
+				a.object IN (?)`
 	row, err := a.DB.Raw(sql, objects).Rows()
 	if err != nil {
 		return nil, err

@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/teambition/urbs-console/src/conf"
-	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/tpl"
 	"github.com/teambition/urbs-console/src/util/request"
 )
@@ -25,10 +24,10 @@ func (a *UrbsSetting) GroupListLables(ctx context.Context, args *tpl.UIDPaginati
 }
 
 // GroupListSettings ...
-func (a *UrbsSetting) GroupListSettings(ctx context.Context, args *tpl.UIDProductURL) (*urbssetting.MySettingsRes, error) {
+func (a *UrbsSetting) GroupListSettings(ctx context.Context, args *tpl.UIDProductURL) (*tpl.MySettingsRes, error) {
 	url := fmt.Sprintf("%s/v1/groups/%s/settings?product=%s&skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Product, args.Skip, args.PageSize, args.PageToken)
 
-	result := new(urbssetting.MySettingsRes)
+	result := new(tpl.MySettingsRes)
 
 	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 
@@ -39,10 +38,10 @@ func (a *UrbsSetting) GroupListSettings(ctx context.Context, args *tpl.UIDProduc
 }
 
 // GroupList ...
-func (a *UrbsSetting) GroupList(ctx context.Context, args *tpl.GroupsURL) (*urbssetting.GroupsRes, error) {
+func (a *UrbsSetting) GroupList(ctx context.Context, args *tpl.GroupsURL) (*tpl.GroupsRes, error) {
 	url := fmt.Sprintf("%s/v1/groups?kind=%s&skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Kind, args.Skip, args.PageSize, args.PageToken)
 
-	result := new(urbssetting.GroupsRes)
+	result := new(tpl.GroupsRes)
 
 	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 
@@ -83,10 +82,10 @@ func (a *UrbsSetting) GroupBatchAdd(ctx context.Context, groups []*tpl.GroupBody
 }
 
 // GroupUpdate ...
-func (a *UrbsSetting) GroupUpdate(ctx context.Context, uid string, body *tpl.GroupUpdateBody) (*urbssetting.GroupRes, error) {
+func (a *UrbsSetting) GroupUpdate(ctx context.Context, uid string, body *tpl.GroupUpdateBody) (*tpl.GroupRes, error) {
 	url := fmt.Sprintf("%s/v1/groups/%s", conf.Config.UrbsSetting.Addr, uid)
 
-	result := new(urbssetting.GroupRes)
+	result := new(tpl.GroupRes)
 
 	resp, err := request.Put(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
 	if err := HanderResponse(resp, err); err != nil {
@@ -109,10 +108,10 @@ func (a *UrbsSetting) GroupDelete(ctx context.Context, uid string) (*tpl.BoolRes
 }
 
 // GroupListMembers ...
-func (a *UrbsSetting) GroupListMembers(ctx context.Context, args *tpl.UIDPaginationURL) (*urbssetting.GroupMembersRes, error) {
+func (a *UrbsSetting) GroupListMembers(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.GroupMembersRes, error) {
 	url := fmt.Sprintf("%s/v1/groups/%s/members?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken)
 
-	result := new(urbssetting.GroupMembersRes)
+	result := new(tpl.GroupMembersRes)
 
 	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 	if err := HanderResponse(resp, err); err != nil {
@@ -125,7 +124,7 @@ func (a *UrbsSetting) GroupListMembers(ctx context.Context, args *tpl.UIDPaginat
 func (a *UrbsSetting) GroupBatchAddMembers(ctx context.Context, groupId string, users []string) (*tpl.BoolRes, error) {
 	url := fmt.Sprintf("%s/v1/groups/%s/members:batch", conf.Config.UrbsSetting.Addr, groupId)
 
-	body := new(urbssetting.UsersBody)
+	body := new(tpl.UsersBody)
 	body.Users = users
 
 	result := new(tpl.BoolRes)
@@ -139,7 +138,7 @@ func (a *UrbsSetting) GroupBatchAddMembers(ctx context.Context, groupId string, 
 
 // GroupRemoveMembers ...
 func (a *UrbsSetting) GroupRemoveMembers(ctx context.Context, args *tpl.GroupMembersURL) (*tpl.BoolRes, error) {
-	url := fmt.Sprintf("%s/v1/groups/%s/members?sync_lt=%d&user=%s", conf.Config.UrbsSetting.Addr, args.UID, args.SyncLt, args.User)
+	url := fmt.Sprintf("%s/v1/groups/%s/members?syncLt=%d&user=%s", conf.Config.UrbsSetting.Addr, args.UID, args.SyncLt, args.User)
 
 	result := new(tpl.BoolRes)
 

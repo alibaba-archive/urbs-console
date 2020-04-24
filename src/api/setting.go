@@ -24,6 +24,32 @@ func (a *Setting) List(ctx *gear.Context) error {
 	return ctx.OkJSON(res)
 }
 
+// ListGroups ..
+func (a *Setting) ListGroups(ctx *gear.Context) error {
+	req := tpl.ProductModuleSettingURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	res, err := a.blls.Setting.ListGroups(ctx, &req)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}
+
+// ListUsers ..
+func (a *Setting) ListUsers(ctx *gear.Context) error {
+	req := tpl.ProductModuleSettingURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	res, err := a.blls.Setting.ListUsers(ctx, &req)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}
+
 // Create ..
 func (a *Setting) Create(ctx *gear.Context) error {
 	req := tpl.ProductModuleURL{}
@@ -115,15 +141,19 @@ func (a *Setting) Recall(ctx *gear.Context) error {
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
+	body := tpl.RecallBody{}
+	if err := ctx.ParseBody(&body); err != nil {
+		return err
+	}
 	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module+req.Setting)
 	if err != nil {
 		return err
 	}
-	err = a.blls.Setting.Recall(ctx, req.Product, req.Module, req.Setting)
+	res, err := a.blls.Setting.Recall(ctx, &req, &body)
 	if err != nil {
 		return err
 	}
-	return ctx.OkJSON(tpl.BoolRes{Result: true})
+	return ctx.OkJSON(res)
 }
 
 // Logs 返回操作日志列表

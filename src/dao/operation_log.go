@@ -56,3 +56,9 @@ func (a *OperationLog) FindOneByObject(ctx context.Context, object string) (*sch
 	}
 	return acl, nil
 }
+
+// DeleteByObject ...
+func (a *OperationLog) DeleteByObject(ctx context.Context, object string) error {
+	sql := "delete from operation_log where object = ?"
+	return a.DB.Exec(sql, object).Error
+}

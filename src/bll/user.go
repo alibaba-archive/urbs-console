@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/teambition/gear"
-	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/tpl"
 )
@@ -30,12 +29,12 @@ func (a *User) RefreshCachedLables(ctx context.Context, uid string) (*tpl.BoolRe
 }
 
 // ListSettings ...
-func (a *User) ListSettings(ctx context.Context, args *tpl.UIDProductURL) (*urbssetting.MySettingsRes, error) {
+func (a *User) ListSettings(ctx context.Context, args *tpl.UIDProductURL) (*tpl.MySettingsRes, error) {
 	return a.services.UrbsSetting.UserListSettings(ctx, args)
 }
 
 // ListSettingsUnionAll ...
-func (a *User) ListSettingsUnionAll(ctx *gear.Context, args *tpl.MySettingsQueryURL) (*urbssetting.MySettingsRes, error) {
+func (a *User) ListSettingsUnionAll(ctx *gear.Context, args *tpl.MySettingsQueryURL) (*tpl.MySettingsRes, error) {
 	return a.services.UrbsSetting.UserListSettingsUnionAll(ctx, args)
 }
 

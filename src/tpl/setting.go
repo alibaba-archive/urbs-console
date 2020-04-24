@@ -1,8 +1,9 @@
 package tpl
 
 import (
+	"time"
+
 	"github.com/teambition/gear"
-	"github.com/teambition/urbs-console/src/schema"
 )
 
 // MySettingsQueryURL ...
@@ -96,8 +97,20 @@ func (t *MySettingsQueryURLClient) Validate() error {
 
 // SettingInfo ...
 type SettingInfo struct {
-	schema.Setting
-	Users []*User `json:"users"`
+	HID       string     `json:"hid"`
+	Product   string     `json:"product"`
+	Module    string     `json:"module"`
+	Name      string     `json:"name"`
+	Desc      string     `json:"desc"`
+	Channels  []string   `json:"channels"`
+	Clients   []string   `json:"clients"`
+	Values    []string   `json:"values"`
+	Status    int64      `json:"status"`
+	Release   int64      `json:"release"`
+	CreatedAt time.Time  `json:"createdAt"`
+	UpdatedAt time.Time  `json:"updatedAt"`
+	OfflineAt *time.Time `json:"offlineAt"`
+	Users     []*User    `json:"users"`
 }
 
 // SettingInfoRes ...
@@ -109,4 +122,36 @@ type SettingInfoRes struct {
 type SettingsInfoRes struct {
 	SuccessResponseType
 	Result []*SettingInfo `json:"result"`
+}
+
+// SettingReleaseInfo ...
+type SettingReleaseInfo struct {
+	Release int64    `json:"release"`
+	Users   []string `json:"users"`
+	Groups  []string `json:"groups"`
+	Value   string   `json:"value"`
+}
+
+// SettingReleaseInfoRes ...
+type SettingReleaseInfoRes struct {
+	SuccessResponseType
+	Result SettingReleaseInfo `json:"result"` // 空数组也保留
+}
+
+// MySettingsRes ...
+type MySettingsRes struct {
+	SuccessResponseType
+	Result []MySetting `json:"result"` // 空数组也保留
+}
+
+// MySetting ...
+type MySetting struct {
+	ID        int64     `json:"-"`
+	HID       string    `json:"hid"`
+	Module    string    `json:"module"`
+	Name      string    `json:"name"`
+	Value     string    `json:"value"`
+	LastValue string    `json:"lastValue"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }

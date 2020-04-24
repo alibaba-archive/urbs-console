@@ -19,6 +19,7 @@ func TestAPIsAuth(t *testing.T) {
 	reqArgs := []reqArg{
 		// ***** product ******
 		{Method: http.MethodGet, URL: "/api/v1/products"},
+		{Method: http.MethodGet, URL: "/api/v1/products/product/statistics"},
 		{Method: http.MethodPost, URL: "/api/v1/products"},
 		{Method: http.MethodPut, URL: "/api/v1/products/product", Body: "{}"},
 		{Method: http.MethodPut, URL: "/api/v1/products/product:offline", Body: "{}"},
@@ -33,7 +34,7 @@ func TestAPIsAuth(t *testing.T) {
 		{Method: http.MethodDelete, URL: "/api/v1/products/product/labels/label"},
 		{Method: http.MethodPut, URL: "/api/v1/products/product/labels/label:offline"},
 		{Method: http.MethodPost, URL: "/api/v1/products/product/labels/label:assign", Body: `{"users":["123"]}`},
-		{Method: http.MethodPost, URL: "/api/v1/products/product/labels/label:recall"},
+		{Method: http.MethodPost, URL: "/api/v1/products/product/labels/label:recall", Body: `{"release":123}`},
 		// ***** module ******
 		{Method: http.MethodGet, URL: "/api/v1/products/product/modules"},
 		{Method: http.MethodPost, URL: "/api/v1/products/product/modules", Body: `{"name":"xcccc"}`},
@@ -46,7 +47,7 @@ func TestAPIsAuth(t *testing.T) {
 		{Method: http.MethodPut, URL: "/api/v1/products/product/modules/module/settings/setting", Body: `{"desc":"xxxx"}`},
 		{Method: http.MethodPut, URL: "/api/v1/products/product/modules/module/settings/setting:offline"},
 		{Method: http.MethodPost, URL: "/api/v1/products/product/modules/module/settings/setting:assign", Body: `{"users":["xxxx"]}`},
-		{Method: http.MethodPost, URL: "/api/v1/products/product/modules/module/settings/setting:recall"},
+		{Method: http.MethodPost, URL: "/api/v1/products/product/modules/module/settings/setting:recall", Body: `{"release":123}`},
 		// ***** user ******
 		{Method: http.MethodGet, URL: "/api/v1/users"},
 		{Method: http.MethodGet, URL: "/api/v1/users/uid/labels"},

@@ -12,34 +12,60 @@ import (
 func TestUrbsAcACL(t *testing.T) {
 	require := require.New(t)
 
+	args := &tpl.UrbsAcAclURL{
+		Uid: tpl.RandUID(),
+	}
 	body := &tpl.UrbsAcAclAddReq{}
-	body.Uid = tpl.RandUID()
 	body.Product = tpl.RandName()
 	body.Label = tpl.RandLabel()
 	body.Permission = constant.PermissionAll
 
-	// 添加权限
-	err := blls.UrbsAcAcl.AddByReq(context.Background(), body)
+	err := blls.UrbsAcAcl.AddByReq(context.Background(), args, body)
 	require.Nil(err)
 
-	// 添加用户
 	userBody := &tpl.UrbsAcUsersBody{
 		Users: []*tpl.UrbsAcUserBody{
 			{
-				Uid:  body.Uid,
-				Name: body.Uid,
+				Uid:  args.Uid,
+				Name: args.Uid,
 			},
 		},
 	}
-
 	err = blls.UrbsAcUser.Add(context.Background(), userBody)
 	require.Nil(err)
 
-	// 检查浏览者权限
-	err = blls.UrbsAcAcl.CheckViewer(getUidContext(body.Uid))
+	err = blls.UrbsAcAcl.CheckViewer(getUidContext(args.Uid))
 	require.Nil(err)
 
-	// 检查管理者权限
-	err = blls.UrbsAcAcl.CheckAdmin(getUidContext(body.Uid), body.Product+body.Label)
+	object := body.Product + body.Label
+
+	err = blls.UrbsAcAcl.CheckAdmin(getUidContext(args.Uid), object)
 	require.Nil(err)
+
+	subjects := []string{tpl.RandUID()}
+	userBody = &tpl.UrbsAcUsersBody{
+		Users: []*tpl.UrbsAcUserBody{
+			{
+				Uid:  subjects[0],
+				Name: subjects[0],
+			},
+		},
+	}
+	err = blls.UrbsAcUser.Add(context.Background(), userBody)
+	require.Nil(err)
+
+	err = blls.UrbsAcAcl.Update(context.Background(), subjects, object)
+	require.Nil(err)
+
+	err = blls.UrbsAcAcl.CheckAdmin(getUidContext(subjects[0]), object)
+	require.Nil(err, object)
+
+	err = blls.UrbsAcAcl.CheckAdmin(getUidContext(args.Uid), object)
+	require.NotNil(err)
+
+	users, err := blls.UrbsAcAcl.FindUsersByObject(context.Background(), object)
+	require.Nil(err)
+	require.Equal(1, len(users))
+	require.Equal(subjects[0], users[0].Uid)
+	require.Equal(subjects[0], users[0].Name)
 }

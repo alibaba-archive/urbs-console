@@ -6,6 +6,17 @@ import (
 	"github.com/teambition/gear"
 )
 
+// Group ...
+type Group struct {
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+	SyncAt    int64     `json:"syncAt"`
+	UID       string    `json:"uid"`
+	Kind      string    `json:"kind"`
+	Desc      string    `json:"desc"`
+	Status    int64     `json:"status"`
+}
+
 // GroupsBody ...
 type GroupsBody struct {
 	Groups []*GroupBody `json:"groups"`
@@ -46,13 +57,13 @@ type GroupsURL struct {
 // GroupUpdateBody ...
 type GroupUpdateBody struct {
 	Desc   *string `json:"desc"`
-	SyncAt *int64  `json:"sync_at"`
+	SyncAt *int64  `json:"syncAt"`
 }
 
 // Validate 实现 gear.BodyTemplate。
 func (t *GroupUpdateBody) Validate() error {
 	if t.Desc == nil && t.SyncAt == nil {
-		return gear.ErrBadRequest.WithMsgf("desc or kind or sync_at required")
+		return gear.ErrBadRequest.WithMsgf("desc or kind or syncAt required")
 	}
 	if t.Desc != nil && len(*t.Desc) > 1022 {
 		return gear.ErrBadRequest.WithMsgf("desc too long: %d", len(*t.Desc))
@@ -61,7 +72,7 @@ func (t *GroupUpdateBody) Validate() error {
 		now := time.Now().Unix()
 		if *t.SyncAt < (now-3600) || *t.SyncAt > (now+3600) {
 			// SyncAt 应该在当前时刻前后范围内
-			return gear.ErrBadRequest.WithMsgf("invalid sync_at: %d", *t.SyncAt)
+			return gear.ErrBadRequest.WithMsgf("invalid syncAt: %d", *t.SyncAt)
 		}
 	}
 	return nil
@@ -70,8 +81,8 @@ func (t *GroupUpdateBody) Validate() error {
 // GroupMembersURL ...
 type GroupMembersURL struct {
 	UID    string `json:"uid" param:"uid"`
-	User   string `json:"user" query:"user"`       // 根据用户 uid 删除一个成员
-	SyncLt int64  `json:"sync_lt" query:"sync_lt"` // 或根据 sync_lt 删除同步时间小于指定值的所有成员
+	User   string `json:"user" query:"user"`     // 根据用户 uid 删除一个成员
+	SyncLt int64  `json:"syncLt" query:"syncLt"` // 或根据 syncLt 删除同步时间小于指定值的所有成员
 }
 
 // Validate 实现 gear.BodyTemplate。
@@ -87,10 +98,35 @@ func (t *GroupMembersURL) Validate() error {
 	} else if t.SyncLt != 0 {
 		if t.SyncLt < 0 || t.SyncLt > (time.Now().UTC().Unix()+3600) {
 			// 较大的 SyncLt 可以删除整个群组成员！+3600 是防止把毫秒当秒用
-			return gear.ErrBadRequest.WithMsgf("invalid sync_lt: %d", t.SyncLt)
+			return gear.ErrBadRequest.WithMsgf("invalid syncLt: %d", t.SyncLt)
 		}
 	} else {
-		return gear.ErrBadRequest.WithMsg("user or sync_lt required")
+		return gear.ErrBadRequest.WithMsg("user or syncLt required")
 	}
 	return nil
+}
+
+// GroupsRes ...
+type GroupsRes struct {
+	SuccessResponseType
+	Result []Group `json:"result"`
+}
+
+// GroupMember ...
+type GroupMember struct {
+	User      string    `json:"user"`
+	CreatedAt time.Time `json:"createdAt"`
+	SyncAt    int64     `json:"syncAt"` // 归属关系同步时间戳，1970 以来的秒数，应该与 group.syncAt 相等
+}
+
+// GroupMembersRes ...
+type GroupMembersRes struct {
+	SuccessResponseType
+	Result []GroupMember `json:"result"`
+}
+
+// GroupRes ...
+type GroupRes struct {
+	SuccessResponseType
+	Result Group `json:"result"`
 }

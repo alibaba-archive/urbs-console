@@ -9,20 +9,6 @@ import (
 	"github.com/teambition/urbs-console/src/util/request"
 )
 
-// ProductCreate ...
-func (a *UrbsSetting) ProductCreate(ctx context.Context, body *tpl.NameDescBody) (*tpl.ProductRes, error) {
-	url := fmt.Sprintf("%s/v1/products", conf.Config.UrbsSetting.Addr)
-
-	result := new(tpl.ProductRes)
-
-	resp, err := request.Post(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
-
-	if err := HanderResponse(resp, err); err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
 // ProductList ...
 func (a *UrbsSetting) ProductList(ctx context.Context, args *tpl.Pagination) (*tpl.ProductsRes, error) {
 	url := fmt.Sprintf("%s/v1/products?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Skip, args.PageSize, args.PageToken)
@@ -30,6 +16,34 @@ func (a *UrbsSetting) ProductList(ctx context.Context, args *tpl.Pagination) (*t
 	result := new(tpl.ProductsRes)
 
 	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductStatistics ...
+func (a *UrbsSetting) ProductStatistics(ctx context.Context, product string) (*tpl.ProductStatisticsRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/statistics", conf.Config.UrbsSetting.Addr, product)
+
+	result := new(tpl.ProductStatisticsRes)
+
+	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductCreate ...
+func (a *UrbsSetting) ProductCreate(ctx context.Context, body *tpl.NameDescBody) (*tpl.ProductRes, error) {
+	url := fmt.Sprintf("%s/v1/products", conf.Config.UrbsSetting.Addr)
+
+	result := new(tpl.ProductRes)
+
+	resp, err := request.Post(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
 
 	if err := HanderResponse(resp, err); err != nil {
 		return nil, err
