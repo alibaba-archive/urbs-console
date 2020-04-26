@@ -46,13 +46,10 @@ func (a *UrbsAcAcl) FindOne(ctx context.Context, subject, object, permission str
 
 // FindBySubjects ...
 func (a *UrbsAcAcl) FindBySubjects(ctx context.Context, subjects []string) ([]*schema.UrbsAcAcl, error) {
-	urbsAcAcl := []*schema.UrbsAcAcl{}
-
 	where := "subject in ( ? )"
 
-	args := []interface{}{subjects}
-
-	err := a.DB.Where(where, args...).Find(&urbsAcAcl).Error
+	urbsAcAcl := []*schema.UrbsAcAcl{}
+	err := a.DB.Where(where, subjects).Find(&urbsAcAcl).Error
 	if err != nil {
 		return nil, err
 	}

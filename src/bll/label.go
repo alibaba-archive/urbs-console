@@ -89,12 +89,22 @@ func (a *Label) Offline(ctx context.Context, product, label string) (*tpl.BoolRe
 }
 
 // Assign 把标签批量分配给用户或群组
-func (a *Label) Assign(ctx context.Context, product, label string, body *tpl.UsersGroupsBody) (*tpl.LabelReleaseInfoRes, error) {
-	err := blls.OperationLog.Add(ctx, product+label, actionCreate, body)
+func (a *Label) Assign(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.UsersGroupsBody) (*tpl.LabelReleaseInfoRes, error) {
+	object := args.Product + args.Label
+	err := blls.OperationLog.Add(ctx, object, actionCreate, body)
 	if err != nil {
 		return nil, err
 	}
-	return a.services.UrbsSetting.LabelAssign(ctx, product, label, body)
+	if body.Percent > 0 {
+		ruleBody := new(tpl.LabelRuleBody)
+		ruleBody.Kind = "userPercent"
+		ruleBody.Rule.Value = body.Percent
+		_, err := a.services.UrbsSetting.LabelCreateRule(ctx, args, ruleBody)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return a.services.UrbsSetting.LabelAssign(ctx, args.Product, args.Label, body)
 }
 
 // Delete 物理删除标签

@@ -27,6 +27,10 @@ func (a *OperationLog) List(ctx context.Context, object string, req *tpl.Paginat
 	if err != nil {
 		return nil, err
 	}
+	totalSize, err := a.daos.OperationLog.CountByObject(ctx, object)
+	if err != nil {
+		return nil, err
+	}
 	items := make([]*tpl.OperationLogListItem, len(logs))
 	for i, log := range logs {
 		item := &tpl.OperationLogListItem{
@@ -39,6 +43,7 @@ func (a *OperationLog) List(ctx context.Context, object string, req *tpl.Paginat
 		items[i] = item
 	}
 	res := &tpl.OperationLogListRes{Result: items}
+	res.TotalSize = totalSize
 	if len(res.Result) > req.PageSize {
 		res.NextPageToken = req.GetNextPageToken()
 		res.Result = items[:req.PageSize]
@@ -69,8 +74,8 @@ func genContent(body *tpl.UsersGroupsBody) string {
 	if body.Value != "" {
 		content += "03" + body.Value + "\r\n"
 	}
-	if body.Percentage > 0 {
-		content += "04" + strconv.Itoa(body.Percentage)
+	if body.Percent > 0 {
+		content += "04" + strconv.Itoa(body.Percent)
 	}
 	return content
 }
@@ -89,8 +94,8 @@ func parseLogContent(content string, log *tpl.OperationLogListItem) {
 			log.Groups = strings.Split(content, ",")
 		case "03":
 			log.Value = content
-		case "04": // percentage
-			log.Percentage, _ = strconv.Atoi(content)
+		case "04": // percent
+			log.Percent, _ = strconv.Atoi(content)
 		}
 	}
 }

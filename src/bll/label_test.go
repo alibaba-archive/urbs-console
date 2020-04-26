@@ -89,8 +89,10 @@ func testLabelAssign(tt *TestTools, product, label, uid string) {
 	body := &tpl.UsersGroupsBody{
 		Users: []string{uid},
 	}
-
-	_, err := blls.Label.Assign(getUidContext(), product, label, body)
+	args := new(tpl.ProductLabelURL)
+	args.Product = product
+	args.Label = label
+	_, err := blls.Label.Assign(getUidContext(), args, body)
 
 	tt.Require.Nil(err)
 }

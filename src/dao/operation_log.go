@@ -27,6 +27,7 @@ func (a *OperationLog) Add(ctx context.Context, obj *schema.OperationLog) error 
 // FindByObject ...
 func (a *OperationLog) FindByObject(ctx context.Context, object string, pg *tpl.Pagination) ([]*dto.OperationLog, error) {
 	sql := "SELECT a.id, a.created_at, a.operator, a.object, a.action, a.content, a.description, b.`name` FROM operation_log a LEFT JOIN urbs_ac_user b ON a.operator=b.uid WHERE a.object = ? ORDER BY a.id DESC LIMIT ?,?"
+
 	row, err := a.DB.Raw(sql, object, pg.Skip, pg.PageSize+1).Rows()
 	if err != nil {
 		return nil, err
@@ -46,10 +47,9 @@ func (a *OperationLog) FindByObject(ctx context.Context, object string, pg *tpl.
 
 // FindOneByObject ...
 func (a *OperationLog) FindOneByObject(ctx context.Context, object string) (*schema.OperationLog, error) {
-	acl := &schema.OperationLog{}
-
 	where := "object = ? ORDER BY id DESC LIMIT 1"
 
+	acl := &schema.OperationLog{}
 	err := a.DB.Where(where, object).Find(acl).Error
 	if err != nil {
 		return nil, err
@@ -60,5 +60,13 @@ func (a *OperationLog) FindOneByObject(ctx context.Context, object string) (*sch
 // DeleteByObject ...
 func (a *OperationLog) DeleteByObject(ctx context.Context, object string) error {
 	sql := "delete from operation_log where object = ?"
+
 	return a.DB.Exec(sql, object).Error
+}
+
+// CountByObject ...
+func (a *OperationLog) CountByObject(ctx context.Context, object string) (int, error) {
+	count := 0
+	err := a.DB.Model(&schema.OperationLog{}).Where("object = ?", object).Count(&count).Error
+	return count, err
 }

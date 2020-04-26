@@ -48,8 +48,8 @@ type OperationLogListItem struct {
 	Action       string `json:"action"`       // 操作行为
 	Desc         string `json:"description"`  // 操作说明
 
-	Groups     []string `json:"groups,omitempty"`     // 群组
-	Users      []string `json:"users,omitempty"`      // 用户
-	Value      string   `json:"value,omitempty"`      // 灰度百分比
-	Percentage int      `json:"percentage,omitempty"` // 灰度百分比
+	Groups  []string `json:"groups,omitempty"`  // 群组
+	Users   []string `json:"users,omitempty"`   // 用户
+	Value   string   `json:"value,omitempty"`   // 灰度百分比
+	Percent int      `json:"percent,omitempty"` // 灰度百分比
 }

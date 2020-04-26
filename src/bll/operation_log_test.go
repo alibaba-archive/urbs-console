@@ -20,7 +20,7 @@ func TestOperationLog(t *testing.T) {
 	body.Users = []string{tpl.RandUID()}
 	body.Groups = []string{tpl.RandUID()}
 	body.Desc = tpl.RandName()
-	body.Percentage = 2
+	body.Percent = 2
 	body.Value = "true"
 
 	// 添加用户
@@ -49,6 +49,10 @@ func TestOperationLog(t *testing.T) {
 	require.Equal(body.Users, res.Result[0].Users)
 	require.Equal(body.Groups, res.Result[0].Groups)
 	require.Equal(body.Desc, res.Result[0].Desc)
-	require.Equal(body.Percentage, res.Result[0].Percentage)
+	require.Equal(body.Percent, res.Result[0].Percent)
 	require.Equal(body.Value, res.Result[0].Value)
+
+	totalSize, err := daos.OperationLog.CountByObject(ctx, object)
+	require.Nil(err)
+	require.True(totalSize > 0)
 }

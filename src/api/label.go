@@ -130,7 +130,7 @@ func (a *Label) Assign(ctx *gear.Context) error {
 	if err != nil {
 		return err
 	}
-	result, err := a.blls.Label.Assign(ctx, req.Product, req.Label, &body)
+	result, err := a.blls.Label.Assign(ctx, &req, &body)
 	if err != nil {
 		return err
 	}

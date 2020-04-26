@@ -95,6 +95,15 @@ func (a *Setting) Assign(ctx context.Context, args *tpl.ProductModuleSettingURL,
 	if err != nil {
 		return nil, err
 	}
+	if body.Percent > 0 {
+		ruleBody := new(tpl.SettingRuleBody)
+		ruleBody.Kind = "userPercent"
+		ruleBody.Rule.Value = body.Percent
+		_, err := a.services.UrbsSetting.SettingCreateRule(ctx, args, ruleBody)
+		if err != nil {
+			return nil, err
+		}
+	}
 	return a.services.UrbsSetting.SettingAssign(ctx, args, body)
 }
 

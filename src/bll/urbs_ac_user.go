@@ -13,6 +13,35 @@ type UrbsAcUser struct {
 	daos *dao.Daos
 }
 
+// List 返回用户列表
+func (a *UrbsAcUser) List(ctx context.Context, args *tpl.Pagination) (*tpl.UrbsAcUserListRes, error) {
+	items, err := a.daos.UrbsAcUser.List(ctx, args)
+	if err != nil {
+		return nil, err
+	}
+	total, err := a.daos.UrbsAcUser.Count(ctx)
+	if err != nil {
+		return nil, err
+	}
+	res := &tpl.UrbsAcUserListRes{Result: items}
+	res.TotalSize = total
+	if len(res.Result) > args.PageSize {
+		res.NextPageToken = args.GetNextPageToken()
+		res.Result = items[:args.PageSize]
+	}
+	return res, nil
+}
+
+// Search ...
+func (a *UrbsAcUser) Search(ctx context.Context, key string) (*tpl.UrbsAcUserListRes, error) {
+	items, err := a.daos.UrbsAcUser.Search(ctx, key)
+	if err != nil {
+		return nil, err
+	}
+	res := &tpl.UrbsAcUserListRes{Result: items}
+	return res, nil
+}
+
 // Add ...
 func (a *UrbsAcUser) Add(ctx context.Context, body *tpl.UrbsAcUsersBody) error {
 	users := make([]*schema.UrbsAcUser, len(body.Users))

@@ -9,7 +9,7 @@ type OperationLog struct {
 	CreatedAt time.Time `gorm:"column:created_at"`
 
 	Operator string `gorm:"column:operator"` // 操作人
-	Object   string `gorm:"object:object"`   // 操作对象
+	Object   string `gorm:"column:object"`   // 操作对象
 	Action   string `gorm:"column:action"`   // 操作行为
 	// Content 操作内容
 	Content string `gorm:"column:content"`

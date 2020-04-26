@@ -7,6 +7,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 	"github.com/teambition/urbs-console/src/schema"
+	"github.com/teambition/urbs-console/src/tpl"
 )
 
 // UrbsAcUser table `urbs_ac_user`
@@ -48,7 +49,7 @@ func (a *UrbsAcUser) FindByUIDS(ctx context.Context, uids []string) ([]*schema.U
 
 	where := "uid in ( ? )"
 
-	err := a.DB.Where(where, uids).Find(&urbsAcUsers).Error
+	err := a.DB.Where(where, uids).Scan(&urbsAcUsers).Error
 	if err != nil {
 		return nil, err
 	}
@@ -62,4 +63,35 @@ func (a *UrbsAcUser) RemoveByUID(ctx context.Context, uid string) error {
 	_, err := a.DB.DB().Exec(sql, uid)
 
 	return err
+}
+
+// List ...
+func (a *UrbsAcUser) List(ctx context.Context, pg *tpl.Pagination) ([]*schema.UrbsAcUser, error) {
+	sql := "select * from urbs_ac_user order by id asc limit ?,?"
+
+	urbsAcUsers := make([]*schema.UrbsAcUser, 0)
+	err := a.DB.Raw(sql, pg.Skip, pg.PageSize+1).Scan(&urbsAcUsers).Error
+	if err != nil {
+		return nil, err
+	}
+	return urbsAcUsers, nil
+}
+
+// Search ...
+func (a *UrbsAcUser) Search(ctx context.Context, key string) ([]*schema.UrbsAcUser, error) {
+	sql := "select * from urbs_ac_user where name like ? or uid like ? limit 10"
+
+	urbsAcUsers := make([]*schema.UrbsAcUser, 0)
+	err := a.DB.Raw(sql, "%"+key+"%", "%"+key+"%").Scan(&urbsAcUsers).Error
+	if err != nil {
+		return nil, err
+	}
+	return urbsAcUsers, nil
+}
+
+// Count 用户数量
+func (a *UrbsAcUser) Count(ctx context.Context) (int, error) {
+	count := 0
+	err := a.DB.Model(&schema.UrbsAcUser{}).Count(&count).Error
+	return count, err
 }
