@@ -187,3 +187,77 @@ func (a *Label) Logs(ctx *gear.Context) error {
 	}
 	return ctx.OkJSON(res)
 }
+
+// CreateRule ..
+func (a *Label) CreateRule(ctx *gear.Context) error {
+	req := tpl.ProductLabelURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+
+	body := tpl.LabelRuleBody{}
+	if err := ctx.ParseBody(&body); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Label)
+	if err != nil {
+		return err
+	}
+	res, err := a.blls.Label.CreateRule(ctx, &req, &body)
+	if err != nil {
+		return err
+	}
+
+	return ctx.OkJSON(res)
+}
+
+// ListRules ..
+func (a *Label) ListRules(ctx *gear.Context) error {
+	req := tpl.ProductLabelURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	res, err := a.blls.Label.ListRules(ctx, &req)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}
+
+// UpdateRule ..
+func (a *Label) UpdateRule(ctx *gear.Context) error {
+	req := tpl.ProductLabelHIDURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	body := tpl.LabelRuleBody{}
+	if err := ctx.ParseBody(&body); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Label)
+	if err != nil {
+		return err
+	}
+	res, err := a.blls.Label.UpdateRule(ctx, &req, &body)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}
+
+// DeleteRule ..
+func (a *Label) DeleteRule(ctx *gear.Context) error {
+	req := tpl.ProductLabelHIDURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Label)
+	if err != nil {
+		return err
+	}
+	res, err := a.blls.Label.DeleteRule(ctx, &req)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}

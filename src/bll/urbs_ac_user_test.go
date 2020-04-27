@@ -51,3 +51,16 @@ func TestUrbsAcUser(t *testing.T) {
 	require.Nil(err)
 	require.Equal(res.Result[0].Name, res3.Result[0].Name)
 }
+
+func testAddUrbsAcUser(tt *TestTools, uid string) {
+	userBody := &tpl.UrbsAcUsersBody{
+		Users: []*tpl.UrbsAcUserBody{
+			{
+				Uid:  uid,
+				Name: uid,
+			},
+		},
+	}
+	err := blls.UrbsAcUser.Add(context.Background(), userBody)
+	tt.Require.Nil(err)
+}

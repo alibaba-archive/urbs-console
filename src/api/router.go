@@ -129,6 +129,14 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	routerV1.Post("/products/:product/labels/:label+:assign", apis.Label.Assign)
 	// 批量撤销对用户或群组设置的产品灰度标签
 	routerV1.Post("/products/:product/labels/:label+:recall", apis.Label.Recall)
+	// 创建指定产品灰度标签的灰度发布规则
+	routerV1.Post("/products/:product/labels/:label/rules", apis.Label.CreateRule)
+	// 读取指定产品灰度标签的灰度发布规则列表
+	routerV1.Get("/products/:product/labels/:label/rules", checkViewer, apis.Label.ListRules)
+	// 更新指定产品灰度标签的指定灰度发布规则
+	routerV1.Put("/products/:product/labels/:label/rules/:hid", apis.Label.UpdateRule)
+	// 删除指定产品灰度标签的指定灰度发布规则
+	routerV1.Delete("/products/:product/labels/:label/rules/:hid", apis.Label.DeleteRule)
 
 	// ***** module ******
 	// 读取指定产品的功能模块
@@ -159,6 +167,14 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	routerV1.Post("/products/:product/modules/:module/settings/:setting+:assign", apis.Setting.Assign)
 	// 批量撤销对用户或群组设置的产品灰度设置
 	routerV1.Post("/products/:product/modules/:module/settings/:setting+:recall", apis.Setting.Recall)
+	// 读取指定产品功能模块配置项的灰度发布规则列表
+	routerV1.Get("/products/:product/modules/:module/settings/:setting/rules", checkViewer, apis.Setting.ListRules)
+	// 创建指定产品功能模块配置项的灰度发布规则
+	routerV1.Post("/products/:product/modules/:module/settings/:setting/rules", apis.Setting.CreateRule)
+	// 更新指定产品功能模块配置项的指定灰度发布规则
+	routerV1.Put("/products/:product/modules/:module/settings/:setting/rules/:hid", apis.Setting.UpdateRule)
+	// 删除指定产品功能模块配置项的指定灰度发布规则
+	routerV1.Delete("/products/:product/modules/:module/settings/:setting/rules/:hid", apis.Setting.DeleteRule)
 
 	// ***** user ******
 	// 读取用户列表，支持条件筛选

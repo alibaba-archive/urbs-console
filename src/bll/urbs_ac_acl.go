@@ -98,7 +98,7 @@ func (a *UrbsAcAcl) FindUsersByObjects(ctx context.Context, objects []string) (m
 	for _, acl := range acls {
 		vals, ok := subjects[acl.Object]
 		if ok {
-			vals = append(vals, &tpl.User{
+			subjects[acl.Object] = append(vals, &tpl.User{
 				Name: acl.Name, Uid: acl.Subject,
 			})
 		} else {

@@ -46,9 +46,9 @@ type UrbsSettingInterface interface {
 	// 读取指定产品功能模块配置项的灰度发布规则列表
 	SettingListRule(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.SettingRulesInfoRes, error)
 	// 更新指定产品功能模块配置项的指定灰度发布规则
-	SettingUpdateRule(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingRuleBody) (*tpl.SettingRuleInfoRes, error)
+	SettingUpdateRule(ctx context.Context, args *tpl.ProductModuleSettingHIDURL, body *tpl.SettingRuleBody) (*tpl.SettingRuleInfoRes, error)
 	// 创建指定产品功能模块配置项的灰度发布规则
-	SettingDeleteRule(ctx context.Context, args *tpl.HIDRuleHIDURL) (*tpl.BoolRes, error)
+	SettingDeleteRule(ctx context.Context, args *tpl.ProductModuleSettingHIDURL) (*tpl.BoolRes, error)
 	// 读取指定产品功能模块配置项
 	SettingGet(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.SettingInfoRes, error)
 	// 更新指定产品功能模块配置项
@@ -74,9 +74,9 @@ type UrbsSettingInterface interface {
 	// 读取指定产品灰度标签的灰度发布规则列表
 	LabelListRule(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.LabelRulesInfoRes, error)
 	// 更新指定产品功能模块配置项的指定灰度发布规则
-	LabelUpdateRule(ctx context.Context, args *tpl.HIDRuleHIDURL, body *tpl.LabelRuleBody) (*tpl.LabelRuleInfoRes, error)
+	LabelUpdateRule(ctx context.Context, args *tpl.ProductLabelHIDURL, body *tpl.LabelRuleBody) (*tpl.LabelRuleInfoRes, error)
 	// 创建指定产品功能模块配置项的灰度发布规则
-	LabelDeleteRule(ctx context.Context, args *tpl.HIDRuleHIDURL) (*tpl.BoolRes, error)
+	LabelDeleteRule(ctx context.Context, args *tpl.ProductLabelHIDURL) (*tpl.BoolRes, error)
 	// 更新指定产品灰度标签
 	LabelUpdate(ctx context.Context, product string, label string, body *tpl.LabelUpdateBody) (*tpl.LabelInfoRes, error)
 	// 删除指定产品灰度标签

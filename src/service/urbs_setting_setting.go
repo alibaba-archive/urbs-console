@@ -151,8 +151,8 @@ func (a *UrbsSetting) SettingCreateRule(ctx context.Context, args *tpl.ProductMo
 }
 
 // SettingUpdateRule ...
-func (a *UrbsSetting) SettingUpdateRule(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingRuleBody) (*tpl.SettingRuleInfoRes, error) {
-	url := fmt.Sprintf("%s/products/%s/modules/%s/settings/%s/rules", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting)
+func (a *UrbsSetting) SettingUpdateRule(ctx context.Context, args *tpl.ProductModuleSettingHIDURL, body *tpl.SettingRuleBody) (*tpl.SettingRuleInfoRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/rules/%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting, args.HID)
 
 	result := new(tpl.SettingRuleInfoRes)
 
@@ -165,8 +165,8 @@ func (a *UrbsSetting) SettingUpdateRule(ctx context.Context, args *tpl.ProductMo
 }
 
 // SettingDeleteRule ...
-func (a *UrbsSetting) SettingDeleteRule(ctx context.Context, args *tpl.HIDRuleHIDURL) (*tpl.BoolRes, error) {
-	url := fmt.Sprintf("%s/v1/settings/%s/rules/%s", conf.Config.UrbsSetting.Addr, args.HID, args.RuleHID)
+func (a *UrbsSetting) SettingDeleteRule(ctx context.Context, args *tpl.ProductModuleSettingHIDURL) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/rules/%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting, args.HID)
 
 	result := new(tpl.BoolRes)
 

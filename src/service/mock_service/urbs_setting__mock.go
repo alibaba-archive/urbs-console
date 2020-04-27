@@ -275,7 +275,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) SettingListRule(ctx, args interf
 }
 
 // SettingUpdateRule mocks base method
-func (m *MockUrbsSettingInterface) SettingUpdateRule(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingRuleBody) (*tpl.SettingRuleInfoRes, error) {
+func (m *MockUrbsSettingInterface) SettingUpdateRule(ctx context.Context, args *tpl.ProductModuleSettingHIDURL, body *tpl.SettingRuleBody) (*tpl.SettingRuleInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SettingUpdateRule", ctx, args, body)
 	ret0, _ := ret[0].(*tpl.SettingRuleInfoRes)
@@ -290,7 +290,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) SettingUpdateRule(ctx, args, bod
 }
 
 // SettingDeleteRule mocks base method
-func (m *MockUrbsSettingInterface) SettingDeleteRule(ctx context.Context, args *tpl.HIDRuleHIDURL) (*tpl.BoolRes, error) {
+func (m *MockUrbsSettingInterface) SettingDeleteRule(ctx context.Context, args *tpl.ProductModuleSettingHIDURL) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SettingDeleteRule", ctx, args)
 	ret0, _ := ret[0].(*tpl.BoolRes)
@@ -470,7 +470,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) LabelListRule(ctx, args interfac
 }
 
 // LabelUpdateRule mocks base method
-func (m *MockUrbsSettingInterface) LabelUpdateRule(ctx context.Context, args *tpl.HIDRuleHIDURL, body *tpl.LabelRuleBody) (*tpl.LabelRuleInfoRes, error) {
+func (m *MockUrbsSettingInterface) LabelUpdateRule(ctx context.Context, args *tpl.ProductLabelHIDURL, body *tpl.LabelRuleBody) (*tpl.LabelRuleInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "LabelUpdateRule", ctx, args, body)
 	ret0, _ := ret[0].(*tpl.LabelRuleInfoRes)
@@ -485,7 +485,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) LabelUpdateRule(ctx, args, body 
 }
 
 // LabelDeleteRule mocks base method
-func (m *MockUrbsSettingInterface) LabelDeleteRule(ctx context.Context, args *tpl.HIDRuleHIDURL) (*tpl.BoolRes, error) {
+func (m *MockUrbsSettingInterface) LabelDeleteRule(ctx context.Context, args *tpl.ProductLabelHIDURL) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "LabelDeleteRule", ctx, args)
 	ret0, _ := ret[0].(*tpl.BoolRes)

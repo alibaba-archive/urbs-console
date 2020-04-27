@@ -35,6 +35,10 @@ func TestAPIsAuth(t *testing.T) {
 		{Method: http.MethodPut, URL: "/api/v1/products/product/labels/label:offline"},
 		{Method: http.MethodPost, URL: "/api/v1/products/product/labels/label:assign", Body: `{"users":["123"]}`},
 		{Method: http.MethodPost, URL: "/api/v1/products/product/labels/label:recall", Body: `{"release":123}`},
+		{Method: http.MethodPost, URL: "/api/v1/products/product/labels/label/rules", Body: `{"kind":"userPercent"}`},
+		{Method: http.MethodGet, URL: "/api/v1/products/product/labels/label/rules", Body: `{"kind":"userPercent"}`},
+		{Method: http.MethodPut, URL: "/api/v1/products/product/labels/label/rules/AwAAAAAAAAB25V_QnbhCuRwF", Body: `{"kind":"userPercent"}`},
+		{Method: http.MethodDelete, URL: "/api/v1/products/product/labels/label/rules/AwAAAAAAAAB25V_QnbhCuRwF"},
 		// ***** module ******
 		{Method: http.MethodGet, URL: "/api/v1/products/product/modules"},
 		{Method: http.MethodPost, URL: "/api/v1/products/product/modules", Body: `{"name":"xcccc"}`},
@@ -48,6 +52,10 @@ func TestAPIsAuth(t *testing.T) {
 		{Method: http.MethodPut, URL: "/api/v1/products/product/modules/module/settings/setting:offline"},
 		{Method: http.MethodPost, URL: "/api/v1/products/product/modules/module/settings/setting:assign", Body: `{"users":["xxxx"]}`},
 		{Method: http.MethodPost, URL: "/api/v1/products/product/modules/module/settings/setting:recall", Body: `{"release":123}`},
+		{Method: http.MethodPost, URL: "/api/v1/products/product/modules/module/settings/setting/rules", Body: `{"kind":"userPercent"}`},
+		{Method: http.MethodGet, URL: "/api/v1/products/product/modules/module/settings/setting/rules", Body: `{"kind":"userPercent"}`},
+		{Method: http.MethodPut, URL: "/api/v1/products/product/modules/module/settings/setting/rules/AwAAAAAAAAB25V_QnbhCuRwF", Body: `{"kind":"userPercent"}`},
+		{Method: http.MethodDelete, URL: "/api/v1/products/product/modules/module/settings/setting/rules/AwAAAAAAAAB25V_QnbhCuRwF"},
 		// ***** user ******
 		{Method: http.MethodGet, URL: "/api/v1/users"},
 		{Method: http.MethodGet, URL: "/api/v1/users/uid/labels"},
@@ -79,12 +87,12 @@ func TestAPIsAuth(t *testing.T) {
 	for _, req := range reqArgs {
 		// 验证 401
 		res, err := request.Method(req.Method).Url(testHost + req.URL).RawBody(req.Body).Do()
-		require.Nil(err)
-		require.Equal(http.StatusUnauthorized, res.StatusCode)
+		require.Nil(err, err)
+		require.Equal(http.StatusUnauthorized, res.StatusCode, req.Method+":"+req.URL)
 
 		// 验证 403
 		res, err = request.Method(req.Method).Url(testHost + req.URL).RawBody(req.Body).Header(userTokenHeader()).Do()
 		require.Nil(err)
-		require.Equal(http.StatusForbidden, res.StatusCode)
+		require.Equal(http.StatusForbidden, res.StatusCode, req.Method+":"+req.URL)
 	}
 }

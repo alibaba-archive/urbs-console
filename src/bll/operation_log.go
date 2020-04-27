@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/teambition/urbs-console/src/dao"
+	"github.com/teambition/urbs-console/src/dto"
 	"github.com/teambition/urbs-console/src/schema"
 	"github.com/teambition/urbs-console/src/tpl"
 	"github.com/teambition/urbs-console/src/util"
@@ -52,7 +53,7 @@ func (a *OperationLog) List(ctx context.Context, object string, req *tpl.Paginat
 }
 
 // Add ...
-func (a *OperationLog) Add(ctx context.Context, object string, action string, body *tpl.UsersGroupsBody) error {
+func (a *OperationLog) Add(ctx context.Context, object string, action string, body *dto.OperationLogContent) error {
 	log := &schema.OperationLog{
 		Operator: util.GetUid(ctx),
 		Object:   object,
@@ -63,7 +64,7 @@ func (a *OperationLog) Add(ctx context.Context, object string, action string, bo
 	return a.daos.OperationLog.Add(ctx, log)
 }
 
-func genContent(body *tpl.UsersGroupsBody) string {
+func genContent(body *dto.OperationLogContent) string {
 	content := "01"
 	if len(body.Users) > 0 {
 		content += "01" + strings.Join(body.Users, ",") + "\r\n"
@@ -75,7 +76,7 @@ func genContent(body *tpl.UsersGroupsBody) string {
 		content += "03" + body.Value + "\r\n"
 	}
 	if body.Percent > 0 {
-		content += "04" + strconv.Itoa(body.Percent)
+		content += "04" + strconv.Itoa(body.Percent) + "\r\n"
 	}
 	return content
 }
@@ -85,6 +86,9 @@ func parseLogContent(content string, log *tpl.OperationLogListItem) {
 
 	items := strings.Split(content, "\r\n")
 	for _, item := range items {
+		if item == "" {
+			continue
+		}
 		kind := item[0:2]
 		content := item[2:]
 		switch kind {

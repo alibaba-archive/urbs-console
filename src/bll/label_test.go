@@ -44,7 +44,7 @@ func TestLabelAssign(t *testing.T) {
 	// users labels
 	testUserListLables(tt, uid, 0)
 
-	testLabelList(tt, productName, 1)
+	testLabelList(tt, productName, 0)
 
 	// delete
 	testLabelDelete(tt, productName, labelName)

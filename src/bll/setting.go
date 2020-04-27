@@ -3,6 +3,7 @@ package bll
 import (
 	"context"
 
+	"github.com/teambition/urbs-console/src/dto"
 	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/tpl"
 )
@@ -91,18 +92,15 @@ func (a *Setting) Offline(ctx context.Context, args *tpl.ProductModuleSettingURL
 // Assign 批量为用户或群组设置产品功能模块配置项
 func (a *Setting) Assign(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.UsersGroupsBody) (*tpl.SettingReleaseInfoRes, error) {
 	object := args.Product + args.Module + args.Setting
-	err := blls.OperationLog.Add(ctx, object, actionCreate, body)
+	logContent := &dto.OperationLogContent{
+		Users:  body.Users,
+		Groups: body.Groups,
+		Desc:   body.Desc,
+		Value:  body.Value,
+	}
+	err := blls.OperationLog.Add(ctx, object, actionCreate, logContent)
 	if err != nil {
 		return nil, err
-	}
-	if body.Percent > 0 {
-		ruleBody := new(tpl.SettingRuleBody)
-		ruleBody.Kind = "userPercent"
-		ruleBody.Rule.Value = body.Percent
-		_, err := a.services.UrbsSetting.SettingCreateRule(ctx, args, ruleBody)
-		if err != nil {
-			return nil, err
-		}
 	}
 	return a.services.UrbsSetting.SettingAssign(ctx, args, body)
 }
@@ -115,4 +113,33 @@ func (a *Setting) Recall(ctx context.Context, args *tpl.ProductModuleSettingURL,
 		return nil, err
 	}
 	return a.services.UrbsSetting.SettingRecall(ctx, args, body)
+}
+
+// ListRules ...
+func (a *Setting) ListRules(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.SettingRulesInfoRes, error) {
+	return a.services.UrbsSetting.SettingListRule(ctx, args)
+}
+
+// CreateRule ...
+func (a *Setting) CreateRule(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingRuleBody) (*tpl.SettingRuleInfoRes, error) {
+	object := args.Product + args.Module + args.Setting
+	logContent := &dto.OperationLogContent{
+		Percent: body.Rule.Value,
+		Value:   body.Value,
+	}
+	err := blls.OperationLog.Add(ctx, object, actionCreate, logContent)
+	if err != nil {
+		return nil, err
+	}
+	return a.services.UrbsSetting.SettingCreateRule(ctx, args, body)
+}
+
+// UpdateRule ...
+func (a *Setting) UpdateRule(ctx context.Context, args *tpl.ProductModuleSettingHIDURL, body *tpl.SettingRuleBody) (*tpl.SettingRuleInfoRes, error) {
+	return a.services.UrbsSetting.SettingUpdateRule(ctx, args, body)
+}
+
+// DeleteRule ...
+func (a *Setting) DeleteRule(ctx context.Context, args *tpl.ProductModuleSettingHIDURL) (*tpl.BoolRes, error) {
+	return a.services.UrbsSetting.SettingDeleteRule(ctx, args)
 }

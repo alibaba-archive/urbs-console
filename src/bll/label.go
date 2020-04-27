@@ -3,6 +3,7 @@ package bll
 import (
 	"context"
 
+	"github.com/teambition/urbs-console/src/dto"
 	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/tpl"
@@ -91,18 +92,15 @@ func (a *Label) Offline(ctx context.Context, product, label string) (*tpl.BoolRe
 // Assign 把标签批量分配给用户或群组
 func (a *Label) Assign(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.UsersGroupsBody) (*tpl.LabelReleaseInfoRes, error) {
 	object := args.Product + args.Label
-	err := blls.OperationLog.Add(ctx, object, actionCreate, body)
+	logContent := &dto.OperationLogContent{
+		Users:  body.Users,
+		Groups: body.Groups,
+		Desc:   body.Desc,
+		Value:  body.Value,
+	}
+	err := blls.OperationLog.Add(ctx, object, actionCreate, logContent)
 	if err != nil {
 		return nil, err
-	}
-	if body.Percent > 0 {
-		ruleBody := new(tpl.LabelRuleBody)
-		ruleBody.Kind = "userPercent"
-		ruleBody.Rule.Value = body.Percent
-		_, err := a.services.UrbsSetting.LabelCreateRule(ctx, args, ruleBody)
-		if err != nil {
-			return nil, err
-		}
 	}
 	return a.services.UrbsSetting.LabelAssign(ctx, args.Product, args.Label, body)
 }
@@ -124,4 +122,24 @@ func (a *Label) Recall(ctx context.Context, args *tpl.ProductLabelURL, body *tpl
 		return nil, err
 	}
 	return a.services.UrbsSetting.LabelRecall(ctx, args, body)
+}
+
+// ListRules ...
+func (a *Label) ListRules(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.LabelRulesInfoRes, error) {
+	return a.services.UrbsSetting.LabelListRule(ctx, args)
+}
+
+// CreateRule ...
+func (a *Label) CreateRule(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.LabelRuleBody) (*tpl.LabelRuleInfoRes, error) {
+	return a.services.UrbsSetting.LabelCreateRule(ctx, args, body)
+}
+
+// UpdateRule ...
+func (a *Label) UpdateRule(ctx context.Context, args *tpl.ProductLabelHIDURL, body *tpl.LabelRuleBody) (*tpl.LabelRuleInfoRes, error) {
+	return a.services.UrbsSetting.LabelUpdateRule(ctx, args, body)
+}
+
+// DeleteRule ...
+func (a *Label) DeleteRule(ctx context.Context, args *tpl.ProductLabelHIDURL) (*tpl.BoolRes, error) {
+	return a.services.UrbsSetting.LabelDeleteRule(ctx, args)
 }

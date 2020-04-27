@@ -168,3 +168,78 @@ func (a *Setting) Logs(ctx *gear.Context) error {
 	}
 	return ctx.OkJSON(res)
 }
+
+// ListRules ..
+func (a *Setting) ListRules(ctx *gear.Context) error {
+	req := tpl.ProductModuleSettingURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	res, err := a.blls.Setting.ListRules(ctx, &req)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}
+
+// CreateRule ..
+func (a *Setting) CreateRule(ctx *gear.Context) error {
+	req := tpl.ProductModuleSettingURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+
+	body := tpl.SettingRuleBody{}
+	if err := ctx.ParseBody(&body); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module+req.Setting)
+	if err != nil {
+		return err
+	}
+	res, err := a.blls.Setting.CreateRule(ctx, &req, &body)
+	if err != nil {
+		return err
+	}
+
+	return ctx.OkJSON(res)
+}
+
+// UpdateRule ..
+func (a *Setting) UpdateRule(ctx *gear.Context) error {
+	req := tpl.ProductModuleSettingHIDURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+
+	body := tpl.SettingRuleBody{}
+	if err := ctx.ParseBody(&body); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module+req.Setting)
+	if err != nil {
+		return err
+	}
+	res, err := a.blls.Setting.UpdateRule(ctx, &req, &body)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}
+
+// DeleteRule ..
+func (a *Setting) DeleteRule(ctx *gear.Context) error {
+	req := tpl.ProductModuleSettingHIDURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module+req.Setting)
+	if err != nil {
+		return err
+	}
+	res, err := a.blls.Setting.DeleteRule(ctx, &req)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}

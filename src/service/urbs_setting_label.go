@@ -154,8 +154,8 @@ func (a *UrbsSetting) LabelCreateRule(ctx context.Context, args *tpl.ProductLabe
 }
 
 // LabelUpdateRule ...
-func (a *UrbsSetting) LabelUpdateRule(ctx context.Context, args *tpl.HIDRuleHIDURL, body *tpl.LabelRuleBody) (*tpl.LabelRuleInfoRes, error) {
-	url := fmt.Sprintf("%s/v1/labels/%s/rules/%s", conf.Config.UrbsSetting.Addr, args.HID, args.RuleHID)
+func (a *UrbsSetting) LabelUpdateRule(ctx context.Context, args *tpl.ProductLabelHIDURL, body *tpl.LabelRuleBody) (*tpl.LabelRuleInfoRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/labels/%s/rules/%s", conf.Config.UrbsSetting.Addr, args.Product, args.Label, args.HID)
 
 	result := new(tpl.LabelRuleInfoRes)
 
@@ -168,8 +168,8 @@ func (a *UrbsSetting) LabelUpdateRule(ctx context.Context, args *tpl.HIDRuleHIDU
 }
 
 // LabelDeleteRule ...
-func (a *UrbsSetting) LabelDeleteRule(ctx context.Context, args *tpl.HIDRuleHIDURL) (*tpl.BoolRes, error) {
-	url := fmt.Sprintf("%s/v1/labels/%s/rules/%s", conf.Config.UrbsSetting.Addr, args.HID, args.RuleHID)
+func (a *UrbsSetting) LabelDeleteRule(ctx context.Context, args *tpl.ProductLabelHIDURL) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/labels/%s/rules/%s", conf.Config.UrbsSetting.Addr, args.Product, args.Label, args.HID)
 
 	result := new(tpl.BoolRes)
 
