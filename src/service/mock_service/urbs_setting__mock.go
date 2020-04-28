@@ -605,10 +605,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) UserListLables(ctx, args interfa
 }
 
 // UserRefreshCached mocks base method
-func (m *MockUrbsSettingInterface) UserRefreshCached(ctx context.Context, uid string) (*tpl.BoolRes, error) {
+func (m *MockUrbsSettingInterface) UserRefreshCached(ctx context.Context, uid string) (*tpl.UserRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UserRefreshCached", ctx, uid)
-	ret0, _ := ret[0].(*tpl.BoolRes)
+	ret0, _ := ret[0].(*tpl.UserRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

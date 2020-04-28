@@ -28,6 +28,7 @@ func (a *UrbsAcAcl) Add(ctx context.Context, obj *schema.UrbsAcAcl) error {
 func (a *UrbsAcAcl) FindOne(ctx context.Context, subject, object, permission string) (*schema.UrbsAcAcl, error) {
 	sql := "SELECT a.id, a.created_at, a.subject, a.object, a.permission FROM urbs_ac_acl a INNER JOIN urbs_ac_user b ON a.`subject`=b.uid WHERE a.subject = ? and a.object = ? and a.permission = ?"
 	row, err := a.DB.Raw(sql, subject, object, permission).Rows()
+	defer row.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -98,6 +99,7 @@ func (a *UrbsAcAcl) FindByObjects(ctx context.Context, objects []string) ([]*dto
 			WHERE
 				a.object IN (?)`
 	row, err := a.DB.Raw(sql, objects).Rows()
+	defer row.Close()
 	if err != nil {
 		return nil, err
 	}

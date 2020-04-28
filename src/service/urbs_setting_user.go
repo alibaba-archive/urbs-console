@@ -36,10 +36,10 @@ func (a *UrbsSetting) UserListLables(ctx context.Context, args *tpl.UIDPaginatio
 }
 
 // UserRefreshCached ...
-func (a *UrbsSetting) UserRefreshCached(ctx context.Context, uid string) (*tpl.BoolRes, error) {
+func (a *UrbsSetting) UserRefreshCached(ctx context.Context, uid string) (*tpl.UserRes, error) {
 	url := fmt.Sprintf("%s/v1/users/%s/labels:cache", conf.Config.UrbsSetting.Addr, uid)
 
-	result := new(tpl.BoolRes)
+	result := new(tpl.UserRes)
 
 	resp, err := request.Put(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 	if err := HanderResponse(resp, err); err != nil {

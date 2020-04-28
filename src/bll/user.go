@@ -24,7 +24,7 @@ func (a *User) ListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl
 }
 
 // RefreshCachedLables ...
-func (a *User) RefreshCachedLables(ctx context.Context, uid string) (*tpl.BoolRes, error) {
+func (a *User) RefreshCachedLables(ctx context.Context, uid string) (*tpl.UserRes, error) {
 	return a.services.UrbsSetting.UserRefreshCached(ctx, uid)
 }
 

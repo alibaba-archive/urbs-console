@@ -94,7 +94,7 @@ type UrbsSettingInterface interface {
 	// 读取指定用户的灰度标签，支持条件筛选
 	UserListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.LabelsInfoRes, error)
 	// 强制刷新指定用户的灰度标签列表缓存
-	UserRefreshCached(ctx context.Context, uid string) (*tpl.BoolRes, error)
+	UserRefreshCached(ctx context.Context, uid string) (*tpl.UserRes, error)
 	// 读取指定用户的功能配置项，支持条件筛选
 	UserListSettings(ctx context.Context, args *tpl.UIDProductURL) (*tpl.MySettingsRes, error)
 	// 读取指定用户的功能配置项，支持条件筛选，数据用于客户端

@@ -18,7 +18,7 @@ type Pagination struct {
 
 // Validate ...
 func (pg *Pagination) Validate() error {
-	if pg.PageToken != "" {
+	if pg.PageToken != "" && !strings.HasPrefix(pg.PageToken, "hid.") {
 		pageToken, err := base64.URLEncoding.DecodeString(pg.PageToken)
 		if err != nil {
 			return gear.ErrBadRequest.WithMsgf("invalid PageToken: %v", pg.PageToken)
