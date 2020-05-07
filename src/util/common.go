@@ -40,16 +40,17 @@ func init() {
 }
 
 const (
-	headerAuthorize = "Authorization"
+	// HeaderAuthorize ...
+	HeaderAuthorize = "Authorization"
 	schemaBearer    = "Bearer "
 	schemaOAuth2    = "OAuth2 "
 )
 
 // TokenExtractor ...
 func TokenExtractor(ctx *gear.Context) (token string) {
-	if val := ctx.Get(headerAuthorize); strings.HasPrefix(val, schemaBearer) {
+	if val := ctx.Get(HeaderAuthorize); strings.HasPrefix(val, schemaBearer) {
 		token = val[7:]
-	} else if val := ctx.Get(headerAuthorize); strings.HasPrefix(val, schemaOAuth2) {
+	} else if val := ctx.Get(HeaderAuthorize); strings.HasPrefix(val, schemaOAuth2) {
 		token = val[7:]
 	}
 	return

@@ -1,12 +1,12 @@
 package api
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"os"
 	"testing"
 
-	"github.com/teambition/gear"
 	"github.com/teambition/urbs-console/src/dto/thrid"
 )
 
@@ -35,7 +35,7 @@ type MockUserAuthInterface struct {
 }
 
 // Verify ...
-func (a *MockUserAuthInterface) Verify(ctx *gear.Context, body *thrid.UserVerifyReq) (string, error) {
+func (a *MockUserAuthInterface) Verify(ctx context.Context, body *thrid.UserVerifyReq) (string, error) {
 	if body.Token == "user" {
 		return mockUser, nil
 	}

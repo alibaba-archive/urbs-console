@@ -9,9 +9,23 @@ import (
 	"github.com/teambition/urbs-console/src/util/request"
 )
 
+// SettingListByProduct ...
+func (a *UrbsSetting) SettingListByProduct(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.SettingsInfoRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/settings?skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Skip, args.PageSize, args.PageToken, args.Q)
+
+	result := new(tpl.SettingsInfoRes)
+
+	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 // SettingList ...
 func (a *UrbsSetting) SettingList(ctx context.Context, args *tpl.ProductModuleURL) (*tpl.SettingsInfoRes, error) {
-	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Skip, args.PageSize, args.PageToken)
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings?skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Skip, args.PageSize, args.PageToken, args.Q)
 
 	result := new(tpl.SettingsInfoRes)
 
@@ -109,7 +123,7 @@ func (a *UrbsSetting) SettingRecall(ctx context.Context, args *tpl.ProductModule
 
 // SettingListUsers ...
 func (a *UrbsSetting) SettingListUsers(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.SettingUsersInfoRes, error) {
-	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/users?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting, args.Skip, args.PageSize, args.PageToken)
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/users?skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting, args.Skip, args.PageSize, args.PageToken, args.Q)
 
 	result := new(tpl.SettingUsersInfoRes)
 
@@ -123,7 +137,7 @@ func (a *UrbsSetting) SettingListUsers(ctx context.Context, args *tpl.ProductMod
 
 // SettingListGroups ...
 func (a *UrbsSetting) SettingListGroups(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.SettingGroupsInfoRes, error) {
-	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/groups?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting, args.Skip, args.PageSize, args.PageToken)
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/groups?skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting, args.Skip, args.PageSize, args.PageToken, args.Q)
 
 	result := new(tpl.SettingGroupsInfoRes)
 

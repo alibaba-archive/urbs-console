@@ -1,11 +1,12 @@
 package service
 
 import (
-	"github.com/teambition/gear"
+	"context"
+
 	"github.com/teambition/urbs-console/src/dto/thrid"
 )
 
 // UserAuthInterface ...
 type UserAuthInterface interface {
-	Verify(ctx *gear.Context, body *thrid.UserVerifyReq) (string, error)
+	Verify(ctx context.Context, body *thrid.UserVerifyReq) (string, error)
 }

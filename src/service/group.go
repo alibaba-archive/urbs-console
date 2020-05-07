@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"net/url"
 	"strconv"
 	"strings"
@@ -14,7 +15,7 @@ type GroupMember struct {
 }
 
 // List ...
-func (a *GroupMember) List(groupId string, pageToken string, pageSize int) (*ListGroupMembersResp, error) {
+func (a *GroupMember) List(ctx context.Context, groupId string, pageToken string, pageSize int) (*ListGroupMembersResp, error) {
 	groupUrl := strings.Replace(conf.Config.Thrid.GroupMember.URL, "{groupId}", groupId, -1)
 	httpUrl, err := url.Parse(groupUrl)
 	if err != nil {
@@ -26,7 +27,7 @@ func (a *GroupMember) List(groupId string, pageToken string, pageSize int) (*Lis
 	httpUrl.RawQuery = q.Encode()
 
 	result := new(ListGroupMembersResp)
-	resp, err := request.Get(httpUrl.String()).Header(genThridHeader()).Result(result).Do()
+	resp, err := request.Get(httpUrl.String()).Header(genThridHeader(ctx)).Result(result).Do()
 	if err := HanderResponse(resp, err); err != nil {
 		return nil, err
 	}

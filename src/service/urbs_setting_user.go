@@ -11,7 +11,7 @@ import (
 
 // UserList ...
 func (a *UrbsSetting) UserList(ctx context.Context, args *tpl.Pagination) (*tpl.UsersRes, error) {
-	url := fmt.Sprintf("%s/v1/users?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Skip, args.PageSize, args.PageToken)
+	url := fmt.Sprintf("%s/v1/users?skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.Skip, args.PageSize, args.PageToken, args.Q)
 
 	result := new(tpl.UsersRes)
 
@@ -24,7 +24,7 @@ func (a *UrbsSetting) UserList(ctx context.Context, args *tpl.Pagination) (*tpl.
 
 // UserListLables ...
 func (a *UrbsSetting) UserListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.LabelsInfoRes, error) {
-	url := fmt.Sprintf("%s/v1/users/%s/labels?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken)
+	url := fmt.Sprintf("%s/v1/users/%s/labels?skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Q)
 
 	result := new(tpl.LabelsInfoRes)
 
@@ -50,7 +50,7 @@ func (a *UrbsSetting) UserRefreshCached(ctx context.Context, uid string) (*tpl.U
 
 // UserListSettings ...
 func (a *UrbsSetting) UserListSettings(ctx context.Context, args *tpl.UIDProductURL) (*tpl.MySettingsRes, error) {
-	url := fmt.Sprintf("%s/v1/users/%s/settings?skip=%d&pageSize=%d&pageToken=%s&product=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Product)
+	url := fmt.Sprintf("%s/v1/users/%s/settings?skip=%d&pageSize=%d&pageToken=%s&product=%s&q=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Product, args.Q)
 
 	result := new(tpl.MySettingsRes)
 

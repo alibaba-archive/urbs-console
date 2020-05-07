@@ -9,8 +9,24 @@ import (
 	"github.com/teambition/gear"
 )
 
+// Search 搜索
+type Search struct {
+	Q string `json:"q" query:"q"`
+}
+
+// Validate escape and build MySQL LIKE pattern
+func (s *Search) Validate() error {
+	if s.Q != "" {
+		s.Q = strings.ReplaceAll(s.Q, `\`, "-")
+		s.Q = strings.ReplaceAll(s.Q, "%", `\%`)
+		s.Q = strings.ReplaceAll(s.Q, "_", `\_`)
+	}
+	return nil
+}
+
 // Pagination 分页
 type Pagination struct {
+	Search
 	PageToken string `json:"pageToken" query:"pageToken"`
 	Skip      int    `json:"skip,omitempty" query:"skip"`
 	PageSize  int    `json:"pageSize,omitempty" query:"pageSize"`
@@ -40,6 +56,10 @@ func (pg *Pagination) Validate() error {
 
 	if pg.PageSize <= 0 {
 		pg.PageSize = 10
+	}
+
+	if err := pg.Search.Validate(); err != nil {
+		return err
 	}
 
 	return nil

@@ -11,6 +11,19 @@ type Setting struct {
 	blls *bll.Blls
 }
 
+// ListByProduct ..
+func (a *Setting) ListByProduct(ctx *gear.Context) error {
+	req := tpl.ProductPaginationURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	res, err := a.blls.Setting.ListByProduct(ctx, &req)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}
+
 // List ..
 func (a *Setting) List(ctx *gear.Context) error {
 	req := tpl.ProductModuleURL{}
@@ -18,6 +31,19 @@ func (a *Setting) List(ctx *gear.Context) error {
 		return err
 	}
 	res, err := a.blls.Setting.List(ctx, &req)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}
+
+// Get ..
+func (a *Setting) Get(ctx *gear.Context) error {
+	req := tpl.ProductModuleSettingURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	res, err := a.blls.Setting.Get(ctx, &req)
 	if err != nil {
 		return err
 	}

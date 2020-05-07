@@ -150,7 +150,11 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 
 	// ***** setting ******
 	// 读取指定产品功能模块的配置项
+	routerV1.Get("/products/:product/settings", apis.Setting.ListByProduct)
+	// 读取指定产品功能模块的配置项
 	routerV1.Get("/products/:product/modules/:module/settings", checkViewer, apis.Setting.List)
+
+	routerV1.Get("/products/:product/modules/:module/settings/:setting", apis.Setting.Get)
 	// 读取指定产品功能模块配置项的发布记录
 	routerV1.Get("/products/:product/modules/:module/settings/:setting/logs", checkViewer, apis.Setting.Logs)
 	// 读取指定产品功能模块配置项的群组列表

@@ -9,6 +9,7 @@ import (
 	"github.com/teambition/gear"
 	authjwt "github.com/teambition/gear-auth/jwt"
 	"github.com/teambition/urbs-console/src/conf"
+	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/util"
 	"github.com/teambition/urbs-console/src/util/request"
 )
@@ -41,21 +42,25 @@ func NewServices() *Services {
 
 // UrbsSettingHeader ...
 func UrbsSettingHeader(ctx context.Context) http.Header {
+	var requestId string
 	header := http.Header{}
-	requestId, _ := ctx.Value(gear.HeaderXRequestID).(string)
-	if requestId == "" {
-		if gearCtx, ok := ctx.(*gear.Context); ok {
-			requestId = gearCtx.GetHeader(gear.HeaderXRequestID)
-			if requestId == "" {
-				requestId = gearCtx.Res.Header().Get(gear.HeaderXRequestID)
-			}
-			header.Set("X-Canary", gearCtx.GetHeader("X-Canary"))
+	if gearCtx, ok := ctx.(*gear.Context); ok {
+		requestId = gearCtx.GetHeader(gear.HeaderXRequestID)
+		if requestId == "" {
+			requestId = gearCtx.Res.Header().Get(gear.HeaderXRequestID)
 		}
+		canary := gearCtx.GetHeader("X-Canary")
+		if canary != "" {
+			header.Set("X-Canary", canary)
+		}
+	}
+	if requestId == "" {
+		requestId, _ = ctx.Value(gear.HeaderXRequestID).(string)
 	}
 	if requestId != "" {
 		header.Set(gear.HeaderXRequestID, requestId)
 	}
-	header.Set("Authorization", "Bearer "+genToken(urbsSettingJwt))
+	header.Set(util.HeaderAuthorize, "Bearer "+genToken(urbsSettingJwt))
 	return header
 }
 
@@ -65,6 +70,9 @@ func HanderResponse(response *request.Response, err error) error {
 		return gear.ErrBadRequest.WithMsg(err.Error())
 	}
 	if !response.OK() {
+		resRequestID := response.Request.Header.Get(gear.HeaderXRequestID)
+		logger.Default.Err("error", string(response.Content), "status", response.StatusCode, "xRequestId", resRequestID, "url", response.Request.URL.String())
+
 		gearErr := new(gear.Error)
 		json.Unmarshal(response.Content, gearErr)
 		if gearErr.Err != "" {
@@ -75,10 +83,29 @@ func HanderResponse(response *request.Response, err error) error {
 	return nil
 }
 
-func genThridHeader() http.Header {
+func genThridHeader(ctx context.Context) http.Header {
 	header := http.Header{}
-	header.Set("Authorization", "Bearer "+genToken(thirdJwt))
+	header.Set(util.HeaderAuthorize, "Bearer "+genToken(thirdJwt))
+	addRequestId(ctx, header)
 	return header
+}
+
+func addRequestId(ctx context.Context, header http.Header) {
+	if ctx == nil {
+		return
+	}
+	requestId, _ := ctx.Value(gear.HeaderXRequestID).(string)
+	if requestId == "" {
+		if gearCtx, ok := ctx.(*gear.Context); ok {
+			requestId = gearCtx.GetHeader(gear.HeaderXRequestID)
+			if requestId == "" {
+				requestId = gearCtx.Res.Header().Get(gear.HeaderXRequestID)
+			}
+		}
+	}
+	if requestId != "" {
+		header.Set(gear.HeaderXRequestID, requestId)
+	}
 }
 
 func genToken(j *authjwt.JWT) string {

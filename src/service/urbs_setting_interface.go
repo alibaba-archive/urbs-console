@@ -33,7 +33,9 @@ type UrbsSettingInterface interface {
 	ModuleOffline(ctx context.Context, product string, module string) (*tpl.BoolRes, error)
 
 	// ***** setting ******
-	// 读取指定产品功能模块的配置项
+	// 读取指定产品的配置项
+	SettingListByProduct(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.SettingsInfoRes, error)
+	// 读取指定产品功能模块的配置项列表
 	SettingList(ctx context.Context, args *tpl.ProductModuleURL) (*tpl.SettingsInfoRes, error)
 	//  返回产品下灰度标签的用户列表
 	SettingListUsers(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.SettingUsersInfoRes, error)

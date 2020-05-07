@@ -11,7 +11,7 @@ import (
 
 // GroupListLables ...
 func (a *UrbsSetting) GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.LabelsInfoRes, error) {
-	url := fmt.Sprintf("%s/v1/groups/%s/labels?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken)
+	url := fmt.Sprintf("%s/v1/groups/%s/labels?skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Q)
 
 	result := new(tpl.LabelsInfoRes)
 
@@ -25,7 +25,7 @@ func (a *UrbsSetting) GroupListLables(ctx context.Context, args *tpl.UIDPaginati
 
 // GroupListSettings ...
 func (a *UrbsSetting) GroupListSettings(ctx context.Context, args *tpl.UIDProductURL) (*tpl.MySettingsRes, error) {
-	url := fmt.Sprintf("%s/v1/groups/%s/settings?product=%s&skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Product, args.Skip, args.PageSize, args.PageToken)
+	url := fmt.Sprintf("%s/v1/groups/%s/settings?product=%s&skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Product, args.Skip, args.PageSize, args.PageToken, args.Q)
 
 	result := new(tpl.MySettingsRes)
 
@@ -39,7 +39,7 @@ func (a *UrbsSetting) GroupListSettings(ctx context.Context, args *tpl.UIDProduc
 
 // GroupList ...
 func (a *UrbsSetting) GroupList(ctx context.Context, args *tpl.GroupsURL) (*tpl.GroupsRes, error) {
-	url := fmt.Sprintf("%s/v1/groups?kind=%s&skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Kind, args.Skip, args.PageSize, args.PageToken)
+	url := fmt.Sprintf("%s/v1/groups?kind=%s&skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.Kind, args.Skip, args.PageSize, args.PageToken, args.Q)
 
 	result := new(tpl.GroupsRes)
 

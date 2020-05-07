@@ -11,7 +11,7 @@ import (
 
 // LabelList ...
 func (a *UrbsSetting) LabelList(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.LabelsInfoRes, error) {
-	url := fmt.Sprintf("%s/v1/products/%s/labels?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Skip, args.PageSize, args.PageToken)
+	url := fmt.Sprintf("%s/v1/products/%s/labels?skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Skip, args.PageSize, args.PageToken, args.Q)
 
 	result := new(tpl.LabelsInfoRes)
 
@@ -113,7 +113,7 @@ func (a *UrbsSetting) LabelRecall(ctx context.Context, args *tpl.ProductLabelURL
 
 // LabelListUsers ...
 func (a *UrbsSetting) LabelListUsers(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.LabelUsersInfoRes, error) {
-	url := fmt.Sprintf("%s/v1/products/%s/labels/%s/users?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Label, args.Skip, args.PageSize, args.PageToken)
+	url := fmt.Sprintf("%s/v1/products/%s/labels/%s/users?skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Label, args.Skip, args.PageSize, args.PageToken, args.Q)
 
 	result := new(tpl.LabelUsersInfoRes)
 
@@ -127,7 +127,7 @@ func (a *UrbsSetting) LabelListUsers(ctx context.Context, args *tpl.ProductLabel
 
 // LabelListGroups ...
 func (a *UrbsSetting) LabelListGroups(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.LabelGroupsInfoRes, error) {
-	url := fmt.Sprintf("%s/v1/products/%s/labels/%s/groups?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Label, args.Skip, args.PageSize, args.PageToken)
+	url := fmt.Sprintf("%s/v1/products/%s/labels/%s/groups?skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Label, args.Skip, args.PageSize, args.PageToken, args.Q)
 
 	result := new(tpl.LabelGroupsInfoRes)
 

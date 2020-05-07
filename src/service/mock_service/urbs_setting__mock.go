@@ -184,6 +184,21 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ModuleOffline(ctx, product, modu
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ModuleOffline", reflect.TypeOf((*MockUrbsSettingInterface)(nil).ModuleOffline), ctx, product, module)
 }
 
+// SettingListByProduct mocks base method
+func (m *MockUrbsSettingInterface) SettingListByProduct(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.SettingsInfoRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SettingListByProduct", ctx, args)
+	ret0, _ := ret[0].(*tpl.SettingsInfoRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SettingListByProduct indicates an expected call of SettingListByProduct
+func (mr *MockUrbsSettingInterfaceMockRecorder) SettingListByProduct(ctx, args interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SettingListByProduct", reflect.TypeOf((*MockUrbsSettingInterface)(nil).SettingListByProduct), ctx, args)
+}
+
 // SettingList mocks base method
 func (m *MockUrbsSettingInterface) SettingList(ctx context.Context, args *tpl.ProductModuleURL) (*tpl.SettingsInfoRes, error) {
 	m.ctrl.T.Helper()

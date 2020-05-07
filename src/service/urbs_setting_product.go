@@ -11,7 +11,7 @@ import (
 
 // ProductList ...
 func (a *UrbsSetting) ProductList(ctx context.Context, args *tpl.Pagination) (*tpl.ProductsRes, error) {
-	url := fmt.Sprintf("%s/v1/products?skip=%d&pageSize=%d&pageToken=%s", conf.Config.UrbsSetting.Addr, args.Skip, args.PageSize, args.PageToken)
+	url := fmt.Sprintf("%s/v1/products?skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.Skip, args.PageSize, args.PageToken, args.Q)
 
 	result := new(tpl.ProductsRes)
 

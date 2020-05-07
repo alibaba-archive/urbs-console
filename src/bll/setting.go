@@ -14,7 +14,27 @@ type Setting struct {
 	blls     *Blls
 }
 
-// List 读取指定产品功能模块的配置项
+// ListByProduct ...
+func (a *Setting) ListByProduct(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.SettingsInfoRes, error) {
+	ress, err := a.services.UrbsSetting.SettingListByProduct(ctx, args)
+	if err != nil {
+		return nil, err
+	}
+	objects := make([]string, len(ress.Result))
+	for i, setting := range ress.Result {
+		objects[i] = args.Product + setting.Module + setting.Name
+	}
+	subjects, err := blls.UrbsAcAcl.FindUsersByObjects(ctx, objects)
+	if err != nil {
+		return nil, err
+	}
+	for _, setting := range ress.Result {
+		setting.Users = subjects[args.Product+setting.Module+setting.Name]
+	}
+	return ress, nil
+}
+
+// List ...
 func (a *Setting) List(ctx context.Context, args *tpl.ProductModuleURL) (*tpl.SettingsInfoRes, error) {
 	ress, err := a.services.UrbsSetting.SettingList(ctx, args)
 	if err != nil {
@@ -32,6 +52,11 @@ func (a *Setting) List(ctx context.Context, args *tpl.ProductModuleURL) (*tpl.Se
 		setting.Users = subjects[args.Product+args.Module+setting.Name]
 	}
 	return ress, nil
+}
+
+// Get ...
+func (a *Setting) Get(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.SettingInfoRes, error) {
+	return a.services.UrbsSetting.SettingGet(ctx, args)
 }
 
 // ListGroups ...

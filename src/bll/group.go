@@ -62,7 +62,7 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 	nextPageToken := ""
 	// 同步成员
 	for {
-		resp, err := a.services.GroupMember.List(uid, nextPageToken, pageSize)
+		resp, err := a.services.GroupMember.List(ctx, uid, nextPageToken, pageSize)
 		if err != nil {
 			logger.Err(ctx, err.Error(), "uid", uid)
 			break
