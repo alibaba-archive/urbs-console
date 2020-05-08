@@ -66,8 +66,10 @@ github.com/mattn/go-sqlite3 v2.0.1+incompatible h1:xQ15muvnzGBHpIpdrNi1DA5x0+TcB
 github.com/mattn/go-sqlite3 v2.0.1+incompatible/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=
 github.com/mozillazg/request v0.8.0 h1:TbXeQUdBWr1J1df5Z+lQczDFzX9JD71kTCl7Zu/9rNM=
 github.com/mozillazg/request v0.8.0/go.mod h1:weoQ/mVFNbWgRBtivCGF1tUT9lwneFesues+CleXMWc=
-github.com/mushroomsir/logger v1.4.2-0.20200323090418-a9e9bc04232a h1:99EvnzrFzVEhhgbk+VhIJEw5+M+UQ/IkwuhwW168hnI=
-github.com/mushroomsir/logger v1.4.2-0.20200323090418-a9e9bc04232a/go.mod h1:ON3fJFd0erGjzGCJbT9/Cnrovy3dMaqbtENzMYRS740=
+github.com/mushroomsir/logger v1.5.0 h1:VBV5xXk56z9f9Q2Sqsaw1svv9oCS1QfG2si24YIdunw=
+github.com/mushroomsir/logger v1.5.0/go.mod h1:ON3fJFd0erGjzGCJbT9/Cnrovy3dMaqbtENzMYRS740=
+github.com/mushroomsir/request v0.1.0 h1:h6kmTaP741XYQx41K4AikzIlE+2QwRIZoBWw53MhoQ4=
+github.com/mushroomsir/request v0.1.0/go.mod h1:3HOSds9MvFIOsAMZeZugToLvo1dyGpM7NaoQFtAhgaI=
 github.com/opentracing/opentracing-go v1.1.0 h1:pWlfV3Bxv7k65HYwkikxat0+s3pV4bsqf19k25Ur8rU=
 github.com/opentracing/opentracing-go v1.1.0/go.mod h1:UkNAQd3GIcIGf0SeVgPpRdFStlNbqXla1AfSYxPUl2o=
 github.com/pelletier/go-toml v1.4.0/go.mod h1:PN7xzY2wHTK0K9p34ErDQMlFxa51Fk0OUruD3k1mMwo=

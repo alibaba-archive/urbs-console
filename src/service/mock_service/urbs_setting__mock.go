@@ -605,10 +605,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) UserList(ctx, args interface{}) 
 }
 
 // UserListLables mocks base method
-func (m *MockUrbsSettingInterface) UserListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.LabelsInfoRes, error) {
+func (m *MockUrbsSettingInterface) UserListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MyLabelsRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UserListLables", ctx, args)
-	ret0, _ := ret[0].(*tpl.LabelsInfoRes)
+	ret0, _ := ret[0].(*tpl.MyLabelsRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -740,10 +740,10 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) UserRemoveSetting(ctx, uid, hid 
 }
 
 // GroupListLables mocks base method
-func (m *MockUrbsSettingInterface) GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.LabelsInfoRes, error) {
+func (m *MockUrbsSettingInterface) GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MyLabelsRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupListLables", ctx, args)
-	ret0, _ := ret[0].(*tpl.LabelsInfoRes)
+	ret0, _ := ret[0].(*tpl.MyLabelsRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

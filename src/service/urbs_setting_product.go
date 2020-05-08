@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/mushroomsir/request"
 	"github.com/teambition/urbs-console/src/conf"
 	"github.com/teambition/urbs-console/src/tpl"
-	"github.com/teambition/urbs-console/src/util/request"
 )
 
 // ProductList ...

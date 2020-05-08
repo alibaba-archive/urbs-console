@@ -111,3 +111,20 @@ type LabelReleaseInfoRes struct {
 	SuccessResponseType
 	Result LabelReleaseInfo `json:"result"` // 空数组也保留
 }
+
+// MyLabel ...
+type MyLabel struct {
+	ID         int64     `json:"-"`
+	HID        string    `json:"hid"`
+	Product    string    `json:"product"`
+	Name       string    `json:"name"`
+	Desc       string    `json:"desc"`
+	Release    int64     `json:"release"`
+	AssignedAt time.Time `json:"assignedAt"`
+}
+
+// MyLabelsRes ...
+type MyLabelsRes struct {
+	SuccessResponseType
+	Result []*MyLabel `json:"result"` // 空数组也保留
+}

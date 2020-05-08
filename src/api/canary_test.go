@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/mushroomsir/request"
 	"github.com/stretchr/testify/require"
-	"github.com/teambition/urbs-console/src/util/request"
 )
 
 func TestCanary(t *testing.T) {

@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/mushroomsir/request"
 	"github.com/teambition/gear"
-	"github.com/teambition/urbs-console/src/util/request"
 )
 
 var (
@@ -42,15 +42,17 @@ func init() {
 const (
 	// HeaderAuthorize ...
 	HeaderAuthorize = "Authorization"
-	schemaBearer    = "Bearer "
-	schemaOAuth2    = "OAuth2 "
+	// HeaderAuthorizeBearer ...
+	HeaderAuthorizeBearer = "Bearer "
+	// HeaderAuthorizeOAuth2 ...
+	HeaderAuthorizeOAuth2 = "OAuth2 "
 )
 
 // TokenExtractor ...
 func TokenExtractor(ctx *gear.Context) (token string) {
-	if val := ctx.Get(HeaderAuthorize); strings.HasPrefix(val, schemaBearer) {
+	if val := ctx.Get(HeaderAuthorize); strings.HasPrefix(val, HeaderAuthorizeBearer) {
 		token = val[7:]
-	} else if val := ctx.Get(HeaderAuthorize); strings.HasPrefix(val, schemaOAuth2) {
+	} else if val := ctx.Get(HeaderAuthorize); strings.HasPrefix(val, HeaderAuthorizeOAuth2) {
 		token = val[7:]
 	}
 	return

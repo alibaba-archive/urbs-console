@@ -200,6 +200,8 @@ func (a *User) ListSettingsUnionAllClient(ctx *gear.Context) error {
 	if err != nil {
 		return err
 	}
-
+	for _, item := range res.Result {
+		item.UpdatedAt = item.AssignedAt
+	}
 	return ctx.OkJSON(res)
 }

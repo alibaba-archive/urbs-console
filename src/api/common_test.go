@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/mushroomsir/request"
 	"github.com/stretchr/testify/require"
-	"github.com/teambition/urbs-console/src/util/request"
 )
 
 func TestAPIsAuth(t *testing.T) {

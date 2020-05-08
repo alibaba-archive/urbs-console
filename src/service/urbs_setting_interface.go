@@ -94,7 +94,7 @@ type UrbsSettingInterface interface {
 	// 读取用户列表，支持条件筛选
 	UserList(ctx context.Context, args *tpl.Pagination) (*tpl.UsersRes, error)
 	// 读取指定用户的灰度标签，支持条件筛选
-	UserListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.LabelsInfoRes, error)
+	UserListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MyLabelsRes, error)
 	// 强制刷新指定用户的灰度标签列表缓存
 	UserRefreshCached(ctx context.Context, uid string) (*tpl.UserRes, error)
 	// 读取指定用户的功能配置项，支持条件筛选
@@ -114,7 +114,7 @@ type UrbsSettingInterface interface {
 
 	// ***** group ******
 	// 读取指定群组的灰度标签，支持条件筛选
-	GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.LabelsInfoRes, error)
+	GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MyLabelsRes, error)
 	// 读取指定群组的功能配置项，支持条件筛选
 	GroupListSettings(ctx context.Context, args *tpl.UIDProductURL) (*tpl.MySettingsRes, error)
 	// 读取群组列表，支持条件筛选

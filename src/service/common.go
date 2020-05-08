@@ -6,12 +6,12 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/mushroomsir/request"
 	"github.com/teambition/gear"
 	authjwt "github.com/teambition/gear-auth/jwt"
 	"github.com/teambition/urbs-console/src/conf"
 	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/util"
-	"github.com/teambition/urbs-console/src/util/request"
 )
 
 var urbsSettingJwt *authjwt.JWT
@@ -42,25 +42,17 @@ func NewServices() *Services {
 
 // UrbsSettingHeader ...
 func UrbsSettingHeader(ctx context.Context) http.Header {
-	var requestId string
 	header := http.Header{}
-	if gearCtx, ok := ctx.(*gear.Context); ok {
-		requestId = gearCtx.GetHeader(gear.HeaderXRequestID)
-		if requestId == "" {
-			requestId = gearCtx.Res.Header().Get(gear.HeaderXRequestID)
-		}
-		canary := gearCtx.GetHeader("X-Canary")
-		if canary != "" {
-			header.Set("X-Canary", canary)
-		}
-	}
-	if requestId == "" {
-		requestId, _ = ctx.Value(gear.HeaderXRequestID).(string)
-	}
-	if requestId != "" {
-		header.Set(gear.HeaderXRequestID, requestId)
-	}
-	header.Set(util.HeaderAuthorize, "Bearer "+genToken(urbsSettingJwt))
+	addRequestId(ctx, header)
+	header.Set(util.HeaderAuthorize, util.HeaderAuthorizeBearer+genToken(urbsSettingJwt))
+	return header
+}
+
+// ThridHeader ...
+func ThridHeader(ctx context.Context) http.Header {
+	header := http.Header{}
+	addRequestId(ctx, header)
+	header.Set(util.HeaderAuthorize, util.HeaderAuthorizeBearer+genToken(thirdJwt))
 	return header
 }
 
@@ -83,13 +75,6 @@ func HanderResponse(response *request.Response, err error) error {
 	return nil
 }
 
-func genThridHeader(ctx context.Context) http.Header {
-	header := http.Header{}
-	header.Set(util.HeaderAuthorize, "Bearer "+genToken(thirdJwt))
-	addRequestId(ctx, header)
-	return header
-}
-
 func addRequestId(ctx context.Context, header http.Header) {
 	if ctx == nil {
 		return
@@ -100,6 +85,10 @@ func addRequestId(ctx context.Context, header http.Header) {
 			requestId = gearCtx.GetHeader(gear.HeaderXRequestID)
 			if requestId == "" {
 				requestId = gearCtx.Res.Header().Get(gear.HeaderXRequestID)
+			}
+			canary := gearCtx.GetHeader("X-Canary")
+			if canary != "" {
+				header.Set("X-Canary", canary)
 			}
 		}
 	}

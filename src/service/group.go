@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/mushroomsir/request"
 	"github.com/teambition/urbs-console/src/conf"
-	"github.com/teambition/urbs-console/src/util/request"
 )
 
 // GroupMember ...
@@ -27,7 +27,7 @@ func (a *GroupMember) List(ctx context.Context, groupId string, pageToken string
 	httpUrl.RawQuery = q.Encode()
 
 	result := new(ListGroupMembersResp)
-	resp, err := request.Get(httpUrl.String()).Header(genThridHeader(ctx)).Result(result).Do()
+	resp, err := request.Get(httpUrl.String()).Header(ThridHeader(ctx)).Result(result).Do()
 	if err := HanderResponse(resp, err); err != nil {
 		return nil, err
 	}

@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `urbs_console`.`operation_log` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `created_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `operator` varchar(63) NOT NULL,
-  `object` varchar(256) NOT NULL,
+  `object` varchar(189) NOT NULL,
   `action` varchar(63) NOT NULL,
   `content` TEXT NOT NULL,
   `description` varchar(8190) NOT NULL DEFAULT '',
@@ -29,5 +29,5 @@ CREATE TABLE IF NOT EXISTS `urbs_console`.`urbs_ac_acl` (
   `object` varchar(256) NOT NULL,
   `permission` varchar(63) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_subject_object_permission` (`subject`, `object`, `permission`)
+  KEY KEY `idx_subject` (`subject`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;

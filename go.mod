@@ -8,7 +8,8 @@ require (
 	github.com/go-http-utils/headers v0.0.0-20181008091004-fed159eddc2a // indirect
 	github.com/golang/mock v1.4.3
 	github.com/jinzhu/gorm v1.9.12
-	github.com/mushroomsir/logger v1.4.2-0.20200323090418-a9e9bc04232a
+	github.com/mushroomsir/logger v1.5.0
+	github.com/mushroomsir/request v0.1.0
 	github.com/opentracing/opentracing-go v1.1.0 // indirect
 	github.com/stretchr/testify v1.5.1
 	github.com/teambition/gear v1.21.1

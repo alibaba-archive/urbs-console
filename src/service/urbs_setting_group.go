@@ -4,16 +4,16 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/mushroomsir/request"
 	"github.com/teambition/urbs-console/src/conf"
 	"github.com/teambition/urbs-console/src/tpl"
-	"github.com/teambition/urbs-console/src/util/request"
 )
 
 // GroupListLables ...
-func (a *UrbsSetting) GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.LabelsInfoRes, error) {
+func (a *UrbsSetting) GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MyLabelsRes, error) {
 	url := fmt.Sprintf("%s/v1/groups/%s/labels?skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Q)
 
-	result := new(tpl.LabelsInfoRes)
+	result := new(tpl.MyLabelsRes)
 
 	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 

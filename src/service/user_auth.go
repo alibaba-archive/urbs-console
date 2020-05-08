@@ -3,11 +3,11 @@ package service
 import (
 	"context"
 
+	"github.com/mushroomsir/request"
 	"github.com/teambition/urbs-console/src/conf"
 	"github.com/teambition/urbs-console/src/dto/thrid"
 	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/tpl"
-	"github.com/teambition/urbs-console/src/util/request"
 )
 
 // UserAuth ...
@@ -21,7 +21,7 @@ func (a *UserAuth) Verify(ctx context.Context, body *thrid.UserVerifyReq) (strin
 		return "", nil
 	}
 	result := new(tpl.StringRes)
-	resp, err := request.Post(conf.Config.Thrid.UserAuth.URL).Header(genThridHeader(ctx)).Body(body).Result(result).Do()
+	resp, err := request.Post(conf.Config.Thrid.UserAuth.URL).Header(ThridHeader(ctx)).Body(body).Result(result).Do()
 	if err := HanderResponse(resp, err); err != nil {
 		return "", err
 	}

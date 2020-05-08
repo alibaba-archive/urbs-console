@@ -141,17 +141,21 @@ type SettingReleaseInfoRes struct {
 // MySettingsRes ...
 type MySettingsRes struct {
 	SuccessResponseType
-	Result []MySetting `json:"result"` // 空数组也保留
+	Result []*MySetting `json:"result"` // 空数组也保留
 }
 
 // MySetting ...
 type MySetting struct {
-	ID        int64     `json:"-"`
-	HID       string    `json:"hid"`
-	Module    string    `json:"module"`
-	Name      string    `json:"name"`
-	Value     string    `json:"value"`
-	LastValue string    `json:"lastValue"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	ID         int64     `json:"-"`
+	HID        string    `json:"hid"`
+	Product    string    `json:"product"`
+	Module     string    `json:"module"`
+	Name       string    `json:"name"`
+	Desc       string    `json:"desc"`
+	Value      string    `json:"value"`
+	LastValue  string    `json:"lastValue"`
+	Release    int64     `json:"release"`
+	AssignedAt time.Time `json:"assignedAt"`
+
+	UpdatedAt time.Time `json:"updated_at"` //兼容
 }

@@ -19,7 +19,7 @@ func (a *User) List(ctx context.Context, args *tpl.Pagination) (*tpl.UsersRes, e
 }
 
 // ListLables ...
-func (a *User) ListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.LabelsInfoRes, error) {
+func (a *User) ListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MyLabelsRes, error) {
 	return a.services.UrbsSetting.UserListLables(ctx, args)
 }
 
