@@ -755,7 +755,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupListLables(ctx, args interf
 }
 
 // GroupListSettings mocks base method
-func (m *MockUrbsSettingInterface) GroupListSettings(ctx context.Context, args *tpl.UIDProductURL) (*tpl.MySettingsRes, error) {
+func (m *MockUrbsSettingInterface) GroupListSettings(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MySettingsRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupListSettings", ctx, args)
 	ret0, _ := ret[0].(*tpl.MySettingsRes)

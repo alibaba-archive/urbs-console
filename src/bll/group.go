@@ -25,7 +25,7 @@ func (a *Group) List(ctx context.Context, args *tpl.GroupsURL) (*tpl.GroupsRes, 
 }
 
 // ListSettings ...
-func (a *Group) ListSettings(ctx context.Context, args *tpl.UIDProductURL) (*tpl.MySettingsRes, error) {
+func (a *Group) ListSettings(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MySettingsRes, error) {
 	return a.services.UrbsSetting.GroupListSettings(ctx, args)
 }
 

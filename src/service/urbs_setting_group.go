@@ -24,8 +24,8 @@ func (a *UrbsSetting) GroupListLables(ctx context.Context, args *tpl.UIDPaginati
 }
 
 // GroupListSettings ...
-func (a *UrbsSetting) GroupListSettings(ctx context.Context, args *tpl.UIDProductURL) (*tpl.MySettingsRes, error) {
-	url := fmt.Sprintf("%s/v1/groups/%s/settings?product=%s&skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Product, args.Skip, args.PageSize, args.PageToken, args.Q)
+func (a *UrbsSetting) GroupListSettings(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MySettingsRes, error) {
+	url := fmt.Sprintf("%s/v1/groups/%s/settings?skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Q)
 
 	result := new(tpl.MySettingsRes)
 
