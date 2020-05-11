@@ -21,14 +21,17 @@ func (t *ProductURL) Validate() error {
 
 // ProductUpdateBody ...
 type ProductUpdateBody struct {
-	Desc *string  `json:"desc"`
-	Uids []string `json:"uids"`
+	Desc *string   `json:"desc"`
+	Uids *[]string `json:"uids"`
 }
 
 // Validate 实现 gear.BodyTemplate。
 func (t *ProductUpdateBody) Validate() error {
 	if t.Desc != nil && len(*t.Desc) > 1022 {
 		return gear.ErrBadRequest.WithMsgf("desc too long: %d", len(*t.Desc))
+	}
+	if t.Uids != nil && len(*t.Uids) > 9 {
+		return gear.ErrBadRequest.WithMsgf("uids length should 0 < %d < 10", len(*t.Uids))
 	}
 	return nil
 }

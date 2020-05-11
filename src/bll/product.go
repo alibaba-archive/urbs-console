@@ -55,14 +55,12 @@ func (a *Product) List(ctx context.Context, args *tpl.Pagination) (*tpl.Products
 }
 
 // Update ...
-func (a *Product) Update(ctx context.Context, product string, args *tpl.ProductUpdateBody) (*tpl.ProductRes, error) {
-	if len(args.Uids) > 0 {
-		err := blls.UrbsAcAcl.Update(ctx, args.Uids, product)
-		if err != nil {
-			return nil, err
-		}
+func (a *Product) Update(ctx context.Context, product string, body *tpl.ProductUpdateBody) (*tpl.ProductRes, error) {
+	err := blls.UrbsAcAcl.Update(ctx, body.Uids, product)
+	if err != nil {
+		return nil, err
 	}
-	res, err := a.services.UrbsSetting.ProductUpdate(ctx, product, args)
+	res, err := a.services.UrbsSetting.ProductUpdate(ctx, product, body)
 	if err != nil {
 		return nil, err
 	}

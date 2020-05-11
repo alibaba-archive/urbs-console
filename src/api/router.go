@@ -93,6 +93,8 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	routerV1.Get("/ac/users:search", checkViewer, apis.UrbsAcUser.Search)
 	// 添加权限
 	routerV1.Post("/ac/users/:uid/permissions", checkSuperAdmin, apis.UrbsAcAcl.Add)
+	// 检查权限
+	routerV1.Post("/ac/permission:check", checkViewer, apis.UrbsAcAcl.Check)
 
 	// ***** product ******
 	// 读取产品列表，支持条件筛选

@@ -44,15 +44,31 @@ type StringRes struct {
 	Result string `json:"result"`
 }
 
-// NameDescBody ...
-type NameDescBody struct {
-	Name string   `json:"name"`
-	Desc string   `json:"desc"`
+// UidsBody ...
+type UidsBody struct {
 	Uids []string `json:"uids"`
 }
 
 // Validate 实现 gear.BodyTemplate。
+func (t *UidsBody) Validate() error {
+	if len(t.Uids) < 1 || len(t.Uids) > 9 {
+		return gear.ErrBadRequest.WithMsgf("uids length should 0 < %d < 10", len(t.Uids))
+	}
+	return nil
+}
+
+// NameDescBody ...
+type NameDescBody struct {
+	UidsBody
+	Name string `json:"name"`
+	Desc string `json:"desc"`
+}
+
+// Validate 实现 gear.BodyTemplate。
 func (t *NameDescBody) Validate() error {
+	if err := t.UidsBody.Validate(); err != nil {
+		return err
+	}
 	if !validNameReg.MatchString(t.Name) {
 		return gear.ErrBadRequest.WithMsgf("invalid name: %s", t.Name)
 	}

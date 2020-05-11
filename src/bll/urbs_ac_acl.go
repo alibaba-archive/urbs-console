@@ -3,6 +3,7 @@ package bll
 import (
 	"context"
 
+	"github.com/teambition/gear"
 	"github.com/teambition/urbs-console/src/apperrs"
 	"github.com/teambition/urbs-console/src/conf"
 	"github.com/teambition/urbs-console/src/constant"
@@ -18,7 +19,7 @@ type UrbsAcAcl struct {
 }
 
 // AddByReq ...
-func (a *UrbsAcAcl) AddByReq(ctx context.Context, args *tpl.UrbsAcAclURL, req *tpl.UrbsAcAclAddReq) error {
+func (a *UrbsAcAcl) AddByReq(ctx context.Context, args *tpl.UrbsAcAclURL, req *tpl.UrbsAcAclAddBody) error {
 	object := req.Product + req.Label + req.Module + req.Setting
 	return a.Add(ctx, args.Uid, object, req.Permission)
 }
@@ -39,14 +40,22 @@ func (a *UrbsAcAcl) Add(ctx context.Context, subject string, object string, perm
 }
 
 // Update ...
-func (a *UrbsAcAcl) Update(ctx context.Context, subjects []string, object string) error {
-	for _, subject := range subjects {
+func (a *UrbsAcAcl) Update(ctx context.Context, subjects *[]string, object string) error {
+	if subjects == nil || len(*subjects) == 0 {
+		return nil
+	}
+	for _, item := range *subjects {
+		if item == "" {
+			return gear.ErrBadRequest.WithMsg("invalid subjects")
+		}
+	}
+	for _, subject := range *subjects {
 		err := a.AddDefaultPermission(ctx, subject, object)
 		if err != nil {
 			return err
 		}
 	}
-	err := a.daos.UrbsAcAcl.DeleteNotIn(ctx, subjects, object)
+	err := a.daos.UrbsAcAcl.DeleteNotIn(ctx, *subjects, object)
 	if err != nil {
 		return err
 	}

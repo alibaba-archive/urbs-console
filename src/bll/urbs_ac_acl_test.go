@@ -15,7 +15,7 @@ func TestUrbsAcACL(t *testing.T) {
 	args := &tpl.UrbsAcAclURL{
 		Uid: tpl.RandUID(),
 	}
-	body := &tpl.UrbsAcAclAddReq{}
+	body := &tpl.UrbsAcAclAddBody{}
 	body.Product = tpl.RandName()
 	body.Label = tpl.RandLabel()
 	body.Permission = constant.PermissionAll
@@ -54,7 +54,7 @@ func TestUrbsAcACL(t *testing.T) {
 	err = blls.UrbsAcUser.Add(context.Background(), userBody)
 	require.Nil(err)
 
-	err = blls.UrbsAcAcl.Update(context.Background(), subjects, object)
+	err = blls.UrbsAcAcl.Update(context.Background(), &subjects, object)
 	require.Nil(err)
 
 	err = blls.UrbsAcAcl.CheckAdmin(getUidContext(subjects[0]), object)

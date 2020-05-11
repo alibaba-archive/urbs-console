@@ -41,6 +41,15 @@ const (
 	defaultConfigPath = "src/github.com/teambition/urbs-console/config/test.yml"
 )
 
+// GetStaticFilePath the default path is `./static`
+func GetStaticFilePath() string {
+	path := os.Getenv("STATIC_FILE_PATH")
+	if path == "" {
+		path = "./static"
+	}
+	return path
+}
+
 func getConfigFilePath(path ...string) (string, error) {
 	// 优先使用的环境变量
 	filePath := os.Getenv("CONFIG_FILE_PATH")

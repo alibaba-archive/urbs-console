@@ -9,6 +9,7 @@ import (
 // MySettingsQueryURL ...
 type MySettingsQueryURL struct {
 	Pagination
+	UidsBody
 	UID     string `json:"uid" param:"uid"`
 	Product string `json:"product" query:"product"`
 	Channel string `json:"channel" query:"channel"`
@@ -23,8 +24,10 @@ func (t *MySettingsQueryURL) Validate() error {
 	if !validNameReg.MatchString(t.Product) {
 		return gear.ErrBadRequest.WithMsgf("invalid product name: %s", t.Product)
 	}
-
 	if err := t.Pagination.Validate(); err != nil {
+		return err
+	}
+	if err := t.UidsBody.Validate(); err != nil {
 		return err
 	}
 	return nil
@@ -36,12 +39,12 @@ type SettingUpdateBody struct {
 	Channels *[]string `json:"channels"`
 	Clients  *[]string `json:"clients"`
 	Values   *[]string `json:"values"`
-	Uids     []string  `json:"uids"`
+	Uids     *[]string `json:"uids"`
 }
 
 // Validate 实现 gear.BodyTemplate。
 func (t *SettingUpdateBody) Validate() error {
-	if t.Desc == nil && t.Channels == nil && t.Clients == nil && t.Values == nil {
+	if t.Desc == nil && t.Channels == nil && t.Clients == nil && t.Values == nil && t.Uids == nil {
 		return gear.ErrBadRequest.WithMsgf("desc or channels or clients or values required")
 	}
 	if t.Desc != nil && len(*t.Desc) > 1022 {
@@ -71,6 +74,9 @@ func (t *SettingUpdateBody) Validate() error {
 		if !SortStringsAndCheck(*t.Values) {
 			return gear.ErrBadRequest.WithMsgf("invalid values: %v", *t.Values)
 		}
+	}
+	if t.Uids != nil && len(*t.Uids) > 9 {
+		return gear.ErrBadRequest.WithMsgf("uids length should 0 < %d < 10", len(*t.Uids))
 	}
 	return nil
 }

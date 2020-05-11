@@ -10,8 +10,8 @@ func (t *UrbsAcAclURL) Validate() error {
 	return nil
 }
 
-// UrbsAcAclAddReq ...
-type UrbsAcAclAddReq struct {
+// UrbsAcAclAddBody ...
+type UrbsAcAclAddBody struct {
 	Product string `json:"product"`
 	Label   string `json:"label"`
 	Module  string `json:"module"`
@@ -21,6 +21,19 @@ type UrbsAcAclAddReq struct {
 }
 
 // Validate 实现 gear.BodyTemplate。
-func (t *UrbsAcAclAddReq) Validate() error {
+func (t *UrbsAcAclAddBody) Validate() error {
+	return nil
+}
+
+// UrbsAcAclCheckBody ...
+type UrbsAcAclCheckBody struct {
+	Product string `json:"product"`
+	Label   string `json:"label"`
+	Module  string `json:"module"`
+	Setting string `json:"setting"`
+}
+
+// Validate 实现 gear.BodyTemplate。
+func (t *UrbsAcAclCheckBody) Validate() error {
 	return nil
 }

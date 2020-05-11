@@ -7,6 +7,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 	"github.com/teambition/gear/middleware/cors"
+	"github.com/teambition/gear/middleware/static"
 
 	"github.com/teambition/gear"
 	"github.com/teambition/urbs-console/src/conf"
@@ -35,12 +36,18 @@ func NewApp() *gear.App {
 
 		return gear.ParseError(err)
 	})
+	staticServer := static.New(static.Options{Root: util.GetStaticFilePath()})
 
-	// used for health check, so ingore logger
 	app.Use(func(ctx *gear.Context) error {
-		if ctx.Path == "/" || ctx.Path == "/version" {
+		if ctx.Path == "/version" { // used for health check, so ingore logger
 			ctx.Set(gear.HeaderContentType, gear.MIMEApplicationJSONCharsetUTF8)
 			return ctx.End(http.StatusOK, util.GetVersion())
+		}
+		if !strings.HasPrefix(ctx.Path, "/api") && !strings.HasPrefix(ctx.Path, "/v1") {
+			if !strings.HasPrefix(ctx.Path, "/umi.css") && !strings.HasPrefix(ctx.Path, "/umi.js") {
+				ctx.Path = "/"
+			}
+			return staticServer(ctx)
 		}
 		return nil
 	})

@@ -67,11 +67,9 @@ func (a *Label) List(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.
 // Update ...
 func (a *Label) Update(ctx context.Context, product, label string, body *tpl.LabelUpdateBody) (*tpl.LabelInfoRes, error) {
 	aclObject := product + label
-	if len(body.Uids) > 0 {
-		err := blls.UrbsAcAcl.Update(ctx, body.Uids, product+label)
-		if err != nil {
-			return nil, err
-		}
+	err := blls.UrbsAcAcl.Update(ctx, body.Uids, product+label)
+	if err != nil {
+		return nil, err
 	}
 	res, err := a.services.UrbsSetting.LabelUpdate(ctx, product, label, body)
 	if err != nil {

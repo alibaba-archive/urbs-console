@@ -8,13 +8,18 @@ import (
 
 // LabelBody ...
 type LabelBody struct {
-	Name string   `json:"name"`
-	Desc string   `json:"desc"`
-	Uids []string `json:"uids"`
+	UidsBody
+	Name     string    `json:"name"`
+	Desc     string    `json:"desc"`
+	Channels *[]string `json:"channels"`
+	Clients  *[]string `json:"clients"`
 }
 
 // Validate 实现 gear.BodyTemplate。
 func (t *LabelBody) Validate() error {
+	if err := t.UidsBody.Validate(); err != nil {
+		return err
+	}
 	if !validLabelReg.MatchString(t.Name) {
 		return gear.ErrBadRequest.WithMsgf("invalid label: %s", t.Name)
 	}
@@ -29,12 +34,12 @@ type LabelUpdateBody struct {
 	Desc     *string   `json:"desc"`
 	Channels *[]string `json:"channels"`
 	Clients  *[]string `json:"clients"`
-	Uids     []string  `json:"uids"`
+	Uids     *[]string `json:"uids"`
 }
 
 // Validate 实现 gear.BodyTemplate。
 func (t *LabelUpdateBody) Validate() error {
-	if t.Desc == nil && t.Channels == nil && t.Clients == nil {
+	if t.Desc == nil && t.Channels == nil && t.Clients == nil && t.Uids == nil {
 		return gear.ErrBadRequest.WithMsgf("desc or channels or clients required")
 	}
 	if t.Desc != nil && len(*t.Desc) > 1022 {
@@ -55,6 +60,9 @@ func (t *LabelUpdateBody) Validate() error {
 		if !SortStringsAndCheck(*t.Clients) {
 			return gear.ErrBadRequest.WithMsgf("invalid clients: %v", *t.Clients)
 		}
+	}
+	if t.Uids != nil && len(*t.Uids) > 9 {
+		return gear.ErrBadRequest.WithMsgf("uids length should 0 < %d < 10", len(*t.Uids))
 	}
 	return nil
 }

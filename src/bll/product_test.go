@@ -26,8 +26,8 @@ func TestProduct(t *testing.T) {
 	testAddUrbsAcUser(tt, uid)
 
 	req := &tpl.NameDescBody{
-		Name: tpl.RandName(),
-		Uids: []string{uid},
+		Name:     tpl.RandName(),
+		UidsBody: tpl.UidsBody{Uids: []string{uid}},
 	}
 	res, err := blls.Product.Create(context.Background(), req)
 	require.Nil(err)
@@ -39,7 +39,7 @@ func TestProduct(t *testing.T) {
 	testAddUrbsAcUser(tt, uid2)
 
 	req1 := &tpl.ProductUpdateBody{
-		Uids: []string{uid2},
+		Uids: &[]string{uid2},
 		Desc: &uid2,
 	}
 	res, err = blls.Product.Update(context.Background(), req.Name, req1)
