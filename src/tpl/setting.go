@@ -9,7 +9,6 @@ import (
 // MySettingsQueryURL ...
 type MySettingsQueryURL struct {
 	Pagination
-	UidsBody
 	UID     string `json:"uid" param:"uid"`
 	Product string `json:"product" query:"product"`
 	Channel string `json:"channel" query:"channel"`
@@ -25,9 +24,6 @@ func (t *MySettingsQueryURL) Validate() error {
 		return gear.ErrBadRequest.WithMsgf("invalid product name: %s", t.Product)
 	}
 	if err := t.Pagination.Validate(); err != nil {
-		return err
-	}
-	if err := t.UidsBody.Validate(); err != nil {
 		return err
 	}
 	return nil

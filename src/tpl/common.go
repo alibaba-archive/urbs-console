@@ -20,6 +20,8 @@ var validLabelReg = regexp.MustCompile(`^[0-9a-z][0-9a-z-]{0,61}[0-9a-z]$`)
 // https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#dns-subdomain-names
 var validNameReg = regexp.MustCompile(`^[0-9a-z][0-9a-z.-]{0,61}[0-9a-z]$`)
 
+var validValueReg = regexp.MustCompile(`^\S+$`)
+
 // Should be subset of
 // https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#syntax-and-character-set
 var validValueReg1 = regexp.MustCompile(`^[0-9A-Za-z]*$`)
@@ -52,7 +54,7 @@ type UidsBody struct {
 // Validate 实现 gear.BodyTemplate。
 func (t *UidsBody) Validate() error {
 	if len(t.Uids) < 1 || len(t.Uids) > 9 {
-		return gear.ErrBadRequest.WithMsgf("uids length should 0 < %d < 10", len(t.Uids))
+		return gear.ErrBadRequest.WithMsg("uids length should great than 0 and less than 10")
 	}
 	return nil
 }
@@ -110,7 +112,7 @@ func StringSliceHas(sl []string, v string) bool {
 type UsersGroupsBody struct {
 	Users  []string `json:"users"`
 	Groups []string `json:"groups"`
-	Desc   string   `json:"description"` // 操作说明
+	Desc   string   `json:"desc"` // 操作说明
 	Value  string   `json:"value"`
 }
 
@@ -130,7 +132,7 @@ func (t *UsersGroupsBody) Validate() error {
 			return gear.ErrBadRequest.WithMsgf("invalid group: %s", uid)
 		}
 	}
-	if !validValueReg1.MatchString(t.Value) && !validValueReg2.MatchString(t.Value) {
+	if t.Value != "" && !validValueReg.MatchString(t.Value) {
 		return gear.ErrBadRequest.WithMsgf("invalid value: %s", t.Value)
 	}
 	return nil

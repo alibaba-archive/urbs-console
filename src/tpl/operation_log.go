@@ -1,6 +1,10 @@
 package tpl
 
-import "github.com/teambition/gear"
+import (
+	"time"
+
+	"github.com/teambition/gear"
+)
 
 // OperationLogListReq ...
 type OperationLogListReq struct {
@@ -43,13 +47,18 @@ type OperationLogListRes struct {
 
 // OperationLogListItem ...
 type OperationLogListItem struct {
-	Operator     string `json:"operator"`     // 操作人
-	OperatorName string `json:"operatorName"` // 操作人
-	Action       string `json:"action"`       // 操作行为
-	Desc         string `json:"description"`  // 操作说明
+	HID          string    `json:"hid"`
+	Operator     string    `json:"operator"`     // 操作人
+	OperatorName string    `json:"operatorName"` // 操作人
+	Action       string    `json:"action"`       // 操作行为
+	Desc         string    `json:"desc"`         // 操作说明
+	CreatedAt    time.Time `json:"createdAt"`
 
-	Groups  []string `json:"groups,omitempty"`  // 群组
-	Users   []string `json:"users,omitempty"`   // 用户
-	Value   string   `json:"value,omitempty"`   // 灰度百分比
-	Percent int      `json:"percent,omitempty"` // 灰度百分比
+	Groups []string `json:"groups,omitempty"` // 群组
+	Users  []string `json:"users,omitempty"`  // 用户
+
+	Value string `json:"value,omitempty"`
+
+	Kind    string `json:"kind"`
+	Percent int    `json:"percent,omitempty"` // 灰度百分比
 }

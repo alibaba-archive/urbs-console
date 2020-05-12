@@ -37,6 +37,7 @@ func (r *PercentRule) ToRule() string {
 type SettingRuleBody struct {
 	PercentRule
 	Value string `json:"value"`
+	Desc  string `json:"description"` // 操作说明
 }
 
 // SettingRuleInfo ...

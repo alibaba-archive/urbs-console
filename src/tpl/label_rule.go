@@ -7,6 +7,7 @@ import (
 // LabelRuleBody ...
 type LabelRuleBody struct {
 	PercentRule
+	Desc string `json:"description"` // 操作说明
 }
 
 // LabelRuleInfo ...

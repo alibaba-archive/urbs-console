@@ -8,6 +8,7 @@ import (
 	"github.com/teambition/urbs-console/src/dao"
 	"github.com/teambition/urbs-console/src/dto"
 	"github.com/teambition/urbs-console/src/schema"
+	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/tpl"
 	"github.com/teambition/urbs-console/src/util"
 )
@@ -19,6 +20,7 @@ type OperationLog struct {
 
 var (
 	actionCreate = "create"
+	actionUpdate = "update"
 	actionDelete = "delete"
 )
 
@@ -35,10 +37,12 @@ func (a *OperationLog) List(ctx context.Context, object string, req *tpl.Paginat
 	items := make([]*tpl.OperationLogListItem, len(logs))
 	for i, log := range logs {
 		item := &tpl.OperationLogListItem{
+			HID:          service.IDToHID(log.ID, "log"),
 			Operator:     log.Operator,
 			OperatorName: log.Name,
 			Action:       log.Action,
 			Desc:         log.Desc,
+			CreatedAt:    log.CreatedAt,
 		}
 		parseLogContent(log.Content, item)
 		items[i] = item
@@ -99,6 +103,7 @@ func parseLogContent(content string, log *tpl.OperationLogListItem) {
 		case "03":
 			log.Value = content
 		case "04": // percent
+			log.Kind = "userPercent"
 			log.Percent, _ = strconv.Atoi(content)
 		}
 	}

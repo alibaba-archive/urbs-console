@@ -147,6 +147,7 @@ func (a *Setting) ListRules(ctx context.Context, args *tpl.ProductModuleSettingU
 func (a *Setting) CreateRule(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingRuleBody) (*tpl.SettingRuleInfoRes, error) {
 	object := args.Product + args.Module + args.Setting
 	logContent := &dto.OperationLogContent{
+		Desc:    body.Desc,
 		Percent: body.Rule.Value,
 		Value:   body.Value,
 	}
@@ -159,6 +160,16 @@ func (a *Setting) CreateRule(ctx context.Context, args *tpl.ProductModuleSetting
 
 // UpdateRule ...
 func (a *Setting) UpdateRule(ctx context.Context, args *tpl.ProductModuleSettingHIDURL, body *tpl.SettingRuleBody) (*tpl.SettingRuleInfoRes, error) {
+	object := args.Product + args.Module + args.Setting
+	logContent := &dto.OperationLogContent{
+		Desc:    body.Desc,
+		Percent: body.Rule.Value,
+		Value:   body.Value,
+	}
+	err := blls.OperationLog.Add(ctx, object, actionUpdate, logContent)
+	if err != nil {
+		return nil, err
+	}
 	return a.services.UrbsSetting.SettingUpdateRule(ctx, args, body)
 }
 

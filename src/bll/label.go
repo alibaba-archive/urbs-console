@@ -129,11 +129,29 @@ func (a *Label) ListRules(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.
 
 // CreateRule ...
 func (a *Label) CreateRule(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.LabelRuleBody) (*tpl.LabelRuleInfoRes, error) {
+	object := args.Product + args.Label
+	logContent := &dto.OperationLogContent{
+		Desc:    body.Desc,
+		Percent: body.Rule.Value,
+	}
+	err := blls.OperationLog.Add(ctx, object, actionCreate, logContent)
+	if err != nil {
+		return nil, err
+	}
 	return a.services.UrbsSetting.LabelCreateRule(ctx, args, body)
 }
 
 // UpdateRule ...
 func (a *Label) UpdateRule(ctx context.Context, args *tpl.ProductLabelHIDURL, body *tpl.LabelRuleBody) (*tpl.LabelRuleInfoRes, error) {
+	object := args.Product + args.Label
+	logContent := &dto.OperationLogContent{
+		Desc:    body.Desc,
+		Percent: body.Rule.Value,
+	}
+	err := blls.OperationLog.Add(ctx, object, actionUpdate, logContent)
+	if err != nil {
+		return nil, err
+	}
 	return a.services.UrbsSetting.LabelUpdateRule(ctx, args, body)
 }
 

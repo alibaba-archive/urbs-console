@@ -24,6 +24,7 @@ type ConfigTpl struct {
 	CorsWhiteList []string    `json:"cors_white_list" yaml:"cors_white_list"`
 	MySQL         SQL         `json:"mysql" yaml:"mysql"`
 	SuperAdmins   []string    `json:"superAdmins" yaml:"superAdmins"`
+	HIDKey        string      `json:"hid_key" yaml:"hid_key"`
 }
 
 // TlsConfig the config struct for creating tls.Config.
