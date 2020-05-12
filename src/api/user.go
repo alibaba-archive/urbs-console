@@ -201,7 +201,9 @@ func (a *User) ListSettingsUnionAllClient(ctx *gear.Context) error {
 		return err
 	}
 	for _, item := range res.Result {
-		item.UpdatedAt = item.AssignedAt
+		if item.AssignedAt.Unix() > 0 {
+			item.UpdatedAt = item.AssignedAt
+		}
 	}
 	return ctx.OkJSON(res)
 }
