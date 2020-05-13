@@ -42,3 +42,13 @@ func (t *UrbsAcUserUrl) Validate() error {
 	}
 	return nil
 }
+
+// UrbsAcUserUidUrl ...
+type UrbsAcUserUidUrl struct {
+	Uid string `json:"uid" query:"uid"`
+}
+
+// Validate 实现 gear.BodyTemplate。
+func (t *UrbsAcUserUidUrl) Validate() error {
+	return nil
+}

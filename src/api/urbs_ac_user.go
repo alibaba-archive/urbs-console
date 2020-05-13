@@ -49,3 +49,16 @@ func (a *UrbsAcUser) Search(ctx *gear.Context) error {
 	}
 	return ctx.OkJSON(res)
 }
+
+// Delete ...
+func (a *UrbsAcUser) Delete(ctx *gear.Context) error {
+	args := tpl.UrbsAcUserUidUrl{}
+	if err := ctx.ParseURL(&args); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcUser.Delete(ctx, args.Uid)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(struct{}{})
+}

@@ -87,8 +87,10 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	// ***** UrbsAc ******
 	// 添加用户
 	routerV1.Post("/ac/users", checkSuperAdmin, apis.UrbsAcUser.Add)
+	// 删除用户
+	routerV1.Delete("/ac/users/:uid", checkSuperAdmin, apis.UrbsAcUser.Delete)
 	// 获取用户列表
-	routerV1.Get("/ac/users", checkViewer, apis.UrbsAcUser.List)
+	routerV1.Get("/ac/users", checkSuperAdmin, apis.UrbsAcUser.List)
 	// 搜索用户
 	routerV1.Get("/ac/users:search", checkViewer, apis.UrbsAcUser.Search)
 	// 添加权限

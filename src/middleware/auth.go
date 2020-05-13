@@ -2,8 +2,11 @@ package middleware
 
 import (
 	"context"
+	"time"
 
 	"github.com/teambition/gear"
+	auth "github.com/teambition/gear-auth"
+	authjwt "github.com/teambition/gear-auth/jwt"
 	"github.com/teambition/urbs-console/src/bll"
 	"github.com/teambition/urbs-console/src/conf"
 	"github.com/teambition/urbs-console/src/dto/thrid"
@@ -11,17 +14,38 @@ import (
 	"github.com/teambition/urbs-console/src/util"
 )
 
+func init() {
+	keys := conf.Config.AuthKeys
+	if len(keys) > 0 {
+		Auther = auth.New(authjwt.StrToKeys(keys...)...)
+		Auther.JWT().SetExpiresIn(time.Minute * 10)
+	}
+}
+
+// Auther 是基于 JWT 的身份验证，当 config.auth_keys 配置了才会启用
+var Auther *auth.Auth
+
 // Verify ...
 func Verify(services *service.Services) func(ctx *gear.Context) error {
 	return func(ctx *gear.Context) error {
-		body := &thrid.UserVerifyReq{}
-		body.Cookie, _ = ctx.Cookies.Get(conf.Config.Thrid.UserAuth.CookieKey)
-		body.Singed, _ = ctx.Cookies.Get(conf.Config.Thrid.UserAuth.CookieKey + ".sig")
-		body.Token = util.TokenExtractor(ctx)
-
-		uid, err := services.UserAuth.Verify(ctx, body)
-		if err != nil {
-			return gear.ErrUnauthorized.WithMsg(err.Error())
+		var uid string
+		xToken := util.XAuthExtractor(ctx)
+		if xToken != "" && Auther != nil {
+			claims, err := Auther.FromCtx(ctx)
+			if err != nil {
+				return gear.ErrUnauthorized.WithMsg(err.Error())
+			}
+			uid = claims.Get("uid").(string)
+		} else {
+			body := &thrid.UserVerifyReq{}
+			body.Cookie, _ = ctx.Cookies.Get(conf.Config.Thrid.UserAuth.CookieKey)
+			body.Singed, _ = ctx.Cookies.Get(conf.Config.Thrid.UserAuth.CookieKey + ".sig")
+			body.Token = util.AuthorizationExtractor(ctx)
+			var err error
+			uid, err = services.UserAuth.Verify(ctx, body)
+			if err != nil {
+				return gear.ErrUnauthorized.WithMsg(err.Error())
+			}
 		}
 		if uid == "" {
 			return gear.ErrUnauthorized.WithMsg("invalid uid")

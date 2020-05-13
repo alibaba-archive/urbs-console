@@ -10,46 +10,58 @@ import (
 
 func TestUrbsAcUser(t *testing.T) {
 	require := require.New(t)
+	tt := SetUpTestTools(require)
 
-	for i := 0; i < 5; i++ {
-		args := &tpl.UrbsAcAclURL{
-			Uid: tpl.RandUID(),
+	t.Run("add urbsAcUser", func(t *testing.T) {
+		for i := 0; i < 5; i++ {
+			testAddUrbsAcUser(tt, tpl.RandUID())
 		}
-		userBody := &tpl.UrbsAcUsersBody{
-			Users: []*tpl.UrbsAcUserBody{
-				{
-					Uid:  args.Uid,
-					Name: args.Uid,
-				},
-			},
-		}
-		err := blls.UrbsAcUser.Add(context.Background(), userBody)
+	})
+
+	t.Run("urbsAcUser pagination", func(t *testing.T) {
+		args := new(tpl.Pagination)
+		args.PageSize = 1
+		res, err := blls.UrbsAcUser.List(context.Background(), args)
 		require.Nil(err)
-	}
+		require.Equal(1, len(res.Result))
+		require.NotEmpty(res.NextPageToken)
 
-	args := new(tpl.Pagination)
-	args.PageSize = 1
-	res, err := blls.UrbsAcUser.List(context.Background(), args)
-	require.Nil(err)
-	require.Equal(1, len(res.Result))
-	require.NotEmpty(res.NextPageToken)
+		args2 := new(tpl.Pagination)
+		args2.PageToken = res.NextPageToken
+		args2.Validate()
+		require.Equal(1, args2.Skip)
 
-	args2 := new(tpl.Pagination)
-	args2.PageToken = res.NextPageToken
-	args2.Validate()
-	require.Equal(1, args2.Skip)
+		res2, err := blls.UrbsAcUser.List(context.Background(), args2)
+		require.Nil(err)
+		require.Equal(1, len(res2.Result))
+		require.NotEmpty(res2.NextPageToken)
+		require.NotEqual(res.Result[0].UID, res2.Result[0].UID)
+		require.True(res2.TotalSize > 0)
+	})
+	t.Run("search", func(t *testing.T) {
+		uid := tpl.RandUID()
+		testAddUrbsAcUser(tt, uid)
 
-	res2, err := blls.UrbsAcUser.List(context.Background(), args2)
-	require.Nil(err)
-	require.Equal(1, len(res2.Result))
-	require.NotEmpty(res2.NextPageToken)
-	require.NotEqual(res.Result[0].UID, res2.Result[0].UID)
+		res3, err := blls.UrbsAcUser.Search(context.Background(), uid)
+		require.Nil(err)
+		require.Equal(uid, res3.Result[0].Name)
+	})
 
-	require.True(res2.TotalSize > 0)
+	t.Run("delete", func(t *testing.T) {
+		uid := tpl.RandUID()
+		testAddUrbsAcUser(tt, uid)
 
-	res3, err := blls.UrbsAcUser.Search(context.Background(), res.Result[0].Name)
-	require.Nil(err)
-	require.Equal(res.Result[0].Name, res3.Result[0].Name)
+		res, err := blls.UrbsAcUser.Search(context.Background(), uid)
+		require.Nil(err)
+		require.Equal(uid, res.Result[0].Name)
+
+		err = blls.UrbsAcUser.Delete(context.Background(), uid)
+		require.Nil(err)
+
+		res, err = blls.UrbsAcUser.Search(context.Background(), uid)
+		require.Nil(err)
+		require.Equal(0, len(res.Result))
+	})
 }
 
 func testAddUrbsAcUser(tt *TestTools, uid string) {

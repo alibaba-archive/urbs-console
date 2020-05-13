@@ -20,7 +20,6 @@ func (a *UrbsAcAcl) Add(ctx context.Context, obj *schema.UrbsAcAcl) error {
 	sql := "insert ignore into `urbs_ac_acl` (`subject`, `object`,`permission`) values ( ?, ?, ?)"
 
 	args := []interface{}{obj.Subject, obj.Object, obj.Permission}
-
 	return a.DB.Exec(sql, args...).Error
 }
 
@@ -60,10 +59,7 @@ func (a *UrbsAcAcl) FindBySubjects(ctx context.Context, subjects []string) ([]*s
 // DeleteByObject ...
 func (a *UrbsAcAcl) DeleteByObject(ctx context.Context, object string) error {
 	sql := "delete from `urbs_ac_acl` where object = ?"
-
-	_, err := a.DB.DB().Exec(sql, object)
-
-	return err
+	return a.DB.Exec(sql, object).Error
 }
 
 // Delete ...
@@ -71,10 +67,7 @@ func (a *UrbsAcAcl) Delete(ctx context.Context, subject, object, permission stri
 	sql := "delete from `urbs_ac_acl` where subject = ? and object = ? and permission = ?"
 
 	args := []interface{}{subject, object, permission}
-
-	_, err := a.DB.DB().Exec(sql, args...)
-
-	return err
+	return a.DB.Exec(sql, args...).Error
 }
 
 // UpdateSubjects ...

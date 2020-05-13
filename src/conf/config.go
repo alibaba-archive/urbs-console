@@ -25,6 +25,7 @@ type ConfigTpl struct {
 	MySQL         SQL         `json:"mysql" yaml:"mysql"`
 	SuperAdmins   []string    `json:"superAdmins" yaml:"superAdmins"`
 	HIDKey        string      `json:"hid_key" yaml:"hid_key"`
+	AuthKeys      []string    `json:"auth_keys" yaml:"auth_keys"`
 }
 
 // TlsConfig the config struct for creating tls.Config.

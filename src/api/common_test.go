@@ -79,6 +79,7 @@ func TestAPIsAuth(t *testing.T) {
 		{Method: http.MethodDelete, URL: "/api/v1/groups/uid/members"},
 		// ***** UrbsAc ******
 		{Method: http.MethodPost, URL: "/api/v1/ac/users"},
+		{Method: http.MethodDelete, URL: "/api/v1/ac/users/users"},
 		{Method: http.MethodGet, URL: "/api/v1/ac/users"},
 		{Method: http.MethodGet, URL: "/api/v1/ac/users:search"},
 		{Method: http.MethodPost, URL: "/api/v1/ac/users/:uid/permissions"},

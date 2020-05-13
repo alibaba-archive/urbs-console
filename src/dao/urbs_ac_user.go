@@ -56,12 +56,17 @@ func (a *UrbsAcUser) FindByUIDS(ctx context.Context, uids []string) ([]*schema.U
 	return urbsAcUsers, nil
 }
 
-// RemoveByUID ...
-func (a *UrbsAcUser) RemoveByUID(ctx context.Context, uid string) error {
-	sql := "delete from `urbs_ac_user` where uid = ?"
-
-	_, err := a.DB.DB().Exec(sql, uid)
-
+// DeleteByUid ...
+func (a *UrbsAcUser) DeleteByUid(ctx context.Context, uid string) error {
+	err := a.DB.Transaction(func(tx *gorm.DB) error {
+		sql := "delete from `urbs_ac_user` where uid = ?"
+		err := tx.Exec(sql, uid).Error
+		if err != nil {
+			return err
+		}
+		sql = "delete from `urbs_ac_acl` where subject = ?"
+		return tx.Exec(sql, uid).Error
+	})
 	return err
 }
 

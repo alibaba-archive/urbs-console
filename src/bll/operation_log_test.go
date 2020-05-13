@@ -1,7 +1,6 @@
 package bll
 
 import (
-	"context"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -12,6 +11,7 @@ import (
 
 func TestOperationLog(t *testing.T) {
 	require := require.New(t)
+	tt := SetUpTestTools(require)
 
 	uid := tpl.RandUID()
 	ctx := getUidContext(uid)
@@ -23,18 +23,7 @@ func TestOperationLog(t *testing.T) {
 	body.Desc = tpl.RandName()
 	body.Value = "true"
 
-	// 添加用户
-	userBody := &tpl.UrbsAcUsersBody{
-		Users: []*tpl.UrbsAcUserBody{
-			{
-				Uid:  uid,
-				Name: tpl.RandUID(),
-			},
-		},
-	}
-
-	err := blls.UrbsAcUser.Add(context.Background(), userBody)
-	require.Nil(err)
+	testAddUrbsAcUser(tt, uid)
 
 	// 添加操作日志
 	logContent := &dto.OperationLogContent{
@@ -44,7 +33,7 @@ func TestOperationLog(t *testing.T) {
 		Value:   body.Value,
 		Percent: 2,
 	}
-	err = blls.OperationLog.Add(ctx, object, constant.OperationCreate, logContent)
+	err := blls.OperationLog.Add(ctx, object, constant.OperationCreate, logContent)
 	require.Nil(err)
 
 	// 获取操作日志
