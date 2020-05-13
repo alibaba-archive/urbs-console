@@ -3,7 +3,6 @@ package bll
 import (
 	"context"
 
-	"github.com/teambition/gear"
 	"github.com/teambition/urbs-console/src/apperrs"
 	"github.com/teambition/urbs-console/src/conf"
 	"github.com/teambition/urbs-console/src/constant"
@@ -25,8 +24,14 @@ func (a *UrbsAcAcl) AddByReq(ctx context.Context, args *tpl.UrbsAcAclURL, req *t
 }
 
 // AddDefaultPermission ...
-func (a *UrbsAcAcl) AddDefaultPermission(ctx context.Context, subject string, object string) error {
-	return a.Add(ctx, subject, object, constant.PermissionAll)
+func (a *UrbsAcAcl) AddDefaultPermission(ctx context.Context, subjects []string, object string) error {
+	for _, subject := range subjects {
+		err := a.Add(ctx, subject, object, constant.PermissionAll)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // Add ...
@@ -44,22 +49,8 @@ func (a *UrbsAcAcl) Update(ctx context.Context, subjects *[]string, object strin
 	if subjects == nil || len(*subjects) == 0 {
 		return nil
 	}
-	for _, item := range *subjects {
-		if item == "" {
-			return gear.ErrBadRequest.WithMsg("invalid subjects")
-		}
-	}
-	for _, subject := range *subjects {
-		err := a.AddDefaultPermission(ctx, subject, object)
-		if err != nil {
-			return err
-		}
-	}
-	err := a.daos.UrbsAcAcl.DeleteNotIn(ctx, *subjects, object)
-	if err != nil {
-		return err
-	}
-	return nil
+	err := a.daos.UrbsAcAcl.UpdateSubjects(ctx, *subjects, object, constant.PermissionAll)
+	return err
 }
 
 // CheckViewer ...
@@ -80,7 +71,7 @@ func (a *UrbsAcAcl) CheckAdmin(ctx context.Context, object string) error {
 // CheckSuperAdmin ...
 func (a *UrbsAcAcl) CheckSuperAdmin(ctx context.Context) error {
 	uid := util.GetUid(ctx)
-	res := util.StringInSlice(uid, conf.Config.SuperAdmins)
+	res := util.StringSliceHas(conf.Config.SuperAdmins, uid)
 	if !res {
 		return apperrs.ErrForbidden.WithMsg(uid)
 	}

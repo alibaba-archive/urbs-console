@@ -77,11 +77,25 @@ func (a *UrbsAcAcl) Delete(ctx context.Context, subject, object, permission stri
 	return err
 }
 
-// DeleteNotIn ...
-func (a *UrbsAcAcl) DeleteNotIn(ctx context.Context, subjects []string, object string) error {
-	sql := "delete from `urbs_ac_acl` where object = ? and subject not in (?)"
-
-	return a.DB.Exec(sql, object, subjects).Error
+// UpdateSubjects ...
+func (a *UrbsAcAcl) UpdateSubjects(ctx context.Context, subjects []string, object string, permission string) error {
+	err := a.DB.Transaction(func(tx *gorm.DB) error {
+		sql := "delete from `urbs_ac_acl` where object = ? and permission = ?"
+		err := tx.Exec(sql, object, permission).Error
+		if err != nil {
+			return err
+		}
+		for _, subject := range subjects {
+			sql := "insert ignore into `urbs_ac_acl` (`subject`,`object`,`permission`) values ( ?, ?, ?)"
+			args := []interface{}{subject, object, permission}
+			err = tx.Exec(sql, args...).Error
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+	return err
 }
 
 // FindByObjects ...

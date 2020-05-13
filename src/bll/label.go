@@ -27,11 +27,9 @@ func (a *Label) ListUsers(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.
 // Create ...
 func (a *Label) Create(ctx context.Context, product string, args *tpl.LabelBody) (*tpl.LabelInfoRes, error) {
 	aclObject := product + args.Name
-	for _, uid := range args.Uids {
-		err := blls.UrbsAcAcl.AddDefaultPermission(ctx, uid, aclObject)
-		if err != nil {
-			return nil, err
-		}
+	err := blls.UrbsAcAcl.AddDefaultPermission(ctx, args.Uids, aclObject)
+	if err != nil {
+		return nil, err
 	}
 	res, err := a.services.UrbsSetting.LabelCreate(ctx, product, args)
 	if err != nil {

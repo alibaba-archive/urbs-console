@@ -194,7 +194,7 @@ func (a *UrbsSetting) SettingDeleteRule(ctx context.Context, args *tpl.ProductMo
 
 // SettingListRule ...
 func (a *UrbsSetting) SettingListRule(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.SettingRulesInfoRes, error) {
-	url := fmt.Sprintf("%s/products/%s/modules/%s/settings/%s/rules", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting)
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/rules", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting)
 
 	result := new(tpl.SettingRulesInfoRes)
 

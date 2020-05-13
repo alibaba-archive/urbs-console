@@ -56,6 +56,9 @@ func (t *UidsBody) Validate() error {
 	if len(t.Uids) < 1 || len(t.Uids) > 9 {
 		return gear.ErrBadRequest.WithMsg("uids length should great than 0 and less than 10")
 	}
+	if !SortStringsAndCheck(t.Uids) {
+		return gear.ErrBadRequest.WithMsgf("invalid uids: %v", t.Uids)
+	}
 	return nil
 }
 

@@ -58,8 +58,8 @@ func TokenExtractor(ctx *gear.Context) (token string) {
 	return
 }
 
-// StringInSlice ...
-func StringInSlice(a string, list []string) bool {
+// StringSliceHas ...
+func StringSliceHas(list []string, a string) bool {
 	for _, b := range list {
 		if b == a {
 			return true

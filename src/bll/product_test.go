@@ -45,6 +45,6 @@ func TestProduct(t *testing.T) {
 	res, err = blls.Product.Update(context.Background(), req.Name, req1)
 	require.Nil(err)
 	require.Equal(req.Name, res.Result.Name)
-	require.True(len(res.Result.Users) == 1, req.Uids[0])
+	require.True(len(res.Result.Users) == 1, len(res.Result.Users))
 	require.Equal(uid2, res.Result.Users[0].Uid)
 }

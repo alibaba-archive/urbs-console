@@ -34,11 +34,9 @@ func (a *Module) List(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl
 
 // Create 指定产品创建功能模块
 func (a *Module) Create(ctx context.Context, product string, body *tpl.NameDescBody) (*tpl.ModuleInfoRes, error) {
-	for _, uid := range body.Uids {
-		err := blls.UrbsAcAcl.AddDefaultPermission(ctx, uid, product+body.Name)
-		if err != nil {
-			return nil, err
-		}
+	err := blls.UrbsAcAcl.AddDefaultPermission(ctx, body.Uids, product+body.Name)
+	if err != nil {
+		return nil, err
 	}
 	res, err := a.services.UrbsSetting.ModuleCreate(ctx, product, body)
 	if err != nil {
