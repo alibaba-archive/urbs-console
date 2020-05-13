@@ -1,7 +1,9 @@
 import { IConfig } from 'umi-types'; // ref: https://umijs.org/config/
-
+const defEnv = process.env.NODE_DEF_ENV;
+console.log('defEnv:', defEnv);
 const config: IConfig = {
   treeShaking: true,
+  hash: true,
   routes: [
     {
       path: '/',
