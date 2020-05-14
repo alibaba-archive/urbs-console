@@ -40,7 +40,8 @@
     "react-test-renderer": "^16.7.0",
     "umi": "^2.9.0",
     "umi-plugin-react": "^1.8.0",
-    "umi-types": "^0.3.0"
+    "umi-types": "^0.3.0",
+    "yargs-parser": "^18.1.3"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
