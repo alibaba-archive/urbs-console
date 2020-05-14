@@ -47,6 +47,9 @@ func GetStaticFilePath() string {
 	if path == "" {
 		path = "./static"
 	}
+	if !PathExists(path) {
+		return ""
+	}
 	return path
 }
 

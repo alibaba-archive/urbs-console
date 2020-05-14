@@ -77,3 +77,15 @@ func StringSliceHas(list []string, a string) bool {
 	}
 	return false
 }
+
+// PathExists returns whether the given file or directory exists
+func PathExists(path string) bool {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true
+	}
+	if os.IsNotExist(err) {
+		return false
+	}
+	return true
+}

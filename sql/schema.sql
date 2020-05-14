@@ -29,5 +29,5 @@ CREATE TABLE IF NOT EXISTS `urbs_console`.`urbs_ac_acl` (
   `object` varchar(256) NOT NULL,
   `permission` varchar(63) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY KEY `idx_subject` (`subject`)
+  KEY `idx_subject` (`subject`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;

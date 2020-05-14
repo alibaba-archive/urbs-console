@@ -28,6 +28,13 @@ misspell-check:
 	fi
 	@misspell -error $(GO_FILES)
 
+.PHONY: lint
+lint:
+	@hash golint > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
+		go get -u golang.org/x/lint/golint; \
+	fi
+	@golint -set_exit_status ${PKG_LIST}
+
 .PHONY: coverhtml
 coverhtml:
 	@mkdir -p coverage

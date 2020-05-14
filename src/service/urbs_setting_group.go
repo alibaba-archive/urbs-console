@@ -66,7 +66,7 @@ func (a *UrbsSetting) GroupCheckExists(ctx context.Context, uid string) (*tpl.Bo
 }
 
 // GroupBatchAdd ...
-func (a *UrbsSetting) GroupBatchAdd(ctx context.Context, groups []*tpl.GroupBody) (*tpl.BoolRes, error) {
+func (a *UrbsSetting) GroupBatchAdd(ctx context.Context, groups []tpl.GroupBody) (*tpl.BoolRes, error) {
 	url := fmt.Sprintf("%s/v1/groups:batch", conf.Config.UrbsSetting.Addr)
 
 	body := new(tpl.GroupsBody)

@@ -31,11 +31,10 @@ func (a *Canary) Get(ctx *gear.Context) error {
 	if schema == "" {
 		schema = "http"
 	}
-	redirectURL := schema + "://"
 	if option.Domain != "" {
+		redirectURL := schema + "://"
 		redirectURL += strings.TrimPrefix(option.Domain, ".")
-	} else {
-		redirectURL += ctx.Req.Host
+		return ctx.Redirect(redirectURL)
 	}
-	return ctx.Redirect(redirectURL)
+	return ctx.OkJSON(struct{}{})
 }

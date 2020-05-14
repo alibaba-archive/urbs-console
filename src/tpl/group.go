@@ -19,7 +19,7 @@ type Group struct {
 
 // GroupsBody ...
 type GroupsBody struct {
-	Groups []*GroupBody `json:"groups"`
+	Groups []GroupBody `json:"groups"`
 }
 
 // GroupBody ...
