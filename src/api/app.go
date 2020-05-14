@@ -39,7 +39,7 @@ func NewApp() *gear.App {
 
 	var staticServer gear.Middleware = nil
 	if path := util.GetStaticFilePath(); path != "" {
-		staticServer = static.New(static.Options{Root: util.GetStaticFilePath()})
+		staticServer = static.New(static.Options{Root: path})
 	}
 	app.Use(middleware.StaticFile(staticServer))
 
