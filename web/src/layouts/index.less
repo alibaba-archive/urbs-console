@@ -1,0 +1,52 @@
+
+.normal {
+  font-family: Georgia, sans-serif;
+  text-align: center;
+}
+
+.parent {
+  height: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.mainframe {
+  flex: 1 0;
+  height: 100%;
+  padding: 0 12px;
+  overflow-y: auto;
+}
+
+.sidebar {
+  flex: 0 0 16rem;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between; 
+}
+
+.sidemenu {
+  min-height: 4rem;
+  flex: auto;
+  height: calc(100% - 190px);
+  overflow-y: scroll;
+  & > ul {
+    height: 100%;
+  }
+}
+
+.quicklink {
+  min-height: 4rem;
+  background: red;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 16px 11px 24px;
+  border-right: 1px solid #e8e8e8;
+  span {
+    font-size: 16px;
+    font-weight: 400;
+  }
+}

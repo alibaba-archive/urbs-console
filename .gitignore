@@ -18,3 +18,5 @@
 config/dev.yml
 coverage
 static
+web/dist
+web/node_modules
