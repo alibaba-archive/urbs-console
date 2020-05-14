@@ -26,9 +26,9 @@ const ModuleModifyModal: React.FC<Props> = (props) => {
   };
   return (
     <Modal
-      visible={ visible }
-      title={ modalTitle }
-      onCancel={ onCancel }
+      visible={visible}
+      title={modalTitle}
+      onCancel={onCancel}
       footer={
         <div
           style={{
@@ -38,18 +38,18 @@ const ModuleModifyModal: React.FC<Props> = (props) => {
         >
           {
             isEdit && (<div>
-              <Button onClick={ onOffline } className={ styleNames['offline-btn--color'] }>下线</Button>
+              <Button onClick={onOffline} className={styleNames['offline-btn--color']}>下线</Button>
             </div>)
           }
           <div>
-            <Button onClick={ onCancel }>取消</Button>
-            <Button type="primary" onClick={ handleOnOk }>确定</Button>
+            <Button onClick={onCancel}>取消</Button>
+            <Button type="primary" onClick={handleOnOk}>确定</Button>
           </div>
         </div>
       }
       destroyOnClose
     >
-      <Form { ...DEFAULT_FORM_ITEM_LAYOUT }>
+      <Form {...DEFAULT_FORM_ITEM_LAYOUT}>
         <Form.Item
           label="名称"
           style={{
@@ -64,7 +64,7 @@ const ModuleModifyModal: React.FC<Props> = (props) => {
                 message: '请输入名称',
               }],
             })(
-              <Input disabled={ isEdit } placeholder="请输入名称"></Input>
+              <Input disabled={isEdit} placeholder="请输入名称"></Input>
             )
           }
         </Form.Item>
@@ -76,7 +76,7 @@ const ModuleModifyModal: React.FC<Props> = (props) => {
         >
           {
             getFieldDecorator('uids')(
-              <AcUserSelect defaultSelectedUser={ moduleInfo ? moduleInfo.users : [] } />
+              <AcUserSelect defaultSelectedUser={moduleInfo ? moduleInfo.users : []} />
             )
           }
         </Form.Item>

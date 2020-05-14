@@ -70,10 +70,10 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
   };
   const renderModalTitle = () => {
     return (
-      <div className={ styleNames['modal-title'] }>
-        <div>{ title }</div>
+      <div className={styleNames['modal-title']}>
+        <div>{title}</div>
         <div>
-          <Icon type="setting" onClick={ onModuleEdit }></Icon>
+          <Icon type="setting" onClick={onModuleEdit}></Icon>
         </div>
       </div>
     )
@@ -83,7 +83,7 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
     title: '配置项',
     content: (
       <Setting
-        dataSource={ moduleSettingsList }
+        dataSource={moduleSettingsList}
         paginationProps={
           {
             pageSize,
@@ -113,11 +113,11 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
           type="link"
           icon="plus"
           block
-          onClick={ handleOpenModuleModifyModal }
+          onClick={handleOpenModuleModifyModal}
         >
           添加配置项
         </Button>
-        <Input.Search value={ tabsSearchWord } placeholder="请输入搜索关键字" onChange={ handleTabsSearchWordChange } onSearch={ handleTabsSearch } />
+        <Input.Search value={tabsSearchWord} placeholder="请输入搜索关键字" onChange={handleTabsSearchWordChange} onSearch={handleTabsSearch} />
       </div>
     ),
   }];
@@ -150,18 +150,18 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
     );
   }, [moduleInfo, product]);
   return (
-    <Modal width={ DEFAULT_MODAL_WIDTH } title={ renderModalTitle() } visible={ visible } onCancel={ onCancel } footer={ null }>
-      <ContentDetail content={ moduleContentDetail }></ContentDetail>
+    <Modal width={DEFAULT_MODAL_WIDTH} title={renderModalTitle()} visible={visible} onCancel={onCancel} footer={null}>
+      <ContentDetail content={moduleContentDetail}></ContentDetail>
       <ContentTabs
-        tabs={ tagTabsConfig }
+        tabs={tagTabsConfig}
       ></ContentTabs>
       {/* 弹窗 */}
       {
         settingModifyModalVisible && <SettingModifyModal
-          isEdit={ false }
-          visible={ settingModifyModalVisible }
-          onCancel={ () => setSettingModifyModalVisible(false) }
-          onOk={ handleSettingModifyModalOk }
+          isEdit={false}
+          visible={settingModifyModalVisible}
+          onCancel={() => setSettingModifyModalVisible(false)}
+          onOk={handleSettingModifyModalOk}
         />
       }
     </Modal>

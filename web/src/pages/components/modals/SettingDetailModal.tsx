@@ -3,7 +3,7 @@ import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { Button, Input, Modal, Icon } from 'antd';
 import { connect } from 'dva';
 import { PublishRecord, ContentDetail, ContentTabs, UserGroup, Users, GrayscaleTagModifyModal, PublishTagModal } from '../';
-import { SettingDetailComponentProps, TagTabsKey, PaginationParameters, FieldsValue, UserPercentRule, DEFAULT_PAGE_SIZE } from '../../declare';
+import { DEFAULT_MODAL_WIDTH, SettingDetailComponentProps, TagTabsKey, PaginationParameters, FieldsValue, UserPercentRule, DEFAULT_PAGE_SIZE } from '../../declare';
 import styles from '../style/TagDetailModal.less';
 import { formatTableTime } from '../../utils/format';
 
@@ -85,7 +85,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
   const handleTabsActiveKeyChange = (activeKey: string) => {
     setTabsActiveKey(activeKey);
     setTabsSearchWord('');
-    switch(activeKey) {
+    switch (activeKey) {
       case TagTabsKey.Publish:
         fetchSettingLogs();
         break;
@@ -104,7 +104,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
     }
   };
   const handleTabsSearch = (searchWord: string) => {
-    switch(tabsActiveKey) {
+    switch (tabsActiveKey) {
       case TagTabsKey.Group:
         fetchSettingGroups({
           pageSize: settingGroupPageSize,
@@ -180,10 +180,10 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
   };
   const renderModalTitle = () => {
     return (
-      <div className={ styles['tag-modal-title'] }>
-        <div>{ title }</div>
+      <div className={styles['tag-modal-title']}>
+        <div>{title}</div>
         <div>
-          <Icon type="setting" onClick={ onSettingEdit }></Icon>
+          <Icon type="setting" onClick={onSettingEdit}></Icon>
         </div>
       </div>
     )
@@ -193,7 +193,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
     title: '发布记录',
     content: (
       <PublishRecord
-        publishRecordList={ settingLogsList }
+        publishRecordList={settingLogsList}
       />
     ),
     action: (
@@ -201,7 +201,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
         type="link"
         icon="plus"
         block
-        onClick={ handleOpenPublishTagModal }
+        onClick={handleOpenPublishTagModal}
       >
         添加灰度发布
       </Button>
@@ -211,8 +211,8 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
     title: '群组',
     content: (
       <UserGroup
-        dataSource={ settingGroupsList }
-        hideColumns={ ['syncAt'] }
+        dataSource={settingGroupsList}
+        hideColumns={['syncAt']}
         paginationProps={
           {
             total: settingGroupsPageTotal,
@@ -238,10 +238,10 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
     ),
     action: (
       <Input.Search
-        value={ tabsSearchWord }
+        value={tabsSearchWord}
         placeholder="请输入搜索关键字"
-        onChange={ handleTabsSearchWordChange }
-        onSearch={ handleTabsSearch }
+        onChange={handleTabsSearchWordChange}
+        onSearch={handleTabsSearch}
       />
     ),
   }, {
@@ -249,8 +249,8 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
     title: '用户',
     content: (
       <Users
-        dataSource={ settingUsersList }
-        hideColumns={ ['syncAt'] }
+        dataSource={settingUsersList}
+        hideColumns={['syncAt']}
         paginationProps={
           {
             total: settingUsersPageTotal,
@@ -276,10 +276,10 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
     ),
     action: (
       <Input.Search
-        value={ tabsSearchWord }
+        value={tabsSearchWord}
         placeholder="请输入搜索关键字"
-        onChange={ handleTabsSearchWordChange }
-        onSearch={ handleTabsSearch }
+        onChange={handleTabsSearchWordChange}
+        onSearch={handleTabsSearch}
       />
     ),
   }];
@@ -336,34 +336,34 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
     ]);
   }, [settingInfo, product]);
   return (
-    <Modal title={ renderModalTitle() } visible={ visible } onCancel={ onCancel } footer={ null }>
-      <ContentDetail content={ labelContentDetail }></ContentDetail>
+    <Modal width={DEFAULT_MODAL_WIDTH} title={renderModalTitle()} visible={visible} onCancel={onCancel} footer={null}>
+      <ContentDetail content={labelContentDetail}></ContentDetail>
       <ContentTabs
-        activeKey={ tabsActiveKey }
-        handleActiveKeyChange={ handleTabsActiveKeyChange }
-        tabs={ tagTabsConfig }
+        activeKey={tabsActiveKey}
+        handleActiveKeyChange={handleTabsActiveKeyChange}
+        tabs={tagTabsConfig}
       />
       {/* 弹窗 */}
       {
         publishTagModalVisible && <PublishTagModal
           title="发布配置项"
-          visible={ publishTagModalVisible }
-          onCancel={ handleOpenPublishTagModalCancel }
-          onOk={ handleOpenPublishTagModalOk }
-          label={ settingInfo?.name }
-          module={ settingInfo?.module }
-          product={ product }
-          grayscale={ settingInfo?.values }
-          onGotoGroups={ onGotoGroups }
-          onGotoUsers={ onGotoUsers }
-          defauleRule={ userPercentRule }
+          visible={publishTagModalVisible}
+          onCancel={handleOpenPublishTagModalCancel}
+          onOk={handleOpenPublishTagModalOk}
+          label={settingInfo?.name}
+          module={settingInfo?.module}
+          product={product}
+          grayscale={settingInfo?.values}
+          onGotoGroups={onGotoGroups}
+          onGotoUsers={onGotoUsers}
+          defauleRule={userPercentRule}
         ></PublishTagModal>
       }
       <GrayscaleTagModifyModal
-        visible={ grayscaleTagModalVisible }
-        isEdit={ true }
-        onCancel={ () => setGrayscaleTagModalVisible(false)}
-        onOk={ () => setGrayscaleTagModalVisible(false)}
+        visible={grayscaleTagModalVisible}
+        isEdit={true}
+        onCancel={() => setGrayscaleTagModalVisible(false)}
+        onOk={() => setGrayscaleTagModalVisible(false)}
       ></GrayscaleTagModifyModal>
     </Modal>
   );

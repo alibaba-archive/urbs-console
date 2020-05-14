@@ -7,9 +7,9 @@ import { Pagination } from './';
 const UserGroup: React.FC<TableComponentProps<Group>> = (props) => {
   const { paginationProps, onAction, hideColumns } = props;
   const columns = [{
-    title: 'UID',
-    dataIndex: 'uid',
-    key: 'uid',
+    title: '群组',
+    dataIndex: 'group',
+    key: 'group',
   }, {
     title: '类型',
     dataIndex: 'kind',
@@ -42,7 +42,7 @@ const UserGroup: React.FC<TableComponentProps<Group>> = (props) => {
     width: 'auto',
     render: (_, record: Group) => {
       const { onDelete } = onAction ? onAction(record) : ({} as ActionEventListeners);
-      return <a onClick={ onDelete }>移除</a>
+      return <a onClick={onDelete}>移除</a>
     }
   }];
   const generateTableColumns = () => {
@@ -53,9 +53,9 @@ const UserGroup: React.FC<TableComponentProps<Group>> = (props) => {
   };
   return (
     <div>
-      <Table rowKey="uid" { ...props } columns={ generateTableColumns() } pagination={ false }></Table>
+      <Table rowKey="uid" {...props} columns={generateTableColumns()} pagination={false}></Table>
       {
-        paginationProps && (<Pagination { ...paginationProps }></Pagination>)
+        paginationProps && (<Pagination {...paginationProps}></Pagination>)
       }
     </div>
   );

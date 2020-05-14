@@ -13,6 +13,26 @@
 ## Depends
 - urbs-setting >= 1.3.0
 
+
+## Get Started
+
+编译前端文件:
+
+```shell
+make budilweb
+```
+
+启动应用：
+
+```shell
+make run
+```
+
+浏览器访问：
+
+>  http://localhost:8080
+
+
 ## Documentation (WIP)
 
 [API 文档](https://github.com/teambition/urbs-console/blob/master/doc/api.md)

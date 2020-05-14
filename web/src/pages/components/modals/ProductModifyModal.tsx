@@ -53,10 +53,10 @@ const ProductModifyModal: React.FC<Props> = (props) => {
   };
   return (
     <Modal
-      visible={ visible }
-      title={ modalTitle }
-      onCancel={ onCancel }
-      width={ DEFAULT_MODAL_WIDTH }
+      visible={visible}
+      title={modalTitle}
+      onCancel={onCancel}
+      width={DEFAULT_MODAL_WIDTH}
       destroyOnClose
       footer={
         <div
@@ -67,38 +67,38 @@ const ProductModifyModal: React.FC<Props> = (props) => {
         >
           {
             isEdit && (<div>
-              <Button onClick={ handleOffline } className={styleNames['offline-btn--color']}>下线</Button>
-              {(productInfo && !~productInfo.status) && <Button onClick={ handleDelete } type="danger">删除</Button>}
+              <Button onClick={handleOffline} className={styleNames['offline-btn--color']}>下线</Button>
+              {(productInfo && !~productInfo.status) && <Button onClick={handleDelete} type="danger">删除</Button>}
             </div>)
           }
           <div>
-            <Button onClick={ onCancel }>取消</Button>
-            <Button type="primary" onClick={ handleOk }>确定</Button>
+            <Button onClick={onCancel}>取消</Button>
+            <Button type="primary" onClick={handleOk}>确定</Button>
           </div>
         </div>
       }
     >
-      <Form { ...DEFAULT_FORM_ITEM_LAYOUT }>
+      <Form {...DEFAULT_FORM_ITEM_LAYOUT}>
         <Form.Item
           label="名称"
-          className={ styleNames['modify-form-item'] }
+          className={styleNames['modify-form-item']}
         >
           <>
-            <Input onChange={ handleNameChange } value={ productName } className={ styleNames['form-name'] } disabled={ isEdit } placeholder="请输入名称"></Input>
-            <span className={ styleNames['form-name__tips'] }>注：创建时可修改，编辑时不可修改</span>
+            <Input onChange={handleNameChange} value={productName} className={styleNames['form-name']} disabled={isEdit} placeholder="请输入名称"></Input>
+            <span className={styleNames['form-name__tips']}>注：创建时可修改，编辑时不可修改</span>
           </>
         </Form.Item>
         <Form.Item
           label="负责人"
-          className={ styleNames['modify-form-item'] }
+          className={styleNames['modify-form-item']}
         >
-          <AcUserSelect defaultSelectedUser={ users } onChange={ handleUsersChange } />
+          <AcUserSelect defaultSelectedUser={users} onChange={handleUsersChange} />
         </Form.Item>
         <Form.Item
           label="描述"
-          className={ styleNames['modify-form-item'] }
+          className={styleNames['modify-form-item']}
         >
-          <Input.TextArea value={ productDesc } onChange={ handleDescChange } className={ styleNames['form-desc'] } placeholder="请输入描述"></Input.TextArea>
+          <Input.TextArea value={productDesc} onChange={handleDescChange} className={styleNames['form-desc']} placeholder="请输入描述"></Input.TextArea>
         </Form.Item>
       </Form>
     </Modal>

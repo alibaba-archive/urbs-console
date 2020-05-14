@@ -36,9 +36,9 @@ const GrayscaleTagModifyModal: React.FC<Props> = (props) => {
   };
   return (
     <Modal
-      title={`${ isEdit ? '编辑' : '添加'}灰度标签`}
-      visible={ visible }
-      onCancel={ onCancel }
+      title={`${isEdit ? '编辑' : '添加'}灰度标签`}
+      visible={visible}
+      onCancel={onCancel}
       destroyOnClose
       footer={
         <div
@@ -49,18 +49,18 @@ const GrayscaleTagModifyModal: React.FC<Props> = (props) => {
         >
           {
             isEdit && (<div>
-              <Button onClick={ onOffline } className={styleNames['offline-btn--color']}>下线</Button>
-              <Button onClick={ onDelete } type="danger">删除</Button>
+              <Button onClick={onOffline} className={styleNames['offline-btn--color']}>下线</Button>
+              <Button onClick={onDelete} type="danger">删除</Button>
             </div>)
           }
           <div>
-            <Button onClick={ onCancel }>取消</Button>
-            <Button type="primary" onClick={ handleOnOk }>确定</Button>
+            <Button onClick={onCancel}>取消</Button>
+            <Button type="primary" onClick={handleOnOk}>确定</Button>
           </div>
         </div>
       }
     >
-      <Form { ...DEFAULT_FORM_ITEM_LAYOUT }>
+      <Form {...DEFAULT_FORM_ITEM_LAYOUT}>
         <Form.Item
           label="名称"
           style={{
@@ -71,7 +71,7 @@ const GrayscaleTagModifyModal: React.FC<Props> = (props) => {
             getFieldDecorator('name', {
               initialValue: labelInfo && labelInfo.name
             })(
-              <Input disabled={ isEdit } placeholder="请输入名称"></Input>
+              <Input disabled={isEdit} placeholder="请输入名称"></Input>
             )
           }
         </Form.Item>
@@ -83,7 +83,7 @@ const GrayscaleTagModifyModal: React.FC<Props> = (props) => {
         >
           {
             getFieldDecorator('uids')(
-              <AcUserSelect defaultSelectedUser={ labelInfo && (labelInfo.users || []) } />
+              <AcUserSelect defaultSelectedUser={labelInfo && (labelInfo.users || [])} />
             )
           }
         </Form.Item>
@@ -111,7 +111,7 @@ const GrayscaleTagModifyModal: React.FC<Props> = (props) => {
             getFieldDecorator('channels', {
               initialValue: labelInfo && labelInfo.channels
             })(
-              <Checkbox.Group options={ VERSION_CHANNEL }></Checkbox.Group>
+              <Checkbox.Group options={VERSION_CHANNEL}></Checkbox.Group>
             )
           }
         </Form.Item>
@@ -125,7 +125,7 @@ const GrayscaleTagModifyModal: React.FC<Props> = (props) => {
             getFieldDecorator('clients', {
               initialValue: labelInfo && labelInfo.clients
             })(
-              <Checkbox.Group options={ CLIENT_TYPE }></Checkbox.Group>
+              <Checkbox.Group options={CLIENT_TYPE}></Checkbox.Group>
             )
           }
         </Form.Item>
@@ -135,7 +135,7 @@ const GrayscaleTagModifyModal: React.FC<Props> = (props) => {
 };
 
 export default Form.create<Props>({
-  onFieldsChange (props, field, allFields) {
+  onFieldsChange(props, field, allFields) {
     console.log(props, field, allFields);
   },
 })(GrayscaleTagModifyModal);

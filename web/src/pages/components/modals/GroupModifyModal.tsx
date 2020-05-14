@@ -18,7 +18,7 @@ const ModuleModifyModal: React.FC<Props> = (props) => {
   const modalTitle = `${isEdit ? '编辑' : '添加'}群组`;
   const handleOnOk = () => {
     const values = form.getFieldsValue();
-    const {uid, kind} = values;
+    const { uid, kind } = values;
     if (!uid) {
       message.info('请输入名称');
       return
@@ -33,9 +33,9 @@ const ModuleModifyModal: React.FC<Props> = (props) => {
   };
   return (
     <Modal
-      visible={ visible }
-      title={ modalTitle }
-      onCancel={ onCancel }
+      visible={visible}
+      title={modalTitle}
+      onCancel={onCancel}
       footer={
         <div
           style={{
@@ -45,24 +45,24 @@ const ModuleModifyModal: React.FC<Props> = (props) => {
         >
           {
             isEdit && (<div>
-              <Button type="danger" onClick={ onDel }>删除</Button>
+              <Button type="danger" onClick={onDel}>删除</Button>
             </div>)
           }
           <div>
-            <Button onClick={ onCancel }>取消</Button>
-            <Button type="primary" onClick={ handleOnOk }>确定</Button>
+            <Button onClick={onCancel}>取消</Button>
+            <Button type="primary" onClick={handleOnOk}>确定</Button>
           </div>
         </div>
       }
       destroyOnClose
     >
-      <Form { ...DEFAULT_FORM_ITEM_LAYOUT }>
+      <Form {...DEFAULT_FORM_ITEM_LAYOUT}>
         <Form.Item label="名称">
           {
             getFieldDecorator('uid', {
               initialValue: groupInfo ? groupInfo.uid : undefined,
             })(
-              <Input disabled={ isEdit } placeholder="请输入uid"></Input>
+              <Input disabled={isEdit} placeholder="请输入uid"></Input>
             )
           }
         </Form.Item>
@@ -71,7 +71,7 @@ const ModuleModifyModal: React.FC<Props> = (props) => {
             getFieldDecorator('kind', {
               initialValue: groupInfo ? groupInfo.kind : undefined
             })(
-              <Select placeholder="请选择类型" disabled={ isEdit }>
+              <Select placeholder="请选择类型" disabled={isEdit}>
                 <Select.Option value="organization">organization</Select.Option>
               </Select>
             )
@@ -92,10 +92,10 @@ const ModuleModifyModal: React.FC<Props> = (props) => {
 };
 
 export default Form.create<Props>({
-  onFieldsChange (props, field, allFields) {
+  onFieldsChange(props, field, allFields) {
     console.log(props, field, allFields);
   },
-  onValuesChange (props, changeValues, allValues) {
+  onValuesChange(props, changeValues, allValues) {
     console.log(props, changeValues, allValues);
   },
 })(ModuleModifyModal);
