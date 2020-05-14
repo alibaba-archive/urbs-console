@@ -800,7 +800,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupCheckExists(ctx, uid interf
 }
 
 // GroupBatchAdd mocks base method
-func (m *MockUrbsSettingInterface) GroupBatchAdd(ctx context.Context, groups []*tpl.GroupBody) (*tpl.BoolRes, error) {
+func (m *MockUrbsSettingInterface) GroupBatchAdd(ctx context.Context, groups []tpl.GroupBody) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupBatchAdd", ctx, groups)
 	ret0, _ := ret[0].(*tpl.BoolRes)

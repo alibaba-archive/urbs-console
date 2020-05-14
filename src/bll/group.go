@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/teambition/urbs-console/src/dao"
 	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/tpl"
@@ -12,6 +13,7 @@ import (
 // Group ...
 type Group struct {
 	services *service.Services
+	daos     *dao.Daos
 }
 
 // ListLables ...
@@ -35,13 +37,19 @@ func (a *Group) CheckExists(ctx context.Context, uid string) (*tpl.BoolRes, erro
 }
 
 // BatchAdd ...
-func (a *Group) BatchAdd(ctx context.Context, groups []*tpl.GroupBody) error {
+func (a *Group) BatchAdd(ctx context.Context, groups []tpl.GroupBody) error {
 	_, err := a.services.UrbsSetting.GroupBatchAdd(ctx, groups)
 	if err != nil {
 		return err
 	}
-	for _, g := range groups {
-		go a.BatchAddMember(ctx, g.UID)
+	for i := range groups {
+		go func(group *tpl.GroupBody) {
+			err := a.daos.UrbsLock.Lock(ctx, group.Kind+group.UID, 30*time.Minute)
+			if err == nil {
+				a.BatchAddMember(ctx, group.UID)
+				a.daos.UrbsLock.Unlock(ctx, group.Kind+group.UID)
+			}
+		}(&groups[i])
 	}
 	return nil
 }
@@ -90,8 +98,9 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 	_, err = a.services.UrbsSetting.GroupRemoveMembers(ctx, args)
 	if err != nil {
 		logger.Err(ctx, "groupRemoveMembers", "error", err.Error())
+	} else {
+		logger.Info(ctx, "batchAddMember", "count", count, "uid", uid)
 	}
-	logger.Info(ctx, "batchAddMember", "count", count, "uid", uid)
 	return nil
 }
 

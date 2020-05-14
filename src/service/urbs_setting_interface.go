@@ -122,7 +122,7 @@ type UrbsSettingInterface interface {
 	// 查询指定群组是否存在
 	GroupCheckExists(ctx context.Context, uid string) (*tpl.BoolRes, error)
 	// 批量添加群组
-	GroupBatchAdd(ctx context.Context, groups []*tpl.GroupBody) (*tpl.BoolRes, error)
+	GroupBatchAdd(ctx context.Context, groups []tpl.GroupBody) (*tpl.BoolRes, error)
 	// 更新指定群组
 	GroupUpdate(ctx context.Context, uid string, body *tpl.GroupUpdateBody) (*tpl.GroupRes, error)
 	// 删除指定群组
