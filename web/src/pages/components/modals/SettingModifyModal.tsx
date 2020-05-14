@@ -26,9 +26,9 @@ const SettingModifyModal: React.FC<Props> = (props) => {
   };
   return (
     <Modal
-      title={`${ isEdit ? '编辑' : '添加'}配置项`}
-      visible={ visible }
-      onCancel={ onCancel }
+      title={`${isEdit ? '编辑' : '添加'}配置项`}
+      visible={visible}
+      onCancel={onCancel}
       destroyOnClose
       footer={
         <div
@@ -39,17 +39,17 @@ const SettingModifyModal: React.FC<Props> = (props) => {
         >
           {
             isEdit && (<div>
-              <Button onClick={ onOffline } className={styleNames['offline-btn--color']}>下线</Button>
+              <Button onClick={onOffline} className={styleNames['offline-btn--color']}>下线</Button>
             </div>)
           }
           <div>
-            <Button onClick={ onCancel }>取消</Button>
-            <Button type="primary" onClick={ handleOnOk }>确定</Button>
+            <Button onClick={onCancel}>取消</Button>
+            <Button type="primary" onClick={handleOnOk}>确定</Button>
           </div>
         </div>
       }
     >
-      <Form { ...DEFAULT_FORM_ITEM_LAYOUT }>
+      <Form {...DEFAULT_FORM_ITEM_LAYOUT}>
         <Form.Item
           label="名称"
           style={{
@@ -60,7 +60,7 @@ const SettingModifyModal: React.FC<Props> = (props) => {
             getFieldDecorator('name', {
               initialValue: defaultValue && defaultValue.name
             })(
-              <Input placeholder="请输入名称" disabled={ isEdit }></Input>
+              <Input placeholder="请输入名称" disabled={isEdit}></Input>
             )
           }
         </Form.Item>
@@ -74,7 +74,7 @@ const SettingModifyModal: React.FC<Props> = (props) => {
             getFieldDecorator('module', {
               initialValue: defaultValue && defaultValue.module
             })(
-              <Input placeholder="请输入所属模块" disabled={ isEdit }></Input>
+              <Input placeholder="请输入所属模块" disabled={isEdit}></Input>
             )
           }
         </Form.Item>
@@ -86,7 +86,7 @@ const SettingModifyModal: React.FC<Props> = (props) => {
         >
           {
             getFieldDecorator('uids')(
-              <AcUserSelect defaultSelectedUser={ defaultValue && defaultValue.users } ></AcUserSelect>
+              <AcUserSelect defaultSelectedUser={defaultValue && defaultValue.users} ></AcUserSelect>
             )
           }
         </Form.Item>
@@ -114,7 +114,7 @@ const SettingModifyModal: React.FC<Props> = (props) => {
             getFieldDecorator('channels', {
               initialValue: defaultValue ? [defaultValue.channels] : []
             })(
-              <Checkbox.Group options={ VERSION_CHANNEL }></Checkbox.Group>
+              <Checkbox.Group options={VERSION_CHANNEL}></Checkbox.Group>
             )
           }
         </Form.Item>
@@ -128,7 +128,7 @@ const SettingModifyModal: React.FC<Props> = (props) => {
             getFieldDecorator('clients', {
               initialValue: defaultValue ? [defaultValue.clients] : []
             })(
-              <Checkbox.Group options={ CLIENT_TYPE }></Checkbox.Group>
+              <Checkbox.Group options={CLIENT_TYPE}></Checkbox.Group>
             )
           }
         </Form.Item>

@@ -84,7 +84,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
   const handleTabsActiveKeyChange = (activeKey: string) => {
     setTabsActiveKey(activeKey);
     setTabsSearchWord('');
-    switch(activeKey) {
+    switch (activeKey) {
       case TagTabsKey.Publish:
         fetchLabelLogs();
         break;
@@ -103,7 +103,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
     }
   };
   const handleTabsSearch = (searchWord: string) => {
-    switch(tabsActiveKey) {
+    switch (tabsActiveKey) {
       case TagTabsKey.Group:
         fetchLabelGroups({
           pageSize: labelGroupPageSize,
@@ -175,10 +175,10 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
   };
   const renderModalTitle = () => {
     return (
-      <div className={ styles['tag-modal-title'] }>
-        <div>{ title }</div>
+      <div className={styles['tag-modal-title']}>
+        <div>{title}</div>
         <div>
-          <Icon type="setting" onClick={ onSettingEdit }></Icon>
+          <Icon type="setting" onClick={onSettingEdit}></Icon>
         </div>
       </div>
     )
@@ -188,7 +188,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
     title: '发布记录',
     content: (
       <PublishRecord
-        publishRecordList={ labelLogsList }
+        publishRecordList={labelLogsList}
       />
     ),
     action: (
@@ -196,7 +196,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
         type="link"
         icon="plus"
         block
-        onClick={ handleOpenPublishTagModal }
+        onClick={handleOpenPublishTagModal}
       >
         添加灰度发布
       </Button>
@@ -206,8 +206,8 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
     title: '群组',
     content: (
       <UserGroup
-        dataSource={ labelGroupsList }
-        hideColumns={ ['syncAt'] }
+        dataSource={labelGroupsList}
+        hideColumns={['syncAt']}
         paginationProps={
           {
             total: labelGroupsPageTotal,
@@ -233,10 +233,10 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
     ),
     action: (
       <Input.Search
-        value={ tabsSearchWord }
+        value={tabsSearchWord}
         placeholder="请输入搜索关键字"
-        onChange={ handleTabsSearchWordChange }
-        onSearch={ handleTabsSearch }
+        onChange={handleTabsSearchWordChange}
+        onSearch={handleTabsSearch}
       />
     ),
   }, {
@@ -244,8 +244,8 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
     title: '用户',
     content: (
       <Users
-        dataSource={ labelUsersList }
-        hideColumns={ ['syncAt'] }
+        dataSource={labelUsersList}
+        hideColumns={['syncAt']}
         paginationProps={
           {
             total: labelUsersPageTotal,
@@ -271,10 +271,10 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
     ),
     action: (
       <Input.Search
-        value={ tabsSearchWord }
+        value={tabsSearchWord}
         placeholder="请输入搜索关键字"
-        onChange={ handleTabsSearchWordChange }
-        onSearch={ handleTabsSearch }
+        onChange={handleTabsSearchWordChange}
+        onSearch={handleTabsSearch}
       />
     ),
   }];
@@ -319,32 +319,32 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
     ]);
   }, [labelInfo, product]);
   return (
-    <Modal title={ renderModalTitle() } visible={ visible } onCancel={ onCancel } footer={ null }>
-      <ContentDetail content={ labelContentDetail }></ContentDetail>
+    <Modal title={renderModalTitle()} visible={visible} onCancel={onCancel} footer={null}>
+      <ContentDetail content={labelContentDetail}></ContentDetail>
       <ContentTabs
-        activeKey={ tabsActiveKey }
-        handleActiveKeyChange={ handleTabsActiveKeyChange }
-        tabs={ tagTabsConfig }
+        activeKey={tabsActiveKey}
+        handleActiveKeyChange={handleTabsActiveKeyChange}
+        tabs={tagTabsConfig}
       />
       {/* 弹窗 */}
       {
         publishTagModalVisible && <PublishTagModal
           title="发布灰度标签"
-          visible={ publishTagModalVisible }
-          onCancel={ handleOpenPublishTagModalCancel }
-          onOk={ handleOpenPublishTagModalOk }
-          label={ labelInfo?.name }
-          product={ product }
-          onGotoGroups={ onGotoGroups }
-          onGotoUsers={ onGotoUsers }
-          defauleRule={ userPercentRule }
+          visible={publishTagModalVisible}
+          onCancel={handleOpenPublishTagModalCancel}
+          onOk={handleOpenPublishTagModalOk}
+          label={labelInfo?.name}
+          product={product}
+          onGotoGroups={onGotoGroups}
+          onGotoUsers={onGotoUsers}
+          defauleRule={userPercentRule}
         ></PublishTagModal>
       }
       <GrayscaleTagModifyModal
-        visible={ grayscaleTagModalVisible }
-        isEdit={ true }
-        onCancel={ () => setGrayscaleTagModalVisible(false)}
-        onOk={ () => setGrayscaleTagModalVisible(false)}
+        visible={grayscaleTagModalVisible}
+        isEdit={true}
+        onCancel={() => setGrayscaleTagModalVisible(false)}
+        onOk={() => setGrayscaleTagModalVisible(false)}
       ></GrayscaleTagModifyModal>
     </Modal>
   );

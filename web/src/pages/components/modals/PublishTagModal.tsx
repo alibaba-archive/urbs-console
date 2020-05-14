@@ -58,20 +58,20 @@ const PublishTagModal: React.FC<Props> = (props) => {
   };
   return (
     <Modal
-      title={ title }
-      visible={ visible }
-      onCancel={ onCancel }
+      title={title}
+      visible={visible}
+      onCancel={onCancel}
       destroyOnClose
-      onOk={ handleOnOk }
+      onOk={handleOnOk}
     >
-      <Form { ...DEFAULT_FORM_ITEM_LAYOUT }>
+      <Form {...DEFAULT_FORM_ITEM_LAYOUT}>
         <Form.Item
           label="名称"
           style={{
             margin: '0',
           }}
         >
-          <span>{ label }</span>
+          <span>{label}</span>
         </Form.Item>
         <Form.Item
           label="所属产品"
@@ -79,7 +79,7 @@ const PublishTagModal: React.FC<Props> = (props) => {
             margin: '0',
           }}
         >
-          <span>{ product }</span>
+          <span>{product}</span>
         </Form.Item>
         {
           module ? (<Form.Item
@@ -88,7 +88,7 @@ const PublishTagModal: React.FC<Props> = (props) => {
               margin: '0',
             }}
           >
-            <span>{ product }</span>
+            <span>{product}</span>
           </Form.Item>) : null
         }
         {
@@ -105,7 +105,7 @@ const PublishTagModal: React.FC<Props> = (props) => {
                 <Select>
                   {
                     grayscale.map((item, index) => (
-                      <Select.Option key={ `${item}_${ index }` } value={ item }>{ item }</Select.Option>
+                      <Select.Option key={`${item}_${index}`} value={item}>{item}</Select.Option>
                     ))
                   }
                 </Select>
@@ -144,11 +144,11 @@ const PublishTagModal: React.FC<Props> = (props) => {
                     initialValue: ''
                   })(
                     <Row>
-                      <Col span={ 18 }>
+                      <Col span={18}>
                         <Input placeholder="输入多个使用英文 , 分隔"></Input>
                       </Col>
-                      <Col span={ 6 }>
-                        <Button onClick={ onGotoGroups } type="link" block>去创建群组</Button>
+                      <Col span={6}>
+                        <Button onClick={onGotoGroups} type="link" block>去创建群组</Button>
                       </Col>
                     </Row>
                   )
@@ -165,38 +165,38 @@ const PublishTagModal: React.FC<Props> = (props) => {
                     initialValue: ''
                   })(
                     <Row>
-                      <Col span={ 18 }>
+                      <Col span={18}>
                         <Input placeholder="输入多个使用英文 , 分隔"></Input>
                       </Col>
-                      <Col span={ 6 }>
-                        <Button onClick={ onGotoUsers } type="link" block>去添加用户</Button>
+                      <Col span={6}>
+                        <Button onClick={onGotoUsers} type="link" block>去添加用户</Button>
                       </Col>
                     </Row>
                   )
-              }
+                }
               </Form.Item>
             </>
           ) : (
-            <Form.Item
-              label="比例添加"
-              style={{
-                margin: '0',
-              }}
-            >
-              {
-                getFieldDecorator('percent')(
-                  <Row>
-                    <Col span={ 8 }>
-                      <InputNumber defaultValue={ defauleRule ? defauleRule.rule.value : 0 } style={{width: '100%'}} min={ 0 } max={ 100 } placeholder="请输入1～100"></InputNumber>
+              <Form.Item
+                label="比例添加"
+                style={{
+                  margin: '0',
+                }}
+              >
+                {
+                  getFieldDecorator('percent')(
+                    <Row>
+                      <Col span={8}>
+                        <InputNumber defaultValue={defauleRule ? defauleRule.rule.value : 0} style={{ width: '100%' }} min={0} max={100} placeholder="请输入1～100"></InputNumber>
+                      </Col>
+                      <Col span={9} push={1}>
+                        %，本次新增比例用户
                     </Col>
-                    <Col span={ 9 } push={ 1 }>
-                      %，本次新增比例用户
-                    </Col>
-                  </Row>
-                )
-              }
-            </Form.Item>
-          )
+                    </Row>
+                  )
+                }
+              </Form.Item>
+            )
         }
         <Form.Item
           label="发布说明"
