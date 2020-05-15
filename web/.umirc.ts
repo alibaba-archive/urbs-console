@@ -2,22 +2,24 @@ import { IConfig } from 'umi-types'; // ref: https://umijs.org/config/
 
 const getPublicPath = () => {
   let publicPath = '/';
+  let base = '/'
   if (process.env.BUILD_DEST) {
     const BUILD_GIT_GROUP = process.env.BUILD_GIT_GROUP;
     const BUILD_GIT_PROJECT = process.env.BUILD_GIT_PROJECT;
     const buildArgv = require('yargs-parser')(process.env.BUILD_ARGV_STR);
     if (buildArgv['def_publish_env'] === 'prod') {
       publicPath = `https://g.alicdn.com/${BUILD_GIT_GROUP}/${BUILD_GIT_PROJECT}/`;
+      base = 'urbs/'
     } else {
       publicPath = `https://dev.g.alicdn.com/${BUILD_GIT_GROUP}/${BUILD_GIT_PROJECT}/`;
     }
   }
-  return publicPath;
+  return { publicPath, base };
 };
 
 const config: IConfig = {
   treeShaking: true,
-  publicPath: getPublicPath(),
+  ...getPublicPath(),
   routes: [
     {
       path: '/',

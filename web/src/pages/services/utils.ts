@@ -1,7 +1,3 @@
-export const isUrl = (url: string) => {
-  return /^(https?:\/\/(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+\.)+[a-zA-Z]+)(:\d+)?(\/.*)?(\?.*)?(#.*)?$/.test(url);
-};
-
 export const generateQuery = (params: Object) => {
   const queryArr = [];
   for (const item of Object.entries(params)) {
@@ -9,5 +5,6 @@ export const generateQuery = (params: Object) => {
   }
   return `?${queryArr.join('&')}`
 };
-
-export const serviceApiPrefix = isUrl(window.location.href) ? `${window.location.origin}/urbs/api/v1` : `${window.location.protocol}//urbs.teambition.aone.alibaba.net/api/v1`;
+// 本地开发需修改 API_ORIGIN
+const API_ORIGIN = window.location.origin;
+export const serviceApiPrefix = `${API_ORIGIN}${window.location.pathname.includes('urbs') ? '/urbs' : ''}/api/v1`;
