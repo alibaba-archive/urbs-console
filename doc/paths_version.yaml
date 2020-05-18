@@ -1,0 +1,9 @@
+
+  /version:
+    get:
+      tags:
+        - Version
+      summary: 获取版本信息
+      responses:
+        '200':
+          $ref: '#/components/responses/Version'

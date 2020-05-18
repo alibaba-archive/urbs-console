@@ -33,8 +33,10 @@ make run
 >  http://localhost:8080
 
 
-## Documentation (WIP)
+## Documentation
 
-[API 文档](https://github.com/teambition/urbs-console/blob/master/doc/api.md)
+[API 文档](https://github.com/teambition/urbs-console/blob/develop/doc/api.md)
 
-[集成到现有系统文档](https://github.com/teambition/urbs-console/blob/master/doc/adapter.md)
+[客户端使用文档](https://github.com/teambition/urbs-console/blob/develop/doc/client_usage.md)
+
+[集成到现有系统文档](https://github.com/teambition/urbs-console/blob/develop/doc/adapter.md)
