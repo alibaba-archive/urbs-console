@@ -15,7 +15,7 @@ const BasicLayout: React.FC = props => {
     const pathname = window.location.pathname;
     const pathReg = /^\/products(?:\/([^\/#\?]+?))(?:\/([^\/#\?]+?))[\/#\?]?$/i;
     const routePath = pathReg.exec(pathname);
-    return routePath ? [`/products/${ routePath[1] }`] : [];
+    return routePath ? [`/products/${routePath[1]}`] : [];
   }, []);
   return (
     <div className={styles.parent}>
@@ -25,17 +25,17 @@ const BasicLayout: React.FC = props => {
         </div>
         <div className={styles.sidemenu}>
           <Products
-            isRootRoute={ window.location.pathname === '/' }
-            history={ history }
-            onActiveKeyChange={ handleActiveKeyChange }
-            activeKeys={ [activeKey] }
-            defaultOpenSub={ defaultOpenSubs }
+            isRootRoute={window.location.pathname === '/'}
+            history={history}
+            onActiveKeyChange={handleActiveKeyChange}
+            activeKeys={[activeKey]}
+            defaultOpenSub={defaultOpenSubs}
           />
         </div>
         <div className={styles.quicklink}>
           <Menu
             selectedKeys={[activeKey]}
-            onSelect={ ({key}) => handleActiveKeyChange(key) }
+            onSelect={({ key }) => handleActiveKeyChange(key)}
           >
             <Menu.Item
               key="/group"
@@ -54,6 +54,14 @@ const BasicLayout: React.FC = props => {
               </Link>
             </Menu.Item>
             <Menu.Item
+              key="/ac"
+            >
+              <Link to="/ac">
+                <Icon type="container" />
+                管理
+              </Link>
+            </Menu.Item>
+            <Menu.Item
               key="/help"
             >
               <Link to="/help">
@@ -61,10 +69,10 @@ const BasicLayout: React.FC = props => {
                 使用帮助
               </Link>
             </Menu.Item>
-          </Menu>          
+          </Menu>
         </div>
       </div>
-      <div className={styles.mainframe}>        
+      <div className={styles.mainframe}>
         {props.children}
       </div>
     </div>
