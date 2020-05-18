@@ -1,5 +1,6 @@
 export { default as ProductModifyModal } from './modals/ProductModifyModal';
 export { default as ModuleModifyModal } from './modals/ModuleModifyModal';
+export { default as AcAddModal } from './modals/AcAddModal';
 export { default as ModuleDetailModal } from './modals/ModuleDetailModal';
 export { default as SettingModifyModal } from './modals/SettingModifyModal';
 export { default as GroupModifyModal } from './modals/GroupModifyModal';

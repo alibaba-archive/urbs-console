@@ -54,7 +54,12 @@ func (a *UrbsAcUser) Add(ctx context.Context, body *tpl.UrbsAcUsersBody) error {
 	return a.daos.UrbsAcUser.BatchAdd(ctx, users)
 }
 
-// Delete ...
-func (a *UrbsAcUser) Delete(ctx context.Context, uid string) error {
-	return a.daos.UrbsAcUser.DeleteByUid(ctx, uid)
+// DeleteByUID ...
+func (a *UrbsAcUser) DeleteByUID(ctx context.Context, uid string) error {
+	return a.daos.UrbsAcUser.DeleteByUID(ctx, uid)
+}
+
+// UpdateByUID ...
+func (a *UrbsAcUser) UpdateByUID(ctx context.Context, name, uid string) error {
+	return a.daos.UrbsAcUser.UpdateByUID(ctx, name, uid)
 }

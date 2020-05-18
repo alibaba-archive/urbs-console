@@ -56,7 +56,24 @@ func (a *UrbsAcUser) Delete(ctx *gear.Context) error {
 	if err := ctx.ParseURL(&args); err != nil {
 		return err
 	}
-	err := a.blls.UrbsAcUser.Delete(ctx, args.Uid)
+	err := a.blls.UrbsAcUser.DeleteByUID(ctx, args.Uid)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(struct{}{})
+}
+
+// Update ...
+func (a *UrbsAcUser) Update(ctx *gear.Context) error {
+	args := tpl.UrbsAcUserUidUrl{}
+	if err := ctx.ParseURL(&args); err != nil {
+		return err
+	}
+	body := tpl.UrbsAcUserUpdateBody{}
+	if err := ctx.ParseBody(&body); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcUser.UpdateByUID(ctx, body.Name, args.Uid)
 	if err != nil {
 		return err
 	}
