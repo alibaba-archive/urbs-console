@@ -65,6 +65,10 @@ const config: IConfig = {
           path: '/help',
           component: '../pages/help/index',
         },
+        {
+          path: '/ac',
+          component: '../pages/ac/index',
+        },
       ],
     },
   ],

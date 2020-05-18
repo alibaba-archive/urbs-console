@@ -176,7 +176,7 @@ export interface TagDetailComponentProps extends ModalProps {
   onGotoUsers?: () => void;
 }
 
-export interface UserSelectComponentProps  {
+export interface UserSelectComponentProps {
   acUserList: User[];
   dispatch: Dispatch<AnyAction>;
   placeholder?: string;
@@ -247,6 +247,15 @@ export interface UsersComponentProps extends BaseContainerComponentProps {
   labelsPageTotal?: number;
   labelsNextPageToken?: string;
   labelsPrePageToken?: string;
+}
+
+export interface ACComponentProps extends BaseContainerComponentProps {
+  dispatch: Dispatch<AnyAction>;
+  acUserList: User[];
+  onChange?: (users: string[]) => void;
+  acPrePageToken?: string;
+  acNextPageToken?: string;
+  pageTotal?: number;
 }
 
 export interface AcUserSelectComponentProps {

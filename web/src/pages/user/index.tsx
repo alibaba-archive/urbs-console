@@ -61,8 +61,8 @@ const Users: React.FC<UsersComponentProps> = (props) => {
     });
   }, [fetchUserList, pageSize]);
 
-  const handleModulesSearchWordChange = (value: string) => {};
-  const handleModulesSearch = (value: string) => {};
+  const handleModulesSearchWordChange = (value: string) => { };
+  const handleModulesSearch = (value: string) => { };
   const handleOnRow = (record: CanaryUser) => {
     return {
       onDoubleClick: () => {
@@ -125,26 +125,26 @@ const Users: React.FC<UsersComponentProps> = (props) => {
   const contentDetailConfig = useMemo(() => {
     return currentUser ? [{
       title: 'uid',
-      content: `${ currentUser.uid }`,
+      content: `${currentUser.uid}`,
     }, {
       title: '活跃时间',
-      content: `${ formatTableTime(currentUser.activeAt) }`,
+      content: `${formatTableTime(currentUser.activeAt)}`,
     }, {
       title: '创建时间',
-      content: `${ formatTableTime(currentUser.createdAt) }`,
+      content: `${formatTableTime(currentUser.createdAt)}`,
     }, {
       title: '缓存标签',
       content: (
         <div style={{ display: 'flex' }}>
-          <Input.TextArea defaultValue={ currentUser.labels } disabled></Input.TextArea>
-          <Button icon="reload" type="link" onClick={ handleRefreshLabels }>刷新缓存</Button>
+          <Input.TextArea defaultValue={currentUser.labels} disabled></Input.TextArea>
+          <Button icon="reload" type="link" onClick={handleRefreshLabels}>刷新缓存</Button>
         </div>
       ),
     }] : undefined;
   }, [currentUser, handleRefreshLabels]);
 
   const columns = [{
-    title: 'uid',
+    title: 'ID',
     dataIndex: 'uid',
     key: 'uid',
   }, {
@@ -172,8 +172,8 @@ const Users: React.FC<UsersComponentProps> = (props) => {
     title: '灰度标签',
     content: (
       <GrayscaleTag
-        dataSource={ labelsList }
-        hideColumns={ ['users', 'release', 'status', 'updatedAt'] }
+        dataSource={labelsList}
+        hideColumns={['users', 'release', 'status', 'updatedAt']}
         onAction={
           (record: Label) => ({
             onDelete: () => {
@@ -232,55 +232,55 @@ const Users: React.FC<UsersComponentProps> = (props) => {
     <div>
       <TableTitle
         plusTitle="添加用户"
-        handlePlusClick={ () => setUserAddModalVisible(true) }
-        handleSearch={ handleModulesSearch }
-        handleWordChange={ handleModulesSearchWordChange }
+        handlePlusClick={() => setUserAddModalVisible(true)}
+        handleSearch={handleModulesSearch}
+        handleWordChange={handleModulesSearchWordChange}
       />
       <Table
         rowKey="uid"
-        onRow={ handleOnRow }
-        pagination={ false }
-        columns={ columns }
-        dataSource={ canaryUserList }
+        onRow={handleOnRow}
+        pagination={false}
+        columns={columns}
+        dataSource={canaryUserList}
       />
       <Pagination
-        pageSize={ pageSize }
+        pageSize={pageSize}
         pageSizeOptions={[10, 20, 30, 40]}
-        onTokenChange={ handleTokenChange }
-        prePageToken={ prePageToken }
-        nextPageToken={ nextPageToken }
-        onPageSizeChange={ handlePageSizeChange }
-        total={ pageTotal }
+        onTokenChange={handleTokenChange}
+        prePageToken={prePageToken}
+        nextPageToken={nextPageToken}
+        onPageSizeChange={handlePageSizeChange}
+        total={pageTotal}
       />
       {/* 弹窗 */}
       {
         userAddModalVisible && (
           <Modal
             title="添加用户"
-            visible={ userAddModalVisible }
-            onCancel={ () => setUserAddModalVisible(false) }
-            onOk={ handleBatchUsersOk }
+            visible={userAddModalVisible}
+            onCancel={() => setUserAddModalVisible(false)}
+            onOk={handleBatchUsersOk}
             destroyOnClose
           >
-            <Form { ...DEFAULT_FORM_ITEM_LAYOUT }>
+            <Form {...DEFAULT_FORM_ITEM_LAYOUT}>
               <Form.Item label="批量用户" help="添加多个用户使用英文;间隔">
-                <Input onChange={ handleBatchUsersChange } value={ batchUsers } placeholder="请输入用户uid"></Input>
+                <Input onChange={handleBatchUsersChange} value={batchUsers} placeholder="请输入用户uid"></Input>
               </Form.Item>
             </Form>
           </Modal>
         )
       }
       <Modal
-        footer={ null }
+        footer={null}
         title="用户"
-        visible={ userDetailModalVisible }
-        onCancel={ () => setUserDetailModalVisible(false) }
-        width={ DEFAULT_MODAL_WIDTH }
+        visible={userDetailModalVisible}
+        onCancel={() => setUserDetailModalVisible(false)}
+        width={DEFAULT_MODAL_WIDTH}
         destroyOnClose
       >
-        <ContentDetail content={ contentDetailConfig }></ContentDetail>
+        <ContentDetail content={contentDetailConfig}></ContentDetail>
         <ContentTabs
-          tabs={ userTabsConfig }
+          tabs={userTabsConfig}
         ></ContentTabs>
       </Modal>
     </div>

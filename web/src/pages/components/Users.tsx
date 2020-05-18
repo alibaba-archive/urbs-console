@@ -7,7 +7,7 @@ import { Pagination } from './';
 const Users: React.FC<TableComponentProps<any>> = (props) => {
   const { paginationProps, onAction, hideColumns } = props;
   const columns = [{
-    title: 'user',
+    title: 'ID',
     dataIndex: 'user',
     key: 'user',
   }, {
@@ -31,7 +31,7 @@ const Users: React.FC<TableComponentProps<any>> = (props) => {
     render: (_, record: GroupMember) => {
       const { onDelete } = onAction ? onAction(record) : ({} as ActionEventListeners);
       return (
-        <a onClick={ onDelete }>移除</a>
+        <a onClick={onDelete}>移除</a>
       );
     },
   }];
@@ -43,9 +43,9 @@ const Users: React.FC<TableComponentProps<any>> = (props) => {
   };
   return (
     <div>
-      <Table rowKey="user" { ...props } columns={ generateTableColumns() } pagination={ false }></Table>
+      <Table rowKey="user" {...props} columns={generateTableColumns()} pagination={false}></Table>
       {
-        paginationProps && (<Pagination { ...paginationProps }></Pagination>)
+        paginationProps && (<Pagination {...paginationProps}></Pagination>)
       }
     </div>
   );

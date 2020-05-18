@@ -43,8 +43,8 @@ func (a *UrbsAcUser) FindByUID(ctx context.Context, uid string) (*schema.UrbsAcU
 	return urbsAcUser, nil
 }
 
-// FindByUIDS ...
-func (a *UrbsAcUser) FindByUIDS(ctx context.Context, uids []string) ([]*schema.UrbsAcUser, error) {
+// FindByUIDs ...
+func (a *UrbsAcUser) FindByUIDs(ctx context.Context, uids []string) ([]*schema.UrbsAcUser, error) {
 	urbsAcUsers := make([]*schema.UrbsAcUser, 0)
 
 	where := "uid in ( ? )"
@@ -56,8 +56,8 @@ func (a *UrbsAcUser) FindByUIDS(ctx context.Context, uids []string) ([]*schema.U
 	return urbsAcUsers, nil
 }
 
-// DeleteByUid ...
-func (a *UrbsAcUser) DeleteByUid(ctx context.Context, uid string) error {
+// DeleteByUID ...
+func (a *UrbsAcUser) DeleteByUID(ctx context.Context, uid string) error {
 	err := a.DB.Transaction(func(tx *gorm.DB) error {
 		sql := "delete from `urbs_ac_user` where uid = ?"
 		err := tx.Exec(sql, uid).Error
@@ -68,6 +68,14 @@ func (a *UrbsAcUser) DeleteByUid(ctx context.Context, uid string) error {
 		return tx.Exec(sql, uid).Error
 	})
 	return err
+}
+
+// UpdateByUID ...
+func (a *UrbsAcUser) UpdateByUID(ctx context.Context, name, uid string) error {
+
+	sql := "update `urbs_ac_user` set name=? where uid = ?"
+
+	return a.DB.Exec(sql, name, uid).Error
 }
 
 // List ...

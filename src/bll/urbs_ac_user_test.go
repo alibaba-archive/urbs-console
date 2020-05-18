@@ -55,12 +55,25 @@ func TestUrbsAcUser(t *testing.T) {
 		require.Nil(err)
 		require.Equal(uid, res.Result[0].Name)
 
-		err = blls.UrbsAcUser.Delete(context.Background(), uid)
+		err = blls.UrbsAcUser.DeleteByUID(context.Background(), uid)
 		require.Nil(err)
 
 		res, err = blls.UrbsAcUser.Search(context.Background(), uid)
 		require.Nil(err)
 		require.Equal(0, len(res.Result))
+	})
+
+	t.Run("update", func(t *testing.T) {
+		uid := tpl.RandUID()
+		testAddUrbsAcUser(tt, uid)
+
+		name := tpl.RandName()
+		err := blls.UrbsAcUser.UpdateByUID(context.Background(), name, uid)
+		require.Nil(err)
+
+		res, err := blls.UrbsAcUser.Search(context.Background(), uid)
+		require.Nil(err)
+		require.Equal(name, res.Result[0].Name)
 	})
 }
 
