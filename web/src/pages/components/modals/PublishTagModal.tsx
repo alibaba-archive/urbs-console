@@ -88,7 +88,7 @@ const PublishTagModal: React.FC<Props> = (props) => {
               margin: '0',
             }}
           >
-            <span>{product}</span>
+            <span>{module}</span>
           </Form.Item>) : null
         }
         {
