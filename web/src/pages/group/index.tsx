@@ -101,7 +101,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
       dispatch({
         type: 'groups/updateGroups',
         payload: {
-          params: {...currentGroup, ...fieldsValue},
+          params: { ...currentGroup, ...fieldsValue },
           cb: () => {
             fetchGroupList({
               pageSize,
@@ -201,8 +201,8 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
     title: '灰度标签',
     content: (
       <GrayscaleTag
-        hideColumns={ ['users', 'status', 'release', 'updatedAt'] }
-        dataSource={ labelsList }
+        hideColumns={['users', 'status', 'release', 'updatedAt']}
+        dataSource={labelsList}
         onAction={
           (record: Label) => ({
             onDelete: () => {
@@ -253,7 +253,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
     title: '配置项',
     content: (
       <Setting
-        hideColumns={ [] }
+        hideColumns={[]}
       />
     ),
     action: (
@@ -267,7 +267,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
     title: '用户',
     content: (
       <Users
-        dataSource={ membersList }
+        dataSource={membersList}
         onAction={
           (record: GroupMember) => ({
             onDelete: () => {
@@ -316,7 +316,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
           type="link"
           icon="plus"
           block
-          onClick={ () => changeGroupUserAddVisible(true) }
+          onClick={() => changeGroupUserAddVisible(true)}
         >
           添加成员
         </Button>
@@ -344,7 +344,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
       title: '同步时间',
       content: (
         <div style={{ display: 'flex', position: 'relative', top: '-5px' }}>
-          <Button style={{ padding: '0' }} disabled type="link">{ formatTableTime(currentGroup.syncAt || '') }</Button>
+          <Button style={{ padding: '0' }} disabled type="link">{formatTableTime(currentGroup.syncAt || '')}</Button>
           <Button icon="reload" type="link">重新同步</Button>
         </div>
       ),
@@ -352,23 +352,24 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
       title: '创建日期',
       content: formatTableTime(currentGroup.createdAt || ''),
     }] : undefined;
-}, [currentGroup]);
+  }, [currentGroup]);
 
   const handlePlusClick = () => {
     setCurrentGroup(undefined);
     changeGroupModifyVisible(true);
   };
+
   return (
     <div>
       <TableTitle
         plusTitle="添加群组"
-        handlePlusClick={ handlePlusClick }
-        handleSearch={ handleGroupSearch }
+        handlePlusClick={handlePlusClick}
+        handleSearch={handleGroupSearch}
       />
       <UserGroup
-        onRow={ handleOnRow }
-        hideColumns={ ['action'] }
-        dataSource={ groupList }
+        onRow={handleOnRow}
+        hideColumns={['action']}
+        dataSource={groupList}
         paginationProps={{
           pageSize,
           pageSizeOptions: [10, 20, 30, 40],
@@ -381,61 +382,61 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
       {/* 弹窗 */}
       {
         groupModifyVisible && <GroupModifyModal
-          visible={ groupModifyVisible }
-          onCancel={ () => changeGroupModifyVisible(false) }
-          groupInfo={ currentGroup }
-          onOk={ handleAddGroup }
-          onDel={ handleDelGroup }
+          visible={groupModifyVisible}
+          onCancel={() => changeGroupModifyVisible(false)}
+          groupInfo={currentGroup}
+          onOk={handleAddGroup}
+          onDel={handleDelGroup}
         />
       }
       {/* 弹窗 */}
       <Modal
-        visible={ groupDetailVisible }
+        visible={groupDetailVisible}
         title={
           <div className={styleNames['modal-title']}>
             <div>群组</div>
             <div>
-              <Icon type="setting" onClick={ () => changeGroupModifyVisible(true) }></Icon>
+              <Icon type="setting" onClick={() => changeGroupModifyVisible(true)}></Icon>
             </div>
           </div>
         }
         width="50%"
-        footer={ null }
-        onCancel={ () => changeGroupDetailVisible(false) }
+        footer={null}
+        onCancel={() => changeGroupDetailVisible(false)}
       >
         <ContentDetail
-          content={ contentDetail }
+          content={contentDetail}
         />
         <ContentTabs
-          tabs={ tabsConfig }
+          tabs={tabsConfig}
         />
       </Modal>
       {
         groupUserAddVisible && (<Modal
           title="添加成员"
-          visible={ groupUserAddVisible }
-          onCancel={ () => changeGroupUserAddVisible(false) }
-          onOk={ handleBatchUsersOk }
+          visible={groupUserAddVisible}
+          onCancel={() => changeGroupUserAddVisible(false)}
+          onOk={handleBatchUsersOk}
         >
-          <Form { ...DEFAULT_FORM_ITEM_LAYOUT }>
+          <Form {...DEFAULT_FORM_ITEM_LAYOUT}>
             <Form.Item
               label="群组"
-              style={{marginBottom: '0'}}
+              style={{ marginBottom: '0' }}
             >
               <span>{currentGroup?.uid}</span>
             </Form.Item>
             <Form.Item
               label="类型"
-              style={{marginBottom: '0'}}
+              style={{ marginBottom: '0' }}
             >
               <span>{currentGroup?.kind}</span>
             </Form.Item>
             <Form.Item
               label="批量用户"
-              style={{marginBottom: '0'}}
+              style={{ marginBottom: '0' }}
               help="添加多个用户使用英文;间隔"
             >
-              <Input onChange={ handleBatchUsersChange } value={ batchUsers } placeholder="请输入用户uid"></Input>
+              <Input onChange={handleBatchUsersChange} value={batchUsers} placeholder="请输入用户uid"></Input>
             </Form.Item>
           </Form>
         </Modal>)
