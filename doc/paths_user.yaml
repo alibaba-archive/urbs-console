@@ -1,0 +1,26 @@
+  # User API
+  /v1/users/settings:unionAll:
+    get:
+      tags:
+        - User
+      summary: 获取 user 的所有 settings 信息
+      parameters:
+        - $ref: '#/components/parameters/HeaderAuthorization'
+        - $ref: "#/components/parameters/QueryProduct"
+        - in: query
+          name: client
+          description: 客户端标识，例如 web、ios、android、windows、macos
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: channel
+          description: 客户端渠道，例如 stable、beta、dev
+          required: false
+          schema:
+            type: string
+        - $ref: "#/components/parameters/QueryPageSize"
+        - $ref: "#/components/parameters/QueryPageToken"           
+      responses:
+        '200':
+          $ref: "#/components/responses/MySettingsRes"
