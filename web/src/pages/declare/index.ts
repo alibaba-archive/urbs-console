@@ -84,7 +84,7 @@ export interface PublishRecordItem {
   action: string;
   desc: string;
   kind: string;
-  precent: number;
+  percent: number;
   groups: string[];
   users: string[];
   createdAt: string;

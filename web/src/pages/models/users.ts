@@ -118,7 +118,7 @@ const users: Model = {
     },
     *deleteAcUser({ payload }: AnyAction, { call }: EffectsCommandMap) {
       const { uid, cb } = payload;
-      const { result } = yield call(usersService.deleteAcUser, uid);
+      const result = yield call(usersService.deleteAcUser, uid);
       if (result && cb) {
         cb();
       }

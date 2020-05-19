@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 
+	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/tpl"
 )
 
@@ -98,7 +99,7 @@ type UrbsSettingInterface interface {
 	// 强制刷新指定用户的灰度标签列表缓存
 	UserRefreshCached(ctx context.Context, uid string) (*tpl.UserRes, error)
 	// 读取指定用户的功能配置项，支持条件筛选
-	UserListSettings(ctx context.Context, args *tpl.UIDProductURL) (*tpl.MySettingsRes, error)
+	UserListSettings(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MySettingsRes, error)
 	// 读取指定用户的功能配置项，支持条件筛选，数据用于客户端
 	UserListSettingsUnionAll(ctx context.Context, args *tpl.MySettingsQueryURL) (*tpl.MySettingsRes, error)
 	// 查询指定用户是否存在
@@ -124,7 +125,7 @@ type UrbsSettingInterface interface {
 	// 批量添加群组
 	GroupBatchAdd(ctx context.Context, groups []tpl.GroupBody) (*tpl.BoolRes, error)
 	// 更新指定群组
-	GroupUpdate(ctx context.Context, uid string, body *tpl.GroupUpdateBody) (*tpl.GroupRes, error)
+	GroupUpdate(ctx context.Context, uid string, body *urbssetting.GroupUpdateBody) (*tpl.GroupRes, error)
 	// 删除指定群组
 	GroupDelete(ctx context.Context, uid string) (*tpl.BoolRes, error)
 	// 读取群组成员列表，支持条件筛选

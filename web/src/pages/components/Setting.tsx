@@ -11,6 +11,10 @@ const Settings: React.FC<TableComponentProps<Setting>> = (props) => {
     dataIndex: 'name',
     key: 'name',
   }, {
+    title: '所属模块',
+    dataIndex: 'module',
+    key: 'module',
+  }, {
     title: '负责人',
     dataIndex: 'users',
     key: 'users',
@@ -27,7 +31,7 @@ const Settings: React.FC<TableComponentProps<Setting>> = (props) => {
     key: 'status',
     render: (status: number) => {
       const len = String(status).length;
-      return `小于${ Math.pow(10, len) }`;
+      return `小于${Math.pow(10, len)}`;
     },
   }, {
     title: '发布次数',
@@ -38,14 +42,14 @@ const Settings: React.FC<TableComponentProps<Setting>> = (props) => {
     dataIndex: 'updatedAt',
     key: 'updatedAt',
     render: (time: string) => {
-      return `${ formatTableTime(time) }`;
+      return `${formatTableTime(time)}`;
     },
   }, {
     title: '创建时间',
     dataIndex: 'createdAt',
     key: 'createdAt',
     render: (time: string) => {
-      return `${ formatTableTime(time) }`;
+      return `${formatTableTime(time)}`;
     },
   }];
   const generateTableColumns = () => {
@@ -56,9 +60,9 @@ const Settings: React.FC<TableComponentProps<Setting>> = (props) => {
   };
   return (
     <div>
-      <Table rowKey="hid" { ...props } columns={ generateTableColumns() } pagination={ false }></Table>
+      <Table rowKey="hid" {...props} columns={generateTableColumns()} pagination={false}></Table>
       {
-        paginationProps && (<Pagination { ...paginationProps }></Pagination>)
+        paginationProps && (<Pagination {...paginationProps}></Pagination>)
       }
     </div>
   );

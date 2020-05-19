@@ -49,8 +49,8 @@ func (a *UrbsSetting) UserRefreshCached(ctx context.Context, uid string) (*tpl.U
 }
 
 // UserListSettings ...
-func (a *UrbsSetting) UserListSettings(ctx context.Context, args *tpl.UIDProductURL) (*tpl.MySettingsRes, error) {
-	url := fmt.Sprintf("%s/v1/users/%s/settings?skip=%d&pageSize=%d&pageToken=%s&product=%s&q=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Product, args.Q)
+func (a *UrbsSetting) UserListSettings(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MySettingsRes, error) {
+	url := fmt.Sprintf("%s/v1/users/%s/settings?skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Q)
 
 	result := new(tpl.MySettingsRes)
 

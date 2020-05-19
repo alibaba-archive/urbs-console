@@ -29,7 +29,7 @@ func (a *User) RefreshCachedLables(ctx context.Context, uid string) (*tpl.UserRe
 }
 
 // ListSettings ...
-func (a *User) ListSettings(ctx context.Context, args *tpl.UIDProductURL) (*tpl.MySettingsRes, error) {
+func (a *User) ListSettings(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MySettingsRes, error) {
 	return a.services.UrbsSetting.UserListSettings(ctx, args)
 }
 
