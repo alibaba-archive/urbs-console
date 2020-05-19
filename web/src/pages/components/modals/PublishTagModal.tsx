@@ -44,8 +44,8 @@ const PublishTagModal: React.FC<Props> = (props) => {
     const values = getFieldsValue();
     const kind = getFieldValue('kind');
     if (kind === 'batch') {
-      values.groups = values.groups.split(',');
-      values.users = values.users.split(',');
+      values.groups = values.groups ? values.groups.split(',') : [];
+      values.users = values.users ? values.users.split(',') : [];
     }
     if (kind === 'userPercent') {
       values.rule = {
@@ -74,21 +74,21 @@ const PublishTagModal: React.FC<Props> = (props) => {
           <span>{label}</span>
         </Form.Item>
         <Form.Item
-          label="所属产品"
+          label="所属模块"
           style={{
             margin: '0',
           }}
         >
-          <span>{product}</span>
+          <span>{module}</span>
         </Form.Item>
         {
           module ? (<Form.Item
-            label="所属模块"
+            label="所属产品"
             style={{
               margin: '0',
             }}
           >
-            <span>{module}</span>
+            <span>{product}</span>
           </Form.Item>) : null
         }
         {

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/teambition/urbs-console/src/dao"
+	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/tpl"
@@ -60,7 +61,7 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 	count := 0
 	now := time.Now().Unix()
 	// 更新同步时间
-	groupUpdateBody := new(tpl.GroupUpdateBody)
+	groupUpdateBody := new(urbssetting.GroupUpdateBody)
 	groupUpdateBody.SyncAt = &now
 	_, err := a.services.UrbsSetting.GroupUpdate(ctx, uid, groupUpdateBody)
 	if err != nil {
@@ -106,7 +107,10 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 
 // Update ...
 func (a *Group) Update(ctx context.Context, uid string, body *tpl.GroupUpdateBody) (*tpl.GroupRes, error) {
-	return a.services.UrbsSetting.GroupUpdate(ctx, uid, body)
+	b := &urbssetting.GroupUpdateBody{
+		Desc: body.Desc,
+	}
+	return a.services.UrbsSetting.GroupUpdate(ctx, uid, b)
 }
 
 // Delete ...

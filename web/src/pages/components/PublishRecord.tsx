@@ -20,11 +20,11 @@ const PublishRecord: React.FC<Props> = (props) => {
         return '';
     }
   }, []);
-  const getActionDesc = (kind: string, precent?: number, users?: string[], groups?: string[]) => {
+  const getActionDesc = (kind: string, percent?: number, users?: string[], groups?: string[]) => {
     if (kind === 'userPercent') {
-      return `比例${ precent }`
+      return `比例到 ${percent}%`
     } else {
-      return `${ users ? `用户 ${ users.join(',') }；` : ''}${ groups ? `用户 ${ groups.join(',') }；` : ''}`;
+      return `${users ? `用户 ${users.join(',')}；` : ''}${groups ? `群组 ${groups.join(',')}；` : ''}`;
     }
   };
   return (
@@ -32,23 +32,23 @@ const PublishRecord: React.FC<Props> = (props) => {
       {
         publishRecordList.map((item, index) => {
           return (
-            <div key={ item.hid } className={ styleNames['publish-record-wrap'] }>
-              <div className={ styleNames['record-dot-wrap'] }>
-                <div className={ styleNames['record-dot'] }></div>
+            <div key={item.hid} className={styleNames['publish-record-wrap']}>
+              <div className={styleNames['record-dot-wrap']}>
+                <div className={styleNames['record-dot']}></div>
                 <Divider type="vertical" style={{ height: '100%' }}></Divider>
               </div>
-              <div className={ styleNames['publish-record-content-wrap'] }>
-                <div>{ formatTableTime(item.createdAt) }, { item.operatorName }</div>
+              <div className={styleNames['publish-record-content-wrap']}>
+                <div>{formatTableTime(item.createdAt)}, {item.operatorName}</div>
                 <Divider style={{ margin: '5px 0' }}></Divider>
-                <div className={ styleNames['publish-record-action-wrap'] }>
-                  { index === 0 ? <Button type="link" block>撤回</Button> : null }
+                <div className={styleNames['publish-record-action-wrap']}>
+                  {index === 0 ? <Button type="link" block>撤回</Button> : null}
                 </div>
                 <ul>
                   <li>
-                    <span>操作：{ `${ getActionLabel(item.action) }${ getActionDesc(item.kind, item.precent, item.users, item.groups) }` }</span>
+                    <span>操作：{`${getActionLabel(item.action)}${getActionDesc(item.kind, item.percent, item.users, item.groups)}`}</span>
                   </li>
                   <li>
-                    <span>发布说明：{ item.desc }</span>
+                    <span>发布说明：{item.desc}</span>
                   </li>
                 </ul>
               </div>

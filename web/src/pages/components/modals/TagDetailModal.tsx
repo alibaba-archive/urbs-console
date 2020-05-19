@@ -3,7 +3,7 @@ import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { Button, Input, Modal, Icon } from 'antd';
 import { connect } from 'dva';
 import { PublishRecord, ContentDetail, ContentTabs, UserGroup, Users, GrayscaleTagModifyModal, PublishTagModal } from '../';
-import { TagDetailComponentProps, TagTabsKey, PaginationParameters, FieldsValue, UserPercentRule, DEFAULT_PAGE_SIZE } from '../../declare';
+import { DEFAULT_MODAL_WIDTH, TagDetailComponentProps, TagTabsKey, PaginationParameters, FieldsValue, UserPercentRule, DEFAULT_PAGE_SIZE } from '../../declare';
 import styles from '../style/TagDetailModal.less';
 import { formatTableTime } from '../../utils/format';
 
@@ -319,7 +319,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
     ]);
   }, [labelInfo, product]);
   return (
-    <Modal title={renderModalTitle()} visible={visible} onCancel={onCancel} footer={null}>
+    <Modal width={DEFAULT_MODAL_WIDTH} title={renderModalTitle()} visible={visible} onCancel={onCancel} footer={null}>
       <ContentDetail content={labelContentDetail}></ContentDetail>
       <ContentTabs
         activeKey={tabsActiveKey}

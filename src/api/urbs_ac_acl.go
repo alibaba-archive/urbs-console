@@ -43,3 +43,20 @@ func (a *UrbsAcAcl) Check(ctx *gear.Context) error {
 	}
 	return ctx.OkJSON(&tpl.BoolRes{Result: err == nil})
 }
+
+// Delete ...
+func (a *UrbsAcAcl) Delete(ctx *gear.Context) error {
+	req := tpl.UrbsAcAclURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	body := tpl.UrbsAcAclAddBody{}
+	if err := ctx.ParseBody(&body); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.Delete(ctx, &req, &body)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(struct{}{})
+}

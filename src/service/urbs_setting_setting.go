@@ -152,7 +152,7 @@ func (a *UrbsSetting) SettingListGroups(ctx context.Context, args *tpl.ProductMo
 // SettingCreateRule ...
 func (a *UrbsSetting) SettingCreateRule(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingRuleBody) (*tpl.SettingRuleInfoRes, error) {
 
-	url := fmt.Sprintf("%s/products/%s/modules/%s/settings/%s/rules", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting)
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/rules", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting)
 
 	result := new(tpl.SettingRuleInfoRes)
 

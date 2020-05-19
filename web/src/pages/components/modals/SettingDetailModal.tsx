@@ -290,12 +290,12 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
         content: settingInfo.name,
       },
       {
-        title: '所属产品',
-        content: product,
-      },
-      {
         title: '所属模块',
         content: settingInfo.module,
+      },
+      {
+        title: '所属产品',
+        content: product,
       },
       {
         title: '负责人',

@@ -97,6 +97,8 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	routerV1.Get("/ac/users:search", checkViewer, apis.UrbsAcUser.Search)
 	// 添加权限
 	routerV1.Post("/ac/users/:uid/permissions", checkSuperAdmin, apis.UrbsAcAcl.Add)
+	// 删除权限
+	routerV1.Delete("/ac/users/:uid/permissions", checkSuperAdmin, apis.UrbsAcAcl.Delete)
 	// 检查权限
 	routerV1.Post("/ac/permission:check", checkViewer, apis.UrbsAcAcl.Check)
 

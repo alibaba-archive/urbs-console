@@ -56,24 +56,16 @@ type GroupsURL struct {
 
 // GroupUpdateBody ...
 type GroupUpdateBody struct {
-	Desc   *string `json:"desc"`
-	SyncAt *int64  `json:"syncAt"`
+	Desc *string `json:"desc"`
 }
 
 // Validate 实现 gear.BodyTemplate。
 func (t *GroupUpdateBody) Validate() error {
-	if t.Desc == nil && t.SyncAt == nil {
+	if t.Desc == nil {
 		return gear.ErrBadRequest.WithMsgf("desc or kind or syncAt required")
 	}
-	if t.Desc != nil && len(*t.Desc) > 1022 {
+	if len(*t.Desc) > 1022 {
 		return gear.ErrBadRequest.WithMsgf("desc too long: %d", len(*t.Desc))
-	}
-	if t.SyncAt != nil {
-		now := time.Now().Unix()
-		if *t.SyncAt < (now-3600) || *t.SyncAt > (now+3600) {
-			// SyncAt 应该在当前时刻前后范围内
-			return gear.ErrBadRequest.WithMsgf("invalid syncAt: %d", *t.SyncAt)
-		}
 	}
 	return nil
 }

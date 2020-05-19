@@ -6,6 +6,7 @@ import (
 
 	"github.com/mushroomsir/request"
 	"github.com/teambition/urbs-console/src/conf"
+	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/tpl"
 )
 
@@ -82,7 +83,7 @@ func (a *UrbsSetting) GroupBatchAdd(ctx context.Context, groups []tpl.GroupBody)
 }
 
 // GroupUpdate ...
-func (a *UrbsSetting) GroupUpdate(ctx context.Context, uid string, body *tpl.GroupUpdateBody) (*tpl.GroupRes, error) {
+func (a *UrbsSetting) GroupUpdate(ctx context.Context, uid string, body *urbssetting.GroupUpdateBody) (*tpl.GroupRes, error) {
 	url := fmt.Sprintf("%s/v1/groups/%s", conf.Config.UrbsSetting.Addr, uid)
 
 	result := new(tpl.GroupRes)

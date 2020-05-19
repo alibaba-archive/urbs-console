@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	github.com/DavidCai1993/request v0.0.0-20171115020405-aad722fa9b76 // indirect
+	github.com/asaskevich/govalidator v0.0.0-20200428143746-21a406dcc535
 	github.com/go-http-utils/cookie v1.3.1
 	github.com/go-http-utils/headers v0.0.0-20181008091004-fed159eddc2a // indirect
 	github.com/golang/mock v1.4.3

@@ -7,6 +7,7 @@ package mock_service
 import (
 	context "context"
 	gomock "github.com/golang/mock/gomock"
+	urbssetting "github.com/teambition/urbs-console/src/dto/urbssetting"
 	tpl "github.com/teambition/urbs-console/src/tpl"
 	reflect "reflect"
 )
@@ -635,7 +636,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) UserRefreshCached(ctx, uid inter
 }
 
 // UserListSettings mocks base method
-func (m *MockUrbsSettingInterface) UserListSettings(ctx context.Context, args *tpl.UIDProductURL) (*tpl.MySettingsRes, error) {
+func (m *MockUrbsSettingInterface) UserListSettings(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MySettingsRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UserListSettings", ctx, args)
 	ret0, _ := ret[0].(*tpl.MySettingsRes)
@@ -815,7 +816,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupBatchAdd(ctx, groups interf
 }
 
 // GroupUpdate mocks base method
-func (m *MockUrbsSettingInterface) GroupUpdate(ctx context.Context, uid string, body *tpl.GroupUpdateBody) (*tpl.GroupRes, error) {
+func (m *MockUrbsSettingInterface) GroupUpdate(ctx context.Context, uid string, body *urbssetting.GroupUpdateBody) (*tpl.GroupRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupUpdate", ctx, uid, body)
 	ret0, _ := ret[0].(*tpl.GroupRes)
