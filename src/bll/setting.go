@@ -70,7 +70,7 @@ func (a *Setting) ListUsers(ctx context.Context, args *tpl.ProductModuleSettingU
 }
 
 // Create 创建指定产品功能模块配置项
-func (a *Setting) Create(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.NameDescBody) (*tpl.SettingInfoRes, error) {
+func (a *Setting) Create(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.SettingBody) (*tpl.SettingInfoRes, error) {
 	object := args.Product + args.Module + body.Name
 	err := blls.UrbsAcAcl.AddDefaultPermission(ctx, body.Uids, object)
 	if err != nil {
@@ -90,7 +90,7 @@ func (a *Setting) Create(ctx context.Context, args *tpl.ProductModuleURL, body *
 // Update 更新指定产品功能模块配置项
 func (a *Setting) Update(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingUpdateBody) (*tpl.SettingInfoRes, error) {
 	object := args.Product + args.Module + args.Setting
-	err := blls.UrbsAcAcl.Update(ctx, body.Uids, object)
+	err := blls.UrbsAcAcl.Update(ctx, &body.Uids, object)
 	if err != nil {
 		return nil, err
 	}

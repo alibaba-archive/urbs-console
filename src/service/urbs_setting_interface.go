@@ -43,7 +43,7 @@ type UrbsSettingInterface interface {
 	//  返回产品下功能配置项的群组列表
 	SettingListGroups(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.SettingGroupsInfoRes, error)
 	// 创建指定产品功能模块配置项
-	SettingCreate(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.NameDescBody) (*tpl.SettingInfoRes, error)
+	SettingCreate(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.SettingBody) (*tpl.SettingInfoRes, error)
 	// 创建指定产品功能模块配置项的灰度发布规则
 	SettingCreateRule(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingRuleBody) (*tpl.SettingRuleInfoRes, error)
 	// 读取指定产品功能模块配置项的灰度发布规则列表

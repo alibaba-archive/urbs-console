@@ -246,7 +246,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) SettingListGroups(ctx, args inte
 }
 
 // SettingCreate mocks base method
-func (m *MockUrbsSettingInterface) SettingCreate(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.NameDescBody) (*tpl.SettingInfoRes, error) {
+func (m *MockUrbsSettingInterface) SettingCreate(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.SettingBody) (*tpl.SettingInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SettingCreate", ctx, args, body)
 	ret0, _ := ret[0].(*tpl.SettingInfoRes)

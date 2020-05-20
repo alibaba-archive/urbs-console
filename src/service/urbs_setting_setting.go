@@ -38,7 +38,7 @@ func (a *UrbsSetting) SettingList(ctx context.Context, args *tpl.ProductModuleUR
 }
 
 // SettingCreate ...
-func (a *UrbsSetting) SettingCreate(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.NameDescBody) (*tpl.SettingInfoRes, error) {
+func (a *UrbsSetting) SettingCreate(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.SettingBody) (*tpl.SettingInfoRes, error) {
 	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings", conf.Config.UrbsSetting.Addr, args.Product, args.Module)
 
 	result := new(tpl.SettingInfoRes)
