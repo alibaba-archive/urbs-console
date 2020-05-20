@@ -63,6 +63,13 @@ func TestUrbsAcACL(t *testing.T) {
 		require.Equal(uid, users[0].Uid)
 		require.Equal(uid, users[0].Name)
 	})
+
+	t.Run("check empty admin", func(t *testing.T) {
+		uid := tpl.RandUID()
+		object := ""
+		err := blls.UrbsAcAcl.CheckAdmin(getUidContext(uid), object)
+		require.NotNil(err)
+	})
 }
 
 func testAddUrbsAcAcl(tt *TestTools, uid string) *tpl.UrbsAcAclAddBody {

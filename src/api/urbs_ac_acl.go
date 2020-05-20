@@ -31,7 +31,7 @@ func (a *UrbsAcAcl) Add(ctx *gear.Context) error {
 // Check ...
 func (a *UrbsAcAcl) Check(ctx *gear.Context) error {
 	body := tpl.UrbsAcAclCheckBody{}
-	if err := ctx.ParseURL(&body); err != nil {
+	if err := ctx.ParseBody(&body); err != nil {
 		return err
 	}
 	object := body.Product + body.Label + body.Module + body.Setting

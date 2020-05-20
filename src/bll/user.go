@@ -47,18 +47,3 @@ func (a *User) CheckExists(ctx context.Context, uid string) (*tpl.BoolRes, error
 func (a *User) BatchAdd(ctx context.Context, users []string) (*tpl.BoolRes, error) {
 	return a.services.UrbsSetting.UserBatchAdd(ctx, users)
 }
-
-// RemoveLable ...
-func (a *User) RemoveLable(ctx context.Context, uid string, hid string) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.UserRemoveLabled(ctx, uid, hid)
-}
-
-// RollbackSetting ...
-func (a *User) RollbackSetting(ctx context.Context, uid string, hid string) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.UserRollbackSetting(ctx, uid, hid)
-}
-
-// RemoveSetting ...
-func (a *User) RemoveSetting(ctx context.Context, uid string, hid string) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.UserRemoveSetting(ctx, uid, hid)
-}

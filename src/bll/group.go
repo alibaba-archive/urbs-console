@@ -132,18 +132,3 @@ func (a *Group) BatchAddMembers(ctx context.Context, groupId string, users []str
 func (a *Group) RemoveMembers(ctx context.Context, args *tpl.GroupMembersURL) (*tpl.BoolRes, error) {
 	return a.services.UrbsSetting.GroupRemoveMembers(ctx, args)
 }
-
-// RemoveLable ...
-func (a *Group) RemoveLable(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.GroupRemoveLable(ctx, args)
-}
-
-// RollbackSetting 回滚指定群组的指定配置项
-func (a *Group) RollbackSetting(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.GroupRollbackSetting(ctx, args)
-}
-
-// RemoveSetting 删除指定群组的指定配置项
-func (a *Group) RemoveSetting(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.GroupRemoveSetting(ctx, args)
-}

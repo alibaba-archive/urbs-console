@@ -194,3 +194,31 @@ func (a *UrbsSetting) LabelListRule(ctx context.Context, args *tpl.ProductLabelU
 	}
 	return result, nil
 }
+
+// LabelDeleteUser ...
+func (a *UrbsSetting) LabelDeleteUser(ctx context.Context, args *tpl.ProductLabelUIDURL) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/labels/%s/users/%s", conf.Config.UrbsSetting.Addr, args.Product, args.Label, args.UID)
+
+	result := new(tpl.BoolRes)
+
+	resp, err := request.Delete(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// LabelDeleteGroup ...
+func (a *UrbsSetting) LabelDeleteGroup(ctx context.Context, args *tpl.ProductLabelUIDURL) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/labels/%s/groups/%s", conf.Config.UrbsSetting.Addr, args.Product, args.Label, args.UID)
+
+	result := new(tpl.BoolRes)
+
+	resp, err := request.Delete(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}

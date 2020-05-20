@@ -395,6 +395,66 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) SettingRecall(ctx, args, body in
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SettingRecall", reflect.TypeOf((*MockUrbsSettingInterface)(nil).SettingRecall), ctx, args, body)
 }
 
+// SettingDeleteUser mocks base method
+func (m *MockUrbsSettingInterface) SettingDeleteUser(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SettingDeleteUser", ctx, args)
+	ret0, _ := ret[0].(*tpl.BoolRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SettingDeleteUser indicates an expected call of SettingDeleteUser
+func (mr *MockUrbsSettingInterfaceMockRecorder) SettingDeleteUser(ctx, args interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SettingDeleteUser", reflect.TypeOf((*MockUrbsSettingInterface)(nil).SettingDeleteUser), ctx, args)
+}
+
+// SettingRollbackUserSetting mocks base method
+func (m *MockUrbsSettingInterface) SettingRollbackUserSetting(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SettingRollbackUserSetting", ctx, args)
+	ret0, _ := ret[0].(*tpl.BoolRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SettingRollbackUserSetting indicates an expected call of SettingRollbackUserSetting
+func (mr *MockUrbsSettingInterfaceMockRecorder) SettingRollbackUserSetting(ctx, args interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SettingRollbackUserSetting", reflect.TypeOf((*MockUrbsSettingInterface)(nil).SettingRollbackUserSetting), ctx, args)
+}
+
+// SettingDeleteGroup mocks base method
+func (m *MockUrbsSettingInterface) SettingDeleteGroup(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SettingDeleteGroup", ctx, args)
+	ret0, _ := ret[0].(*tpl.BoolRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SettingDeleteGroup indicates an expected call of SettingDeleteGroup
+func (mr *MockUrbsSettingInterfaceMockRecorder) SettingDeleteGroup(ctx, args interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SettingDeleteGroup", reflect.TypeOf((*MockUrbsSettingInterface)(nil).SettingDeleteGroup), ctx, args)
+}
+
+// SettingRollbackGroupSetting mocks base method
+func (m *MockUrbsSettingInterface) SettingRollbackGroupSetting(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SettingRollbackGroupSetting", ctx, args)
+	ret0, _ := ret[0].(*tpl.BoolRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SettingRollbackGroupSetting indicates an expected call of SettingRollbackGroupSetting
+func (mr *MockUrbsSettingInterfaceMockRecorder) SettingRollbackGroupSetting(ctx, args interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SettingRollbackGroupSetting", reflect.TypeOf((*MockUrbsSettingInterface)(nil).SettingRollbackGroupSetting), ctx, args)
+}
+
 // LabelList mocks base method
 func (m *MockUrbsSettingInterface) LabelList(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.LabelsInfoRes, error) {
 	m.ctrl.T.Helper()
@@ -590,6 +650,36 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) LabelRecall(ctx, args, body inte
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LabelRecall", reflect.TypeOf((*MockUrbsSettingInterface)(nil).LabelRecall), ctx, args, body)
 }
 
+// LabelDeleteUser mocks base method
+func (m *MockUrbsSettingInterface) LabelDeleteUser(ctx context.Context, args *tpl.ProductLabelUIDURL) (*tpl.BoolRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LabelDeleteUser", ctx, args)
+	ret0, _ := ret[0].(*tpl.BoolRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LabelDeleteUser indicates an expected call of LabelDeleteUser
+func (mr *MockUrbsSettingInterfaceMockRecorder) LabelDeleteUser(ctx, args interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LabelDeleteUser", reflect.TypeOf((*MockUrbsSettingInterface)(nil).LabelDeleteUser), ctx, args)
+}
+
+// LabelDeleteGroup mocks base method
+func (m *MockUrbsSettingInterface) LabelDeleteGroup(ctx context.Context, args *tpl.ProductLabelUIDURL) (*tpl.BoolRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LabelDeleteGroup", ctx, args)
+	ret0, _ := ret[0].(*tpl.BoolRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LabelDeleteGroup indicates an expected call of LabelDeleteGroup
+func (mr *MockUrbsSettingInterfaceMockRecorder) LabelDeleteGroup(ctx, args interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LabelDeleteGroup", reflect.TypeOf((*MockUrbsSettingInterface)(nil).LabelDeleteGroup), ctx, args)
+}
+
 // UserList mocks base method
 func (m *MockUrbsSettingInterface) UserList(ctx context.Context, args *tpl.Pagination) (*tpl.UsersRes, error) {
 	m.ctrl.T.Helper()
@@ -693,51 +783,6 @@ func (m *MockUrbsSettingInterface) UserBatchAdd(ctx context.Context, users []str
 func (mr *MockUrbsSettingInterfaceMockRecorder) UserBatchAdd(ctx, users interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserBatchAdd", reflect.TypeOf((*MockUrbsSettingInterface)(nil).UserBatchAdd), ctx, users)
-}
-
-// UserRemoveLabled mocks base method
-func (m *MockUrbsSettingInterface) UserRemoveLabled(ctx context.Context, uid, hid string) (*tpl.BoolRes, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UserRemoveLabled", ctx, uid, hid)
-	ret0, _ := ret[0].(*tpl.BoolRes)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UserRemoveLabled indicates an expected call of UserRemoveLabled
-func (mr *MockUrbsSettingInterfaceMockRecorder) UserRemoveLabled(ctx, uid, hid interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserRemoveLabled", reflect.TypeOf((*MockUrbsSettingInterface)(nil).UserRemoveLabled), ctx, uid, hid)
-}
-
-// UserRollbackSetting mocks base method
-func (m *MockUrbsSettingInterface) UserRollbackSetting(ctx context.Context, uid, hid string) (*tpl.BoolRes, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UserRollbackSetting", ctx, uid, hid)
-	ret0, _ := ret[0].(*tpl.BoolRes)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UserRollbackSetting indicates an expected call of UserRollbackSetting
-func (mr *MockUrbsSettingInterfaceMockRecorder) UserRollbackSetting(ctx, uid, hid interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserRollbackSetting", reflect.TypeOf((*MockUrbsSettingInterface)(nil).UserRollbackSetting), ctx, uid, hid)
-}
-
-// UserRemoveSetting mocks base method
-func (m *MockUrbsSettingInterface) UserRemoveSetting(ctx context.Context, uid, hid string) (*tpl.BoolRes, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UserRemoveSetting", ctx, uid, hid)
-	ret0, _ := ret[0].(*tpl.BoolRes)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// UserRemoveSetting indicates an expected call of UserRemoveSetting
-func (mr *MockUrbsSettingInterfaceMockRecorder) UserRemoveSetting(ctx, uid, hid interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserRemoveSetting", reflect.TypeOf((*MockUrbsSettingInterface)(nil).UserRemoveSetting), ctx, uid, hid)
 }
 
 // GroupListLables mocks base method
@@ -888,49 +933,4 @@ func (m *MockUrbsSettingInterface) GroupRemoveMembers(ctx context.Context, args 
 func (mr *MockUrbsSettingInterfaceMockRecorder) GroupRemoveMembers(ctx, args interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupRemoveMembers", reflect.TypeOf((*MockUrbsSettingInterface)(nil).GroupRemoveMembers), ctx, args)
-}
-
-// GroupRemoveLable mocks base method
-func (m *MockUrbsSettingInterface) GroupRemoveLable(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GroupRemoveLable", ctx, args)
-	ret0, _ := ret[0].(*tpl.BoolRes)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GroupRemoveLable indicates an expected call of GroupRemoveLable
-func (mr *MockUrbsSettingInterfaceMockRecorder) GroupRemoveLable(ctx, args interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupRemoveLable", reflect.TypeOf((*MockUrbsSettingInterface)(nil).GroupRemoveLable), ctx, args)
-}
-
-// GroupRollbackSetting mocks base method
-func (m *MockUrbsSettingInterface) GroupRollbackSetting(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GroupRollbackSetting", ctx, args)
-	ret0, _ := ret[0].(*tpl.BoolRes)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GroupRollbackSetting indicates an expected call of GroupRollbackSetting
-func (mr *MockUrbsSettingInterfaceMockRecorder) GroupRollbackSetting(ctx, args interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupRollbackSetting", reflect.TypeOf((*MockUrbsSettingInterface)(nil).GroupRollbackSetting), ctx, args)
-}
-
-// GroupRemoveSetting mocks base method
-func (m *MockUrbsSettingInterface) GroupRemoveSetting(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GroupRemoveSetting", ctx, args)
-	ret0, _ := ret[0].(*tpl.BoolRes)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GroupRemoveSetting indicates an expected call of GroupRemoveSetting
-func (mr *MockUrbsSettingInterfaceMockRecorder) GroupRemoveSetting(ctx, args interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupRemoveSetting", reflect.TypeOf((*MockUrbsSettingInterface)(nil).GroupRemoveSetting), ctx, args)
 }

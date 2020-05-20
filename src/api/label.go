@@ -24,6 +24,23 @@ func (a *Label) ListGroups(ctx *gear.Context) error {
 	return ctx.OkJSON(res)
 }
 
+// DeleteGroup ..
+func (a *Label) DeleteGroup(ctx *gear.Context) error {
+	req := tpl.ProductLabelUIDURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Label)
+	if err != nil {
+		return err
+	}
+	res, err := a.blls.Label.DeleteGroup(ctx, &req)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}
+
 // ListUsers ..
 func (a *Label) ListUsers(ctx *gear.Context) error {
 	req := tpl.ProductLabelURL{}
@@ -31,6 +48,23 @@ func (a *Label) ListUsers(ctx *gear.Context) error {
 		return err
 	}
 	res, err := a.blls.Label.ListUsers(ctx, &req)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}
+
+// DeleteUser ..
+func (a *Label) DeleteUser(ctx *gear.Context) error {
+	req := tpl.ProductLabelUIDURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Label)
+	if err != nil {
+		return err
+	}
+	res, err := a.blls.Label.DeleteUser(ctx, &req)
 	if err != nil {
 		return err
 	}

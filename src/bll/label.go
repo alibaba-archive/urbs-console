@@ -19,9 +19,19 @@ func (a *Label) ListGroups(ctx context.Context, args *tpl.ProductLabelURL) (*tpl
 	return a.services.UrbsSetting.LabelListGroups(ctx, args)
 }
 
+// DeleteGroup ...
+func (a *Label) DeleteGroup(ctx context.Context, args *tpl.ProductLabelUIDURL) (*tpl.BoolRes, error) {
+	return a.services.UrbsSetting.LabelDeleteGroup(ctx, args)
+}
+
 // ListUsers ...
 func (a *Label) ListUsers(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.LabelUsersInfoRes, error) {
 	return a.services.UrbsSetting.LabelListUsers(ctx, args)
+}
+
+// DeleteUser ...
+func (a *Label) DeleteUser(ctx context.Context, args *tpl.ProductLabelUIDURL) (*tpl.BoolRes, error) {
+	return a.services.UrbsSetting.LabelDeleteUser(ctx, args)
 }
 
 // Create ...
@@ -120,11 +130,6 @@ func (a *Label) Recall(ctx context.Context, args *tpl.ProductLabelURL, body *tpl
 	return a.services.UrbsSetting.LabelRecall(ctx, args, body)
 }
 
-// ListRules ...
-func (a *Label) ListRules(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.LabelRulesInfoRes, error) {
-	return a.services.UrbsSetting.LabelListRule(ctx, args)
-}
-
 // CreateRule ...
 func (a *Label) CreateRule(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.LabelRuleBody) (*tpl.LabelRuleInfoRes, error) {
 	object := args.Product + args.Label
@@ -137,6 +142,11 @@ func (a *Label) CreateRule(ctx context.Context, args *tpl.ProductLabelURL, body 
 		return nil, err
 	}
 	return a.services.UrbsSetting.LabelCreateRule(ctx, args, body)
+}
+
+// ListRules ...
+func (a *Label) ListRules(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.LabelRulesInfoRes, error) {
+	return a.services.UrbsSetting.LabelListRule(ctx, args)
 }
 
 // UpdateRule ...

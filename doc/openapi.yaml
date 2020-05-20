@@ -18,7 +18,7 @@ components:
     HeaderAuthorization:
       in: header
       name: Authorization
-      description: '请求 JWT token, 格式如: `Bearer xxx`'
+      description: '用户 Token, 格式如: `Bearer xxx`；header 不存在，尝试从 cookie 中读取'
       required: true
       schema:
         type: string
@@ -170,7 +170,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/Version'  # User API
-  /v1/users/settings:unionAll:
+  /api/v1/users/settings:unionAll:
     get:
       tags:
         - User

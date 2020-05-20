@@ -41,6 +41,9 @@ func Verify(services *service.Services) func(ctx *gear.Context) error {
 			body.Cookie, _ = ctx.Cookies.Get(conf.Config.Thrid.UserAuth.CookieKey)
 			body.Singed, _ = ctx.Cookies.Get(conf.Config.Thrid.UserAuth.CookieKey + ".sig")
 			body.Token = util.AuthorizationExtractor(ctx)
+			if body.Cookie == "" && body.Token == "" {
+				return gear.ErrUnauthorized.WithMsg("invalid authorization")
+			}
 			var err error
 			uid, err = services.UserAuth.Verify(ctx, body)
 			if err != nil {
