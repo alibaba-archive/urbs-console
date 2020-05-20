@@ -35,7 +35,7 @@ type SettingUpdateBody struct {
 	Channels *[]string `json:"channels"`
 	Clients  *[]string `json:"clients"`
 	Values   *[]string `json:"values"`
-	Uids     *[]string `json:"uids"`
+	*UidsBody
 }
 
 // Validate 实现 gear.BodyTemplate。
@@ -71,12 +71,12 @@ func (t *SettingUpdateBody) Validate() error {
 			return gear.ErrBadRequest.WithMsgf("invalid values: %v", *t.Values)
 		}
 	}
-	if t.Uids != nil {
-		if len(*t.Uids) > 9 {
-			return gear.ErrBadRequest.WithMsgf("uids length should 0 < %d < 10", len(*t.Uids))
+	if t.UidsBody != nil {
+		if len(t.UidsBody.Uids) > 9 {
+			return gear.ErrBadRequest.WithMsgf("uids length should 0 < %d < 10", len(t.UidsBody.Uids))
 		}
-		if !SortStringsAndCheck(*t.Uids) {
-			return gear.ErrBadRequest.WithMsgf("invalid uids: %v", *t.Uids)
+		if !SortStringsAndCheck(t.UidsBody.Uids) {
+			return gear.ErrBadRequest.WithMsgf("invalid uids: %v", t.UidsBody.Uids)
 		}
 	}
 	return nil
@@ -165,4 +165,58 @@ type MySetting struct {
 	AssignedAt time.Time `json:"assignedAt"`
 
 	UpdatedAt time.Time `json:"updated_at"` //兼容
+}
+
+// SettingBody ...
+type SettingBody struct {
+	UidsBody
+	Name     string    `json:"name"`
+	Desc     string    `json:"desc"`
+	Channels *[]string `json:"channels"`
+	Clients  *[]string `json:"clients"`
+	Values   *[]string `json:"values"`
+}
+
+// Validate 实现 gear.BodyTemplate。
+func (t *SettingBody) Validate() error {
+	if err := t.UidsBody.Validate(); err != nil {
+		return err
+	}
+	if !validNameReg.MatchString(t.Name) {
+		return gear.ErrBadRequest.WithMsgf("invalid name: %s", t.Name)
+	}
+	if len(t.Desc) > 1022 {
+		return gear.ErrBadRequest.WithMsgf("desc too long: %d (<= 1022)", len(t.Desc))
+	}
+	if t.Channels != nil {
+		if len(*t.Channels) > 5 {
+			return gear.ErrBadRequest.WithMsgf("too many channels: %d", len(*t.Channels))
+		}
+		if !SortStringsAndCheck(*t.Channels) {
+			return gear.ErrBadRequest.WithMsgf("invalid channels: %v", *t.Channels)
+		}
+	}
+	if t.Clients != nil {
+		if len(*t.Clients) > 10 {
+			return gear.ErrBadRequest.WithMsgf("too many clients: %d", len(*t.Clients))
+		}
+		if !SortStringsAndCheck(*t.Clients) {
+			return gear.ErrBadRequest.WithMsgf("invalid clients: %v", *t.Clients)
+		}
+	}
+	if t.Values != nil {
+		if len(*t.Values) > 10 {
+			return gear.ErrBadRequest.WithMsgf("too many values: %d", len(*t.Clients))
+		}
+		if !SortStringsAndCheck(*t.Values) {
+			return gear.ErrBadRequest.WithMsgf("invalid values: %v", *t.Values)
+		}
+		for _, value := range *t.Values {
+			if !validValueReg.MatchString(value) {
+				return gear.ErrBadRequest.WithMsgf("invalid value: %s", value)
+			}
+		}
+	}
+
+	return nil
 }
