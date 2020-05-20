@@ -293,6 +293,7 @@ export interface TableComponentProps<T> extends TableProps<T> {
 
 export interface Group {
   uid: string;
+  group: string;
   kind: string;
   desc: string;
   status: number;

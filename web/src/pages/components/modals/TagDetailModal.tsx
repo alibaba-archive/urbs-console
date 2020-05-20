@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import { Button, Input, Modal, Icon } from 'antd';
+import { Button, Input, Modal, Icon, message } from 'antd';
 import { connect } from 'dva';
 import { PublishRecord, ContentDetail, ContentTabs, UserGroup, Users, GrayscaleTagModifyModal, PublishTagModal } from '../';
 import { DEFAULT_MODAL_WIDTH, TagDetailComponentProps, TagTabsKey, PaginationParameters, FieldsValue, UserPercentRule, DEFAULT_PAGE_SIZE } from '../../declare';
@@ -38,6 +38,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
   const [tabsSearchWord, setTabsSearchWord] = useState('');
   const [publishTagModalVisible, setPublishTagModalVisible] = useState(false);
   const [grayscaleTagModalVisible, setGrayscaleTagModalVisible] = useState(false);
+  const [grayscaleTagCanEdit, setGrayscaleTagCanEdit] = useState(false);
   const fetchLabelLogs = useCallback(() => {
     dispatch({
       type: 'products/getLabelLogs',
@@ -81,6 +82,20 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
       pageSize: labelUserPageSize,
     });
   }, [fetchLabelLogs, fetchLabelGroups, fetchLabelUsers, labelGroupPageSize, labelUserPageSize]);
+  useEffect(() => {
+    dispatch({
+      type: 'products/getPermission',
+      payload: {
+        cb: (canEdit: boolean) => {
+          setGrayscaleTagCanEdit(!!canEdit);
+        },
+        params: {
+          product,
+          label: labelInfo?.name,
+        }
+      },
+    })
+  }, [dispatch, labelInfo, product]);
   const handleTabsActiveKeyChange = (activeKey: string) => {
     setTabsActiveKey(activeKey);
     setTabsSearchWord('');
@@ -164,6 +179,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
           label: labelInfo?.name,
           params: values,
           cb: () => {
+            fetchLabelLogs();
             changePublishTagModalVisible(false);
           }
         },
@@ -173,13 +189,75 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
   const handleOpenPublishTagModalCancel = () => {
     changePublishTagModalVisible(false);
   };
+  const handleLabelLogReback = (hid: string) => {
+    dispatch({
+      type: 'products/recallLabelLogs',
+      payload: {
+        product,
+        label: labelInfo?.name,
+        hid,
+        cb: () => {
+          fetchLabelLogs();
+          message.success('撤回成功');
+        },
+      },
+    });
+  };
+  const handleDeleteGroup = (uid: string) => {
+    Modal.confirm({
+      title: '操作不可逆，请再次确认',
+      content: '确认删除该群组？',
+      onOk: () => {
+        dispatch({
+          type: 'products/deleteLabelGroup',
+          payload: {
+            product,
+            label: labelInfo?.name,
+            uid,
+            cb: () => {
+              message.success('删除群组成功');
+              fetchLabelGroups({
+                pageSize: labelGroupPageSize,
+                q: tabsSearchWord,
+              }, 'del');
+            },
+          },
+        });
+      },
+    });
+  };
+  const handleDeleteUser = (uid: string) => {
+    Modal.confirm({
+      title: '操作不可逆，请再次确认',
+      content: '确认删除该用户？',
+      onOk: () => {
+        dispatch({
+          type: 'products/deleteLabeUser',
+          payload: {
+            product,
+            label: labelInfo?.name,
+            uid,
+            cb: () => {
+              message.success('删除用户成功');
+              fetchLabelUsers({
+                pageSize: labelUserPageSize,
+                q: tabsSearchWord,
+              }, 'del');
+            },
+          },
+        });
+      },
+    });
+  };
   const renderModalTitle = () => {
     return (
       <div className={styles['tag-modal-title']}>
         <div>{title}</div>
-        <div>
-          <Icon type="setting" onClick={onSettingEdit}></Icon>
-        </div>
+        {
+          grayscaleTagCanEdit && <div>
+            <Icon type="setting" onClick={onSettingEdit}></Icon>
+          </div>
+        }
       </div>
     )
   };
@@ -189,6 +267,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
     content: (
       <PublishRecord
         publishRecordList={labelLogsList}
+        onReback={handleLabelLogReback}
       />
     ),
     action: (
@@ -207,28 +286,37 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
     content: (
       <UserGroup
         dataSource={labelGroupsList}
-        hideColumns={['syncAt']}
+        hideColumns={['syncAt', 'uid', 'desc']}
         paginationProps={
           {
             total: labelGroupsPageTotal,
             nextPageToken: labelGroupsNextPageToken,
             prePageToken: labelGroupsPrePageToken,
             pageSize: labelGroupPageSize,
-            pageSizeOptions: [10, 20, 30, 40],
+            pageSizeOptions: [10, 20, 50, 100],
             onPageSizeChange: (size) => {
               changeLabelGroupPageSize(size);
               fetchLabelGroups({
                 pageSize: size,
+                q: tabsSearchWord,
               }, 'del');
             },
             onTokenChange: (type, token) => {
               fetchLabelGroups({
                 pageSize: labelGroupPageSize,
                 pageToken: token,
+                q: tabsSearchWord,
               }, type);
             }
           }
         }
+        onAction={(record) => {
+          return {
+            onDelete: () => {
+              handleDeleteGroup(record.uid || record.group);
+            },
+          }
+        }}
       />
     ),
     action: (
@@ -237,6 +325,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
         placeholder="请输入搜索关键字"
         onChange={handleTabsSearchWordChange}
         onSearch={handleTabsSearch}
+        allowClear
       />
     ),
   }, {
@@ -252,21 +341,30 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
             nextPageToken: labelUsersNextPageToken,
             prePageToken: labelUsersPrePageToken,
             pageSize: labelUserPageSize,
-            pageSizeOptions: [10, 20, 30, 40],
+            pageSizeOptions: [10, 20, 50, 100],
             onPageSizeChange: (size) => {
               changeLabelUserPageSize(size);
               fetchLabelUsers({
                 pageSize: size,
+                q: tabsSearchWord,
               }, 'del');
             },
             onTokenChange: (type, token) => {
               fetchLabelUsers({
                 pageSize: labelGroupPageSize,
                 pageToken: token,
+                q: tabsSearchWord,
               }, type);
             }
           }
         }
+        onAction={(record) => {
+          return {
+            onDelete: () => {
+              handleDeleteUser(record.user);
+            },
+          }
+        }}
       />
     ),
     action: (

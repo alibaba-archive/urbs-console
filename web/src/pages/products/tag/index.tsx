@@ -23,6 +23,7 @@ const Tag: React.FC<TagComponentProps> = (props) => {
   const productName = params.name;
   const [productTagModalVisible, setProductTagModalVisible] = useState(false);
   const [grayscaleTagModalVisible, setGrayscaleTagModalVisible] = useState(false);
+  const [tagsSearchWord, setTagsSearchWord] = useState('');
   const fetchProductTags = useCallback((params: PaginationParameters, type?: string) => {
     dispatch({
       type: 'products/getProductTags',
@@ -38,9 +39,10 @@ const Tag: React.FC<TagComponentProps> = (props) => {
       pageSize,
       q: value,
     }, 'del');
+    setTagsSearchWord(value);
   };
   const handleTagsSearchWordChange = (value: string) => {
-    console.log(value)
+    setTagsSearchWord(value);
   };
   const changeProductTagModalVisible = (visible: boolean) => {
     setProductTagModalVisible(visible);
@@ -68,6 +70,7 @@ const Tag: React.FC<TagComponentProps> = (props) => {
             setCurentLabel(record);
             fetchProductTags({
               pageSize,
+              q: tagsSearchWord,
             }, 'del');
             setGrayscaleTagModalVisible(false);
           },
@@ -82,6 +85,7 @@ const Tag: React.FC<TagComponentProps> = (props) => {
           cb: () => {
             fetchProductTags({
               pageSize,
+              q: tagsSearchWord,
             }, 'del');
             setGrayscaleTagModalVisible(false);
           },
@@ -98,6 +102,7 @@ const Tag: React.FC<TagComponentProps> = (props) => {
         cb: () => {
           fetchProductTags({
             pageSize,
+            q: tagsSearchWord,
           }, 'del');
           setGrayscaleTagModalVisible(false);
         },
@@ -113,6 +118,7 @@ const Tag: React.FC<TagComponentProps> = (props) => {
         cb: () => {
           fetchProductTags({
             pageSize,
+            q: tagsSearchWord,
           }, 'del');
           setGrayscaleTagModalVisible(false);
         },
@@ -122,6 +128,7 @@ const Tag: React.FC<TagComponentProps> = (props) => {
   useEffect(() => {
     fetchProductTags({
       pageSize,
+      q: tagsSearchWord,
     });
   }, [productName, pageSize, fetchProductTags]);
   const gotoGroups = () => {
@@ -148,17 +155,19 @@ const Tag: React.FC<TagComponentProps> = (props) => {
             total: pageTotal,
             nextPageToken,
             prePageToken,
-            pageSizeOptions: [10, 20, 30, 40],
+            pageSizeOptions: [10, 20, 50, 100],
             onTokenChange: (type: string, token?: string) => {
               fetchProductTags({
                 pageSize,
                 pageToken: token,
+                q: tagsSearchWord,
               }, type);
             },
             onPageSizeChange: (size: number) => {
               setPageSize(size);
               fetchProductTags({
                 pageSize: size,
+                q: tagsSearchWord,
               }, 'del')
             }
           }

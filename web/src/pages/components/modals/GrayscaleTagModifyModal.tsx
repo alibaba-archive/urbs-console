@@ -26,12 +26,31 @@ const GrayscaleTagModifyModal: React.FC<Props> = (props) => {
     onDelete,
     onOffline,
   } = props;
-  console.log(isEdit, labelInfo, props);
   const { getFieldDecorator, getFieldsValue } = form;
   const handleOnOk = () => {
     const values = getFieldsValue();
     if (onOk) {
       onOk(values);
+    }
+  };
+  const handleOffline = () => {
+    const { onOffline } = props;
+    if (onOffline) {
+      Modal.confirm({
+        title: '操作不可逆，请再次确认',
+        content: '确认下线该标签？',
+        onOk: onOffline,
+      });
+    }
+  };
+  const handleDelete = () => {
+    const { onDelete } = props;
+    if (onDelete) {
+      Modal.confirm({
+        title: '操作不可逆，请再次确认',
+        content: '确认删除该标签？',
+        onOk: onDelete,
+      });
     }
   };
   return (
@@ -49,8 +68,8 @@ const GrayscaleTagModifyModal: React.FC<Props> = (props) => {
         >
           {
             isEdit && (<div>
-              <Button onClick={onOffline} className={styleNames['offline-btn--color']}>下线</Button>
-              <Button onClick={onDelete} type="danger">删除</Button>
+              <Button onClick={handleOffline} className={styleNames['offline-btn--color']}>下线</Button>
+              <Button onClick={handleDelete} type="danger">删除</Button>
             </div>)
           }
           <div>
@@ -134,8 +153,4 @@ const GrayscaleTagModifyModal: React.FC<Props> = (props) => {
   )
 };
 
-export default Form.create<Props>({
-  onFieldsChange(props, field, allFields) {
-    console.log(props, field, allFields);
-  },
-})(GrayscaleTagModifyModal);
+export default Form.create<Props>()(GrayscaleTagModifyModal);

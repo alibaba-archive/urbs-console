@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
-import { Divider, Button } from 'antd';
+import { Divider, Button, Modal } from 'antd';
 import styleNames from './style/PublishRecord.less';
 import { formatTableTime } from '../utils/format';
 import { PublishRecordItem } from '../declare';
 
 interface Props {
   publishRecordList: PublishRecordItem[];
+  onReback?: (hid: string) => void;
 }
 
 const PublishRecord: React.FC<Props> = (props) => {
@@ -27,6 +28,16 @@ const PublishRecord: React.FC<Props> = (props) => {
       return `${users ? `用户 ${users.join(',')}；` : ''}${groups ? `群组 ${groups.join(',')}；` : ''}`;
     }
   };
+  const handleReback = () => {
+    const { onReback, publishRecordList } = props;
+    if (onReback && publishRecordList.length) {
+      Modal.confirm({
+        title: '操作不可逆，请再次确认',
+        content: '确认撤回？',
+        onOk: () => onReback(publishRecordList[0].hid),
+      });
+    }
+  };
   return (
     <>
       {
@@ -41,7 +52,7 @@ const PublishRecord: React.FC<Props> = (props) => {
                 <div>{formatTableTime(item.createdAt)}, {item.operatorName}</div>
                 <Divider style={{ margin: '5px 0' }}></Divider>
                 <div className={styleNames['publish-record-action-wrap']}>
-                  {index === 0 ? <Button type="link" block>撤回</Button> : null}
+                  {index === 0 ? <Button type="link" block onClick={ handleReback }>撤回</Button> : null}
                 </div>
                 <ul>
                   <li>

@@ -154,7 +154,7 @@ const Modules: React.FC<ModulesComponentProps> = (props) => {
       <Pagination
         pageSize={ pageSize }
         total={ modulePageTotal }
-        pageSizeOptions={ [10, 20, 30, 40] }
+        pageSizeOptions={ [10, 20, 50, 100] }
         nextPageToken={ moduleNextPageToken }
         prePageToken={ modulePrePageToken }
         onTokenChange={

@@ -245,7 +245,7 @@ const Users: React.FC<UsersComponentProps> = (props) => {
       />
       <Pagination
         pageSize={pageSize}
-        pageSizeOptions={[10, 20, 30, 40]}
+        pageSizeOptions={[10, 20, 50, 100]}
         onTokenChange={handleTokenChange}
         prePageToken={prePageToken}
         nextPageToken={nextPageToken}

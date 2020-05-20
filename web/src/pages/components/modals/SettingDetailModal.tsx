@@ -219,7 +219,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
             nextPageToken: settingGroupsNextPageToken,
             prePageToken: settingGroupsPrePageToken,
             pageSize: settingGroupPageSize,
-            pageSizeOptions: [10, 20, 30, 40],
+            pageSizeOptions: [10, 20, 50, 100],
             onPageSizeChange: (size) => {
               changeSettingGroupPageSize(size);
               fetchSettingGroups({
@@ -257,7 +257,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
             nextPageToken: settingUsersNextPageToken,
             prePageToken: settingUsersPrePageToken,
             pageSize: settingUserPageSize,
-            pageSizeOptions: [10, 20, 30, 40],
+            pageSizeOptions: [10, 20, 50, 100],
             onPageSizeChange: (size) => {
               changeSettingUserPageSize(size);
               fetchSettingUsers({

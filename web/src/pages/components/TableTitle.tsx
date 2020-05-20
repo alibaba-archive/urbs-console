@@ -42,6 +42,7 @@ const TableTitle: React.FC<TableTitleComponentProps> = (props) => {
           value={ searchWord }
           onChange={ onChange }
           onSearch={ onSearch }
+          allowClear
         />
       </div>
       <Divider className={styleNames['op-divider']}></Divider>

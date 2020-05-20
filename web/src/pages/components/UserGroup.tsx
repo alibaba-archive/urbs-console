@@ -7,7 +7,11 @@ import { Pagination } from './';
 const UserGroup: React.FC<TableComponentProps<Group>> = (props) => {
   const { paginationProps, onAction, hideColumns } = props;
   const columns = [{
-    title: 'ID',
+    title: '群组',
+    dataIndex: 'group',
+    key: 'group',
+  }, {
+    title: '群组',
     dataIndex: 'uid',
     key: 'uid',
   }, {
@@ -53,7 +57,7 @@ const UserGroup: React.FC<TableComponentProps<Group>> = (props) => {
   };
   return (
     <div>
-      <Table rowKey="uid" {...props} columns={generateTableColumns()} pagination={false}></Table>
+      <Table rowKey={ (record) => (record.uid || record.group) } {...props} columns={generateTableColumns()} pagination={false}></Table>
       {
         paginationProps && (<Pagination {...paginationProps}></Pagination>)
       }
