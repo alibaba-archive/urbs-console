@@ -1,5 +1,5 @@
   # User API
-  /v1/users/settings:unionAll:
+  /api/v1/users/settings:unionAll:
     get:
       tags:
         - User

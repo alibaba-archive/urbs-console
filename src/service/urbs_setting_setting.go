@@ -205,3 +205,59 @@ func (a *UrbsSetting) SettingListRule(ctx context.Context, args *tpl.ProductModu
 	}
 	return result, nil
 }
+
+// SettingDeleteUser ...
+func (a *UrbsSetting) SettingDeleteUser(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/users/%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting, args.UID)
+
+	result := new(tpl.BoolRes)
+
+	resp, err := request.Delete(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// SettingRollbackUserSetting ...
+func (a *UrbsSetting) SettingRollbackUserSetting(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/users/%s:rollback", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting, args.UID)
+
+	result := new(tpl.BoolRes)
+
+	resp, err := request.Put(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// SettingDeleteGroup ...
+func (a *UrbsSetting) SettingDeleteGroup(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/groups/%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting, args.UID)
+
+	result := new(tpl.BoolRes)
+
+	resp, err := request.Delete(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// SettingRollbackGroupSetting ...
+func (a *UrbsSetting) SettingRollbackGroupSetting(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/groups/%s:rollback", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting, args.UID)
+
+	result := new(tpl.BoolRes)
+
+	resp, err := request.Put(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}

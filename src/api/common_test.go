@@ -28,7 +28,9 @@ func TestAPIsAuth(t *testing.T) {
 		{Method: http.MethodGet, URL: "/api/v1/products/product/labels"},
 		{Method: http.MethodGet, URL: "/api/v1/products/product/labels/label/logs"},
 		{Method: http.MethodGet, URL: "/api/v1/products/product/labels/label/groups"},
+		{Method: http.MethodDelete, URL: "/api/v1/products/product/labels/label/groups/123"},
 		{Method: http.MethodGet, URL: "/api/v1/products/product/labels/label/users"},
+		{Method: http.MethodDelete, URL: "/api/v1/products/product/labels/label/users/123"},
 		{Method: http.MethodPost, URL: "/api/v1/products/product/labels", Body: `{"name":"name","uids":["123"]}`},
 		{Method: http.MethodPut, URL: "/api/v1/products/product/labels/label", Body: `{"desc":"name"}`},
 		{Method: http.MethodDelete, URL: "/api/v1/products/product/labels/label"},
@@ -46,6 +48,14 @@ func TestAPIsAuth(t *testing.T) {
 		{Method: http.MethodPut, URL: "/api/v1/products/product/modules/module:offline"},
 		// ***** setting ******
 		{Method: http.MethodGet, URL: "/api/v1/products/product/modules/module/settings"},
+		{Method: http.MethodGet, URL: "/api/v1/products/product/modules/module/settings/setting/groups"},
+		{Method: http.MethodDelete, URL: "/api/v1/products/product/modules/module/settings/setting/groups/123"},
+		{Method: http.MethodPut, URL: "/api/v1/products/product/modules/module/settings/setting/groups/123:rollback"},
+
+		{Method: http.MethodGet, URL: "/api/v1/products/product/modules/module/settings/setting/users"},
+		{Method: http.MethodDelete, URL: "/api/v1/products/product/modules/module/settings/setting/users/123"},
+		{Method: http.MethodPut, URL: "/api/v1/products/product/modules/module/settings/setting/users/123:rollback"},
+
 		{Method: http.MethodGet, URL: "/api/v1/products/product/modules/module/settings/setting/logs"},
 		{Method: http.MethodPost, URL: "/api/v1/products/product/modules/module/settings", Body: `{"name":"xxxx","uids":["123"]}`},
 		{Method: http.MethodPut, URL: "/api/v1/products/product/modules/module/settings/setting", Body: `{"desc":"xxxx","uids":["123"]}`},
@@ -61,9 +71,6 @@ func TestAPIsAuth(t *testing.T) {
 		{Method: http.MethodGet, URL: "/api/v1/users/uid/labels"},
 		{Method: http.MethodGet, URL: "/api/v1/users/uid/settings"},
 		{Method: http.MethodPut, URL: "/api/v1/users/uid/labels:cache"},
-		{Method: http.MethodDelete, URL: "/api/v1/users/uid/labels/hid"},
-		{Method: http.MethodPut, URL: "/api/v1/users/uid/settings/hid:rollback"},
-		{Method: http.MethodDelete, URL: "/api/v1/users/uid/settings/hid"},
 		{Method: http.MethodPost, URL: "/api/v1/users:batch"},
 		// ***** group ******
 		{Method: http.MethodGet, URL: "/api/v1/groups"},
@@ -73,9 +80,6 @@ func TestAPIsAuth(t *testing.T) {
 		{Method: http.MethodPost, URL: "/api/v1/groups:batch"},
 		{Method: http.MethodPut, URL: "/api/v1/groups/uid"},
 		{Method: http.MethodDelete, URL: "/api/v1/groups/uid"},
-		{Method: http.MethodDelete, URL: "/api/v1/groups/uid/labels/hid"},
-		{Method: http.MethodPut, URL: "/api/v1/groups/uid/settings/hid:rollback"},
-		{Method: http.MethodDelete, URL: "/api/v1/groups/uid/settings/hid"},
 		{Method: http.MethodDelete, URL: "/api/v1/groups/uid/members"},
 		// ***** UrbsAc ******
 		{Method: http.MethodPost, URL: "/api/v1/ac/users"},
@@ -83,6 +87,7 @@ func TestAPIsAuth(t *testing.T) {
 		{Method: http.MethodGet, URL: "/api/v1/ac/users"},
 		{Method: http.MethodGet, URL: "/api/v1/ac/users:search"},
 		{Method: http.MethodPost, URL: "/api/v1/ac/users/:uid/permissions"},
+		{Method: http.MethodDelete, URL: "/api/v1/ac/users/:uid/permissions"},
 	}
 
 	for _, req := range reqArgs {

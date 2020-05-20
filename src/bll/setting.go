@@ -175,3 +175,23 @@ func (a *Setting) UpdateRule(ctx context.Context, args *tpl.ProductModuleSetting
 func (a *Setting) DeleteRule(ctx context.Context, args *tpl.ProductModuleSettingHIDURL) (*tpl.BoolRes, error) {
 	return a.services.UrbsSetting.SettingDeleteRule(ctx, args)
 }
+
+// DeleteUser ...
+func (a *Setting) DeleteUser(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
+	return a.services.UrbsSetting.SettingDeleteUser(ctx, args)
+}
+
+// DeleteGroup ...
+func (a *Setting) DeleteGroup(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
+	return a.services.UrbsSetting.SettingDeleteGroup(ctx, args)
+}
+
+// RollbackGroupSetting ...
+func (a *Setting) RollbackGroupSetting(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
+	return a.services.UrbsSetting.SettingRollbackGroupSetting(ctx, args)
+}
+
+// RollbackUserSetting ...
+func (a *Setting) RollbackUserSetting(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
+	return a.services.UrbsSetting.SettingRollbackUserSetting(ctx, args)
+}

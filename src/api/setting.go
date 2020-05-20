@@ -63,6 +63,40 @@ func (a *Setting) ListGroups(ctx *gear.Context) error {
 	return ctx.OkJSON(res)
 }
 
+// RollbackGroupSetting ..
+func (a *Setting) RollbackGroupSetting(ctx *gear.Context) error {
+	req := tpl.ProductModuleSettingUIDURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module+req.Setting)
+	if err != nil {
+		return err
+	}
+	res, err := a.blls.Setting.RollbackGroupSetting(ctx, &req)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}
+
+// DeleteGroup ..
+func (a *Setting) DeleteGroup(ctx *gear.Context) error {
+	req := tpl.ProductModuleSettingUIDURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module+req.Setting)
+	if err != nil {
+		return err
+	}
+	res, err := a.blls.Setting.DeleteGroup(ctx, &req)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}
+
 // ListUsers ..
 func (a *Setting) ListUsers(ctx *gear.Context) error {
 	req := tpl.ProductModuleSettingURL{}
@@ -70,6 +104,40 @@ func (a *Setting) ListUsers(ctx *gear.Context) error {
 		return err
 	}
 	res, err := a.blls.Setting.ListUsers(ctx, &req)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}
+
+// RollbackUserSetting ..
+func (a *Setting) RollbackUserSetting(ctx *gear.Context) error {
+	req := tpl.ProductModuleSettingUIDURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module+req.Setting)
+	if err != nil {
+		return err
+	}
+	res, err := a.blls.Setting.RollbackUserSetting(ctx, &req)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}
+
+// DeleteUser ..
+func (a *Setting) DeleteUser(ctx *gear.Context) error {
+	req := tpl.ProductModuleSettingUIDURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module+req.Setting)
+	if err != nil {
+		return err
+	}
+	res, err := a.blls.Setting.DeleteUser(ctx, &req)
 	if err != nil {
 		return err
 	}

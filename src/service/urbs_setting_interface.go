@@ -63,6 +63,15 @@ type UrbsSettingInterface interface {
 	// Recall 撤销指定批次的用户或群组的配置项
 	SettingRecall(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.RecallBody) (*tpl.BoolRes, error)
 
+	// 删除指定用户的配置项
+	SettingDeleteUser(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error)
+	// 回滚指定用户的配置项
+	SettingRollbackUserSetting(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error)
+	// 删除指定群组的配置项
+	SettingDeleteGroup(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error)
+	// 回滚指定群组的配置项
+	SettingRollbackGroupSetting(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error)
+
 	// ***** label ******
 	// 读取指定产品灰度标签
 	LabelList(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.LabelsInfoRes, error)
@@ -90,6 +99,10 @@ type UrbsSettingInterface interface {
 	LabelAssign(ctx context.Context, product string, label string, body *tpl.UsersGroupsBody) (*tpl.LabelReleaseInfoRes, error)
 	// 批量撤销对用户或群组设置的产品灰度标签
 	LabelRecall(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.RecallBody) (*tpl.BoolRes, error)
+	// 删除指定用户的指定灰度标签
+	LabelDeleteUser(ctx context.Context, args *tpl.ProductLabelUIDURL) (*tpl.BoolRes, error)
+	// 删除指定用户的配置项
+	LabelDeleteGroup(ctx context.Context, args *tpl.ProductLabelUIDURL) (*tpl.BoolRes, error)
 
 	// ***** user ******
 	// 读取用户列表，支持条件筛选
@@ -106,12 +119,6 @@ type UrbsSettingInterface interface {
 	UserCheckExists(ctx context.Context, uid string) (*tpl.BoolRes, error)
 	// 批量添加用户
 	UserBatchAdd(ctx context.Context, users []string) (*tpl.BoolRes, error)
-	// 删除指定用户的指定灰度标签
-	UserRemoveLabled(ctx context.Context, uid string, hid string) (*tpl.BoolRes, error)
-	// 回滚指定用户的指定配置项
-	UserRollbackSetting(ctx context.Context, uid string, hid string) (*tpl.BoolRes, error)
-	// 删除指定用户的指定配置项
-	UserRemoveSetting(ctx context.Context, uid string, hid string) (*tpl.BoolRes, error)
 
 	// ***** group ******
 	// 读取指定群组的灰度标签，支持条件筛选
@@ -134,10 +141,4 @@ type UrbsSettingInterface interface {
 	GroupBatchAddMembers(ctx context.Context, groupId string, users []string) (*tpl.BoolRes, error)
 	// 指定群组根据条件清理成员
 	GroupRemoveMembers(ctx context.Context, args *tpl.GroupMembersURL) (*tpl.BoolRes, error)
-	// 删除指定群组的指定灰度标签
-	GroupRemoveLable(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error)
-	// 回滚指定群组的指定配置项
-	GroupRollbackSetting(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error)
-	// 删除指定群组的指定配置项
-	GroupRemoveSetting(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error)
 }
