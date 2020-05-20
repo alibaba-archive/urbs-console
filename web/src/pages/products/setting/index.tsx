@@ -21,6 +21,7 @@ const Settings: React.FC<SettingComponentProps> = (props) => {
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [settingModifyVisible, changeSettingModifyVisible] = useState(false);
   const [settingDetailVisible, changeSettingDetailVisible] = useState(false);
+  const [settingSearchWord, setSettingSearchWord] = useState('');
 
   const fetchSettingList = useCallback((params: PaginationParameters, type?: string) => {
     dispatch({
@@ -32,22 +33,10 @@ const Settings: React.FC<SettingComponentProps> = (props) => {
       }
     })
   }, [dispatch, productName]);
-  const fetchSettingLogList = useCallback((curentSetting: Setting) => {
-    dispatch({
-      type: 'products/getSettingLogs',
-      payload: {
-        product: productName,
-        module: curentSetting?.module,
-        setting: curentSetting?.name,
-        params: {
-          pageSize: 1000
-        },
-      }
-    });
-  }, [dispatch, productName]);
   useEffect(() => {
     fetchSettingList({
       pageSize,
+      q: settingSearchWord,
     });
   }, [fetchSettingList, pageSize]);
 
@@ -56,7 +45,6 @@ const Settings: React.FC<SettingComponentProps> = (props) => {
       onDoubleClick: () => {
         setCurentSetting(record);
         changeSettingDetailVisible(true);
-        fetchSettingLogList(record);
       }
     };
   };
@@ -71,6 +59,7 @@ const Settings: React.FC<SettingComponentProps> = (props) => {
             setCurentSetting(record);
             fetchSettingList({
               pageSize,
+              q: settingSearchWord,
             }, 'del');
             changeSettingModifyVisible(false);
           },
@@ -85,6 +74,7 @@ const Settings: React.FC<SettingComponentProps> = (props) => {
           cb: () => {
             fetchSettingList({
               pageSize,
+              q: settingSearchWord,
             }, 'del');
             changeSettingModifyVisible(false);
           },
@@ -102,8 +92,10 @@ const Settings: React.FC<SettingComponentProps> = (props) => {
         cb: () => {
           fetchSettingList({
             pageSize,
+            q: settingSearchWord,
           }, 'del');
           changeSettingModifyVisible(false);
+          changeSettingDetailVisible(false);
         },
       },
     });
@@ -112,14 +104,25 @@ const Settings: React.FC<SettingComponentProps> = (props) => {
     setCurentSetting(undefined);
     changeSettingModifyVisible(true);
   };
+  const handleSettingSearchWordChange = (value: string) => {
+    setSettingSearchWord(value);
+  };
+  const handleSettingSearch = (value: string) => {
+    fetchSettingList({
+      pageSize,
+      q: value,
+    }, 'del');
+  };
   return (
     <div className={ styleNames.normal }>
       <TableTitle
         plusTitle="添加配置项"
         handlePlusClick={ handlePlusClick }
-        handleSearch={ (value: string) => { fetchSettingList({pageSize, q: value}, 'del') } }
+        handleSearch={ handleSettingSearch }
+        handleWordChange={ handleSettingSearchWordChange }
       />
       <SettingTable
+        hideColumns={['action']}
         onRow={ handleOnRow }
         dataSource={ productSettingsList }
         paginationProps={
@@ -133,12 +136,14 @@ const Settings: React.FC<SettingComponentProps> = (props) => {
               fetchSettingList({
                 pageSize,
                 pageToken: token,
+                q: settingSearchWord,
               }, type);
             },
             onPageSizeChange: (size: number) => {
               setPageSize(size);
               fetchSettingList({
                 pageSize: size,
+                q: settingSearchWord,
               }, 'del');
             }
           }

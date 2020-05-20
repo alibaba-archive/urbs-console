@@ -31,8 +31,8 @@ const TableTitle: React.FC<TableTitleComponentProps> = (props) => {
         <Button
           className={styleNames['op-btn']}
           type="link"
-          icon="plus"
-          onClick={ handlePlusClick }
+          icon={plusTitle ? 'plus' : undefined}
+          onClick={ plusTitle ? handlePlusClick : undefined}
         >
           { plusTitle }
         </Button>

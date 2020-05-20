@@ -32,8 +32,8 @@ export function getGroupLabels(uid: string, params: PaginationParameters) {
   return request(`${serviceApiPrefix}/groups/${uid}/labels${ generateQuery(params) }`);
 };
 
-export function deleteGroupLabel (uid: string, hid: string) {
-  return request.delete(`${serviceApiPrefix}/groups/${uid}/labels/${hid}`);
+export function deleteGroupLabel (product: string, label: string, uid: string) {
+  return request.delete(`${serviceApiPrefix}/products/${product}/labels/${label}/groups/${uid}`);
 }
 
 export function getGroupSettings(uid: string, params: PaginationParameters) {
@@ -56,3 +56,20 @@ export function addGroupMembers(uid: string, users: string[]) {
 export function deleteGroupMembers(uid: string, user: string) {
   return request.delete(`${serviceApiPrefix}/groups/${uid}/members?user=${user}`);
 };
+
+export function deleteGroupSetting (product: string, module: string, setting: string, uid: string) {
+  return request.delete(`${serviceApiPrefix}/products/${product}/modules/${module}/settings/${setting}/groups/${uid}`);
+}
+
+export function rollbackGroupSetting (product: string, module: string, setting: string, uid: string) {
+  return request.put(`${serviceApiPrefix}/products/${product}/modules/${module}/settings/${setting}/groups/${uid}:rollback`);
+}
+
+export function getPermission () {
+  return request.post(`${serviceApiPrefix}/ac/permission:check`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({}),
+  });
+}

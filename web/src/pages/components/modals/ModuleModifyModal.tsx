@@ -24,6 +24,13 @@ const ModuleModifyModal: React.FC<Props> = (props) => {
       onOk(values);
     }
   };
+  const handleOffline = () => {
+    Modal.confirm({
+      title: '操作不可逆，请再次确认',
+      content: '确认下线？',
+      onOk: onOffline,
+    });
+  };
   return (
     <Modal
       visible={visible}
@@ -38,7 +45,7 @@ const ModuleModifyModal: React.FC<Props> = (props) => {
         >
           {
             isEdit && (<div>
-              <Button onClick={onOffline} className={styleNames['offline-btn--color']}>下线</Button>
+              <Button onClick={handleOffline} className={styleNames['offline-btn--color']}>下线</Button>
             </div>)
           }
           <div>

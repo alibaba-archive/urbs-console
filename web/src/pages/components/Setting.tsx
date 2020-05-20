@@ -1,7 +1,7 @@
 import React from 'react';
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
 import { formatTableTime } from '../utils/format';
-import { TableComponentProps, User, Setting } from '../declare';
+import { TableComponentProps, User, Setting, ActionEventListeners } from '../declare';
 import { Pagination } from './';
 
 const Settings: React.FC<TableComponentProps<Setting>> = (props) => {
@@ -51,6 +51,19 @@ const Settings: React.FC<TableComponentProps<Setting>> = (props) => {
     render: (time: string) => {
       return `${formatTableTime(time)}`;
     },
+  }, {
+    dataIndex: 'action',
+    key: 'action',
+    width: 'auto',
+    render: (_, record: Setting) => {
+      const { onDelete, onRollback } = onAction ? onAction(record) : ({} as ActionEventListeners);
+      return (
+        <>
+          <a onClick={onRollback}>回滚</a>
+          <a onClick={onDelete} style={{marginLeft: '5px'}}>移除</a>
+        </>
+      )
+    }
   }];
   const generateTableColumns = () => {
     if (hideColumns) {

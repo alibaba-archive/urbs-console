@@ -423,6 +423,27 @@ const products: Model = {
         cb();
       }
     },
+    *recallSettingLogs ({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+      const {cb, product, module, setting, hid} = payload;
+      const { result } = yield call(productsService.recallSettingLogs, product, module, setting, hid);
+      if (result) {
+        cb();
+      }
+    },
+    *deleteSettingUser ({ payload }: AnyAction, { call }: EffectsCommandMap) {
+      const {cb, product, module, setting, uid} = payload;
+      const { result } = yield call(productsService.deleteSettingUser, product, module, setting, uid);
+      if (result) {
+        cb();
+      }
+    },
+    *deleteSettingGroup ({ payload }: AnyAction, { call }: EffectsCommandMap) {
+      const {cb, product, module, setting, uid} = payload;
+      const { result } = yield call(productsService.deleteSettingGroup, product, module, setting, uid);
+      if (result) {
+        cb();
+      }
+    },
   },
 };
 

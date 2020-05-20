@@ -84,8 +84,8 @@ const groups: Model = {
       });
     },
     *deleteGroupLabel({ payload }: AnyAction, { call }: EffectsCommandMap) {
-      const { uid, hid, cb } = payload;
-      const { result } = yield call(groupsService.deleteGroupLabel, uid, hid);
+      const { uid, product, label, cb } = payload;
+      const { result } = yield call(groupsService.deleteGroupLabel, product, label, uid);
       if (result && cb) {
         cb();
       }
@@ -110,6 +110,13 @@ const groups: Model = {
           settingsPageTotal: totalSize,
         },
       });
+    },
+    *deleteGroupSetting({ payload }: AnyAction, { call }: EffectsCommandMap) {
+      const { uid, product, module, setting, cb } = payload;
+      const { result } = yield call(groupsService.deleteGroupSetting, product, module, setting, uid);
+      if (result && cb) {
+        cb();
+      }
     },
     *getGroupMembers({ payload }: AnyAction, { call, put, select }: EffectsCommandMap) {
       const { params, uid, type } = payload;
@@ -144,6 +151,20 @@ const groups: Model = {
       const { result } = yield call(groupsService.deleteGroupMembers, uid, params.user);
       if (result && cb) {
         cb();
+      }
+    },
+    *rollbackGroupSetting({ payload }: AnyAction, { call }: EffectsCommandMap) {
+      const { uid, product, module, setting, cb } = payload;
+      const { result } = yield call(groupsService.rollbackGroupSetting, product, module, setting, uid);
+      if (result && cb) {
+        cb();
+      }
+    },
+    *getPermission ({ payload }: AnyAction, { call }: EffectsCommandMap) {
+      const { cb } = payload;
+      const { result } = yield call(groupsService.getPermission);
+      if (cb) {
+        cb(result);
       }
     },
   },

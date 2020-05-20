@@ -67,3 +67,20 @@ export function getUserSettings(uid: string, params: PaginationParameters) {
 export function deleteUserLabel(uid: string, hid: string) {
   return request.delete(`${serviceApiPrefix}/users/${uid}/labels/${hid}`);
 }
+
+export function deleteUserSetting (product: string, module: string, setting: string, uid: string) {
+  return request.delete(`${serviceApiPrefix}/products/${product}/modules/${module}/settings/${setting}/users/${uid}`);
+}
+
+export function rollbackUserSetting (product: string, module: string, setting: string, uid: string) {
+  return request.put(`${serviceApiPrefix}/products/${product}/modules/${module}/settings/${setting}/users/${uid}:rollback`);
+}
+
+export function getPermission () {
+  return request.post(`${serviceApiPrefix}/ac/permission:check`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({}),
+  });
+}
