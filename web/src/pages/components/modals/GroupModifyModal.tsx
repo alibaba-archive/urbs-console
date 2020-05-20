@@ -31,6 +31,13 @@ const ModuleModifyModal: React.FC<Props> = (props) => {
       onOk(values, isEdit);
     }
   };
+  const handleDelete = () => {
+    Modal.confirm({
+      title: '操作不可逆，请再次确认',
+      content: '确认删除？',
+      onOk: onDel,
+    });
+  };
   return (
     <Modal
       visible={visible}
@@ -45,7 +52,7 @@ const ModuleModifyModal: React.FC<Props> = (props) => {
         >
           {
             isEdit && (<div>
-              <Button type="danger" onClick={onDel}>删除</Button>
+              <Button type="danger" onClick={handleDelete}>删除</Button>
             </div>)
           }
           <div>
@@ -91,11 +98,4 @@ const ModuleModifyModal: React.FC<Props> = (props) => {
   );
 };
 
-export default Form.create<Props>({
-  onFieldsChange(props, field, allFields) {
-    console.log(props, field, allFields);
-  },
-  onValuesChange(props, changeValues, allValues) {
-    console.log(props, changeValues, allValues);
-  },
-})(ModuleModifyModal);
+export default Form.create<Props>()(ModuleModifyModal);

@@ -12,10 +12,11 @@ interface Props extends FormComponentProps {
   onOk?: (values: FieldsValue) => void;
   onOffline?: () => void;
   defaultValue?: Setting;
+  module?: string,
 }
 
 const SettingModifyModal: React.FC<Props> = (props) => {
-  const { isEdit, visible, onCancel, onOk, defaultValue, form, onOffline } = props;
+  const { isEdit, visible, onCancel, onOk, defaultValue, form, onOffline, module } = props;
   const { getFieldDecorator, getFieldsValue } = form;
   const handleOnOk = () => {
     const fieldsValues = getFieldsValue();
@@ -23,6 +24,13 @@ const SettingModifyModal: React.FC<Props> = (props) => {
       fieldsValues.values = fieldsValues.values.split(',');
       onOk(fieldsValues);
     }
+  };
+  const handleOffline = () => {
+    Modal.confirm({
+      title: '操作不可逆，请再次确认',
+      content: '确认下线？',
+      onOk: onOffline,
+    });
   };
   return (
     <Modal
@@ -39,7 +47,7 @@ const SettingModifyModal: React.FC<Props> = (props) => {
         >
           {
             isEdit && (<div>
-              <Button onClick={onOffline} className={styleNames['offline-btn--color']}>下线</Button>
+              <Button onClick={handleOffline} className={styleNames['offline-btn--color']}>下线</Button>
             </div>)
           }
           <div>
@@ -72,9 +80,9 @@ const SettingModifyModal: React.FC<Props> = (props) => {
         >
           {
             getFieldDecorator('module', {
-              initialValue: defaultValue && defaultValue.module
+              initialValue: defaultValue ? defaultValue.module : (module && module)
             })(
-              <Input placeholder="请输入所属模块" disabled={isEdit}></Input>
+              <Input placeholder="请输入所属模块" disabled={!!(isEdit || module)}></Input>
             )
           }
         </Form.Item>
@@ -112,7 +120,7 @@ const SettingModifyModal: React.FC<Props> = (props) => {
         >
           {
             getFieldDecorator('channels', {
-              initialValue: defaultValue ? [defaultValue.channels] : []
+              initialValue: defaultValue ? defaultValue.channels : []
             })(
               <Checkbox.Group options={VERSION_CHANNEL}></Checkbox.Group>
             )
@@ -126,7 +134,7 @@ const SettingModifyModal: React.FC<Props> = (props) => {
         >
           {
             getFieldDecorator('clients', {
-              initialValue: defaultValue ? [defaultValue.clients] : []
+              initialValue: defaultValue ? defaultValue.clients : []
             })(
               <Checkbox.Group options={CLIENT_TYPE}></Checkbox.Group>
             )

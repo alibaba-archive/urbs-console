@@ -21,6 +21,7 @@ const Modules: React.FC<ModulesComponentProps> = (props) => {
   const [moduleModalVisible, setModuleModalVisible] = useState(false);
   const [moduleDetailVisible, setModuleDetailVisible] = useState(false);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [modulesSearchWord, setModulesSearchWord] = useState('');
   const fetchModuleList = useCallback((params: PaginationParameters, type?: string) => {
     dispatch({
       type: 'products/getProductModules',
@@ -34,9 +35,12 @@ const Modules: React.FC<ModulesComponentProps> = (props) => {
   useEffect(() => {
     fetchModuleList({
       pageSize,
+      q: modulesSearchWord,
     });
   }, [fetchModuleList, pageSize]);
-  const handleModulesSearchWordChange = () => {};
+  const handleModulesSearchWordChange = (value: string) => {
+    setModulesSearchWord(value);
+  };
   const handleModulesSearch = (value: string) => {
     fetchModuleList({
       pageSize,
@@ -100,6 +104,7 @@ const Modules: React.FC<ModulesComponentProps> = (props) => {
             setCurentModule(record);
             fetchModuleList({
               pageSize,
+              q: modulesSearchWord,
             }, 'del');
             setModuleModalVisible(false);
           },
@@ -114,6 +119,7 @@ const Modules: React.FC<ModulesComponentProps> = (props) => {
           cb: () => {
             fetchModuleList({
               pageSize,
+              q: modulesSearchWord,
             }, 'del');
             setModuleModalVisible(false);
           },
@@ -130,8 +136,10 @@ const Modules: React.FC<ModulesComponentProps> = (props) => {
         cb: () => {
           fetchModuleList({
             pageSize,
+            q: modulesSearchWord,
           }, 'del');
           setModuleModalVisible(false);
+          setModuleDetailVisible(false);
         },
       },
     });
@@ -162,6 +170,7 @@ const Modules: React.FC<ModulesComponentProps> = (props) => {
             fetchModuleList({
               pageSize,
               pageToken: token,
+              q: modulesSearchWord,
             }, type);
           }
         }
@@ -170,6 +179,7 @@ const Modules: React.FC<ModulesComponentProps> = (props) => {
             setPageSize(size);
             fetchModuleList({
               pageSize: size,
+              q: modulesSearchWord,
             }, 'del');
           }
         }

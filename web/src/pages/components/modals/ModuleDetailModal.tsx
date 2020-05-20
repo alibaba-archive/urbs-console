@@ -26,6 +26,7 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
   const [tabsSearchWord, setTabsSearchWord] = useState('');
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [settingModifyModalVisible, setSettingModifyModalVisible] = useState(false);
+  const [moduleCanEdit, setModuleCanEdit] = useState(false);
   const fetchModuleSettingList = useCallback((params: PaginationParameters, type?: string) => {
     dispatch({
       type: 'products/getModuleSettings',
@@ -40,8 +41,23 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
   useEffect(() => {
     fetchModuleSettingList({
       pageSize,
+      q: tabsSearchWord,
     });
   }, [fetchModuleSettingList, pageSize]);
+  useEffect(() => {
+    dispatch({
+      type: 'products/getPermission',
+      payload: {
+        cb: (canEdit: boolean) => {
+          setModuleCanEdit(!!canEdit);
+        },
+        params: {
+          product,
+          module: moduleInfo?.name,
+        }
+      },
+    })
+  }, [dispatch, moduleInfo, product]);
   const handleTabsSearch = (searchWord: string) => {
     setTabsSearchWord(searchWord);
     fetchModuleSettingList({
@@ -64,6 +80,10 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
         productName: product,
         cb: () => {
           setSettingModifyModalVisible(false);
+          fetchModuleSettingList({
+            pageSize,
+            q: tabsSearchWord,
+          }, 'del');
         },
       },
     });
@@ -72,9 +92,13 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
     return (
       <div className={styleNames['modal-title']}>
         <div>{title}</div>
-        <div>
-          <Icon type="setting" onClick={onModuleEdit}></Icon>
-        </div>
+        {
+          moduleCanEdit && (
+            <div>
+              <Icon type="setting" onClick={onModuleEdit}></Icon>
+            </div>
+          )
+        }
       </div>
     )
   };
@@ -84,10 +108,11 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
     content: (
       <Setting
         dataSource={moduleSettingsList}
+        hideColumns={['module', 'desc', 'release', 'action']}
         paginationProps={
           {
             pageSize,
-            pageSizeOptions: [10, 20, 30, 40, 50],
+            pageSizeOptions: [10, 20, 50, 100],
             total: moduleSettingPageTotal,
             prePageToken: moduleSettingPrePageToken,
             nextPageToken: moduleSettingNextPageToken,
@@ -95,12 +120,14 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
               fetchModuleSettingList({
                 pageSize,
                 pageToken: token,
+                q: tabsSearchWord,
               }, type);
             },
             onPageSizeChange: (size) => {
               setPageSize(size);
               fetchModuleSettingList({
                 pageSize: size,
+                q: tabsSearchWord,
               }, 'del');
             },
           }
@@ -117,7 +144,7 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
         >
           添加配置项
         </Button>
-        <Input.Search value={tabsSearchWord} placeholder="请输入搜索关键字" onChange={handleTabsSearchWordChange} onSearch={handleTabsSearch} />
+        <Input.Search allowClear value={tabsSearchWord} placeholder="请输入搜索关键字" onChange={handleTabsSearchWordChange} onSearch={handleTabsSearch} />
       </div>
     ),
   }];
@@ -162,6 +189,7 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
           visible={settingModifyModalVisible}
           onCancel={() => setSettingModifyModalVisible(false)}
           onOk={handleSettingModifyModalOk}
+          module={moduleInfo?.name}
         />
       }
     </Modal>

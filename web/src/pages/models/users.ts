@@ -169,6 +169,27 @@ const users: Model = {
         },
       });
     },
+    *deleteUserSetting({ payload }: AnyAction, { call }: EffectsCommandMap) {
+      const { uid, product, module, setting, cb } = payload;
+      const { result } = yield call(usersService.deleteUserSetting, product, module, setting, uid);
+      if (result && cb) {
+        cb();
+      }
+    },
+    *rollbackUserSetting({ payload }: AnyAction, { call }: EffectsCommandMap) {
+      const { uid, product, module, setting, cb } = payload;
+      const { result } = yield call(usersService.rollbackUserSetting, product, module, setting, uid);
+      if (result && cb) {
+        cb();
+      }
+    },
+    *getPermission ({ payload }: AnyAction, { call }: EffectsCommandMap) {
+      const { cb } = payload;
+      const { result } = yield call(usersService.getPermission);
+      if (cb) {
+        cb(result);
+      }
+    },
   },
 };
 

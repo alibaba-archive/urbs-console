@@ -211,6 +211,7 @@ export interface Setting {
   name: string;
   desc: string;
   module: string;
+  product: string;
   createdAt: string;
   updatedAt: string;
   offlineAt: string;
@@ -283,6 +284,7 @@ export interface PaginationComponentProps {
 
 export interface ActionEventListeners {
   onDelete: (e: React.MouseEvent) => void;
+  onRollback?: (e: React.MouseEvent) => void;
 }
 
 export interface TableComponentProps<T> extends TableProps<T> {

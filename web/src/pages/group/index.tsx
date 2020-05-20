@@ -2,9 +2,15 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Icon, Modal, Button, Input, Form, message } from 'antd';
 import { connect } from 'dva';
 import { GrayscaleTag, Setting, Users, UserGroup, TableTitle, GroupModifyModal, ContentTabs, ContentDetail } from '../components';
-import { DEFAULT_FORM_ITEM_LAYOUT, DEFAULT_PAGE_SIZE, PaginationParameters, Group, GroupsComponentProps, FieldsValue, Label, GroupMember } from '../declare';
+import { DEFAULT_FORM_ITEM_LAYOUT, DEFAULT_PAGE_SIZE, PaginationParameters, Group, GroupsComponentProps, FieldsValue, Label, GroupMember, Setting as SettingData } from '../declare';
 import { formatTableTime } from '../utils/format';
 import styleNames from '../components/style/base.less';
+
+enum TagTabsKey {
+  setting = 'setting',
+  label = 'label',
+  user = 'user',
+}
 
 const Groups: React.FC<GroupsComponentProps> = (props) => {
   const {
@@ -21,6 +27,10 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
     membersPrePageToken,
     membersNextPageToken,
     membersPageTotal,
+    settingsList,
+    settingsNextPageToken,
+    settingsPrePageToken,
+    settingsPageTotal,
   } = props;
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [currentGroup, setCurrentGroup] = useState<Group>();
@@ -31,6 +41,10 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
   const [groupModifyVisible, changeGroupModifyVisible] = useState(false);
   const [groupDetailVisible, changeGroupDetailVisible] = useState(false);
   const [groupUserAddVisible, changeGroupUserAddVisible] = useState(false);
+  const [tabsSearchWord, setTabsSearchWord] = useState('');
+  const [tabsActiveKey, setTabsActiveKey] = useState(String(TagTabsKey.label));
+  const [tagsSearchWord, setTagsSearchWord] = useState('');
+  const [canAddGroup, setCanAddGroup] = useState(false);
 
   const fetchGroupList = useCallback((params: PaginationParameters, type?: string) => {
     dispatch({
@@ -85,6 +99,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
   const handlePageSizeChange = (size: number) => {
     fetchGroupList({
       pageSize,
+      q: tagsSearchWord,
     }, 'del');
     setPageSize(size);
   };
@@ -93,6 +108,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
     fetchGroupList({
       pageSize,
       pageToken,
+      q: tagsSearchWord,
     }, type);
   };
 
@@ -105,6 +121,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
           cb: () => {
             fetchGroupList({
               pageSize,
+              q: tagsSearchWord,
             }, 'del');
             message.success('修改群组成功');
             changeGroupModifyVisible(false);
@@ -119,6 +136,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
           cb: () => {
             fetchGroupList({
               pageSize,
+              q: tagsSearchWord,
             }, 'del');
             message.success('添加群组成功');
             changeGroupModifyVisible(false);
@@ -136,6 +154,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
         cb: () => {
           fetchGroupList({
             pageSize,
+            q: tagsSearchWord,
           }, 'del');
           message.success('删除群组成功');
           changeGroupModifyVisible(false);
@@ -164,6 +183,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
           changeGroupUserAddVisible(false);
           fetchMemberList({
             pageSize,
+            q: tabsSearchWord,
           }, currentGroup?.uid as string, 'del');
         },
         params: {
@@ -176,28 +196,118 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
   useEffect(() => {
     fetchGroupList({
       pageSize,
+      q: tagsSearchWord,
     });
   }, [fetchGroupList, pageSize]);
+
+  useEffect(() => {
+    dispatch({
+      type: 'groups/getPermission',
+      payload: {
+        cb: (can: boolean) => {
+          setCanAddGroup(!!can);
+        }
+      }
+    });
+  }, [dispatch]);
 
   const handleOnRow = (record: Group) => {
     return {
       onDoubleClick: () => {
         fetchLabelList({
           pageSize: labelsPageSize,
+          q: tabsSearchWord,
         }, record.uid);
         fetchMemberList({
           pageSize: membersPageSize,
+          q: tabsSearchWord,
         }, record.uid);
         fetchSettingList({
           pageSize: settingsPageSize,
+          q: tabsSearchWord,
         }, record.uid);
         setCurrentGroup(record);
         changeGroupDetailVisible(true);
       }
     };
   };
+
+  const handleSyncGroup = () => {
+    dispatch({
+      type: 'groups/addGroups',
+      payload: {
+        params: currentGroup,
+        cb: () => {},
+      }
+    });
+  };
+
+  const handleTabsSearch = (searchWord: string) => {
+    switch (tabsActiveKey) {
+      case TagTabsKey.label:
+        fetchLabelList({
+          pageSize: settingsPageSize,
+          q: searchWord,
+        }, (currentGroup?.uid) as string, 'del');
+        break;
+      case TagTabsKey.user:
+        fetchMemberList({
+          pageSize: membersPageSize,
+          q: searchWord,
+        }, (currentGroup?.uid) as string, 'del');
+        break;
+      case TagTabsKey.setting:
+        fetchSettingList({
+          pageSize: membersPageSize,
+          q: searchWord,
+        }, (currentGroup?.uid) as string, 'del');
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handlePlusClick = () => {
+    setCurrentGroup(undefined);
+    changeGroupModifyVisible(true);
+  };
+
+  const handleTabsSearchWordChange = (e: React.ChangeEvent) => {
+    const nativeEvent = e.nativeEvent;
+    const target = nativeEvent.target || nativeEvent.srcElement;
+    setTabsSearchWord((target as any).value);
+  };
+
+  const handleTabsActiveKeyChange = (activeKey: string) => {
+    setTabsActiveKey(activeKey);
+    setTabsSearchWord('');
+    switch (activeKey) {
+      case TagTabsKey.label:
+        fetchLabelList({
+          pageSize: settingsPageSize,
+        }, (currentGroup?.uid) as string, 'del');
+        break;
+      case TagTabsKey.user:
+        fetchMemberList({
+          pageSize: membersPageSize,
+        }, (currentGroup?.uid) as string, 'del');
+        break;
+      case TagTabsKey.setting:
+        fetchSettingList({
+          pageSize: membersPageSize,
+        }, (currentGroup?.uid) as string, 'del');
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleTagsSearchWordChange = (value: string) => {
+    setTagsSearchWord(value);
+  };
+
   const tabsConfig = [{
-    key: 'label',
+    key: TagTabsKey.label,
     title: '灰度标签',
     content: (
       <GrayscaleTag
@@ -206,17 +316,25 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
         onAction={
           (record: Label) => ({
             onDelete: () => {
-              dispatch({
-                type: 'groups/deleteGroupLabel',
-                payload: {
-                  uid: currentGroup?.uid,
-                  hid: record.hid,
-                  cb: () => {
-                    fetchLabelList({
-                      pageSize: labelsPageSize,
-                    }, (currentGroup?.uid) as string, 'del');
-                  }
-                }
+              Modal.confirm({
+                title: '操作不可逆，请再次确认',
+                content: '确认删除？',
+                onOk: () => {
+                  dispatch({
+                    type: 'groups/deleteGroupLabel',
+                    payload: {
+                      uid: currentGroup?.uid,
+                      product: record.product,
+                      label: record.name,
+                      cb: () => {
+                        fetchLabelList({
+                          pageSize: labelsPageSize,
+                          q: tabsSearchWord,
+                        }, (currentGroup?.uid) as string, 'del');
+                      }
+                    }
+                  });
+                },
               });
             },
           })
@@ -226,16 +344,19 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
             total: labelsPageTotal,
             prePageToken: labelsPrePageToken,
             nextPageToken: labelsNextPageToken,
+            pageSizeOptions: [10, 20, 50, 100],
             onPageSizeChange: (size: number) => {
               setLabelsPageSize(size);
               fetchLabelList({
-                pageSize: size
+                pageSize: size,
+                q: tabsSearchWord,
               }, currentGroup?.uid as string, 'del');
             },
             onTokenChange: (type: string, token?: string) => {
               fetchLabelList({
                 pageSize: labelsPageSize,
                 pageToken: token,
+                q: tabsSearchWord,
               }, currentGroup?.uid as string, type);
             },
           }
@@ -244,26 +365,107 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
     ),
     action: (
       <Input.Search
-        key="group"
+        key="label"
         placeholder="请输入搜索关键字"
+        value={tabsSearchWord}
+        onChange={handleTabsSearchWordChange}
+        onSearch={handleTabsSearch}
+        allowClear
       />
     ),
   }, {
-    key: 'setting',
+    key: TagTabsKey.setting,
     title: '配置项',
     content: (
       <Setting
-        hideColumns={[]}
+        hideColumns={['users', 'desc', 'status', 'release']}
+        dataSource={ settingsList }
+        onAction={
+          (record: SettingData) => ({
+            onRollback: () => {
+              Modal.confirm({
+                title: '操作不可逆，请再次确认',
+                content: '确认回滚？',
+                onOk: () => {
+                  dispatch({
+                    type: 'groups/rollbackGroupSetting',
+                    payload: {
+                      uid: currentGroup?.uid,
+                      product: record.product,
+                      module: record.module,
+                      setting: record.name,
+                      cb: () => {
+                        fetchSettingList({
+                          pageSize: labelsPageSize,
+                          q: tabsSearchWord,
+                        }, (currentGroup?.uid) as string, 'del');
+                      }
+                    }
+                  });
+                },
+              });
+            },
+            onDelete: () => {
+              Modal.confirm({
+                title: '操作不可逆，请再次确认',
+                content: '确认删除？',
+                onOk: () => {
+                  dispatch({
+                    type: 'groups/deleteGroupSetting',
+                    payload: {
+                      uid: currentGroup?.uid,
+                      product: record.product,
+                      module: record.module,
+                      setting: record.name,
+                      cb: () => {
+                        fetchSettingList({
+                          pageSize: labelsPageSize,
+                          q: tabsSearchWord,
+                        }, (currentGroup?.uid) as string, 'del');
+                      }
+                    }
+                  });
+                },
+              });
+            },
+          })
+        }
+        paginationProps={
+          {
+            pageSizeOptions: [10, 20, 50, 100],
+            total: settingsPageTotal,
+            nextPageToken: settingsNextPageToken,
+            prePageToken: settingsPrePageToken,
+            onPageSizeChange: (size: number) => {
+              setSettingsPageSize(size);
+              fetchSettingList({
+                pageSize: size,
+                q: tabsSearchWord,
+              }, currentGroup?.uid as string, 'del');
+            },
+            onTokenChange: (type: string, token?: string) => {
+              fetchSettingList({
+                pageSize: settingsPageSize,
+                pageToken: token,
+                q: tabsSearchWord,
+              }, currentGroup?.uid as string, type);
+            },
+          }
+        }
       />
     ),
     action: (
       <Input.Search
-        key="group"
+        key="setting"
         placeholder="请输入搜索关键字"
+        value={tabsSearchWord}
+        onChange={handleTabsSearchWordChange}
+        onSearch={handleTabsSearch}
+        allowClear
       />
     ),
   }, {
-    key: 'user',
+    key: TagTabsKey.user,
     title: '用户',
     content: (
       <Users
@@ -271,20 +473,27 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
         onAction={
           (record: GroupMember) => ({
             onDelete: () => {
-              dispatch({
-                type: 'groups/deleteGroupMembers',
-                payload: {
-                  uid: currentGroup?.uid,
-                  params: {
-                    user: record.user
-                  },
-                  cb: () => {
-                    fetchMemberList({
-                      pageSize: membersPageSize,
-                    }, (currentGroup?.uid) as string, 'del');
-                    message.success('移除用户成功');
-                  }
-                }
+              Modal.confirm({
+                title: '操作不可逆，请再次确认',
+                content: '确认删除？',
+                onOk: () => {
+                  dispatch({
+                    type: 'groups/deleteGroupMembers',
+                    payload: {
+                      uid: currentGroup?.uid,
+                      params: {
+                        user: record.user
+                      },
+                      cb: () => {
+                        fetchMemberList({
+                          pageSize: membersPageSize,
+                          q: tabsSearchWord,
+                        }, (currentGroup?.uid) as string, 'del');
+                        message.success('移除用户成功');
+                      }
+                    }
+                  });
+                },
               });
             },
           })
@@ -294,16 +503,19 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
             total: membersPageTotal,
             prePageToken: membersPrePageToken,
             nextPageToken: membersNextPageToken,
+            pageSizeOptions: [10, 20, 50, 100],
             onPageSizeChange: (size: number) => {
               setMembersPageSize(size);
               fetchMemberList({
-                pageSize: size
+                pageSize: size,
+                q: tabsSearchWord,
               }, currentGroup?.uid as string, 'del');
             },
             onTokenChange: (type: string, token?: string) => {
               fetchMemberList({
                 pageSize: membersPageSize,
                 pageToken: token,
+                q: tabsSearchWord,
               }, currentGroup?.uid as string, type);
             },
           }
@@ -323,6 +535,10 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
         <Input.Search
           key="user"
           placeholder="请输入搜索关键字"
+          value={tabsSearchWord}
+          onChange={handleTabsSearchWordChange}
+          onSearch={handleTabsSearch}
+          allowClear
         />
       </div>
     ),
@@ -345,7 +561,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
       content: (
         <div style={{ display: 'flex', position: 'relative', top: '-5px' }}>
           <Button style={{ padding: '0' }} disabled type="link">{formatTableTime(currentGroup.syncAt || '')}</Button>
-          <Button icon="reload" type="link">重新同步</Button>
+          <Button icon="reload" type="link" onClick={handleSyncGroup}>重新同步</Button>
         </div>
       ),
     }, {
@@ -354,17 +570,13 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
     }] : undefined;
   }, [currentGroup]);
 
-  const handlePlusClick = () => {
-    setCurrentGroup(undefined);
-    changeGroupModifyVisible(true);
-  };
-
   return (
     <div>
       <TableTitle
-        plusTitle="添加群组"
+        plusTitle={canAddGroup ? '添加群组' : undefined}
         handlePlusClick={handlePlusClick}
         handleSearch={handleGroupSearch}
+        handleWordChange={handleTagsSearchWordChange}
       />
       <UserGroup
         onRow={handleOnRow}
@@ -409,6 +621,8 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
         />
         <ContentTabs
           tabs={tabsConfig}
+          activeKey={tabsActiveKey}
+          handleActiveKeyChange={handleTabsActiveKeyChange}
         />
       </Modal>
       {
@@ -459,6 +673,10 @@ export default connect((state) => {
     membersPrePageToken,
     membersNextPageToken,
     membersPageTotal,
+    settingsList,
+    settingsNextPageToken,
+    settingsPrePageToken,
+    settingsPageTotal,
   } = (state as any).groups;
   return {
     groupList,
@@ -473,5 +691,9 @@ export default connect((state) => {
     membersPrePageToken,
     membersNextPageToken,
     membersPageTotal,
+    settingsList,
+    settingsNextPageToken,
+    settingsPrePageToken,
+    settingsPageTotal,
   };
 })(Groups);

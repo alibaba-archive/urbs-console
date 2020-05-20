@@ -32,7 +32,6 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
   } = props as any;
   const [labelGroupPageSize, changeLabelGroupPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [labelUserPageSize, changeLabelUserPageSize] = useState(DEFAULT_PAGE_SIZE);
-
   const [userPercentRule, changeUserPercentRule] = useState<UserPercentRule>();
   const [tabsActiveKey, setTabsActiveKey] = useState(String(TagTabsKey.Publish));
   const [tabsSearchWord, setTabsSearchWord] = useState('');
@@ -77,9 +76,11 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
     fetchLabelLogs();
     fetchLabelGroups({
       pageSize: labelGroupPageSize,
+      q: tabsSearchWord,
     });
     fetchLabelUsers({
       pageSize: labelUserPageSize,
+      q: tabsSearchWord,
     });
   }, [fetchLabelLogs, fetchLabelGroups, fetchLabelUsers, labelGroupPageSize, labelUserPageSize]);
   useEffect(() => {
@@ -373,6 +374,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
         placeholder="请输入搜索关键字"
         onChange={handleTabsSearchWordChange}
         onSearch={handleTabsSearch}
+        allowClear
       />
     ),
   }];

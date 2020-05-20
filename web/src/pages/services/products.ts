@@ -237,3 +237,20 @@ export function deleteLabelGroup (product: string, label: string, gid: string) {
 export function deleteLabeUser (product: string, label: string, uid: string) {
   return request.delete(`${serviceApiPrefix}/products/${product}/labels/${label}/users/${uid}`);
 };
+
+export function recallSettingLogs(product: string, module: string, setting: string, release: string) {
+  return request.post(`${serviceApiPrefix}/products/${product}/modules/${module}/settings/${setting}:recall`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({release}),
+  });
+};
+
+export function deleteSettingGroup (product: string, module: string, setting: string, gid: string) {
+  return request.delete(`${serviceApiPrefix}/products/${product}/modules/${module}/settings/${setting}/groups/${gid}`);
+};
+
+export function deleteSettingUser (product: string, module: string, setting: string, uid: string) {
+  return request.delete(`${serviceApiPrefix}/products/${product}/modules/${module}/settings/${setting}/users/${uid}`);
+};

@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import { Button, Input, Modal, Icon } from 'antd';
+import { Button, Input, Modal, Icon, message } from 'antd';
 import { connect } from 'dva';
 import { PublishRecord, ContentDetail, ContentTabs, UserGroup, Users, GrayscaleTagModifyModal, PublishTagModal } from '../';
 import { DEFAULT_MODAL_WIDTH, SettingDetailComponentProps, TagTabsKey, PaginationParameters, FieldsValue, UserPercentRule, DEFAULT_PAGE_SIZE } from '../../declare';
@@ -36,6 +36,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
   const [tabsSearchWord, setTabsSearchWord] = useState('');
   const [publishTagModalVisible, setPublishTagModalVisible] = useState(false);
   const [grayscaleTagModalVisible, setGrayscaleTagModalVisible] = useState(false);
+  const [settingCanEdit, setSettingCanEdit] = useState(false);
   const fetchSettingLogs = useCallback(() => {
     dispatch({
       type: 'products/getSettingLogs',
@@ -77,11 +78,28 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
     fetchSettingLogs();
     fetchSettingGroups({
       pageSize: settingGroupPageSize,
+      q: tabsSearchWord,
     });
     fetchSettingUsers({
       pageSize: settingUserPageSize,
+      q: tabsSearchWord,
     });
   }, [fetchSettingLogs, fetchSettingGroups, fetchSettingUsers, settingGroupPageSize, settingUserPageSize]);
+  useEffect(() => {
+    dispatch({
+      type: 'products/getPermission',
+      payload: {
+        cb: (canEdit: boolean) => {
+          setSettingCanEdit(!!canEdit);
+        },
+        params: {
+          product,
+          module: settingInfo?.module,
+          setting: settingInfo?.name,
+        }
+      },
+    })
+  }, [dispatch, settingInfo, product]);
   const handleTabsActiveKeyChange = (activeKey: string) => {
     setTabsActiveKey(activeKey);
     setTabsSearchWord('');
@@ -178,13 +196,80 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
   const handleOpenPublishTagModalCancel = () => {
     changePublishTagModalVisible(false);
   };
+  const handleSettingLogReback = (hid: string) => {
+    dispatch({
+      type: 'products/recallSettingLogs',
+      payload: {
+        product,
+        module: settingInfo?.module,
+        setting: settingInfo?.name,
+        hid,
+        cb: () => {
+          fetchSettingLogs();
+          message.success('撤回成功');
+        },
+      },
+    });
+  };
+  const handleDeleteGroup = (uid: string) => {
+    Modal.confirm({
+      title: '操作不可逆，请再次确认',
+      content: '确认删除该群组？',
+      onOk: () => {
+        dispatch({
+          type: 'products/deleteSettingGroup',
+          payload: {
+            product,
+            module: settingInfo?.module,
+            setting: settingInfo?.name,
+            uid,
+            cb: () => {
+              message.success('删除群组成功');
+              fetchSettingGroups({
+                pageSize: settingGroupPageSize,
+                q: tabsSearchWord,
+              }, 'del');
+            },
+          },
+        });
+      },
+    });
+  };
+  const handleDeleteUser = (uid: string) => {
+    Modal.confirm({
+      title: '操作不可逆，请再次确认',
+      content: '确认删除该用户？',
+      onOk: () => {
+        dispatch({
+          type: 'products/deleteSettingUser',
+          payload: {
+            product,
+            module: settingInfo?.module,
+            setting: settingInfo?.name,
+            uid,
+            cb: () => {
+              message.success('删除用户成功');
+              fetchSettingUsers({
+                pageSize: settingUserPageSize,
+                q: tabsSearchWord,
+              }, 'del');
+            },
+          },
+        });
+      },
+    });
+  };
   const renderModalTitle = () => {
     return (
       <div className={styles['tag-modal-title']}>
         <div>{title}</div>
-        <div>
-          <Icon type="setting" onClick={onSettingEdit}></Icon>
-        </div>
+        {
+          settingCanEdit && (
+            <div>
+              <Icon type="setting" onClick={onSettingEdit}></Icon>
+            </div>
+          )
+        }
       </div>
     )
   };
@@ -194,6 +279,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
     content: (
       <PublishRecord
         publishRecordList={settingLogsList}
+        onReback={handleSettingLogReback}
       />
     ),
     action: (
@@ -224,16 +310,25 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
               changeSettingGroupPageSize(size);
               fetchSettingGroups({
                 pageSize: size,
+                q: tabsSearchWord,
               }, 'del');
             },
             onTokenChange: (type, token) => {
               fetchSettingGroups({
                 pageSize: settingGroupPageSize,
                 pageToken: token,
+                q: tabsSearchWord,
               }, type);
             }
           }
         }
+        onAction={(record) => {
+          return {
+            onDelete: () => {
+              handleDeleteGroup(record.uid || record.group);
+            },
+          }
+        }}
       />
     ),
     action: (
@@ -242,6 +337,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
         placeholder="请输入搜索关键字"
         onChange={handleTabsSearchWordChange}
         onSearch={handleTabsSearch}
+        allowClear
       />
     ),
   }, {
@@ -262,16 +358,25 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
               changeSettingUserPageSize(size);
               fetchSettingUsers({
                 pageSize: size,
+                q: tabsSearchWord,
               }, 'del');
             },
             onTokenChange: (type, token) => {
               fetchSettingUsers({
                 pageSize: settingGroupPageSize,
                 pageToken: token,
+                q: tabsSearchWord,
               }, type);
             }
           }
         }
+        onAction={(record) => {
+          return {
+            onDelete: () => {
+              handleDeleteUser(record.user);
+            },
+          }
+        }}
       />
     ),
     action: (
@@ -280,6 +385,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
         placeholder="请输入搜索关键字"
         onChange={handleTabsSearchWordChange}
         onSearch={handleTabsSearch}
+        allowClear
       />
     ),
   }];

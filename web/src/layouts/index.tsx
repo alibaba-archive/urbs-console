@@ -9,7 +9,11 @@ const BasicLayout: React.FC = props => {
   const { history } = props;
   const [activeKey, changeActiveKey] = useState(window.location.pathname);
   const handleActiveKeyChange = (key: string) => {
-    changeActiveKey(key);
+    if (key === '/help') {
+      window.open('https://github.com/teambition/urbs-console/blob/develop/doc/help.md');
+    } else {
+      changeActiveKey(key);
+    }
   };
   const defaultOpenSubs = useMemo(() => {
     const pathname = window.location.pathname;
@@ -64,10 +68,10 @@ const BasicLayout: React.FC = props => {
             <Menu.Item
               key="/help"
             >
-              <Link to="/help">
+              <span>
                 <Icon type="question-circle" />
                 使用帮助
-              </Link>
+              </span>
             </Menu.Item>
           </Menu>
         </div>

@@ -105,6 +105,7 @@ const Tag: React.FC<TagComponentProps> = (props) => {
             q: tagsSearchWord,
           }, 'del');
           setGrayscaleTagModalVisible(false);
+          changeProductTagModalVisible(false);
         },
       },
     });
