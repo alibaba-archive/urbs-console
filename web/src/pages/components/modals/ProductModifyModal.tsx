@@ -32,12 +32,20 @@ const ProductModifyModal: React.FC<Props> = (props) => {
   };
   const handleOffline = () => {
     if (onOffline) {
-      onOffline(productName, productDesc, productUsers);
+      Modal.confirm({
+        title: '操作不可逆，请再次确认',
+        content: '确认下线该产品？',
+        onOk: () => onOffline(productName, productDesc, productUsers),
+      });
     }
   };
   const handleDelete = () => {
     if (onDelete) {
-      onDelete(productName, productDesc, productUsers);
+      Modal.confirm({
+        title: '操作不可逆，请再次确认',
+        content: '确认删除该产品？',
+        onOk: () => onDelete(productName, productDesc, productUsers),
+      });
     }
   };
   const handleNameChange = (e: React.ChangeEvent) => {

@@ -74,21 +74,21 @@ const PublishTagModal: React.FC<Props> = (props) => {
           <span>{label}</span>
         </Form.Item>
         <Form.Item
-          label="所属模块"
+          label="所属产品"
           style={{
             margin: '0',
           }}
         >
-          <span>{module}</span>
+          <span>{product}</span>
         </Form.Item>
         {
           module ? (<Form.Item
-            label="所属产品"
+            label="所属模块"
             style={{
               margin: '0',
             }}
           >
-            <span>{product}</span>
+            <span>{module}</span>
           </Form.Item>) : null
         }
         {
@@ -139,20 +139,20 @@ const PublishTagModal: React.FC<Props> = (props) => {
                   margin: '0',
                 }}
               >
-                {
-                  getFieldDecorator('groups', {
-                    initialValue: ''
-                  })(
-                    <Row>
-                      <Col span={18}>
+                <Row>
+                  <Col span={18}>
+                    {
+                      getFieldDecorator('groups', {
+                        initialValue: ''
+                      })(
                         <Input placeholder="输入多个使用英文 , 分隔"></Input>
-                      </Col>
-                      <Col span={6}>
-                        <Button onClick={onGotoGroups} type="link" block>去创建群组</Button>
-                      </Col>
-                    </Row>
-                  )
-                }
+                      )
+                    }
+                  </Col>
+                  <Col span={6}>
+                    <Button onClick={onGotoGroups} type="link" block>去创建群组</Button>
+                  </Col>
+                </Row>
               </Form.Item>
               <Form.Item
                 label="批量用户"
@@ -160,20 +160,20 @@ const PublishTagModal: React.FC<Props> = (props) => {
                   margin: '0',
                 }}
               >
-                {
-                  getFieldDecorator('users', {
-                    initialValue: ''
-                  })(
-                    <Row>
-                      <Col span={18}>
+                <Row>
+                  <Col span={18}>
+                    {
+                      getFieldDecorator('users', {
+                        initialValue: ''
+                      })(
                         <Input placeholder="输入多个使用英文 , 分隔"></Input>
-                      </Col>
-                      <Col span={6}>
-                        <Button onClick={onGotoUsers} type="link" block>去添加用户</Button>
-                      </Col>
-                    </Row>
-                  )
-                }
+                      )
+                    }
+                  </Col>
+                  <Col span={6}>
+                    <Button onClick={onGotoUsers} type="link" block>去添加用户</Button>
+                  </Col>
+                </Row>
               </Form.Item>
             </>
           ) : (
@@ -183,18 +183,20 @@ const PublishTagModal: React.FC<Props> = (props) => {
                   margin: '0',
                 }}
               >
-                {
-                  getFieldDecorator('percent')(
-                    <Row>
-                      <Col span={8}>
-                        <InputNumber defaultValue={defauleRule ? defauleRule.rule.value : 0} style={{ width: '100%' }} min={0} max={100} placeholder="请输入1～100"></InputNumber>
-                      </Col>
-                      <Col span={9} push={1}>
-                        %，本次新增比例用户
-                    </Col>
-                    </Row>
-                  )
-                }
+                <Row>
+                  <Col span={8}>
+                    {
+                      getFieldDecorator('percent', {
+                        initialValue: defauleRule ? defauleRule.rule.value : undefined
+                      })(
+                        <InputNumber style={{ width: '100%' }} min={0} max={100} placeholder="请输入1～100"></InputNumber>
+                      )
+                    }
+                  </Col>
+                  <Col span={9} push={1}>
+                    %，本次新增比例用户
+                  </Col>
+                </Row>
               </Form.Item>
             )
         }
@@ -216,7 +218,7 @@ const PublishTagModal: React.FC<Props> = (props) => {
 };
 
 export default Form.create<Props>({
-  onFieldsChange: (props, fields) => {
+  onFieldsChange: (props, fields, allFields) => {
     const { kind } = fields;
     const { form } = props;
     if (kind === 'batch') {

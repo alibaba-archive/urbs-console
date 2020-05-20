@@ -211,3 +211,29 @@ export function offlineProduct (name: string) {
 export function deleteProduct (name: string) {
   return request.delete(`${serviceApiPrefix}/products/${name}`);
 };
+
+export function getPermission (params: object) {
+  return request.post(`${serviceApiPrefix}/ac/permission:check`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(params),
+  });
+}
+
+export function recallLabelLogs(product: string, label: string, release: string) {
+  return request.post(`${serviceApiPrefix}/products/${product}/labels/${label}:recall`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({release}),
+  });
+};
+
+export function deleteLabelGroup (product: string, label: string, gid: string) {
+  return request.delete(`${serviceApiPrefix}/products/${product}/labels/${label}/groups/${gid}`);
+};
+
+export function deleteLabeUser (product: string, label: string, uid: string) {
+  return request.delete(`${serviceApiPrefix}/products/${product}/labels/${label}/users/${uid}`);
+};

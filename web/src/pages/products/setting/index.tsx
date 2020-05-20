@@ -126,7 +126,7 @@ const Settings: React.FC<SettingComponentProps> = (props) => {
           {
             pageSize,
             total: settingPageTotal,
-            pageSizeOptions: [10, 20, 30, 40],
+            pageSizeOptions: [10, 20, 50, 100],
             nextPageToken: settingNextPageToken,
             prePageToken: settingPrePageToken,
             onTokenChange: (type: string, token?: string) => {

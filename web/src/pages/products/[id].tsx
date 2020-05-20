@@ -20,10 +20,11 @@ const operationTitle = {
 }
 
 const Products: React.FC<ProductsComponentProps> = (props) => {
-  const { match, dispatch, productStatistics, productList } = props;
+  const { match, dispatch, productStatistics, productList, history } = props;
   const { params } = match;
   const { name: productName } = params;
-  const [productEditVisible, changeProductEditVisible] = useState(false);
+  const [productEditVisible, setProductEditVisible] = useState(false);
+  const [productCanEdit, setProductCanEdit] = useState(false);
   const currentProductStatistics = useMemo(() => {
     const {
       labels = 0,
@@ -62,18 +63,47 @@ const Products: React.FC<ProductsComponentProps> = (props) => {
       }
     });
   }, [dispatch, productName]);
+  useEffect(() => {
+    dispatch({
+      type: 'products/getPermission',
+      payload: {
+        cb: (canEdit: boolean) => {
+          setProductCanEdit(!!canEdit);
+        },
+        params: {
+          product: productName,
+        }
+      },
+    });
+  }, [dispatch, productName]);
   const operatingProduct = (name: string, desc: string, uids: string[], type: OperationType) => {
-    console.log(`products/${type}Product`);
     dispatch({
       type: `products/${type}Product`,
       payload: {
         cb: () => {
           message.success(`产品${ operationTitle[type] }成功`);
-          changeProductEditVisible(false);
+          setProductEditVisible(false);
           dispatch({
             type: 'products/getProducts',
             payload: {},
           });
+          if (OperationType.offline === type) {
+            const products = productList.find(product => product.name !== productName);
+            history.push(`/products/${ products ? `${products.name}` : '/help' }`)
+          }
+          if (OperationType.update === type) {
+            dispatch({
+              type: 'products/getPermission',
+              payload: {
+                cb: (canEdit: boolean) => {
+                  setProductCanEdit(!!canEdit);
+                },
+                params: {
+                  product: productName,
+                }
+              },
+            });
+          }
         },
         params:{
           name,
@@ -83,7 +113,6 @@ const Products: React.FC<ProductsComponentProps> = (props) => {
       },
     });
   };
-  console.log('currentProductDetail:', currentProductDetail);
   return (
     <div className={ styles.normal }>
       <ul className={ styles['product-detail-wrap'] }>
@@ -91,11 +120,13 @@ const Products: React.FC<ProductsComponentProps> = (props) => {
           <div>
             {currentProductDetail?.name}
           </div>
-          <div className={ styles['product-detail-desc'] }>
-            <Tooltip placement="right" title={ DEFAULT_TITLE }>
-              <Icon type="setting" onClick={ () => changeProductEditVisible(true) }></Icon>
-            </Tooltip>
-          </div>
+          {
+            productCanEdit && <div className={ styles['product-detail-desc'] }>
+              <Tooltip placement="right" title={ DEFAULT_TITLE }>
+                <Icon type="setting" onClick={ () => setProductEditVisible(true) }></Icon>
+              </Tooltip>
+            </div>
+          }
         </li>
         <li>
           <div>
@@ -137,7 +168,7 @@ const Products: React.FC<ProductsComponentProps> = (props) => {
         productEditVisible && (<ProductModifyModal
           visible={ productEditVisible }
           productInfo={ currentProductDetail }
-          onCancel={ () => changeProductEditVisible(false) }
+          onCancel={ () => setProductEditVisible(false) }
           onOk={ (name, desc, uids) => operatingProduct(name, desc, uids, OperationType.update) }
           onOffline={ (name, desc, uids) => operatingProduct(name, desc, uids, OperationType.offline) }
           onDelete={ (name, desc, uids) => operatingProduct(name, desc, uids, OperationType.delete) }

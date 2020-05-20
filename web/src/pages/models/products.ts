@@ -163,7 +163,6 @@ const products: Model = {
     *getLabelLogs({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
       const { params, product, label } = payload;
       const { result } = yield call(productsService.getLabelLogs, product, label, params);
-      console.log('getLabelLogs', result);
       yield put({
         type: 'setStateByPayload',
         payload: {
@@ -174,7 +173,6 @@ const products: Model = {
     *getSettingLogs({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
       const { params, product, module, setting } = payload;
       const { result } = yield call(productsService.getSettingLogs, product, module, setting, params);
-      console.log('getSettingLogs', result);
       yield put({
         type: 'setStateByPayload',
         payload: {
@@ -393,6 +391,34 @@ const products: Model = {
       const { params, cb } = payload;
       const { name } = params;
       const { result } = yield call(productsService.deleteProduct, name);
+      if (result) {
+        cb();
+      }
+    },
+    *getPermission ({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+      const { cb, params } = payload;
+      const { result } = yield call(productsService.getPermission, params);
+      if (cb) {
+        cb(result);
+      }
+    },
+    *recallLabelLogs ({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+      const {cb, product, label, hid} = payload;
+      const { result } = yield call(productsService.recallLabelLogs, product, label, hid);
+      if (result) {
+        cb();
+      }
+    },
+    *deleteLabeUser ({ payload }: AnyAction, { call }: EffectsCommandMap) {
+      const {cb, product, label, uid} = payload;
+      const { result } = yield call(productsService.deleteLabeUser, product, label, uid);
+      if (result) {
+        cb();
+      }
+    },
+    *deleteLabelGroup ({ payload }: AnyAction, { call }: EffectsCommandMap) {
+      const {cb, product, label, uid} = payload;
+      const { result } = yield call(productsService.deleteLabelGroup, product, label, uid);
       if (result) {
         cb();
       }

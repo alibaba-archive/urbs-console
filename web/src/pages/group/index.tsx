@@ -368,11 +368,11 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
       />
       <UserGroup
         onRow={handleOnRow}
-        hideColumns={['action']}
+        hideColumns={['action', 'group']}
         dataSource={groupList}
         paginationProps={{
           pageSize,
-          pageSizeOptions: [10, 20, 30, 40],
+          pageSizeOptions: [10, 20, 50, 100],
           nextPageToken,
           prePageToken,
           total: pageTotal,
