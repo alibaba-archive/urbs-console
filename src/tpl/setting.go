@@ -72,11 +72,8 @@ func (t *SettingUpdateBody) Validate() error {
 		}
 	}
 	if t.UidsBody != nil {
-		if len(t.UidsBody.Uids) > 9 {
-			return gear.ErrBadRequest.WithMsgf("uids length should 0 < %d < 10", len(t.UidsBody.Uids))
-		}
-		if !SortStringsAndCheck(t.UidsBody.Uids) {
-			return gear.ErrBadRequest.WithMsgf("invalid uids: %v", t.UidsBody.Uids)
+		if err := t.UidsBody.Validate(); err != nil {
+			return err
 		}
 	}
 	return nil
