@@ -260,7 +260,6 @@ export interface ACComponentProps extends BaseContainerComponentProps {
 }
 
 export interface AcUserSelectComponentProps {
-  acUserList: User[];
   defaultSelectedUser?: User[];
   dispatch: Dispatch<AnyAction>;
   onChange?: (users: string[]) => void;

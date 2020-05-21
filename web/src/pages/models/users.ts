@@ -130,7 +130,8 @@ const users: Model = {
         cb();
       }
     },
-    *getAcUsers(_, { call, put }: EffectsCommandMap) {
+    *getAcUsers({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+      const { cb } = payload;
       const { result } = yield call(usersService.getAcUsers);
       yield put({
         type: 'setStateByPayload',
@@ -138,6 +139,9 @@ const users: Model = {
           acUserList: result || []
         },
       });
+      if (cb) {
+        cb(result || []);
+      }
     },
     *getAcUsersList({ payload }, { call, select, put }: EffectsCommandMap) {
       const { params, type } = payload
@@ -160,7 +164,7 @@ const users: Model = {
       });
     },
     *searchAcUsers({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-      const { params } = payload;
+      const { params, cb } = payload;
       const { result } = yield call(usersService.searchAcUsers, params.key);
       yield put({
         type: 'setStateByPayload',
@@ -168,6 +172,9 @@ const users: Model = {
           acUserList: result || []
         },
       });
+      if (cb) {
+        cb(result || []);
+      }
     },
     *deleteUserSetting({ payload }: AnyAction, { call }: EffectsCommandMap) {
       const { uid, product, module, setting, cb } = payload;
