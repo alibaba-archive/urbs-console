@@ -198,7 +198,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
       pageSize,
       q: tagsSearchWord,
     });
-  }, [fetchGroupList, pageSize]);
+  }, [fetchGroupList, pageSize, tagsSearchWord]);
 
   useEffect(() => {
     dispatch({
@@ -237,7 +237,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
       type: 'groups/addGroups',
       payload: {
         params: currentGroup,
-        cb: () => {},
+        cb: () => { },
       }
     });
   };
@@ -379,7 +379,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
     content: (
       <Setting
         hideColumns={['users', 'desc', 'status', 'release']}
-        dataSource={ settingsList }
+        dataSource={settingsList}
         onAction={
           (record: SettingData) => ({
             onRollback: () => {
@@ -568,7 +568,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
       title: '创建日期',
       content: formatTableTime(currentGroup.createdAt || ''),
     }] : undefined;
-  }, [currentGroup]);
+  }, [currentGroup, handleSyncGroup]);
 
   return (
     <div>
@@ -607,7 +607,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
         title={
           <div className={styleNames['modal-title']}>
             <div>群组</div>
-            <div>
+            <div className={styleNames['modal-icon']}>
               <Icon type="setting" onClick={() => changeGroupModifyVisible(true)}></Icon>
             </div>
           </div>

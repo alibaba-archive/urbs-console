@@ -74,7 +74,7 @@ const Users: React.FC<UsersComponentProps> = (props) => {
       pageSize,
       q: usersSearchWord,
     });
-  }, [fetchUserList, pageSize]);
+  }, [fetchUserList, pageSize, usersSearchWord]);
 
   useEffect(() => {
     dispatch({
@@ -261,8 +261,9 @@ const Users: React.FC<UsersComponentProps> = (props) => {
                   dispatch({
                     type: 'users/deleteUserLabel',
                     payload: {
+                      product: record.product,
+                      label: record.name,
                       uid: currentUser?.uid,
-                      hid: record.hid,
                       cb: () => {
                         fetchUserLabels({
                           pageSize: labelsPageSize,

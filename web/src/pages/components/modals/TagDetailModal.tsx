@@ -190,13 +190,13 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
   const handleOpenPublishTagModalCancel = () => {
     changePublishTagModalVisible(false);
   };
-  const handleLabelLogReback = () => {
+  const handleLabelLogReback = (hid: string) => {
     dispatch({
       type: 'products/recallLabelLogs',
       payload: {
         product,
         label: labelInfo?.name,
-        hid: labelInfo?.release,
+        hid: hid,
         cb: () => {
           fetchLabelLogs();
           message.success('撤回成功');
@@ -255,7 +255,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
       <div className={styles['tag-modal-title']}>
         <div>{title}</div>
         {
-          grayscaleTagCanEdit && <div>
+          grayscaleTagCanEdit && <div className={styles['tag-icon']}>
             <Icon type="setting" onClick={onSettingEdit}></Icon>
           </div>
         }
