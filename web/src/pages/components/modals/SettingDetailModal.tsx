@@ -84,7 +84,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
       pageSize: settingUserPageSize,
       q: tabsSearchWord,
     });
-  }, [fetchSettingLogs, fetchSettingGroups, fetchSettingUsers, settingGroupPageSize, settingUserPageSize]);
+  }, [fetchSettingLogs, fetchSettingGroups, fetchSettingUsers, settingGroupPageSize, settingUserPageSize, tabsSearchWord]);
   useEffect(() => {
     dispatch({
       type: 'products/getPermission',
@@ -203,7 +203,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
         product,
         module: settingInfo?.module,
         setting: settingInfo?.name,
-        hid,
+        hid: settingInfo?.release,
         cb: () => {
           fetchSettingLogs();
           message.success('撤回成功');
@@ -298,7 +298,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
     content: (
       <UserGroup
         dataSource={settingGroupsList}
-        hideColumns={['syncAt']}
+        hideColumns={['syncAt', "uid", "desc"]}
         paginationProps={
           {
             total: settingGroupsPageTotal,
