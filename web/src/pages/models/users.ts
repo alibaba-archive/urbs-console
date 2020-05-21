@@ -99,8 +99,8 @@ const users: Model = {
       });
     },
     *deleteUserLabel({ payload }: AnyAction, { call }: EffectsCommandMap) {
-      const { uid, hid, cb } = payload;
-      yield call(usersService.deleteUserLabel, uid, hid);
+      const { product, label, uid, cb } = payload;
+      yield call(usersService.deleteUserLabel, product, label, uid);
       if (cb) {
         cb();
       }
@@ -190,7 +190,7 @@ const users: Model = {
         cb();
       }
     },
-    *getPermission ({ payload }: AnyAction, { call }: EffectsCommandMap) {
+    *getPermission({ payload }: AnyAction, { call }: EffectsCommandMap) {
       const { cb } = payload;
       const { result } = yield call(usersService.getPermission);
       if (cb) {

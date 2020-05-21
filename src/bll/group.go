@@ -71,7 +71,8 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 	nextPageToken := ""
 	// 同步成员
 	for {
-		resp, err := a.services.GroupMember.List(ctx, uid, nextPageToken, pageSize)
+		var resp *service.ListGroupMembersResp
+		resp, err = a.services.GroupMember.List(ctx, uid, nextPageToken, pageSize)
 		if err != nil {
 			logger.Err(ctx, err.Error(), "uid", uid)
 			break
@@ -91,6 +92,9 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 			continue
 		}
 		break
+	}
+	if err != nil { // 同步错误，不删除旧的成员
+		return nil
 	}
 	// 删除旧的成员
 	args := new(tpl.GroupMembersURL)

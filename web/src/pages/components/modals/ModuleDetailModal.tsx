@@ -43,7 +43,7 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
       pageSize,
       q: tabsSearchWord,
     });
-  }, [fetchModuleSettingList, pageSize]);
+  }, [fetchModuleSettingList, pageSize, tabsSearchWord]);
   useEffect(() => {
     dispatch({
       type: 'products/getPermission',
@@ -94,7 +94,7 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
         <div>{title}</div>
         {
           moduleCanEdit && (
-            <div>
+            <div className={styleNames['modal-icon']}>
               <Icon type="setting" onClick={onModuleEdit}></Icon>
             </div>
           )

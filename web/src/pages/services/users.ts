@@ -64,19 +64,19 @@ export function getUserSettings(uid: string, params: PaginationParameters) {
   return request(`${serviceApiPrefix}/users/${uid}/settings${generateQuery(params)}`);
 }
 
-export function deleteUserLabel(uid: string, hid: string) {
-  return request.delete(`${serviceApiPrefix}/users/${uid}/labels/${hid}`);
+export function deleteUserLabel(product: string, label: string, uid: string) {
+  return request.delete(`${serviceApiPrefix}/products/${product}/labels/${label}/users/${uid}`);
 }
 
-export function deleteUserSetting (product: string, module: string, setting: string, uid: string) {
+export function deleteUserSetting(product: string, module: string, setting: string, uid: string) {
   return request.delete(`${serviceApiPrefix}/products/${product}/modules/${module}/settings/${setting}/users/${uid}`);
 }
 
-export function rollbackUserSetting (product: string, module: string, setting: string, uid: string) {
+export function rollbackUserSetting(product: string, module: string, setting: string, uid: string) {
   return request.put(`${serviceApiPrefix}/products/${product}/modules/${module}/settings/${setting}/users/${uid}:rollback`);
 }
 
-export function getPermission () {
+export function getPermission() {
   return request.post(`${serviceApiPrefix}/ac/permission:check`, {
     headers: {
       'Content-Type': 'application/json',

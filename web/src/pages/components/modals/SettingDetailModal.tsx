@@ -203,7 +203,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
         product,
         module: settingInfo?.module,
         setting: settingInfo?.name,
-        hid: settingInfo?.release,
+        hid: hid,
         cb: () => {
           fetchSettingLogs();
           message.success('撤回成功');
@@ -265,7 +265,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
         <div>{title}</div>
         {
           settingCanEdit && (
-            <div>
+            <div className={styles['tag-icon']}>
               <Icon type="setting" onClick={onSettingEdit}></Icon>
             </div>
           )
