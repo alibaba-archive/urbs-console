@@ -1,8 +1,12 @@
 package bll
 
 import (
+	"context"
+
 	"github.com/teambition/urbs-console/src/dao"
+	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/service"
+	"github.com/teambition/urbs-console/src/tpl"
 	"github.com/teambition/urbs-console/src/util"
 )
 
@@ -49,4 +53,31 @@ func NewBlls(s *service.Services, d *dao.Daos) *Blls {
 		UrbsAcUser:   &UrbsAcUser{daos: d},
 	}
 	return blls
+}
+
+// AddUserAndOrg ...
+func AddUserAndOrg(ctx context.Context, users []string, groups []string) {
+	if len(users) > 0 {
+		_, err := services.UrbsSetting.UserBatchAdd(ctx, users)
+		if err != nil {
+			logger.Err(ctx, "userBatchAdd", "error", err.Error())
+		} else {
+			logger.Info(ctx, "userBatchAdd", "users", users)
+		}
+	}
+	if len(groups) > 0 {
+		groupBody := []tpl.GroupBody{}
+		for _, g := range groups {
+			groupBody = append(groupBody, tpl.GroupBody{
+				UID:  g,
+				Kind: "organization",
+			})
+		}
+		err := blls.Group.BatchAdd(ctx, groupBody)
+		if err != nil {
+			logger.Err(ctx, "groupBatchAdd", "error", err.Error())
+		} else {
+			logger.Info(ctx, "groupBatchAdd", "groups", groupBody)
+		}
+	}
 }

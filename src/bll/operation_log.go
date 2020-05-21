@@ -69,7 +69,7 @@ func (a *OperationLog) Add(ctx context.Context, object string, action string, bo
 }
 
 func genContent(body *dto.OperationLogContent) string {
-	content := "01"
+	content := "01" // version
 	if len(body.Users) > 0 {
 		content += "01" + strings.Join(body.Users, ",") + "\r\n"
 	}
@@ -82,7 +82,28 @@ func genContent(body *dto.OperationLogContent) string {
 	if body.Percent > 0 {
 		content += "04" + strconv.Itoa(body.Percent) + "\r\n"
 	}
+	if body.Release > 0 {
+		content += "05" + strconv.FormatInt(body.Release, 10) + "\r\n"
+	}
 	return content
+}
+
+func getRelease(content string) int64 {
+	content = content[2:]
+	items := strings.Split(content, "\r\n")
+	for _, item := range items {
+		if item == "" {
+			continue
+		}
+		kind := item[0:2]
+		content := item[2:]
+		switch kind {
+		case "05": // percent
+			release, _ := strconv.ParseInt(content, 10, 64)
+			return release
+		}
+	}
+	return 0
 }
 
 func parseLogContent(content string, log *tpl.OperationLogListItem) {

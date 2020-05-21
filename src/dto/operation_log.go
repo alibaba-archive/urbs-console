@@ -15,4 +15,6 @@ type OperationLogContent struct {
 	Desc    string
 	Value   string
 	Percent int
+
+	Release int64
 }

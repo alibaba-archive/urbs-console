@@ -2,7 +2,7 @@ import request from '../utils/request';
 import { PaginationParameters, FieldsValue } from '../declare';
 import { serviceApiPrefix, generateQuery } from './utils';
 
-export function getProductsTag (product: string, params: PaginationParameters) {
+export function getProductsTag(product: string, params: PaginationParameters) {
   return request(`${serviceApiPrefix}/products/${product}/labels${generateQuery(params)}`);
 };
 
@@ -107,11 +107,11 @@ export function updateProductsTag(product: string, params: FieldsValue) {
   });
 };
 
-export function getProductStatistics (product: string) {
+export function getProductStatistics(product: string) {
   return request(`${serviceApiPrefix}/products/${product}/statistics`);
 };
 
-export function getProductsModule (product: string, params: PaginationParameters) {
+export function getProductsModule(product: string, params: PaginationParameters) {
   return request(`${serviceApiPrefix}/products/${product}/modules${generateQuery(params)}`);
 };
 
@@ -133,11 +133,11 @@ export function updateProductsModule(product: string, params: FieldsValue) {
   });
 };
 
-export function getProductsSetting (product: string, params: PaginationParameters) {
+export function getProductsSetting(product: string, params: PaginationParameters) {
   return request(`${serviceApiPrefix}/products/${product}/settings${generateQuery(params)}`);
 };
 
-export function getModuleSetting (product: string, module: string, params: PaginationParameters) {
+export function getModuleSetting(product: string, module: string, params: PaginationParameters) {
   return request(`${serviceApiPrefix}/products/${product}/modules/${module}/settings${generateQuery(params)}`);
 };
 
@@ -171,16 +171,16 @@ export function getSettingLogs(product: string, module: string, setting: string,
   return request(`${serviceApiPrefix}/products/${product}/modules/${module}/settings/${setting}/logs`);
 };
 
-export function offlineProductsModule (product: string, module: string) {
+export function offlineProductsModule(product: string, module: string) {
   return request.put(`${serviceApiPrefix}/products/${product}/modules/${module}:offline`);
 };
 
-export function getProductList () {
+export function getProductList() {
   return request(`${serviceApiPrefix}/products`);
 };
 
-export function updateProduct (name: string, desc: string, uids: string[]) {
-  return request.put(`${serviceApiPrefix}/products/${ name }`, {
+export function updateProduct(name: string, desc: string, uids: string[]) {
+  return request.put(`${serviceApiPrefix}/products/${name}`, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -191,7 +191,7 @@ export function updateProduct (name: string, desc: string, uids: string[]) {
   });
 };
 
-export function createProduct (name: string, desc: string, uids: string[]) {
+export function createProduct(name: string, desc: string, uids: string[]) {
   return request.post(`${serviceApiPrefix}/products`, {
     headers: {
       'Content-Type': 'application/json',
@@ -204,15 +204,15 @@ export function createProduct (name: string, desc: string, uids: string[]) {
   });
 };
 
-export function offlineProduct (name: string) {
+export function offlineProduct(name: string) {
   return request.put(`${serviceApiPrefix}/products/${name}:offline`);
 };
 
-export function deleteProduct (name: string) {
+export function deleteProduct(name: string) {
   return request.delete(`${serviceApiPrefix}/products/${name}`);
 };
 
-export function getPermission (params: object) {
+export function getPermission(params: object) {
   return request.post(`${serviceApiPrefix}/ac/permission:check`, {
     headers: {
       'Content-Type': 'application/json',
@@ -221,36 +221,36 @@ export function getPermission (params: object) {
   });
 }
 
-export function recallLabelLogs(product: string, label: string, release: string) {
+export function recallLabelLogs(product: string, label: string, hid: string) {
   return request.post(`${serviceApiPrefix}/products/${product}/labels/${label}:recall`, {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({release}),
+    body: JSON.stringify({ hid }),
   });
 };
 
-export function deleteLabelGroup (product: string, label: string, gid: string) {
+export function deleteLabelGroup(product: string, label: string, gid: string) {
   return request.delete(`${serviceApiPrefix}/products/${product}/labels/${label}/groups/${gid}`);
 };
 
-export function deleteLabeUser (product: string, label: string, uid: string) {
+export function deleteLabeUser(product: string, label: string, uid: string) {
   return request.delete(`${serviceApiPrefix}/products/${product}/labels/${label}/users/${uid}`);
 };
 
-export function recallSettingLogs(product: string, module: string, setting: string, release: string) {
+export function recallSettingLogs(product: string, module: string, setting: string, hid: string) {
   return request.post(`${serviceApiPrefix}/products/${product}/modules/${module}/settings/${setting}:recall`, {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({release}),
+    body: JSON.stringify({ hid }),
   });
 };
 
-export function deleteSettingGroup (product: string, module: string, setting: string, gid: string) {
+export function deleteSettingGroup(product: string, module: string, setting: string, gid: string) {
   return request.delete(`${serviceApiPrefix}/products/${product}/modules/${module}/settings/${setting}/groups/${gid}`);
 };
 
-export function deleteSettingUser (product: string, module: string, setting: string, uid: string) {
+export function deleteSettingUser(product: string, module: string, setting: string, uid: string) {
   return request.delete(`${serviceApiPrefix}/products/${product}/modules/${module}/settings/${setting}/users/${uid}`);
 };
