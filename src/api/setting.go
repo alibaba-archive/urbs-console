@@ -178,7 +178,7 @@ func (a *Setting) Update(ctx *gear.Context) error {
 	if err := ctx.ParseBody(&body); err != nil {
 		return err
 	}
-	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module)
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module+req.Setting)
 	if err != nil {
 		return err
 	}
@@ -195,7 +195,7 @@ func (a *Setting) Offline(ctx *gear.Context) error {
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
-	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module)
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module+req.Setting)
 	if err != nil {
 		return err
 	}
@@ -217,7 +217,7 @@ func (a *Setting) Assign(ctx *gear.Context) error {
 	if err := ctx.ParseBody(&body); err != nil {
 		return err
 	}
-	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module)
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module+req.Setting)
 	if err != nil {
 		return err
 	}

@@ -139,20 +139,13 @@ const PublishTagModal: React.FC<Props> = (props) => {
                   margin: '0',
                 }}
               >
-                <Row>
-                  <Col span={18}>
-                    {
-                      getFieldDecorator('groups', {
-                        initialValue: ''
-                      })(
-                        <Input placeholder="输入多个使用英文 , 分隔"></Input>
-                      )
-                    }
-                  </Col>
-                  <Col span={6}>
-                    <Button onClick={onGotoGroups} type="link" block>去创建群组</Button>
-                  </Col>
-                </Row>
+                {
+                  getFieldDecorator('groups', {
+                    initialValue: ''
+                  })(
+                    <Input placeholder="输入多个使用英文 , 分隔"></Input>
+                  )
+                }
               </Form.Item>
               <Form.Item
                 label="批量用户"
@@ -160,20 +153,13 @@ const PublishTagModal: React.FC<Props> = (props) => {
                   margin: '0',
                 }}
               >
-                <Row>
-                  <Col span={18}>
-                    {
-                      getFieldDecorator('users', {
-                        initialValue: ''
-                      })(
-                        <Input placeholder="输入多个使用英文 , 分隔"></Input>
-                      )
-                    }
-                  </Col>
-                  <Col span={6}>
-                    <Button onClick={onGotoUsers} type="link" block>去添加用户</Button>
-                  </Col>
-                </Row>
+                {
+                  getFieldDecorator('users', {
+                    initialValue: ''
+                  })(
+                    <Input placeholder="输入多个使用英文 , 分隔"></Input>
+                  )
+                }
               </Form.Item>
             </>
           ) : (

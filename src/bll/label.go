@@ -3,10 +3,12 @@ package bll
 import (
 	"context"
 
+	"github.com/teambition/gear"
 	"github.com/teambition/urbs-console/src/dto"
 	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/tpl"
+	"github.com/teambition/urbs-console/src/util"
 )
 
 // Label ...
@@ -97,18 +99,24 @@ func (a *Label) Offline(ctx context.Context, product, label string) (*tpl.BoolRe
 
 // Assign 把标签批量分配给用户或群组
 func (a *Label) Assign(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.UsersGroupsBody) (*tpl.LabelReleaseInfoRes, error) {
-	object := args.Product + args.Label
-	logContent := &dto.OperationLogContent{
-		Users:  body.Users,
-		Groups: body.Groups,
-		Desc:   body.Desc,
-		Value:  body.Value,
-	}
-	err := blls.OperationLog.Add(ctx, object, actionCreate, logContent)
+	AddUserAndOrg(ctx, body.Users, body.Groups)
+	res, err := a.services.UrbsSetting.LabelAssign(ctx, args.Product, args.Label, body)
 	if err != nil {
 		return nil, err
 	}
-	return a.services.UrbsSetting.LabelAssign(ctx, args.Product, args.Label, body)
+	object := args.Product + args.Label
+	logContent := &dto.OperationLogContent{
+		Users:   body.Users,
+		Groups:  body.Groups,
+		Desc:    body.Desc,
+		Value:   body.Value,
+		Release: res.Result.Release,
+	}
+	err = blls.OperationLog.Add(ctx, object, actionCreate, logContent)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 // Delete 物理删除标签
@@ -122,12 +130,26 @@ func (a *Label) Delete(ctx context.Context, product, label string) (*tpl.BoolRes
 
 // Recall 批量撤销对用户或群组设置的产品灰度标签
 func (a *Label) Recall(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.RecallBody) (*tpl.BoolRes, error) {
-	object := args.Product + args.Label
-	err := daos.OperationLog.DeleteByObject(ctx, object)
+	logID := service.HIDToID(body.HID, "log")
+	log, err := daos.OperationLog.FindOneByID(ctx, logID)
 	if err != nil {
 		return nil, err
 	}
-	return a.services.UrbsSetting.LabelRecall(ctx, args, body)
+	release := getRelease(log.Content)
+	if release < 1 {
+		return nil, gear.ErrBadRequest.WithMsgf("invalid release %d", release)
+	}
+	body.Release = release
+	recallRes, err := a.services.UrbsSetting.LabelRecall(ctx, args, body)
+	if err != nil {
+		return nil, err
+	}
+	err = daos.OperationLog.DeleteByObject(ctx, logID)
+	if err != nil {
+		return nil, err
+	}
+	logger.Info(ctx, "labelRecall", "operator", util.GetUid(ctx), "log", log.String)
+	return recallRes, nil
 }
 
 // CreateRule ...

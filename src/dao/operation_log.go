@@ -46,6 +46,17 @@ func (a *OperationLog) FindByObject(ctx context.Context, object string, pg *tpl.
 	return data, nil
 }
 
+// FindOneByID ...
+func (a *OperationLog) FindOneByID(ctx context.Context, id int64) (*schema.OperationLog, error) {
+	where := "id = ?"
+	acl := &schema.OperationLog{}
+	err := a.DB.Where(where, id).Find(acl).Error
+	if err != nil {
+		return nil, err
+	}
+	return acl, nil
+}
+
 // FindOneByObject ...
 func (a *OperationLog) FindOneByObject(ctx context.Context, object string) (*schema.OperationLog, error) {
 	where := "object = ? ORDER BY id DESC LIMIT 1"
@@ -59,10 +70,10 @@ func (a *OperationLog) FindOneByObject(ctx context.Context, object string) (*sch
 }
 
 // DeleteByObject ...
-func (a *OperationLog) DeleteByObject(ctx context.Context, object string) error {
-	sql := "delete from operation_log where object = ?"
+func (a *OperationLog) DeleteByObject(ctx context.Context, id int64) error {
+	sql := "delete from operation_log where id = ?"
 
-	return a.DB.Exec(sql, object).Error
+	return a.DB.Exec(sql, id).Error
 }
 
 // CountByObject ...
