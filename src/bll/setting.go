@@ -90,7 +90,7 @@ func (a *Setting) Create(ctx context.Context, args *tpl.ProductModuleURL, body *
 // Update 更新指定产品功能模块配置项
 func (a *Setting) Update(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingUpdateBody) (*tpl.SettingInfoRes, error) {
 	object := args.Product + args.Module + args.Setting
-	err := blls.UrbsAcAcl.Update(ctx, &body.Uids, object)
+	err := blls.UrbsAcAcl.Update(ctx, body.UidsBody, object)
 	if err != nil {
 		return nil, err
 	}

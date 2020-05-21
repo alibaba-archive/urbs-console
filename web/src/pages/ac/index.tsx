@@ -24,7 +24,12 @@ const AC: React.FC<ACComponentProps> = (props) => {
         title: '名称',
         dataIndex: 'name',
         key: 'name',
-    }];
+    }, {
+        title: '创建时间',
+        dataIndex: 'createdAt',
+        key: 'createdAt',
+    }
+    ];
     useEffect(() => {
         dispatch({
             type: 'users/getAcUsersList',

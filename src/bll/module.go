@@ -51,7 +51,7 @@ func (a *Module) Create(ctx context.Context, product string, body *tpl.NameDescB
 
 // Update 更新指定产品功能模块
 func (a *Module) Update(ctx context.Context, product string, module string, body *tpl.ModuleUpdateBody) (*tpl.ModuleInfoRes, error) {
-	err := blls.UrbsAcAcl.Update(ctx, body.Uids, product+module)
+	err := blls.UrbsAcAcl.Update(ctx, body.UidsBody, product+module)
 	if err != nil {
 		return nil, err
 	}

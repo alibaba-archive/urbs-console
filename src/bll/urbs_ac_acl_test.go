@@ -43,7 +43,10 @@ func TestUrbsAcACL(t *testing.T) {
 
 		uid2 := tpl.RandUID()
 
-		err := blls.UrbsAcAcl.Update(context.Background(), &[]string{uid2}, object)
+		body := tpl.UidsBody{
+			Uids: []string{uid2},
+		}
+		err := blls.UrbsAcAcl.Update(context.Background(), &body, object)
 		require.Nil(err)
 
 		err = blls.UrbsAcAcl.CheckAdmin(getUidContext(uid), object)

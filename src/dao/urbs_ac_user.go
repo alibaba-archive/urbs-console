@@ -80,7 +80,7 @@ func (a *UrbsAcUser) UpdateByUID(ctx context.Context, name, uid string) error {
 
 // List ...
 func (a *UrbsAcUser) List(ctx context.Context, pg *tpl.Pagination) ([]*schema.UrbsAcUser, error) {
-	sql := "select * from urbs_ac_user order by id asc limit ?,?"
+	sql := "select * from urbs_ac_user order by id desc limit ?,?"
 
 	urbsAcUsers := make([]*schema.UrbsAcUser, 0)
 	err := a.DB.Raw(sql, pg.Skip, pg.PageSize+1).Scan(&urbsAcUsers).Error
