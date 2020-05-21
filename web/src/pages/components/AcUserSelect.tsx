@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import { debounce } from 'lodash';
-import { Select } from 'antd';
-import { AcUserSelectComponentProps } from '../declare';
+import { Select, Spin } from 'antd';
+import { AcUserSelectComponentProps, User } from '../declare';
 
 const AcUserSelect: React.FC<AcUserSelectComponentProps> = (props) => {
-  const { dispatch, onChange, acUserList, defaultSelectedUser = [] } = props;
-  const [selectedUser, changeSelectedUser] = useState(defaultSelectedUser.map(user => user.uid));
+  const { dispatch, onChange, defaultSelectedUser = [] } = props;
+  const [selectedUser, setSelectedUser] = useState(defaultSelectedUser.map(user => user.uid));
+  const [fetching, setFetching] = useState(false);
+  const [userList, setUserList] = useState<User[]>([]);
   useEffect(() => {
     dispatch({
-      type: 'users/getAcUsers'
+      type: 'users/getAcUsers',
+      payload: {
+        cb: (users: User[]) => {
+          setUserList(users);
+        }
+      }
     });
   }, [dispatch]);
-  const handleDropdownVisibleChange = (open: boolean) => {
-    if (open) {
-      dispatch({
-        type: 'users/getAcUsers'
-      });
-    }
-  };
   const handleSearch = debounce((value: string) => {
+    setFetching(true);
     if (value) {
       dispatch({
         type: 'users/searchAcUsers',
@@ -27,40 +28,42 @@ const AcUserSelect: React.FC<AcUserSelectComponentProps> = (props) => {
           params: {
             key: value,
           },
+          cb: (users: User[]) => {
+            setUserList(users);
+            setTimeout(() => setFetching(false), 1000);
+          }
         },
       });
     } else {
       dispatch({
-        type: 'users/getAcUsers'
+        type: 'users/getAcUsers',
+        payload: {
+          cb: (users: User[]) => {
+            setUserList(users);
+            setTimeout(() => setFetching(false), 1000);
+          }
+        }
       });
     }
-  }, 500);
-  const handleSelect = (value: string) => {
-    const selected = [...selectedUser, value];
-    changeSelectedUser(selected);
+  }, 800);
+  const handleChange = (value: string[]) => {
     if (onChange) {
-      onChange(selected);
+      onChange(value);
     }
-  };
-  const handleDeSelect = (value: string) => {
-    const selected = selectedUser.filter(item => item !== value);
-    changeSelectedUser(selected);
-    if (onChange) {
-      onChange(selected);
-    }
+    setSelectedUser(value);
   };
   return (
     <Select
       mode="multiple"
       placeholder="请输入搜索关键字"
-      onDropdownVisibleChange={ handleDropdownVisibleChange }
       onSearch={ handleSearch }
       value={ selectedUser }
-      onSelect={ handleSelect }
-      onDeselect={ handleDeSelect }
+      onChange={ handleChange }
+      notFoundContent={ fetching ? <Spin size="small" /> : 'Not Found' }
+      getPopupContainer={ () => window.document.body }
     >
       {
-        acUserList && acUserList.map(user => {
+        (!!userList.length) && userList.map(user => {
           return (
             <Select.Option
               key={ user.uid }
@@ -75,7 +78,4 @@ const AcUserSelect: React.FC<AcUserSelectComponentProps> = (props) => {
   );
 };
 
-export default connect(state => {
-  const { acUserList } = state.users;
-  return { acUserList }
-})(AcUserSelect);
+export default connect()(AcUserSelect);
