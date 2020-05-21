@@ -29,7 +29,7 @@ const BasicLayout: React.FC = props => {
         </div>
         <div className={styles.sidemenu}>
           <Products
-            isRootRoute={window.location.pathname === '/'}
+            isRootRoute={['/', '/urbs'].includes(window.location.pathname)}
             history={history}
             onActiveKeyChange={handleActiveKeyChange}
             activeKeys={[activeKey]}
