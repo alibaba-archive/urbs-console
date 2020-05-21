@@ -27,7 +27,7 @@ export function deleteAcUser(uid: string) {
 
 
 export function getAcUsers() {
-  return request(`${serviceApiPrefix}/ac/users`);
+  return request(`${serviceApiPrefix}/ac/users?pageSize=1000`);
 };
 
 export function getAcUsersList(params?: PaginationParameters) {
