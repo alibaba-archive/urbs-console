@@ -82,7 +82,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
       pageSize: labelUserPageSize,
       q: tabsSearchWord,
     });
-  }, [fetchLabelLogs, fetchLabelGroups, fetchLabelUsers, labelGroupPageSize, labelUserPageSize]);
+  }, [fetchLabelLogs, fetchLabelGroups, fetchLabelUsers, labelGroupPageSize, labelUserPageSize, tabsSearchWord]);
   useEffect(() => {
     dispatch({
       type: 'products/getPermission',
@@ -190,13 +190,13 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
   const handleOpenPublishTagModalCancel = () => {
     changePublishTagModalVisible(false);
   };
-  const handleLabelLogReback = (hid: string) => {
+  const handleLabelLogReback = () => {
     dispatch({
       type: 'products/recallLabelLogs',
       payload: {
         product,
         label: labelInfo?.name,
-        hid,
+        hid: labelInfo?.release,
         cb: () => {
           fetchLabelLogs();
           message.success('撤回成功');

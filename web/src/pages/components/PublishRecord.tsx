@@ -52,7 +52,7 @@ const PublishRecord: React.FC<Props> = (props) => {
                 <div>{formatTableTime(item.createdAt)}, {item.operatorName}</div>
                 <Divider style={{ margin: '5px 0' }}></Divider>
                 <div className={styleNames['publish-record-action-wrap']}>
-                  {index === 0 ? <Button type="link" block onClick={ handleReback }>撤回</Button> : null}
+                  {index === 0 ? <Button type="link" block onClick={handleReback}>撤回</Button> : null}
                 </div>
                 <ul>
                   <li>
