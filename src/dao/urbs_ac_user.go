@@ -32,28 +32,28 @@ func (a *UrbsAcUser) BatchAdd(ctx context.Context, users []*schema.UrbsAcUser) e
 
 // FindByUID ...
 func (a *UrbsAcUser) FindByUID(ctx context.Context, uid string) (*schema.UrbsAcUser, error) {
-	urbsAcUser := &schema.UrbsAcUser{}
+	sql := "select * from urbs_ac_user where uid = ?"
 
-	where := "uid = ?"
+	res := &schema.UrbsAcUser{}
 
-	err := a.DB.Where(where, uid).Find(&urbsAcUser).Error
+	err := a.DB.Raw(sql, uid).Scan(res).Error
 	if err != nil {
 		return nil, err
 	}
-	return urbsAcUser, nil
+	return res, nil
 }
 
 // FindByUIDs ...
-func (a *UrbsAcUser) FindByUIDs(ctx context.Context, uids []string) ([]*schema.UrbsAcUser, error) {
-	urbsAcUsers := make([]*schema.UrbsAcUser, 0)
+func (a *UrbsAcUser) FindByUIDs(ctx context.Context, uids []string) ([]schema.UrbsAcUser, error) {
+	sql := "select * from urbs_ac_user where uid in ( ? )"
 
-	where := "uid in ( ? )"
+	res := []schema.UrbsAcUser{}
 
-	err := a.DB.Where(where, uids).Scan(&urbsAcUsers).Error
+	err := a.DB.Where(sql, uids).Scan(&res).Error
 	if err != nil {
 		return nil, err
 	}
-	return urbsAcUsers, nil
+	return res, nil
 }
 
 // DeleteByUID ...
@@ -104,7 +104,10 @@ func (a *UrbsAcUser) Search(ctx context.Context, key string) ([]*schema.UrbsAcUs
 
 // Count 用户数量
 func (a *UrbsAcUser) Count(ctx context.Context) (int, error) {
-	count := 0
-	err := a.DB.Model(&schema.UrbsAcUser{}).Count(&count).Error
-	return count, err
+	sql := "select count(1) as count from urbs_ac_user"
+
+	res := &schema.CountResult{}
+
+	err := a.DB.Raw(sql).Scan(res).Error
+	return res.Count, err
 }

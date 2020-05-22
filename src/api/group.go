@@ -57,7 +57,7 @@ func (a *Group) ListMembers(ctx *gear.Context) error {
 
 // ListSettings ..
 func (a *Group) ListSettings(ctx *gear.Context) error {
-	req := tpl.UIDPaginationURL{}
+	req := tpl.MySettingsQueryURL{}
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}

@@ -63,7 +63,13 @@ func (a *UrbsSetting) UserListSettings(ctx context.Context, args *tpl.UIDPaginat
 
 // UserListSettingsUnionAll ...
 func (a *UrbsSetting) UserListSettingsUnionAll(ctx context.Context, args *tpl.MySettingsQueryURL) (*tpl.MySettingsRes, error) {
-	url := fmt.Sprintf("%s/v1/users/%s/settings:unionAll?skip=%d&pageSize=%d&pageToken=%s&product=%s&client=%s&channel=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Product, args.Client, args.Channel)
+	path := "%s/v1/users/%s/settings:unionAll?skip=%d&pageSize=%d&pageToken=%s"
+	path += "&product=%s"
+	path += "&module=%s"
+	path += "&setting=%s"
+	path += "&client=%s"
+	path += "&channel=%s"
+	url := fmt.Sprintf(path, conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Product, args.Module, args.Setting, args.Client, args.Channel)
 
 	result := new(tpl.MySettingsRes)
 

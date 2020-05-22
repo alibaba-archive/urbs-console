@@ -124,7 +124,7 @@ type UrbsSettingInterface interface {
 	// 读取指定群组的灰度标签，支持条件筛选
 	GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MyLabelsRes, error)
 	// 读取指定群组的功能配置项，支持条件筛选
-	GroupListSettings(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MySettingsRes, error)
+	GroupListSettings(ctx context.Context, args *tpl.MySettingsQueryURL) (*tpl.MySettingsRes, error)
 	// 读取群组列表，支持条件筛选
 	GroupList(ctx context.Context, args *tpl.GroupsURL) (*tpl.GroupsRes, error)
 	// 查询指定群组是否存在

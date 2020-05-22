@@ -1,25 +1,78 @@
 package bll
 
-// func TestSetting(t *testing.T) {
-// 	require := require.New(t)
+import (
+	"testing"
 
-// 	t.Run("", func(t *testing.T) {
+	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/require"
+	"github.com/teambition/urbs-console/src/dto"
+	"github.com/teambition/urbs-console/src/service"
+	"github.com/teambition/urbs-console/src/service/mock_service"
+	"github.com/teambition/urbs-console/src/tpl"
+)
 
-// 		ctrl := gomock.NewController(t)
-// 		defer ctrl.Finish()
-// 		usMock := mock_service.NewMockUrbsSettingInterface(ctrl)
+func TestSetting(t *testing.T) {
+	require := require.New(t)
 
-// 		setting := &Setting{services: service.NewServices()}
-// 		setting.services.UrbsSetting = usMock
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	usMock := mock_service.NewMockUrbsSettingInterface(ctrl)
 
-// 		mockArgs := &tpl.ProductModuleSettingURL{}
+	uid := tpl.RandUID()
+	object := tpl.RandUID()
+	logContent := &dto.OperationLogContent{
+		Users:   []string{tpl.RandUID()},
+		Groups:  []string{tpl.RandUID()},
+		Desc:    "desc",
+		Value:   "true",
+		Release: 1,
+	}
+	err := blls.OperationLog.Add(getUidContext(uid), object, actionCreate, logContent)
+	require.Nil(err)
 
-// 		mockBody := &tpl.RecallBody{}
+	t.Run("recall", func(t *testing.T) {
+		setting := &Setting{services: service.NewServices()}
 
-// 		mockReturn := new(tpl.BoolRes)
-// 		mockReturn.Result = true
+		// 1
+		args := &tpl.ProductModuleSettingURL{}
+		body := &tpl.RecallBody{
+			HID: service.IDToHID(1000000, "log"),
+		}
+		_, err = setting.Recall(getUidContext(uid), args, body)
+		require.NotNil(err)
 
-// 		usMock.EXPECT().SettingRecall(nil, mockArgs, mockBody).Return(mockReturn, nil)
+		// 2
+		log1, err := daos.OperationLog.FindOneByObject(nil, object)
+		require.Nil(err)
 
-// 	})
-// }
+		body = &tpl.RecallBody{
+			HID: service.IDToHID(log1.ID, "log"),
+		}
+
+		_, err = setting.Recall(getUidContext(uid), args, body)
+		require.NotNil(err)
+	})
+
+	t.Run("recall", func(t *testing.T) {
+		setting := &Setting{services: service.NewServices()}
+		setting.services.UrbsSetting = usMock
+
+		args := &tpl.ProductModuleSettingURL{}
+		log1, err := daos.OperationLog.FindOneByObject(nil, object)
+		require.Nil(err)
+
+		body := &tpl.RecallBody{
+			HID:     service.IDToHID(log1.ID, "log"),
+			Release: log1.ID,
+		}
+
+		usMock.EXPECT().SettingRecall(getUidContext(uid), args, body).Return(&tpl.BoolRes{}, nil)
+
+		_, err = setting.Recall(getUidContext(uid), args, body)
+		require.Nil(err)
+
+		_, err = daos.OperationLog.FindOneByObject(nil, object)
+		require.NotNil(err)
+	})
+
+}

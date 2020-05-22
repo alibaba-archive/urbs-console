@@ -27,6 +27,8 @@ test:
 
 mock:
 	mockgen -source=./src/service/urbs_setting_interface.go -destination=./src/service/mock_service/urbs_setting__mock.go
+	mockgen -source=./src/service/group.go -destination=./src/service/mock_service/group__mock.go
+
 
 .PHONY: misspell-check
 misspell-check:

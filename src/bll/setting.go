@@ -14,7 +14,6 @@ import (
 // Setting ...
 type Setting struct {
 	services *service.Services
-	blls     *Blls
 }
 
 // ListByProduct ...
@@ -155,7 +154,7 @@ func (a *Setting) Recall(ctx context.Context, args *tpl.ProductModuleSettingURL,
 	if err != nil {
 		return nil, err
 	}
-	logger.Info(ctx, "labelRecall", "operator", util.GetUid(ctx), "log", log.String)
+	logger.Info(ctx, "labelRecall", "operator", util.GetUid(ctx), "log", log.String())
 	return recallRes, nil
 }
 
