@@ -26,7 +26,7 @@ func (a *UrbsAcUser) Add(ctx *gear.Context) error {
 
 // List 获取用户列表
 func (a *UrbsAcUser) List(ctx *gear.Context) error {
-	req := new(tpl.Pagination)
+	req := new(tpl.ConsolePagination)
 	if err := ctx.ParseURL(req); err != nil {
 		return err
 	}

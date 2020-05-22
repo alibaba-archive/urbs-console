@@ -19,14 +19,14 @@ func TestUrbsAcUser(t *testing.T) {
 	})
 
 	t.Run("urbsAcUser pagination", func(t *testing.T) {
-		args := new(tpl.Pagination)
+		args := new(tpl.ConsolePagination)
 		args.PageSize = 1
 		res, err := blls.UrbsAcUser.List(context.Background(), args)
 		require.Nil(err)
 		require.Equal(1, len(res.Result))
 		require.NotEmpty(res.NextPageToken)
 
-		args2 := new(tpl.Pagination)
+		args2 := new(tpl.ConsolePagination)
 		args2.PageToken = res.NextPageToken
 		args2.Validate()
 		require.Equal(1, args2.Skip)

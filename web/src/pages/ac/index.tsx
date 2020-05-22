@@ -11,7 +11,7 @@ const AC: React.FC<ACComponentProps> = (props) => {
         acUserList,
         acPrePageToken,
         acNextPageToken,
-        pageTotal,
+        acTotalSize,
     } = props;
     const [currentUser, setCurrentUser] = useState<User>();
     const [userAddModalVisible, setUserAddModalVisible] = useState(false);
@@ -153,7 +153,7 @@ const AC: React.FC<ACComponentProps> = (props) => {
                 prePageToken={acPrePageToken}
                 nextPageToken={acNextPageToken}
                 onPageSizeChange={handlePageSizeChange}
-                total={pageTotal}
+                total={acTotalSize}
             />
             {
                 userAddModalVisible && <AcAddModal
@@ -173,10 +173,12 @@ export default connect((state) => {
         acUserList,
         acPrePageToken,
         acNextPageToken,
+        acTotalSize,
     } = (state as any).users;
     return {
         acPrePageToken,
         acNextPageToken,
-        acUserList
+        acUserList,
+        acTotalSize,
     };
 })(AC);

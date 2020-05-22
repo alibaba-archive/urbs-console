@@ -79,7 +79,7 @@ func (a *UrbsAcUser) UpdateByUID(ctx context.Context, name, uid string) error {
 }
 
 // List ...
-func (a *UrbsAcUser) List(ctx context.Context, pg *tpl.Pagination) ([]*schema.UrbsAcUser, error) {
+func (a *UrbsAcUser) List(ctx context.Context, pg *tpl.ConsolePagination) ([]*schema.UrbsAcUser, error) {
 	sql := "select * from urbs_ac_user order by id desc limit ?,?"
 
 	urbsAcUsers := make([]*schema.UrbsAcUser, 0)

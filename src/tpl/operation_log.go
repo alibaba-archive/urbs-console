@@ -62,3 +62,49 @@ type OperationLogListItem struct {
 	Kind    string `json:"kind"`
 	Percent int    `json:"percent,omitempty"` // 灰度百分比
 }
+
+// LogProductLabelPaginationURL ...
+type LogProductLabelPaginationURL struct {
+	ConsolePagination
+	ProductURL
+	Label string `json:"label" param:"label"`
+}
+
+// Validate 实现 gear.BodyTemplate。
+func (t *LogProductLabelPaginationURL) Validate() error {
+	if err := t.ProductURL.Validate(); err != nil {
+		return err
+	}
+	if !validLabelReg.MatchString(t.Label) {
+		return gear.ErrBadRequest.WithMsgf("invalid label: %s", t.Label)
+	}
+	if err := t.ConsolePagination.Validate(); err != nil {
+		return err
+	}
+	return nil
+}
+
+// LogProductModuleSettingURL ...
+type LogProductModuleSettingURL struct {
+	ConsolePagination
+	ProductURL
+	Module  string `json:"module" param:"module"`
+	Setting string `json:"setting" param:"setting"`
+}
+
+// Validate 实现 gear.BodyTemplate。
+func (t *LogProductModuleSettingURL) Validate() error {
+	if err := t.ProductURL.Validate(); err != nil {
+		return err
+	}
+	if !validNameReg.MatchString(t.Module) {
+		return gear.ErrBadRequest.WithMsgf("invalid module name: %s", t.Module)
+	}
+	if !validNameReg.MatchString(t.Setting) {
+		return gear.ErrBadRequest.WithMsgf("invalid setting name: %s", t.Setting)
+	}
+	if err := t.ConsolePagination.Validate(); err != nil {
+		return err
+	}
+	return nil
+}

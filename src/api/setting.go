@@ -252,11 +252,11 @@ func (a *Setting) Recall(ctx *gear.Context) error {
 
 // Logs 返回操作日志列表
 func (a *Setting) Logs(ctx *gear.Context) error {
-	req := &tpl.ProductModuleSettingURL{}
+	req := &tpl.LogProductModuleSettingURL{}
 	if err := ctx.ParseURL(req); err != nil {
 		return err
 	}
-	res, err := a.blls.OperationLog.List(ctx, req.Product+req.Module+req.Setting, &req.Pagination)
+	res, err := a.blls.OperationLog.List(ctx, req.Product+req.Module+req.Setting, &req.ConsolePagination)
 	if err != nil {
 		return err
 	}

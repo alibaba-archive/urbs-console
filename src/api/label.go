@@ -211,11 +211,11 @@ func (a *Label) Recall(ctx *gear.Context) error {
 
 // Logs 返回操作日志列表
 func (a *Label) Logs(ctx *gear.Context) error {
-	req := &tpl.ProductLabelPaginationURL{}
+	req := &tpl.LogProductLabelPaginationURL{}
 	if err := ctx.ParseURL(req); err != nil {
 		return err
 	}
-	res, err := a.blls.OperationLog.List(ctx, req.Product+req.Label, &req.Pagination)
+	res, err := a.blls.OperationLog.List(ctx, req.Product+req.Label, &req.ConsolePagination)
 	if err != nil {
 		return err
 	}

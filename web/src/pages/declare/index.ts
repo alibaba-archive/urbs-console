@@ -256,7 +256,7 @@ export interface ACComponentProps extends BaseContainerComponentProps {
   onChange?: (users: string[]) => void;
   acPrePageToken?: string;
   acNextPageToken?: string;
-  pageTotal?: number;
+  acTotalSize?: number;
 }
 
 export interface AcUserSelectComponentProps {
