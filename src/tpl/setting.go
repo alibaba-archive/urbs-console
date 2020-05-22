@@ -11,17 +11,28 @@ type MySettingsQueryURL struct {
 	Pagination
 	UID     string `json:"uid" param:"uid"`
 	Product string `json:"product" query:"product"`
+	Module  string `json:"module" query:"module"`
+	Setting string `json:"setting" query:"setting"`
 	Channel string `json:"channel" query:"channel"`
 	Client  string `json:"client" query:"client"`
 }
 
 // Validate 实现 gear.BodyTemplate。
 func (t *MySettingsQueryURL) Validate() error {
-	if !validIDReg.MatchString(t.UID) {
-		return gear.ErrBadRequest.WithMsgf("invalid user: %s", t.UID)
-	}
-	if !validNameReg.MatchString(t.Product) {
+	if t.Product != "" && !validNameReg.MatchString(t.Product) {
 		return gear.ErrBadRequest.WithMsgf("invalid product name: %s", t.Product)
+	}
+	if t.Module != "" && !validNameReg.MatchString(t.Module) {
+		return gear.ErrBadRequest.WithMsgf("invalid module name: %s", t.Module)
+	}
+	if t.Module != "" && t.Product == "" {
+		return gear.ErrBadRequest.WithMsgf("product required for module: %s", t.Module)
+	}
+	if t.Setting != "" && !validNameReg.MatchString(t.Setting) {
+		return gear.ErrBadRequest.WithMsgf("invalid setting name: %s", t.Setting)
+	}
+	if t.Setting != "" && t.Module == "" {
+		return gear.ErrBadRequest.WithMsgf("module required for setting: %s", t.Setting)
 	}
 	if err := t.Pagination.Validate(); err != nil {
 		return err

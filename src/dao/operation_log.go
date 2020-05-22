@@ -48,25 +48,38 @@ func (a *OperationLog) FindByObject(ctx context.Context, object string, pg *tpl.
 
 // FindOneByID ...
 func (a *OperationLog) FindOneByID(ctx context.Context, id int64) (*schema.OperationLog, error) {
-	where := "id = ?"
-	acl := &schema.OperationLog{}
-	err := a.DB.Where(where, id).Find(acl).Error
+	sql := "select * from operation_log where id = ?"
+
+	log := &schema.OperationLog{}
+	err := a.DB.Raw(sql, id).Scan(log).Error
 	if err != nil {
 		return nil, err
 	}
-	return acl, nil
+	return log, nil
 }
 
 // FindOneByObject ...
 func (a *OperationLog) FindOneByObject(ctx context.Context, object string) (*schema.OperationLog, error) {
-	where := "object = ? ORDER BY id DESC LIMIT 1"
+	sql := "select * from operation_log where object = ? limit 1"
 
-	acl := &schema.OperationLog{}
-	err := a.DB.Where(where, object).Find(acl).Error
+	log := &schema.OperationLog{}
+	err := a.DB.Raw(sql, object).Scan(log).Error
 	if err != nil {
 		return nil, err
 	}
-	return acl, nil
+	return log, nil
+}
+
+// FindAllByObject ...
+func (a *OperationLog) FindAllByObject(ctx context.Context) ([]schema.OperationLog, error) {
+	sql := "select * from operation_log limit 10"
+
+	logs := []schema.OperationLog{}
+	err := a.DB.Raw(sql).Scan(&logs).Error
+	if err != nil {
+		return nil, err
+	}
+	return logs, nil
 }
 
 // DeleteByObject ...
@@ -78,7 +91,9 @@ func (a *OperationLog) DeleteByObject(ctx context.Context, id int64) error {
 
 // CountByObject ...
 func (a *OperationLog) CountByObject(ctx context.Context, object string) (int, error) {
-	count := 0
-	err := a.DB.Model(&schema.OperationLog{}).Where("object = ?", object).Count(&count).Error
-	return count, err
+	sql := "select count(1) as count from operation_log where object = ?"
+
+	res := &schema.CountResult{}
+	err := a.DB.Raw(sql, object).Scan(res).Error
+	return res.Count, err
 }

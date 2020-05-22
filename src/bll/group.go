@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/teambition/urbs-console/src/dao"
+	"github.com/teambition/urbs-console/src/dto/thrid"
 	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/service"
@@ -28,7 +29,7 @@ func (a *Group) List(ctx context.Context, args *tpl.GroupsURL) (*tpl.GroupsRes, 
 }
 
 // ListSettings ...
-func (a *Group) ListSettings(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MySettingsRes, error) {
+func (a *Group) ListSettings(ctx context.Context, args *tpl.MySettingsQueryURL) (*tpl.MySettingsRes, error) {
 	return a.services.UrbsSetting.GroupListSettings(ctx, args)
 }
 
@@ -44,13 +45,15 @@ func (a *Group) BatchAdd(ctx context.Context, groups []tpl.GroupBody) error {
 		return err
 	}
 	for i := range groups {
-		go func(group *tpl.GroupBody) {
+		go func(group tpl.GroupBody) {
 			err := a.daos.UrbsLock.Lock(ctx, group.Kind+group.UID, 30*time.Minute)
 			if err == nil {
 				a.BatchAddMember(ctx, group.UID)
 				a.daos.UrbsLock.Unlock(ctx, group.Kind+group.UID)
+			} else {
+				logger.Warning(ctx, "batchAddLock", "error", err.Error())
 			}
-		}(&groups[i])
+		}(groups[i])
 	}
 	return nil
 }
@@ -65,16 +68,19 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 	groupUpdateBody.SyncAt = &now
 	_, err := a.services.UrbsSetting.GroupUpdate(ctx, uid, groupUpdateBody)
 	if err != nil {
-		logger.Err(ctx, "groupUpdate", "error", err.Error())
+		logger.Err(ctx, err.Error())
 		return err
 	}
 	nextPageToken := ""
 	// 同步成员
 	for {
-		var resp *service.ListGroupMembersResp
+		var resp *thrid.ListGroupMembersResp
 		resp, err = a.services.GroupMember.List(ctx, uid, nextPageToken, pageSize)
 		if err != nil {
-			logger.Err(ctx, err.Error(), "uid", uid)
+			logger.Err(ctx, err.Error(), "groupId", uid)
+			return err
+		}
+		if len(resp.Members) == 0 {
 			break
 		}
 		nextPageToken = resp.NextPageToken
@@ -86,15 +92,13 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 		}
 		_, err = a.services.UrbsSetting.GroupBatchAddMembers(ctx, uid, users)
 		if err != nil {
-			logger.Err(ctx, err.Error(), "uid", uid)
+			logger.Err(ctx, err.Error(), "groupId", uid)
+			return err
 		}
-		if len(resp.Members) >= pageSize {
+		if nextPageToken != "" {
 			continue
 		}
 		break
-	}
-	if err != nil { // 同步错误，不删除旧的成员
-		return nil
 	}
 	// 删除旧的成员
 	args := new(tpl.GroupMembersURL)
@@ -102,9 +106,9 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 	args.SyncLt = now
 	_, err = a.services.UrbsSetting.GroupRemoveMembers(ctx, args)
 	if err != nil {
-		logger.Err(ctx, "groupRemoveMembers", "error", err.Error())
+		logger.Err(ctx, "error", err.Error())
 	} else {
-		logger.Info(ctx, "batchAddMember", "count", count, "uid", uid)
+		logger.Info(ctx, "batchAddMember", "count", count, "groupId", uid)
 	}
 	return nil
 }

@@ -41,7 +41,7 @@ func NewBlls(s *service.Services, d *dao.Daos) *Blls {
 	services = s
 	blls = &Blls{
 		User:    &User{services: services},
-		Group:   &Group{services: services},
+		Group:   &Group{services: services, daos: d},
 		Product: &Product{services: services},
 
 		Label:   &Label{services: services},
