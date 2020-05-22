@@ -14,7 +14,7 @@ type UrbsAcUser struct {
 }
 
 // List 返回用户列表
-func (a *UrbsAcUser) List(ctx context.Context, args *tpl.Pagination) (*tpl.UrbsAcUserListRes, error) {
+func (a *UrbsAcUser) List(ctx context.Context, args *tpl.ConsolePagination) (*tpl.UrbsAcUserListRes, error) {
 	items, err := a.daos.UrbsAcUser.List(ctx, args)
 	if err != nil {
 		return nil, err

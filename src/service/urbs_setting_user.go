@@ -69,6 +69,7 @@ func (a *UrbsSetting) UserListSettingsUnionAll(ctx context.Context, args *tpl.My
 	path += "&setting=%s"
 	path += "&client=%s"
 	path += "&channel=%s"
+
 	url := fmt.Sprintf(path, conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Product, args.Module, args.Setting, args.Client, args.Channel)
 
 	result := new(tpl.MySettingsRes)

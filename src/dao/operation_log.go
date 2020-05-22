@@ -25,7 +25,7 @@ func (a *OperationLog) Add(ctx context.Context, obj *schema.OperationLog) error 
 }
 
 // FindByObject ...
-func (a *OperationLog) FindByObject(ctx context.Context, object string, pg *tpl.Pagination) ([]*dto.OperationLog, error) {
+func (a *OperationLog) FindByObject(ctx context.Context, object string, pg *tpl.ConsolePagination) ([]*dto.OperationLog, error) {
 	sql := "SELECT a.id, a.created_at, a.operator, a.object, a.action, a.content, a.description, b.`name` FROM operation_log a LEFT JOIN urbs_ac_user b ON a.operator=b.uid WHERE a.object = ? ORDER BY a.id DESC LIMIT ?,?"
 
 	row, err := a.DB.Raw(sql, object, pg.Skip, pg.PageSize+1).Rows()

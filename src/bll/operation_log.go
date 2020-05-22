@@ -25,7 +25,7 @@ var (
 )
 
 // List 返回操作日志列表
-func (a *OperationLog) List(ctx context.Context, object string, req *tpl.Pagination) (*tpl.OperationLogListRes, error) {
+func (a *OperationLog) List(ctx context.Context, object string, req *tpl.ConsolePagination) (*tpl.OperationLogListRes, error) {
 	logs, err := a.daos.OperationLog.FindByObject(ctx, object, req)
 	if err != nil {
 		return nil, err

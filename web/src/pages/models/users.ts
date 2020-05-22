@@ -148,7 +148,7 @@ const users: Model = {
       const { pageToken } = params;
       const { acPrePageTokens } = yield select(state => state.users);
       const preLen = acPrePageTokens.length;
-      const { result, nextPageToken } = yield call(usersService.getAcUsersList, params);
+      const { result, nextPageToken, totalSize } = yield call(usersService.getAcUsersList, params);
       if (type === 'next') acPrePageTokens.push(pageToken);
       if (type === 'pre') acPrePageTokens.pop();
       if (type === 'del') acPrePageTokens.splice(0);
@@ -159,7 +159,8 @@ const users: Model = {
           acNextPageToken: nextPageToken,
           acPrePageToken: curLen ? acPrePageTokens[curLen - 1] : (preLen ? '' : undefined),
           acPrePageTokens,
-          acUserList: result || []
+          acUserList: result || [],
+          acTotalSize: totalSize
         },
       });
     },

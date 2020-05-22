@@ -39,7 +39,7 @@ func TestOperationLog(t *testing.T) {
 	t.Run("get operationLog", func(t *testing.T) {
 		require := require.New(t)
 		// 获取操作日志
-		page := &tpl.Pagination{}
+		page := &tpl.ConsolePagination{}
 		page.Validate()
 		res, err := blls.OperationLog.List(ctx, object, page)
 		require.Nil(err)
