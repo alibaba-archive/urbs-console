@@ -287,7 +287,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
     content: (
       <UserGroup
         dataSource={labelGroupsList}
-        hideColumns={['syncAt', 'uid', 'desc']}
+        hideColumns={['uid', 'desc']}
         paginationProps={
           {
             total: labelGroupsPageTotal,
@@ -335,7 +335,6 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
     content: (
       <Users
         dataSource={labelUsersList}
-        hideColumns={['syncAt']}
         paginationProps={
           {
             total: labelUsersPageTotal,

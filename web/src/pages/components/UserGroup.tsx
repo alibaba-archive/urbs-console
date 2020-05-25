@@ -27,16 +27,9 @@ const UserGroup: React.FC<TableComponentProps<Group>> = (props) => {
     dataIndex: 'status',
     key: 'status',
   }, {
-    title: '同步时间',
-    dataIndex: 'syncAt',
-    key: 'syncAt',
-    render: (time: string) => {
-      return formatTableTime(time);
-    },
-  }, {
-    title: '创建时间',
-    dataIndex: 'createdAt',
-    key: 'createdAt',
+    title: '分配时间',
+    dataIndex: 'assignedAt',
+    key: 'assignedAt',
     render: (time: string) => {
       return formatTableTime(time);
     },
@@ -57,7 +50,7 @@ const UserGroup: React.FC<TableComponentProps<Group>> = (props) => {
   };
   return (
     <div>
-      <Table rowKey={ (record) => (record.uid || record.group) } {...props} columns={generateTableColumns()} pagination={false}></Table>
+      <Table rowKey={(record) => (record.uid || record.group)} {...props} columns={generateTableColumns()} pagination={false}></Table>
       {
         paginationProps && (<Pagination {...paginationProps}></Pagination>)
       }
