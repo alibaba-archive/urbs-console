@@ -23,3 +23,5 @@ mysql:
     max_idle_conns: 8
     max_open_conns: 64
 superAdmins: []
+auth_keys:
+    - kqGuLsiKT1J5ANFDKXUHc2lAYfdzWBnriL1iHgBbYQ

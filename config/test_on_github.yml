@@ -1,0 +1,26 @@
+addr: ":8080"
+tls:
+    cert_path: ""
+    key_path: ""
+urbs_setting:
+    addr: ""
+    key: ""
+logger:
+    level: "info"
+thrid:
+    key: ""
+    user_auth: 
+        url: ""
+        cookie_key: ""
+    group_member: 
+        url: ""
+mysql:
+    host: localhost:3306
+    user: root
+    password: root
+    database: urbs_console
+    parameters: loc=UTC&readTimeout=10s&writeTimeout=10s&timeout=10s&multiStatements=true
+    max_idle_conns: 8
+    max_open_conns: 64
+superAdmins: []
+auth_keys: []

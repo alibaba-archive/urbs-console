@@ -23,23 +23,6 @@ func init() {
 	thirdJwt = authjwt.New([]byte(conf.Config.Thrid.Key))
 }
 
-// Services ...
-type Services struct {
-	UrbsSetting UrbsSettingInterface
-	UserAuth    UserAuthInterface
-	GroupMember *GroupMember
-}
-
-// NewServices ...
-func NewServices() *Services {
-	s := &Services{
-		GroupMember: &GroupMember{},
-		UrbsSetting: &UrbsSetting{},
-		UserAuth:    &UserAuth{},
-	}
-	return s
-}
-
 // UrbsSettingHeader ...
 func UrbsSettingHeader(ctx context.Context) http.Header {
 	header := http.Header{}

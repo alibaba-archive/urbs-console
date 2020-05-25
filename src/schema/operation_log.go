@@ -1,6 +1,9 @@
 package schema
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 // OperationLog 详见 ./sql/schema.sql table `operation_log`
 // 操作日志
@@ -19,4 +22,10 @@ type OperationLog struct {
 // TableName retuns table name
 func (OperationLog) TableName() string {
 	return "operation_log"
+}
+
+// String ...
+func (a *OperationLog) String() string {
+	log, _ := json.Marshal(a)
+	return string(log)
 }

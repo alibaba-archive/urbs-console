@@ -40,6 +40,8 @@ func init() {
 }
 
 const (
+	// HeaderXAuth ...
+	HeaderXAuth = "X-Auth"
 	// HeaderAuthorize ...
 	HeaderAuthorize = "Authorization"
 	// HeaderAuthorizeBearer ...
@@ -48,11 +50,19 @@ const (
 	HeaderAuthorizeOAuth2 = "OAuth2 "
 )
 
-// TokenExtractor ...
-func TokenExtractor(ctx *gear.Context) (token string) {
+// AuthorizationExtractor ...
+func AuthorizationExtractor(ctx *gear.Context) (token string) {
 	if val := ctx.Get(HeaderAuthorize); strings.HasPrefix(val, HeaderAuthorizeBearer) {
 		token = val[7:]
 	} else if val := ctx.Get(HeaderAuthorize); strings.HasPrefix(val, HeaderAuthorizeOAuth2) {
+		token = val[7:]
+	}
+	return
+}
+
+// XAuthExtractor ...
+func XAuthExtractor(ctx *gear.Context) (token string) {
+	if val := ctx.Get(HeaderXAuth); strings.HasPrefix(val, HeaderAuthorizeBearer) {
 		token = val[7:]
 	}
 	return
@@ -66,4 +76,16 @@ func StringSliceHas(list []string, a string) bool {
 		}
 	}
 	return false
+}
+
+// PathExists returns whether the given file or directory exists
+func PathExists(path string) bool {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true
+	}
+	if os.IsNotExist(err) {
+		return false
+	}
+	return true
 }

@@ -56,8 +56,8 @@ Accept: application/json
 
 ```json
 {
-  "name": "urbs-setting",
-  "version": "v0.1.0",
+  "name": "urbs-console",
+  "version": "v1.2.0",
   "gitSHA1": "cd7e82a",
   "buildTime": "2020-03-25T06:24:25Z"
 }
@@ -67,7 +67,7 @@ Accept: application/json
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|请求成功|[Version](#schemaversion)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|version 返回结果|[Version](#schemaversion)|
 
 <aside class="success">
 This operation does not require authentication
@@ -77,35 +77,34 @@ This operation does not require authentication
 
 User 用户相关接口
 
-## 接口返回 user 的 settings，按照 setting 设置时间反序，支持分页，包含了 user 从属的 group 的 settings
+## 获取 user 的所有 settings 信息
 
 > Code samples
 
 ```shell
 # You can also use wget
-curl -X GET http://urbs-console:8080/v1/users/settings:unionAll?product=string \
+curl -X GET http://urbs-console:8080/api/v1/users/settings:unionAll?product=string \
   -H 'Accept: application/json' \
   -H 'Authorization: string'
 
 ```
 
 ```http
-GET http://urbs-console:8080/v1/users/settings:unionAll?product=string HTTP/1.1
+GET http://urbs-console:8080/api/v1/users/settings:unionAll?product=string HTTP/1.1
 Host: urbs-console:8080
 Accept: application/json
 Authorization: string
 
 ```
 
-`GET /v1/users/settings:unionAll`
+`GET /api/v1/users/settings:unionAll`
 
-<h3 id="接口返回-user-的-settings，按照-setting-设置时间反序，支持分页，包含了-user-从属的-group-的-settings-parameters">Parameters</h3>
+<h3 id="获取-user-的所有-settings-信息-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|Authorization|header|string|false|请求者的 JWT token, 格式如: `Bearer xxx`|
-|配置文件中 thrid.user_auth.cookie_key 的值|cookie|string|false|带请求者身份的 Cookie 的名称|
-|product|query|string|true|产品名称，当 product 对应产品不存在时，该接口会返回空列表|
+|Authorization|header|string|true|用户 Token, 格式如: `Bearer xxx`；header 不存在，尝试从 cookie 中读取|
+|product|query|string|true|产品名称|
 |client|query|string|false|客户端标识，例如 web、ios、android、windows、macos|
 |channel|query|string|false|客户端渠道，例如 stable、beta、dev|
 |pageSize|query|integer(int32)|false|分页大小，默认为 10，(1-1000]|
@@ -117,27 +116,46 @@ Authorization: string
 
 ```json
 {
-  "totalSize": 99,
-  "nextPageToken": "hid.fog-AAAAAABWPxcs-4UJ3Aw9",
+  "nextPageToken": "",
   "result": [
     {
       "hid": "AwAAAAAAAAB25V_QnbhCuRwF",
-      "module": "newHomePage",
-      "name": "beta",
-      "value": "string",
-      "last_value": "string",
-      "created_at": "2020-03-25T06:24:25Z",
-      "updated_at": "2020-03-25T06:24:25Z"
+      "product": "teambition",
+      "module": "task",
+      "name": "task-share",
+      "desc": "string",
+      "value": "disable",
+      "lastValue": "",
+      "release": 1,
+      "assignedAt": "2020-03-25T06:24:25Z"
     }
   ]
 }
 ```
 
-<h3 id="接口返回-user-的-settings，按照-setting-设置时间反序，支持分页，包含了-user-从属的-group-的-settings-responses">Responses</h3>
+<h3 id="获取-user-的所有-settings-信息-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|请求成功|[MySettingsRes](#schemamysettingsres)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|用户或群组被指派的配置项列表返回结果|Inline|
+
+<h3 id="获取-user-的所有-settings-信息-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» nextPageToken|[NextPageToken](#schemanextpagetoken)|false|none|用于分页查询时用于获取下一页数据的 token，当为空值时表示没有下一页了|
+|» result|[[MySetting](#schemamysetting)]|false|none|none|
+|»» hid|string|false|none|配置项的 hid|
+|»» product|string|false|none|配置项所属的产品名称|
+|»» module|string|false|none|配置项所属的功能模块名称|
+|»» name|string|false|none|配置项名称|
+|»» desc|string|false|none|配置项描述，|
+|»» value|string|false|none|配置项值|
+|»» lastValue|string|false|none|配置项值|
+|»» release|integer(int64)|false|none|被设置批次|
+|»» assignedAt|string(date-time)|false|none|被设置时间|
 
 <aside class="success">
 This operation does not require authentication
@@ -153,7 +171,7 @@ This operation does not require authentication
 <a id="tocsnextpagetoken"></a>
 
 ```json
-"hid.fog-AAAAAABWPxcs-4UJ3Aw9"
+""
 
 ```
 
@@ -173,7 +191,7 @@ nextPageToken
 <a id="tocstotalsize"></a>
 
 ```json
-99
+1
 
 ```
 
@@ -185,48 +203,6 @@ totalSize
 |---|---|---|---|---|
 |totalSize|integer(int64)|false|none|当前分页查询的总数据量|
 
-<h2 id="tocS_ErrorResponse">ErrorResponse</h2>
-<!-- backwards compatibility -->
-<a id="schemaerrorresponse"></a>
-<a id="schema_ErrorResponse"></a>
-<a id="tocSerrorresponse"></a>
-<a id="tocserrorresponse"></a>
-
-```json
-{
-  "error": "NotFound",
-  "message": "user 50c32afae8cf1439d35a87e6 not found"
-}
-
-```
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|error|string|false|none|错误代号|
-|message|string|false|none|错误详情|
-
-<h2 id="tocS_BoolRes">BoolRes</h2>
-<!-- backwards compatibility -->
-<a id="schemaboolres"></a>
-<a id="schema_BoolRes"></a>
-<a id="tocSboolres"></a>
-<a id="tocsboolres"></a>
-
-```json
-{
-  "result": true
-}
-
-```
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|result|boolean|false|none|是否成功|
-
 <h2 id="tocS_Version">Version</h2>
 <!-- backwards compatibility -->
 <a id="schemaversion"></a>
@@ -236,8 +212,8 @@ totalSize
 
 ```json
 {
-  "name": "urbs-setting",
-  "version": "v0.1.0",
+  "name": "urbs-console",
+  "version": "v1.2.0",
   "gitSHA1": "cd7e82a",
   "buildTime": "2020-03-25T06:24:25Z"
 }
@@ -253,40 +229,6 @@ totalSize
 |gitSHA1|string|false|none|git commit hash|
 |buildTime|string(date-time)|false|none|打包构建时间|
 
-<h2 id="tocS_MySettingsRes">MySettingsRes</h2>
-<!-- backwards compatibility -->
-<a id="schemamysettingsres"></a>
-<a id="schema_MySettingsRes"></a>
-<a id="tocSmysettingsres"></a>
-<a id="tocsmysettingsres"></a>
-
-```json
-{
-  "totalSize": 99,
-  "nextPageToken": "hid.fog-AAAAAABWPxcs-4UJ3Aw9",
-  "result": [
-    {
-      "hid": "AwAAAAAAAAB25V_QnbhCuRwF",
-      "module": "newHomePage",
-      "name": "beta",
-      "value": "string",
-      "last_value": "string",
-      "created_at": "2020-03-25T06:24:25Z",
-      "updated_at": "2020-03-25T06:24:25Z"
-    }
-  ]
-}
-
-```
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|totalSize|[TotalSize](#schematotalsize)|false|none|当前分页查询的总数据量|
-|nextPageToken|[NextPageToken](#schemanextpagetoken)|false|none|用于分页查询时用于获取下一页数据的 token，当为空值时表示没有下一页了|
-|result|[[MySetting](#schemamysetting)]|false|none|none|
-
 <h2 id="tocS_MySetting">MySetting</h2>
 <!-- backwards compatibility -->
 <a id="schemamysetting"></a>
@@ -297,12 +239,14 @@ totalSize
 ```json
 {
   "hid": "AwAAAAAAAAB25V_QnbhCuRwF",
-  "module": "newHomePage",
-  "name": "beta",
-  "value": "string",
-  "last_value": "string",
-  "created_at": "2020-03-25T06:24:25Z",
-  "updated_at": "2020-03-25T06:24:25Z"
+  "product": "teambition",
+  "module": "task",
+  "name": "task-share",
+  "desc": "string",
+  "value": "disable",
+  "lastValue": "",
+  "release": 1,
+  "assignedAt": "2020-03-25T06:24:25Z"
 }
 
 ```
@@ -311,11 +255,13 @@ totalSize
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|hid|string|false|none|灰度标签的 HID|
-|module|string|false|none|产品模块名称|
-|name|string|false|none|模块配置名称|
-|value|string|false|none|模块配置的值|
-|last_value|string|false|none|上次模块配置的值|
-|created_at|string(date-time)|false|none|创建时间|
-|updated_at|string(date-time)|false|none|更新时间|
+|hid|string|false|none|配置项的 hid|
+|product|string|false|none|配置项所属的产品名称|
+|module|string|false|none|配置项所属的功能模块名称|
+|name|string|false|none|配置项名称|
+|desc|string|false|none|配置项描述，|
+|value|string|false|none|配置项值|
+|lastValue|string|false|none|配置项值|
+|release|integer(int64)|false|none|被设置批次|
+|assignedAt|string(date-time)|false|none|被设置时间|
 

@@ -212,13 +212,14 @@ func RandLabel() string {
 
 // RecallBody ...
 type RecallBody struct {
-	Release int64 `json:"release"`
+	HID     string `json:"hid"`
+	Release int64  `json:"release"`
 }
 
 // Validate 实现 gear.BodyTemplate。
 func (t *RecallBody) Validate() error {
-	if t.Release <= 0 {
-		return gear.ErrBadRequest.WithMsg("release required")
+	if t.HID == "" {
+		return gear.ErrBadRequest.WithMsg("hid required")
 	}
 	return nil
 }

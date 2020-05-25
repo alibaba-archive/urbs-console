@@ -32,42 +32,55 @@ func (a *UrbsAcUser) BatchAdd(ctx context.Context, users []*schema.UrbsAcUser) e
 
 // FindByUID ...
 func (a *UrbsAcUser) FindByUID(ctx context.Context, uid string) (*schema.UrbsAcUser, error) {
-	urbsAcUser := &schema.UrbsAcUser{}
+	sql := "select * from urbs_ac_user where uid = ?"
 
-	where := "uid = ?"
+	res := &schema.UrbsAcUser{}
 
-	err := a.DB.Where(where, uid).Find(&urbsAcUser).Error
+	err := a.DB.Raw(sql, uid).Scan(res).Error
 	if err != nil {
 		return nil, err
 	}
-	return urbsAcUser, nil
+	return res, nil
 }
 
-// FindByUIDS ...
-func (a *UrbsAcUser) FindByUIDS(ctx context.Context, uids []string) ([]*schema.UrbsAcUser, error) {
-	urbsAcUsers := make([]*schema.UrbsAcUser, 0)
+// FindByUIDs ...
+func (a *UrbsAcUser) FindByUIDs(ctx context.Context, uids []string) ([]schema.UrbsAcUser, error) {
+	sql := "select * from urbs_ac_user where uid in ( ? )"
 
-	where := "uid in ( ? )"
+	res := []schema.UrbsAcUser{}
 
-	err := a.DB.Where(where, uids).Scan(&urbsAcUsers).Error
+	err := a.DB.Where(sql, uids).Scan(&res).Error
 	if err != nil {
 		return nil, err
 	}
-	return urbsAcUsers, nil
+	return res, nil
 }
 
-// RemoveByUID ...
-func (a *UrbsAcUser) RemoveByUID(ctx context.Context, uid string) error {
-	sql := "delete from `urbs_ac_user` where uid = ?"
-
-	_, err := a.DB.DB().Exec(sql, uid)
-
+// DeleteByUID ...
+func (a *UrbsAcUser) DeleteByUID(ctx context.Context, uid string) error {
+	err := a.DB.Transaction(func(tx *gorm.DB) error {
+		sql := "delete from `urbs_ac_user` where uid = ?"
+		err := tx.Exec(sql, uid).Error
+		if err != nil {
+			return err
+		}
+		sql = "delete from `urbs_ac_acl` where subject = ?"
+		return tx.Exec(sql, uid).Error
+	})
 	return err
 }
 
+// UpdateByUID ...
+func (a *UrbsAcUser) UpdateByUID(ctx context.Context, name, uid string) error {
+
+	sql := "update `urbs_ac_user` set name=? where uid = ?"
+
+	return a.DB.Exec(sql, name, uid).Error
+}
+
 // List ...
-func (a *UrbsAcUser) List(ctx context.Context, pg *tpl.Pagination) ([]*schema.UrbsAcUser, error) {
-	sql := "select * from urbs_ac_user order by id asc limit ?,?"
+func (a *UrbsAcUser) List(ctx context.Context, pg *tpl.ConsolePagination) ([]*schema.UrbsAcUser, error) {
+	sql := "select * from urbs_ac_user order by id desc limit ?,?"
 
 	urbsAcUsers := make([]*schema.UrbsAcUser, 0)
 	err := a.DB.Raw(sql, pg.Skip, pg.PageSize+1).Scan(&urbsAcUsers).Error
@@ -91,7 +104,10 @@ func (a *UrbsAcUser) Search(ctx context.Context, key string) ([]*schema.UrbsAcUs
 
 // Count 用户数量
 func (a *UrbsAcUser) Count(ctx context.Context) (int, error) {
-	count := 0
-	err := a.DB.Model(&schema.UrbsAcUser{}).Count(&count).Error
-	return count, err
+	sql := "select count(1) as count from urbs_ac_user"
+
+	res := &schema.CountResult{}
+
+	err := a.DB.Raw(sql).Scan(res).Error
+	return res.Count, err
 }

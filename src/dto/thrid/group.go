@@ -1,8 +1,9 @@
 package thrid
 
-// GroupMembersResp ...
-type GroupMembersResp struct {
-	Members []*Member `json:"result"`
+// ListGroupMembersResp ...
+type ListGroupMembersResp struct {
+	Members       []Member `json:"result"`
+	NextPageToken string   `json:"nextPageToken"`
 }
 
 // Member ....

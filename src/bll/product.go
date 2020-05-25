@@ -54,7 +54,7 @@ func (a *Product) List(ctx context.Context, args *tpl.Pagination) (*tpl.Products
 
 // Update ...
 func (a *Product) Update(ctx context.Context, product string, body *tpl.ProductUpdateBody) (*tpl.ProductRes, error) {
-	err := blls.UrbsAcAcl.Update(ctx, body.Uids, product)
+	err := blls.UrbsAcAcl.Update(ctx, body.UidsBody, product)
 	if err != nil {
 		return nil, err
 	}

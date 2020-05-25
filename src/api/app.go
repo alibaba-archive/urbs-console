@@ -2,7 +2,6 @@ package api
 
 import (
 	"log"
-	"net/http"
 	"strings"
 
 	"github.com/jinzhu/gorm"
@@ -36,21 +35,14 @@ func NewApp() *gear.App {
 
 		return gear.ParseError(err)
 	})
-	staticServer := static.New(static.Options{Root: util.GetStaticFilePath()})
+	app.Use(middleware.Version)
 
-	app.Use(func(ctx *gear.Context) error {
-		if ctx.Path == "/version" { // used for health check, so ingore logger
-			ctx.Set(gear.HeaderContentType, gear.MIMEApplicationJSONCharsetUTF8)
-			return ctx.End(http.StatusOK, util.GetVersion())
-		}
-		if !strings.HasPrefix(ctx.Path, "/api") && !strings.HasPrefix(ctx.Path, "/v1") {
-			if !strings.HasPrefix(ctx.Path, "/umi.css") && !strings.HasPrefix(ctx.Path, "/umi.js") {
-				ctx.Path = "/"
-			}
-			return staticServer(ctx)
-		}
-		return nil
-	})
+	var staticServer gear.Middleware = nil
+	if path := util.GetStaticFilePath(); path != "" {
+		staticServer = static.New(static.Options{Root: path})
+	}
+	app.Use(middleware.StaticFile(staticServer))
+
 	app.Use(middleware.Logger)
 
 	app.Use(cors.New(cors.Options{

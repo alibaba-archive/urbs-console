@@ -64,12 +64,8 @@ func (a *User) ListLables(ctx *gear.Context) error {
 
 // ListSettings 返回 user 的 settings，按照 setting 设置时间正序，支持分页
 func (a *User) ListSettings(ctx *gear.Context) error {
-	req := tpl.UIDProductURL{}
+	req := tpl.UIDPaginationURL{}
 	if err := ctx.ParseURL(&req); err != nil {
-		return err
-	}
-	err := a.blls.UrbsAcAcl.CheckSuperAdmin(ctx)
-	if err != nil {
 		return err
 	}
 	res, err := a.blls.User.ListSettings(ctx, &req)
@@ -135,58 +131,6 @@ func (a *User) BatchAdd(ctx *gear.Context) error {
 	return ctx.OkJSON(res)
 }
 
-// RemoveLable ..
-func (a *User) RemoveLable(ctx *gear.Context) error {
-	req := tpl.UIDHIDURL{}
-	if err := ctx.ParseURL(&req); err != nil {
-		return err
-	}
-	// err := a.blls.UrbsAcAcl.CheckAdmin(ctx)
-	// if err != nil {
-	// 	return err
-	// }
-	res, err := a.blls.User.RemoveLable(ctx, req.UID, req.HID)
-	if err != nil {
-		return err
-	}
-	return ctx.OkJSON(res)
-}
-
-// RollbackSetting 回退当前设置值到上一个值
-// 更新值请用 POST /products/:product/modules/:module/settings/:setting+:assign 接口
-func (a *User) RollbackSetting(ctx *gear.Context) error {
-	req := tpl.UIDHIDURL{}
-	if err := ctx.ParseURL(&req); err != nil {
-		return err
-	}
-	err := a.blls.UrbsAcAcl.CheckSuperAdmin(ctx)
-	if err != nil {
-		return err
-	}
-	res, err := a.blls.User.RollbackSetting(ctx, req.UID, req.HID)
-	if err != nil {
-		return err
-	}
-	return ctx.OkJSON(res)
-}
-
-// RemoveSetting ..
-func (a *User) RemoveSetting(ctx *gear.Context) error {
-	req := tpl.UIDHIDURL{}
-	if err := ctx.ParseURL(&req); err != nil {
-		return err
-	}
-	err := a.blls.UrbsAcAcl.CheckSuperAdmin(ctx)
-	if err != nil {
-		return err
-	}
-	res, err := a.blls.User.RemoveSetting(ctx, req.UID, req.HID)
-	if err != nil {
-		return err
-	}
-	return ctx.OkJSON(res)
-}
-
 // ListSettingsUnionAllClient 返回 user 的 settings，按照 setting 设置时间反序，支持分页
 // 包含了 user 从属的 group 的 settings
 func (a *User) ListSettingsUnionAllClient(ctx *gear.Context) error {
@@ -201,6 +145,8 @@ func (a *User) ListSettingsUnionAllClient(ctx *gear.Context) error {
 		return err
 	}
 	for _, item := range res.Result {
+		item.Desc = ""
+		item.Release = 0
 		item.UpdatedAt = item.AssignedAt
 	}
 	return ctx.OkJSON(res)
