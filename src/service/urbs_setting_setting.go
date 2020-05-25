@@ -38,7 +38,7 @@ func (a *UrbsSetting) SettingList(ctx context.Context, args *tpl.ProductModuleUR
 }
 
 // SettingCreate ...
-func (a *UrbsSetting) SettingCreate(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.NameDescBody) (*tpl.SettingInfoRes, error) {
+func (a *UrbsSetting) SettingCreate(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.SettingBody) (*tpl.SettingInfoRes, error) {
 	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings", conf.Config.UrbsSetting.Addr, args.Product, args.Module)
 
 	result := new(tpl.SettingInfoRes)
@@ -152,7 +152,7 @@ func (a *UrbsSetting) SettingListGroups(ctx context.Context, args *tpl.ProductMo
 // SettingCreateRule ...
 func (a *UrbsSetting) SettingCreateRule(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingRuleBody) (*tpl.SettingRuleInfoRes, error) {
 
-	url := fmt.Sprintf("%s/products/%s/modules/%s/settings/%s/rules", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting)
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/rules", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting)
 
 	result := new(tpl.SettingRuleInfoRes)
 
@@ -199,6 +199,62 @@ func (a *UrbsSetting) SettingListRule(ctx context.Context, args *tpl.ProductModu
 	result := new(tpl.SettingRulesInfoRes)
 
 	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// SettingDeleteUser ...
+func (a *UrbsSetting) SettingDeleteUser(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/users/%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting, args.UID)
+
+	result := new(tpl.BoolRes)
+
+	resp, err := request.Delete(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// SettingRollbackUserSetting ...
+func (a *UrbsSetting) SettingRollbackUserSetting(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/users/%s:rollback", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting, args.UID)
+
+	result := new(tpl.BoolRes)
+
+	resp, err := request.Put(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// SettingDeleteGroup ...
+func (a *UrbsSetting) SettingDeleteGroup(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/groups/%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting, args.UID)
+
+	result := new(tpl.BoolRes)
+
+	resp, err := request.Delete(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// SettingRollbackGroupSetting ...
+func (a *UrbsSetting) SettingRollbackGroupSetting(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/groups/%s:rollback", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting, args.UID)
+
+	result := new(tpl.BoolRes)
+
+	resp, err := request.Put(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 
 	if err := HanderResponse(resp, err); err != nil {
 		return nil, err

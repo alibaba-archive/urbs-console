@@ -1,7 +1,6 @@
 package bll
 
 import (
-	"context"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -11,7 +10,7 @@ import (
 )
 
 func TestOperationLog(t *testing.T) {
-	require := require.New(t)
+	tt := SetUpTestTools(require.New(t))
 
 	uid := tpl.RandUID()
 	ctx := getUidContext(uid)
@@ -23,43 +22,76 @@ func TestOperationLog(t *testing.T) {
 	body.Desc = tpl.RandName()
 	body.Value = "true"
 
-	// 添加用户
-	userBody := &tpl.UrbsAcUsersBody{
-		Users: []*tpl.UrbsAcUserBody{
-			{
-				Uid:  uid,
-				Name: tpl.RandUID(),
-			},
-		},
-	}
+	testAddUrbsAcUser(tt, uid)
 
-	err := blls.UrbsAcUser.Add(context.Background(), userBody)
-	require.Nil(err)
+	t.Run("add operationLog", func(t *testing.T) {
+		logContent := &dto.OperationLogContent{
+			Users:   body.Users,
+			Groups:  body.Groups,
+			Desc:    body.Desc,
+			Value:   body.Value,
+			Percent: 2,
+		}
+		err := blls.OperationLog.Add(ctx, object, constant.OperationCreate, logContent)
+		require.Nil(t, err)
+	})
 
-	// 添加操作日志
-	logContent := &dto.OperationLogContent{
-		Users:   body.Users,
-		Groups:  body.Groups,
-		Desc:    body.Desc,
-		Value:   body.Value,
-		Percent: 2,
-	}
-	err = blls.OperationLog.Add(ctx, object, constant.OperationCreate, logContent)
-	require.Nil(err)
+	t.Run("get operationLog", func(t *testing.T) {
+		require := require.New(t)
+		// 获取操作日志
+		page := &tpl.ConsolePagination{}
+		page.Validate()
+		res, err := blls.OperationLog.List(ctx, object, page)
+		require.Nil(err)
 
-	// 获取操作日志
-	page := &tpl.Pagination{}
-	page.Validate()
-	res, err := blls.OperationLog.List(ctx, object, page)
-	require.Nil(err)
+		require.Equal(body.Users, res.Result[0].Users)
+		require.Equal(body.Groups, res.Result[0].Groups)
+		require.Equal(body.Desc, res.Result[0].Desc)
+		require.Equal(body.Value, res.Result[0].Value)
+		require.Equal(2, res.Result[0].Percent)
 
-	require.Equal(body.Users, res.Result[0].Users)
-	require.Equal(body.Groups, res.Result[0].Groups)
-	require.Equal(body.Desc, res.Result[0].Desc)
-	require.Equal(body.Value, res.Result[0].Value)
-	require.Equal(2, res.Result[0].Percent)
+		totalSize, err := daos.OperationLog.CountByObject(ctx, object)
+		require.Nil(err)
+		require.True(totalSize > 0)
+	})
 
-	totalSize, err := daos.OperationLog.CountByObject(ctx, object)
-	require.Nil(err)
-	require.True(totalSize > 0)
+	t.Run("operationLog content", func(t *testing.T) {
+		require := require.New(t)
+		object := tpl.RandName()
+		logContent := &dto.OperationLogContent{
+			Users:   body.Users,
+			Groups:  body.Groups,
+			Desc:    tpl.RandName(),
+			Value:   body.Value,
+			Percent: 2,
+			Release: 111,
+		}
+		err := blls.OperationLog.Add(ctx, object, constant.OperationCreate, logContent)
+		require.Nil(err)
+
+		log, err := daos.OperationLog.FindOneByObject(ctx, object)
+		require.Nil(err)
+		require.Equal(logContent.Desc, log.Desc)
+
+		// 2
+		release := getRelease(log.Content)
+		require.Equal(int64(111), release)
+
+		// 3
+		item := &tpl.OperationLogListItem{}
+		parseLogContent(log.Content, item)
+
+		require.Equal(body.Users, item.Users)
+		require.Equal(body.Groups, item.Groups)
+		require.Equal(body.Value, item.Value)
+		require.Equal("userPercent", item.Kind)
+		require.Equal(2, item.Percent)
+	})
+
+	t.Run("FindAllByObject", func(t *testing.T) {
+		require := require.New(t)
+		logs, err := daos.OperationLog.FindAllByObject(nil)
+		require.Nil(err)
+		require.True(len(logs) > 0, len(logs))
+	})
 }

@@ -26,7 +26,7 @@ func (a *UrbsAcUser) Add(ctx *gear.Context) error {
 
 // List 获取用户列表
 func (a *UrbsAcUser) List(ctx *gear.Context) error {
-	req := new(tpl.Pagination)
+	req := new(tpl.ConsolePagination)
 	if err := ctx.ParseURL(req); err != nil {
 		return err
 	}
@@ -48,4 +48,34 @@ func (a *UrbsAcUser) Search(ctx *gear.Context) error {
 		return err
 	}
 	return ctx.OkJSON(res)
+}
+
+// Delete ...
+func (a *UrbsAcUser) Delete(ctx *gear.Context) error {
+	args := tpl.UrbsAcUserUidUrl{}
+	if err := ctx.ParseURL(&args); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcUser.DeleteByUID(ctx, args.Uid)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(struct{}{})
+}
+
+// Update ...
+func (a *UrbsAcUser) Update(ctx *gear.Context) error {
+	args := tpl.UrbsAcUserUidUrl{}
+	if err := ctx.ParseURL(&args); err != nil {
+		return err
+	}
+	body := tpl.UrbsAcUserUpdateBody{}
+	if err := ctx.ParseBody(&body); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcUser.UpdateByUID(ctx, body.Name, args.Uid)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(struct{}{})
 }

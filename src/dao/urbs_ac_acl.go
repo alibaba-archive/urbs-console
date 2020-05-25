@@ -20,7 +20,6 @@ func (a *UrbsAcAcl) Add(ctx context.Context, obj *schema.UrbsAcAcl) error {
 	sql := "insert ignore into `urbs_ac_acl` (`subject`, `object`,`permission`) values ( ?, ?, ?)"
 
 	args := []interface{}{obj.Subject, obj.Object, obj.Permission}
-
 	return a.DB.Exec(sql, args...).Error
 }
 
@@ -46,24 +45,21 @@ func (a *UrbsAcAcl) FindOne(ctx context.Context, subject, object, permission str
 }
 
 // FindBySubjects ...
-func (a *UrbsAcAcl) FindBySubjects(ctx context.Context, subjects []string) ([]*schema.UrbsAcAcl, error) {
-	where := "subject in ( ? )"
+func (a *UrbsAcAcl) FindBySubjects(ctx context.Context, subjects []string) ([]schema.UrbsAcAcl, error) {
+	where := "select * from `urbs_ac_acl` from subject in ( ? )"
 
-	urbsAcAcl := []*schema.UrbsAcAcl{}
-	err := a.DB.Where(where, subjects).Find(&urbsAcAcl).Error
+	urbsAcAcls := []schema.UrbsAcAcl{}
+	err := a.DB.Raw(where, subjects).Scan(&urbsAcAcls).Error
 	if err != nil {
 		return nil, err
 	}
-	return urbsAcAcl, nil
+	return urbsAcAcls, nil
 }
 
 // DeleteByObject ...
 func (a *UrbsAcAcl) DeleteByObject(ctx context.Context, object string) error {
 	sql := "delete from `urbs_ac_acl` where object = ?"
-
-	_, err := a.DB.DB().Exec(sql, object)
-
-	return err
+	return a.DB.Exec(sql, object).Error
 }
 
 // Delete ...
@@ -71,10 +67,7 @@ func (a *UrbsAcAcl) Delete(ctx context.Context, subject, object, permission stri
 	sql := "delete from `urbs_ac_acl` where subject = ? and object = ? and permission = ?"
 
 	args := []interface{}{subject, object, permission}
-
-	_, err := a.DB.DB().Exec(sql, args...)
-
-	return err
+	return a.DB.Exec(sql, args...).Error
 }
 
 // UpdateSubjects ...
@@ -99,7 +92,7 @@ func (a *UrbsAcAcl) UpdateSubjects(ctx context.Context, subjects []string, objec
 }
 
 // FindByObjects ...
-func (a *UrbsAcAcl) FindByObjects(ctx context.Context, objects []string) ([]*dto.UrbsAcAcl, error) {
+func (a *UrbsAcAcl) FindByObjects(ctx context.Context, objects []string) ([]dto.UrbsAcAcl, error) {
 	sql := `SELECT
 				a.id,
 				a.created_at,
@@ -112,20 +105,12 @@ func (a *UrbsAcAcl) FindByObjects(ctx context.Context, objects []string) ([]*dto
 				INNER JOIN urbs_ac_user b ON a.subject = b.uid 
 			WHERE
 				a.object IN (?)`
-	row, err := a.DB.Raw(sql, objects).Rows()
-	defer row.Close()
+
+	res := []dto.UrbsAcAcl{}
+	err := a.DB.Raw(sql, objects).Scan(&res).Error
+
 	if err != nil {
 		return nil, err
 	}
-	data := make([]*dto.UrbsAcAcl, 0)
-
-	for row.Next() {
-		acl := &dto.UrbsAcAcl{}
-		err := row.Scan(&acl.ID, &acl.CreatedAt, &acl.Subject, &acl.Object, &acl.Permission, &acl.Name)
-		if err != nil {
-			return nil, err
-		}
-		data = append(data, acl)
-	}
-	return data, nil
+	return res, nil
 }

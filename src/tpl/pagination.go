@@ -34,6 +34,36 @@ type Pagination struct {
 
 // Validate ...
 func (pg *Pagination) Validate() error {
+
+	if pg.Skip < 0 {
+		pg.Skip = 0
+	}
+
+	if pg.PageSize > 1000 {
+		return gear.ErrBadRequest.WithMsgf("pageSize(%v) should not great than 1000", pg.PageSize)
+	}
+
+	if pg.PageSize <= 0 {
+		pg.PageSize = 10
+	}
+
+	if err := pg.Search.Validate(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ConsolePagination 分页
+type ConsolePagination struct {
+	Search
+	PageToken string `json:"pageToken" query:"pageToken"`
+	Skip      int    `json:"skip,omitempty" query:"skip"`
+	PageSize  int    `json:"pageSize,omitempty" query:"pageSize"`
+}
+
+// Validate ...
+func (pg *ConsolePagination) Validate() error {
 	if pg.PageToken != "" && !strings.HasPrefix(pg.PageToken, "hid.") {
 		pageToken, err := base64.URLEncoding.DecodeString(pg.PageToken)
 		if err != nil {
@@ -66,7 +96,7 @@ func (pg *Pagination) Validate() error {
 }
 
 // GetNextPageToken ...
-func (pg *Pagination) GetNextPageToken() string {
+func (pg *ConsolePagination) GetNextPageToken() string {
 	pg.Skip += pg.PageSize
 	pageInfo := fmt.Sprintf("%d,%d", pg.Skip, pg.PageSize)
 	return base64.URLEncoding.EncodeToString([]byte(pageInfo))

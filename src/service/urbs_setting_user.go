@@ -49,8 +49,8 @@ func (a *UrbsSetting) UserRefreshCached(ctx context.Context, uid string) (*tpl.U
 }
 
 // UserListSettings ...
-func (a *UrbsSetting) UserListSettings(ctx context.Context, args *tpl.UIDProductURL) (*tpl.MySettingsRes, error) {
-	url := fmt.Sprintf("%s/v1/users/%s/settings?skip=%d&pageSize=%d&pageToken=%s&product=%s&q=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Product, args.Q)
+func (a *UrbsSetting) UserListSettings(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MySettingsRes, error) {
+	url := fmt.Sprintf("%s/v1/users/%s/settings?skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Q)
 
 	result := new(tpl.MySettingsRes)
 
@@ -63,7 +63,14 @@ func (a *UrbsSetting) UserListSettings(ctx context.Context, args *tpl.UIDProduct
 
 // UserListSettingsUnionAll ...
 func (a *UrbsSetting) UserListSettingsUnionAll(ctx context.Context, args *tpl.MySettingsQueryURL) (*tpl.MySettingsRes, error) {
-	url := fmt.Sprintf("%s/v1/users/%s/settings:unionAll?skip=%d&pageSize=%d&pageToken=%s&product=%s&client=%s&channel=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Product, args.Client, args.Channel)
+	path := "%s/v1/users/%s/settings:unionAll?skip=%d&pageSize=%d&pageToken=%s"
+	path += "&product=%s"
+	path += "&module=%s"
+	path += "&setting=%s"
+	path += "&client=%s"
+	path += "&channel=%s"
+
+	url := fmt.Sprintf(path, conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Product, args.Module, args.Setting, args.Client, args.Channel)
 
 	result := new(tpl.MySettingsRes)
 
@@ -97,45 +104,6 @@ func (a *UrbsSetting) UserBatchAdd(ctx context.Context, users []string) (*tpl.Bo
 	result := new(tpl.BoolRes)
 
 	resp, err := request.Post(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
-	if err := HanderResponse(resp, err); err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// UserRemoveLabled ...
-func (a *UrbsSetting) UserRemoveLabled(ctx context.Context, uid string, hid string) (*tpl.BoolRes, error) {
-	url := fmt.Sprintf("%s/v1/users/%s/labels/%s", conf.Config.UrbsSetting.Addr, uid, hid)
-
-	result := new(tpl.BoolRes)
-
-	resp, err := request.Delete(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
-	if err := HanderResponse(resp, err); err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// UserRollbackSetting ...
-func (a *UrbsSetting) UserRollbackSetting(ctx context.Context, uid string, hid string) (*tpl.BoolRes, error) {
-	url := fmt.Sprintf("%s/v1/users/%s/settings/%s:rollback", conf.Config.UrbsSetting.Addr, uid, hid)
-
-	result := new(tpl.BoolRes)
-
-	resp, err := request.Put(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
-	if err := HanderResponse(resp, err); err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// UserRemoveSetting ...
-func (a *UrbsSetting) UserRemoveSetting(ctx context.Context, uid string, hid string) (*tpl.BoolRes, error) {
-	url := fmt.Sprintf("%s/v1/users/%s/settings/%s", conf.Config.UrbsSetting.Addr, uid, hid)
-
-	result := new(tpl.BoolRes)
-
-	resp, err := request.Delete(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
 	if err := HanderResponse(resp, err); err != nil {
 		return nil, err
 	}

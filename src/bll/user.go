@@ -29,7 +29,7 @@ func (a *User) RefreshCachedLables(ctx context.Context, uid string) (*tpl.UserRe
 }
 
 // ListSettings ...
-func (a *User) ListSettings(ctx context.Context, args *tpl.UIDProductURL) (*tpl.MySettingsRes, error) {
+func (a *User) ListSettings(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MySettingsRes, error) {
 	return a.services.UrbsSetting.UserListSettings(ctx, args)
 }
 
@@ -46,19 +46,4 @@ func (a *User) CheckExists(ctx context.Context, uid string) (*tpl.BoolRes, error
 // BatchAdd 批量添加用户
 func (a *User) BatchAdd(ctx context.Context, users []string) (*tpl.BoolRes, error) {
 	return a.services.UrbsSetting.UserBatchAdd(ctx, users)
-}
-
-// RemoveLable ...
-func (a *User) RemoveLable(ctx context.Context, uid string, hid string) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.UserRemoveLabled(ctx, uid, hid)
-}
-
-// RollbackSetting ...
-func (a *User) RollbackSetting(ctx context.Context, uid string, hid string) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.UserRollbackSetting(ctx, uid, hid)
-}
-
-// RemoveSetting ...
-func (a *User) RemoveSetting(ctx context.Context, uid string, hid string) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.UserRemoveSetting(ctx, uid, hid)
 }

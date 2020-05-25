@@ -11,61 +11,81 @@ import (
 
 func TestUrbsAcACL(t *testing.T) {
 	require := require.New(t)
+	tt := SetUpTestTools(require)
 
+	t.Run("check viewer", func(t *testing.T) {
+		uid := tpl.RandUID()
+
+		testAddUrbsAcUser(tt, uid)
+		testAddUrbsAcAcl(tt, uid)
+
+		err := blls.UrbsAcAcl.CheckViewer(getUidContext(uid))
+		require.Nil(err)
+	})
+
+	t.Run("check admin", func(t *testing.T) {
+		uid := tpl.RandUID()
+
+		testAddUrbsAcUser(tt, uid)
+		res := testAddUrbsAcAcl(tt, uid)
+		object := res.Product + res.Label
+
+		err := blls.UrbsAcAcl.CheckAdmin(getUidContext(uid), object)
+		require.Nil(err)
+	})
+
+	t.Run("check update permission", func(t *testing.T) {
+		uid := tpl.RandUID()
+
+		testAddUrbsAcUser(tt, uid)
+		res := testAddUrbsAcAcl(tt, uid)
+		object := res.Product + res.Label
+
+		uid2 := tpl.RandUID()
+
+		body := tpl.UidsBody{
+			Uids: []string{uid2},
+		}
+		err := blls.UrbsAcAcl.Update(context.Background(), &body, object)
+		require.Nil(err)
+
+		err = blls.UrbsAcAcl.CheckAdmin(getUidContext(uid), object)
+		require.NotNil(err)
+	})
+
+	t.Run("find ysers by object", func(t *testing.T) {
+		uid := tpl.RandUID()
+
+		testAddUrbsAcUser(tt, uid)
+		res := testAddUrbsAcAcl(tt, uid)
+		object := res.Product + res.Label
+
+		users, err := blls.UrbsAcAcl.FindUsersByObject(context.Background(), object)
+		require.Nil(err)
+		require.Equal(1, len(users))
+		require.Equal(uid, users[0].Uid)
+		require.Equal(uid, users[0].Name)
+	})
+
+	t.Run("check empty admin", func(t *testing.T) {
+		uid := tpl.RandUID()
+		object := ""
+		err := blls.UrbsAcAcl.CheckAdmin(getUidContext(uid), object)
+		require.NotNil(err)
+	})
+}
+
+func testAddUrbsAcAcl(tt *TestTools, uid string) *tpl.UrbsAcAclAddBody {
 	args := &tpl.UrbsAcAclURL{
-		Uid: tpl.RandUID(),
+		Uid: uid,
 	}
+
 	body := &tpl.UrbsAcAclAddBody{}
 	body.Product = tpl.RandName()
 	body.Label = tpl.RandLabel()
 	body.Permission = constant.PermissionAll
 
 	err := blls.UrbsAcAcl.AddByReq(context.Background(), args, body)
-	require.Nil(err)
-
-	userBody := &tpl.UrbsAcUsersBody{
-		Users: []*tpl.UrbsAcUserBody{
-			{
-				Uid:  args.Uid,
-				Name: args.Uid,
-			},
-		},
-	}
-	err = blls.UrbsAcUser.Add(context.Background(), userBody)
-	require.Nil(err)
-
-	err = blls.UrbsAcAcl.CheckViewer(getUidContext(args.Uid))
-	require.Nil(err)
-
-	object := body.Product + body.Label
-
-	err = blls.UrbsAcAcl.CheckAdmin(getUidContext(args.Uid), object)
-	require.Nil(err)
-
-	subjects := []string{tpl.RandUID()}
-	userBody = &tpl.UrbsAcUsersBody{
-		Users: []*tpl.UrbsAcUserBody{
-			{
-				Uid:  subjects[0],
-				Name: subjects[0],
-			},
-		},
-	}
-	err = blls.UrbsAcUser.Add(context.Background(), userBody)
-	require.Nil(err)
-
-	err = blls.UrbsAcAcl.Update(context.Background(), &subjects, object)
-	require.Nil(err)
-
-	err = blls.UrbsAcAcl.CheckAdmin(getUidContext(subjects[0]), object)
-	require.Nil(err, object)
-
-	err = blls.UrbsAcAcl.CheckAdmin(getUidContext(args.Uid), object)
-	require.NotNil(err)
-
-	users, err := blls.UrbsAcAcl.FindUsersByObject(context.Background(), object)
-	require.Nil(err)
-	require.Equal(1, len(users))
-	require.Equal(subjects[0], users[0].Uid)
-	require.Equal(subjects[0], users[0].Name)
+	tt.Require.Nil(err)
+	return body
 }

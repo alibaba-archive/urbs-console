@@ -14,7 +14,7 @@ type UrbsAcUser struct {
 }
 
 // List 返回用户列表
-func (a *UrbsAcUser) List(ctx context.Context, args *tpl.Pagination) (*tpl.UrbsAcUserListRes, error) {
+func (a *UrbsAcUser) List(ctx context.Context, args *tpl.ConsolePagination) (*tpl.UrbsAcUserListRes, error) {
 	items, err := a.daos.UrbsAcUser.List(ctx, args)
 	if err != nil {
 		return nil, err
@@ -52,4 +52,14 @@ func (a *UrbsAcUser) Add(ctx context.Context, body *tpl.UrbsAcUsersBody) error {
 		}
 	}
 	return a.daos.UrbsAcUser.BatchAdd(ctx, users)
+}
+
+// DeleteByUID ...
+func (a *UrbsAcUser) DeleteByUID(ctx context.Context, uid string) error {
+	return a.daos.UrbsAcUser.DeleteByUID(ctx, uid)
+}
+
+// UpdateByUID ...
+func (a *UrbsAcUser) UpdateByUID(ctx context.Context, name, uid string) error {
+	return a.daos.UrbsAcUser.UpdateByUID(ctx, name, uid)
 }

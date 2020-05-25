@@ -45,11 +45,11 @@ func (a *UrbsAcAcl) Add(ctx context.Context, subject string, object string, perm
 }
 
 // Update ...
-func (a *UrbsAcAcl) Update(ctx context.Context, subjects *[]string, object string) error {
-	if subjects == nil || len(*subjects) == 0 {
+func (a *UrbsAcAcl) Update(ctx context.Context, body *tpl.UidsBody, object string) error {
+	if body == nil || len(body.Uids) == 0 {
 		return nil
 	}
-	err := a.daos.UrbsAcAcl.UpdateSubjects(ctx, *subjects, object, constant.PermissionAll)
+	err := a.daos.UrbsAcAcl.UpdateSubjects(ctx, body.Uids, object, constant.PermissionAll)
 	return err
 }
 
@@ -124,7 +124,8 @@ func (a *UrbsAcAcl) FindOne(ctx context.Context, subject, object, permission str
 	return a.daos.UrbsAcAcl.FindOne(ctx, subject, object, permission)
 }
 
-// Remove ...
-func (a *UrbsAcAcl) Remove(ctx context.Context, subject, object, permission string) error {
-	return a.daos.UrbsAcAcl.Delete(ctx, subject, object, permission)
+// Delete ...
+func (a *UrbsAcAcl) Delete(ctx context.Context, args *tpl.UrbsAcAclURL, req *tpl.UrbsAcAclAddBody) error {
+	object := req.Product + req.Label + req.Module + req.Setting
+	return a.daos.UrbsAcAcl.Delete(ctx, args.Uid, object, req.Permission)
 }

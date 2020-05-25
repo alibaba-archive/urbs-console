@@ -4,6 +4,9 @@ import (
 	"context"
 	"time"
 
+	"github.com/teambition/urbs-console/src/dao"
+	"github.com/teambition/urbs-console/src/dto/thrid"
+	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/tpl"
@@ -12,6 +15,7 @@ import (
 // Group ...
 type Group struct {
 	services *service.Services
+	daos     *dao.Daos
 }
 
 // ListLables ...
@@ -25,7 +29,7 @@ func (a *Group) List(ctx context.Context, args *tpl.GroupsURL) (*tpl.GroupsRes, 
 }
 
 // ListSettings ...
-func (a *Group) ListSettings(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MySettingsRes, error) {
+func (a *Group) ListSettings(ctx context.Context, args *tpl.MySettingsQueryURL) (*tpl.MySettingsRes, error) {
 	return a.services.UrbsSetting.GroupListSettings(ctx, args)
 }
 
@@ -35,13 +39,21 @@ func (a *Group) CheckExists(ctx context.Context, uid string) (*tpl.BoolRes, erro
 }
 
 // BatchAdd ...
-func (a *Group) BatchAdd(ctx context.Context, groups []*tpl.GroupBody) error {
+func (a *Group) BatchAdd(ctx context.Context, groups []tpl.GroupBody) error {
 	_, err := a.services.UrbsSetting.GroupBatchAdd(ctx, groups)
 	if err != nil {
 		return err
 	}
-	for _, g := range groups {
-		go a.BatchAddMember(ctx, g.UID)
+	for i := range groups {
+		go func(group tpl.GroupBody) {
+			err := a.daos.UrbsLock.Lock(ctx, group.Kind+group.UID, 30*time.Minute)
+			if err == nil {
+				a.BatchAddMember(ctx, group.UID)
+				a.daos.UrbsLock.Unlock(ctx, group.Kind+group.UID)
+			} else {
+				logger.Warning(ctx, "batchAddLock", "error", err.Error())
+			}
+		}(groups[i])
 	}
 	return nil
 }
@@ -52,19 +64,23 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 	count := 0
 	now := time.Now().Unix()
 	// 更新同步时间
-	groupUpdateBody := new(tpl.GroupUpdateBody)
+	groupUpdateBody := new(urbssetting.GroupUpdateBody)
 	groupUpdateBody.SyncAt = &now
 	_, err := a.services.UrbsSetting.GroupUpdate(ctx, uid, groupUpdateBody)
 	if err != nil {
-		logger.Err(ctx, "groupUpdate", "error", err.Error())
+		logger.Err(ctx, err.Error())
 		return err
 	}
 	nextPageToken := ""
 	// 同步成员
 	for {
-		resp, err := a.services.GroupMember.List(ctx, uid, nextPageToken, pageSize)
+		var resp *thrid.ListGroupMembersResp
+		resp, err = a.services.GroupMember.List(ctx, uid, nextPageToken, pageSize)
 		if err != nil {
-			logger.Err(ctx, err.Error(), "uid", uid)
+			logger.Err(ctx, err.Error(), "groupId", uid)
+			return err
+		}
+		if len(resp.Members) == 0 {
 			break
 		}
 		nextPageToken = resp.NextPageToken
@@ -76,9 +92,10 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 		}
 		_, err = a.services.UrbsSetting.GroupBatchAddMembers(ctx, uid, users)
 		if err != nil {
-			logger.Err(ctx, err.Error(), "uid", uid)
+			logger.Err(ctx, err.Error(), "groupId", uid)
+			return err
 		}
-		if len(resp.Members) >= pageSize {
+		if nextPageToken != "" {
 			continue
 		}
 		break
@@ -89,15 +106,19 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 	args.SyncLt = now
 	_, err = a.services.UrbsSetting.GroupRemoveMembers(ctx, args)
 	if err != nil {
-		logger.Err(ctx, "groupRemoveMembers", "error", err.Error())
+		logger.Err(ctx, "error", err.Error())
+	} else {
+		logger.Info(ctx, "batchAddMember", "count", count, "groupId", uid)
 	}
-	logger.Info(ctx, "batchAddMember", "count", count, "uid", uid)
 	return nil
 }
 
 // Update ...
 func (a *Group) Update(ctx context.Context, uid string, body *tpl.GroupUpdateBody) (*tpl.GroupRes, error) {
-	return a.services.UrbsSetting.GroupUpdate(ctx, uid, body)
+	b := &urbssetting.GroupUpdateBody{
+		Desc: body.Desc,
+	}
+	return a.services.UrbsSetting.GroupUpdate(ctx, uid, b)
 }
 
 // Delete ...
@@ -118,19 +139,4 @@ func (a *Group) BatchAddMembers(ctx context.Context, groupId string, users []str
 // RemoveMembers ...
 func (a *Group) RemoveMembers(ctx context.Context, args *tpl.GroupMembersURL) (*tpl.BoolRes, error) {
 	return a.services.UrbsSetting.GroupRemoveMembers(ctx, args)
-}
-
-// RemoveLable ...
-func (a *Group) RemoveLable(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.GroupRemoveLable(ctx, args)
-}
-
-// RollbackSetting 回滚指定群组的指定配置项
-func (a *Group) RollbackSetting(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.GroupRollbackSetting(ctx, args)
-}
-
-// RemoveSetting 删除指定群组的指定配置项
-func (a *Group) RemoveSetting(ctx context.Context, args *tpl.UIDHIDURL) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.GroupRemoveSetting(ctx, args)
 }

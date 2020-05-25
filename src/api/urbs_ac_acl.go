@@ -31,7 +31,7 @@ func (a *UrbsAcAcl) Add(ctx *gear.Context) error {
 // Check ...
 func (a *UrbsAcAcl) Check(ctx *gear.Context) error {
 	body := tpl.UrbsAcAclCheckBody{}
-	if err := ctx.ParseURL(&body); err != nil {
+	if err := ctx.ParseBody(&body); err != nil {
 		return err
 	}
 	object := body.Product + body.Label + body.Module + body.Setting
@@ -42,4 +42,21 @@ func (a *UrbsAcAcl) Check(ctx *gear.Context) error {
 		err = a.blls.UrbsAcAcl.CheckAdmin(ctx, object)
 	}
 	return ctx.OkJSON(&tpl.BoolRes{Result: err == nil})
+}
+
+// Delete ...
+func (a *UrbsAcAcl) Delete(ctx *gear.Context) error {
+	req := tpl.UrbsAcAclURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	body := tpl.UrbsAcAclAddBody{}
+	if err := ctx.ParseBody(&body); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.Delete(ctx, &req, &body)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(struct{}{})
 }

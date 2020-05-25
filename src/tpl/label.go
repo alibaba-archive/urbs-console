@@ -34,7 +34,7 @@ type LabelUpdateBody struct {
 	Desc     *string   `json:"desc"`
 	Channels *[]string `json:"channels"`
 	Clients  *[]string `json:"clients"`
-	Uids     *[]string `json:"uids"`
+	*UidsBody
 }
 
 // Validate 实现 gear.BodyTemplate。
@@ -61,12 +61,9 @@ func (t *LabelUpdateBody) Validate() error {
 			return gear.ErrBadRequest.WithMsgf("invalid clients: %v", *t.Clients)
 		}
 	}
-	if t.Uids != nil {
-		if len(*t.Uids) > 9 {
-			return gear.ErrBadRequest.WithMsgf("uids length should 0 < %d < 10", len(*t.Uids))
-		}
-		if !SortStringsAndCheck(*t.Uids) {
-			return gear.ErrBadRequest.WithMsgf("invalid uids: %v", *t.Uids)
+	if t.UidsBody != nil {
+		if err := t.UidsBody.Validate(); err != nil {
+			return err
 		}
 	}
 	return nil

@@ -81,18 +81,28 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	routerV1.Use(tracing.New())
 	routerV1.Use(middleware.Verify(services))
 
+	// ***** client ******
+	// 读取指定用户的功能配置项，支持条件筛选，数据用于客户端
+	routerV1.Get("/users/settings:unionAll", apis.User.ListSettingsUnionAllClient)
+
 	checkSuperAdmin := middleware.CheckSuperAdmin(blls)
 
 	checkViewer := middleware.CheckViewer(blls)
 	// ***** UrbsAc ******
 	// 添加用户
 	routerV1.Post("/ac/users", checkSuperAdmin, apis.UrbsAcUser.Add)
+	// 更新用户
+	routerV1.Put("/ac/users/:uid", checkSuperAdmin, apis.UrbsAcUser.Update)
+	// 删除用户
+	routerV1.Delete("/ac/users/:uid", checkSuperAdmin, apis.UrbsAcUser.Delete)
 	// 获取用户列表
 	routerV1.Get("/ac/users", checkViewer, apis.UrbsAcUser.List)
 	// 搜索用户
 	routerV1.Get("/ac/users:search", checkViewer, apis.UrbsAcUser.Search)
 	// 添加权限
 	routerV1.Post("/ac/users/:uid/permissions", checkSuperAdmin, apis.UrbsAcAcl.Add)
+	// 删除权限
+	routerV1.Delete("/ac/users/:uid/permissions", checkSuperAdmin, apis.UrbsAcAcl.Delete)
 	// 检查权限
 	routerV1.Post("/ac/permission:check", checkViewer, apis.UrbsAcAcl.Check)
 
@@ -111,33 +121,38 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	routerV1.Delete("/products/:product", checkSuperAdmin, apis.Product.Delete)
 
 	// ***** label ******
-	// 读取指定产品灰度标签
+	// 读取指定产品环境标签
 	routerV1.Get("/products/:product/labels", checkViewer, apis.Label.List)
 	// 读取指定产品下标签发布记录
 	routerV1.Get("/products/:product/labels/:label/logs", checkViewer, apis.Label.Logs)
 	// 获取标签下群组
 	routerV1.Get("/products/:product/labels/:label/groups", checkViewer, apis.Label.ListGroups)
+	// 移除指定群组的指定环境标签
+	routerV1.Delete("/products/:product/labels/:label/groups/:uid", apis.Label.DeleteGroup)
 	// 获取标签下用户
 	routerV1.Get("/products/:product/labels/:label/users", checkViewer, apis.Label.ListUsers)
-	// 创建指定产品灰度标签
+	// 移除指定用户的指定环境标签
+	routerV1.Delete("/products/:product/labels/:label/users/:uid", apis.Label.DeleteUser)
+
+	// 创建指定产品环境标签
 	routerV1.Post("/products/:product/labels", apis.Label.Create)
-	// 更新指定产品灰度标签
+	// 更新指定产品环境标签
 	routerV1.Put("/products/:product/labels/:label", apis.Label.Update)
-	// 删除指定产品灰度标签
+	// 删除指定产品环境标签
 	routerV1.Delete("/products/:product/labels/:label", apis.Label.Delete)
-	// 下线指定产品灰度标签
+	// 下线指定产品环境标签
 	routerV1.Put("/products/:product/labels/:label+:offline", apis.Label.Offline)
-	// 批量为用户或群组设置产品灰度标签
+	// 批量为用户或群组设置产品环境标签
 	routerV1.Post("/products/:product/labels/:label+:assign", apis.Label.Assign)
-	// 批量撤销对用户或群组设置的产品灰度标签
+	// 批量撤销对用户或群组设置的产品环境标签
 	routerV1.Post("/products/:product/labels/:label+:recall", apis.Label.Recall)
-	// 创建指定产品灰度标签的灰度发布规则
+	// 创建指定产品环境标签的灰度发布规则
 	routerV1.Post("/products/:product/labels/:label/rules", apis.Label.CreateRule)
-	// 读取指定产品灰度标签的灰度发布规则列表
+	// 读取指定产品环境标签的灰度发布规则列表
 	routerV1.Get("/products/:product/labels/:label/rules", checkViewer, apis.Label.ListRules)
-	// 更新指定产品灰度标签的指定灰度发布规则
+	// 更新指定产品环境标签的指定灰度发布规则
 	routerV1.Put("/products/:product/labels/:label/rules/:hid", apis.Label.UpdateRule)
-	// 删除指定产品灰度标签的指定灰度发布规则
+	// 删除指定产品环境标签的指定灰度发布规则
 	routerV1.Delete("/products/:product/labels/:label/rules/:hid", apis.Label.DeleteRule)
 
 	// ***** module ******
@@ -155,14 +170,22 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	routerV1.Get("/products/:product/settings", apis.Setting.ListByProduct)
 	// 读取指定产品功能模块的配置项
 	routerV1.Get("/products/:product/modules/:module/settings", checkViewer, apis.Setting.List)
-
+	// 读取指定具体配置项
 	routerV1.Get("/products/:product/modules/:module/settings/:setting", apis.Setting.Get)
 	// 读取指定产品功能模块配置项的发布记录
 	routerV1.Get("/products/:product/modules/:module/settings/:setting/logs", checkViewer, apis.Setting.Logs)
 	// 读取指定产品功能模块配置项的群组列表
 	routerV1.Get("/products/:product/modules/:module/settings/:setting/groups", checkViewer, apis.Setting.ListGroups)
+	// 移除指定群组的指定配置项
+	routerV1.Delete("/products/:product/modules/:module/settings/:setting/groups/:uid", apis.Setting.DeleteGroup)
+	// 回滚指定群组的指定配置项
+	routerV1.Put("/products/:product/modules/:module/settings/:setting/groups/:uid+:rollback", apis.Setting.RollbackGroupSetting)
 	// 读取指定产品功能模块配置项的用户列表
 	routerV1.Get("/products/:product/modules/:module/settings/:setting/users", checkViewer, apis.Setting.ListUsers)
+	// 移除指定用户的指定配置项
+	routerV1.Delete("/products/:product/modules/:module/settings/:setting/users/:uid", apis.Setting.DeleteUser)
+	// 回滚指定用户的指定配置项
+	routerV1.Put("/products/:product/modules/:module/settings/:setting/users/:uid+:rollback", apis.Setting.RollbackUserSetting)
 	// 创建指定产品功能模块配置项
 	routerV1.Post("/products/:product/modules/:module/settings", apis.Setting.Create)
 	// 更新指定产品功能模块配置项
@@ -185,28 +208,19 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	// ***** user ******
 	// 读取用户列表，支持条件筛选
 	routerV1.Get("/users", checkViewer, apis.User.List)
-	// 读取指定用户的灰度标签，支持条件筛选
+	// 读取指定用户的环境标签，支持条件筛选
 	routerV1.Get("/users/:uid/labels", checkViewer, apis.User.ListLables)
 	// 读取指定用户的功能配置项，支持条件筛选
 	routerV1.Get("/users/:uid/settings", checkViewer, apis.User.ListSettings)
-	// 强制刷新指定用户的灰度标签列表缓存
+	// 强制刷新指定用户的环境标签列表缓存
 	routerV1.Put("/users/:uid/labels:cache", checkViewer, apis.User.RefreshCachedLables)
-	// 删除指定用户的指定灰度标签
-	routerV1.Delete("/users/:uid/labels/:hid", checkSuperAdmin, apis.User.RemoveLable)
-	// 回滚指定用户的指定配置项
-	routerV1.Put("/users/:uid/settings/:hid+:rollback", checkSuperAdmin, apis.User.RollbackSetting)
-	// 删除指定用户的指定配置项
-	routerV1.Delete("/users/:uid/settings/:hid", checkSuperAdmin, apis.User.RemoveSetting)
 	// 批量添加用户
 	routerV1.Post("/users:batch", checkSuperAdmin, apis.User.BatchAdd)
-
-	// // 查询指定用户是否存在
-	// routerV1.Get("/users/:uid+:exists", checkSuperAdmin, apis.User.CheckExists)
 
 	// ***** group ******
 	// 读取群组列表，支持条件筛选
 	routerV1.Get("/groups", checkViewer, apis.Group.List)
-	// 读取指定群组的灰度标签，支持条件筛选
+	// 读取指定群组的环境标签，支持条件筛选
 	routerV1.Get("/groups/:uid/labels", checkViewer, apis.Group.ListLables)
 	// 读取指定群组的功能配置项，支持条件筛选
 	routerV1.Get("/groups/:uid/settings", checkViewer, apis.Group.ListSettings)
@@ -220,16 +234,8 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	routerV1.Delete("/groups/:uid", checkSuperAdmin, apis.Group.Delete)
 	// 指定群组批量添加成员
 	routerV1.Post("/groups/:uid/members:batch", checkSuperAdmin, apis.Group.BatchAddMembers)
-	// 删除指定群组的指定灰度标签
-	routerV1.Delete("/groups/:uid/labels/:hid", checkSuperAdmin, apis.Group.RemoveLable)
-	// 回滚指定群组的指定配置项
-	routerV1.Put("/groups/:uid/settings/:hid+:rollback", checkSuperAdmin, apis.Group.RollbackSetting)
-	// 删除指定群组的指定配置项
-	routerV1.Delete("/groups/:uid/settings/:hid", checkSuperAdmin, apis.Group.RemoveSetting)
 	// 指定群组根据条件清理成员
 	routerV1.Delete("/groups/:uid/members", checkSuperAdmin, apis.Group.RemoveMembers)
 
-	// // 查询指定群组是否存在
-	// routerV1.Get("/groups/:uid+:exists", checkSuperAdmin, apis.Group.CheckExists)
 	return routerV1
 }
