@@ -95,7 +95,7 @@ const AC: React.FC<ACComponentProps> = (props) => {
     };
     const handleOnRow = (record: User) => {
         return {
-            onDoubleClick: () => {
+            onClick: () => {
                 setCurrentUser(record);
                 setUserAddModalVisible(true);
             }

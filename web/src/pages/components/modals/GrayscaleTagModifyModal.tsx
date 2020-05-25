@@ -55,7 +55,7 @@ const GrayscaleTagModifyModal: React.FC<Props> = (props) => {
   };
   return (
     <Modal
-      title={`${isEdit ? '编辑' : '添加'}灰度标签`}
+      title={`${isEdit ? '编辑' : '添加'}环境标签`}
       visible={visible}
       onCancel={onCancel}
       destroyOnClose

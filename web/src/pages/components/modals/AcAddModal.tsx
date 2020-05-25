@@ -75,15 +75,6 @@ const AcAddModal: React.FC<Props> = (props) => {
                         )
                     }
                 </Form.Item>
-                {/* <Form.Item label="描述">
-                    {
-                        getFieldDecorator('desc', {
-                            initialValue: groupInfo ? groupInfo.desc : undefined
-                        })(
-                            <Input.TextArea placeholder="请输入描述"></Input.TextArea>
-                        )
-                    }
-                </Form.Item> */}
             </Form>
         </Modal>
     );

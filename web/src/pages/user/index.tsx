@@ -98,7 +98,7 @@ const Users: React.FC<UsersComponentProps> = (props) => {
   };
   const handleOnRow = (record: CanaryUser) => {
     return {
-      onDoubleClick: () => {
+      onClick: () => {
         setCurrentUser(record);
         fetchUserSettings({
           pageSize: settingsPageSize,
@@ -246,7 +246,7 @@ const Users: React.FC<UsersComponentProps> = (props) => {
 
   const userTabsConfig = [{
     key: TagTabsKey.label,
-    title: '灰度标签',
+    title: '环境标签',
     content: (
       <GrayscaleTag
         dataSource={labelsList}

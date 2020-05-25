@@ -7,7 +7,7 @@ import { DEFAULT_MODAL_WIDTH, TagDetailComponentProps, TagTabsKey, PaginationPar
 import styles from '../style/TagDetailModal.less';
 import { formatTableTime } from '../../utils/format';
 
-const DEFAULT_TITLE = '灰度标签';
+const DEFAULT_TITLE = '环境标签';
 
 const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
   const {
@@ -271,7 +271,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
         onReback={handleLabelLogReback}
       />
     ),
-    action: (
+    action: grayscaleTagCanEdit && (
       <Button
         type="link"
         icon="plus"
@@ -429,7 +429,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
       {/* 弹窗 */}
       {
         publishTagModalVisible && <PublishTagModal
-          title="发布灰度标签"
+          title="发布环境标签"
           visible={publishTagModalVisible}
           onCancel={handleOpenPublishTagModalCancel}
           onOk={handleOpenPublishTagModalOk}

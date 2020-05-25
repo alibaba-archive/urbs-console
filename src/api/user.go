@@ -146,7 +146,6 @@ func (a *User) ListSettingsUnionAllClient(ctx *gear.Context) error {
 	}
 	for _, item := range res.Result {
 		item.Desc = ""
-		item.HID = ""
 		item.Release = 0
 		item.UpdatedAt = item.AssignedAt
 	}

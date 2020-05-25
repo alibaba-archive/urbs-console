@@ -37,7 +37,7 @@ const Modules: React.FC<ModulesComponentProps> = (props) => {
       pageSize,
       q: modulesSearchWord,
     });
-  }, [fetchModuleList, pageSize]);
+  }, [fetchModuleList, modulesSearchWord, pageSize]);
   const handleModulesSearchWordChange = (value: string) => {
     setModulesSearchWord(value);
   };
@@ -49,7 +49,7 @@ const Modules: React.FC<ModulesComponentProps> = (props) => {
   };
   const handleOnRow = (record: Module) => {
     return {
-      onDoubleClick: () => {
+      onClick: () => {
         setCurentModule(record);
         setModuleDetailVisible(true);
       }
@@ -148,23 +148,23 @@ const Modules: React.FC<ModulesComponentProps> = (props) => {
     <div>
       <TableTitle
         plusTitle="添加功能模块"
-        handlePlusClick={ handlePlusClick }
-        handleWordChange={ handleModulesSearchWordChange }
-        handleSearch={ handleModulesSearch }
+        handlePlusClick={handlePlusClick}
+        handleWordChange={handleModulesSearchWordChange}
+        handleSearch={handleModulesSearch}
       />
       <Table
         rowKey="name"
-        onRow={ handleOnRow }
-        pagination={ false }
-        columns={ columns }
-        dataSource={ productModulesList }
+        onRow={handleOnRow}
+        pagination={false}
+        columns={columns}
+        dataSource={productModulesList}
       ></Table>
       <Pagination
-        pageSize={ pageSize }
-        total={ modulePageTotal }
-        pageSizeOptions={ [10, 20, 50, 100] }
-        nextPageToken={ moduleNextPageToken }
-        prePageToken={ modulePrePageToken }
+        pageSize={pageSize}
+        total={modulePageTotal}
+        pageSizeOptions={[10, 20, 50, 100]}
+        nextPageToken={moduleNextPageToken}
+        prePageToken={modulePrePageToken}
         onTokenChange={
           (type: string, token?: string) => {
             fetchModuleList({
@@ -187,21 +187,21 @@ const Modules: React.FC<ModulesComponentProps> = (props) => {
       {/* 弹窗 */}
       {
         moduleModalVisible && <ModuleModifyModal
-          visible={ moduleModalVisible }
-          isEdit={ !!curentModule }
-          moduleInfo={ curentModule }
-          onOk={ handleModuleModifyOk }
-          onCancel={ () => setModuleModalVisible(false) }
-          onOffline={ handleModuleOffline }
+          visible={moduleModalVisible}
+          isEdit={!!curentModule}
+          moduleInfo={curentModule}
+          onOk={handleModuleModifyOk}
+          onCancel={() => setModuleModalVisible(false)}
+          onOffline={handleModuleOffline}
         />
       }
       {
         moduleDetailVisible && <ModuleDetailModal
-          moduleInfo={ curentModule }
-          product={ productName }
-          visible={ moduleDetailVisible }
-          onCancel={ () => setModuleDetailVisible(false) }
-          onModuleEdit={ () => setModuleModalVisible(true) }
+          moduleInfo={curentModule}
+          product={productName}
+          visible={moduleDetailVisible}
+          onCancel={() => setModuleDetailVisible(false)}
+          onModuleEdit={() => setModuleModalVisible(true)}
         ></ModuleDetailModal>
       }
     </div>

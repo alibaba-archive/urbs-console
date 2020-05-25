@@ -27,7 +27,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
     settingUsersNextPageToken,
     settingUsersPrePageToken,
     settingUsersPageTotal,
-  } = props;
+  } = props as any;
   const [settingGroupPageSize, changeSettingGroupPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [settingUserPageSize, changeSettingUserPageSize] = useState(DEFAULT_PAGE_SIZE);
 
@@ -282,7 +282,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
         onReback={handleSettingLogReback}
       />
     ),
-    action: (
+    action: settingCanEdit && (
       <Button
         type="link"
         icon="plus"
@@ -298,7 +298,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
     content: (
       <UserGroup
         dataSource={settingGroupsList}
-        hideColumns={['syncAt', "uid", "desc"]}
+        hideColumns={['syncAt', "uid"]}
         paginationProps={
           {
             total: settingGroupsPageTotal,
