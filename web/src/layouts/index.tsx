@@ -6,7 +6,7 @@ import Products from './components/Products';
 import Title from './components/Title';
 
 const BasicLayout: React.FC = props => {
-  const { history } = props;
+  const { history } = props as any;
   const [activeKey, changeActiveKey] = useState(window.location.pathname);
   const handleActiveKeyChange = (key: string) => {
     if (key === '/help') {

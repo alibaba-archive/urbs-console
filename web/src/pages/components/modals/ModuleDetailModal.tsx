@@ -2,8 +2,8 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { Button, Input, Modal, Icon } from 'antd';
 import { connect } from 'dva';
-import { ContentDetail, ContentTabs, SettingModifyModal, Setting } from '..';
-import { ModuleDetailModalComponentProps, FieldsValue, PaginationParameters, DEFAULT_PAGE_SIZE, DEFAULT_MODAL_WIDTH } from '../../declare';
+import { ContentDetail, ContentTabs, SettingModifyModal, SettingDetailModal, Setting } from '..';
+import { ModuleDetailModalComponentProps, FieldsValue, PaginationParameters, DEFAULT_PAGE_SIZE, Setting as SettingDeclare, DEFAULT_MODAL_WIDTH } from '../../declare';
 import styleNames from '../style/base.less';
 import { formatTableTime } from '../../utils/format';
 
@@ -27,6 +27,11 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [settingModifyModalVisible, setSettingModifyModalVisible] = useState(false);
   const [moduleCanEdit, setModuleCanEdit] = useState(false);
+
+  const [settingDetailVisible, changeSettingDetailVisible] = useState(false);
+  const [curentSetting, setCurentSetting] = useState<SettingDeclare>();
+  const [settingModifyVisible, changeSettingModifyVisible] = useState(false);
+
   const fetchModuleSettingList = useCallback((params: PaginationParameters, type?: string) => {
     dispatch({
       type: 'products/getModuleSettings',
@@ -102,12 +107,23 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
       </div>
     )
   };
+
+  const handleOnRow = (record: SettingDeclare) => {
+    return {
+      onClick: () => {
+        setCurentSetting(record);
+        changeSettingDetailVisible(true);
+      }
+    };
+  };
+
   const tagTabsConfig = [{
     key: 'setting',
     title: '配置项',
     content: (
       <Setting
         dataSource={moduleSettingsList}
+        onRow={handleOnRow}
         hideColumns={['module', 'desc', 'release', 'action']}
         paginationProps={
           {
@@ -134,7 +150,7 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
         }
       />
     ),
-    action: (
+    action: moduleCanEdit && (
       <div>
         <Button
           type="link"
@@ -176,6 +192,51 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
       )
     );
   }, [moduleInfo, product]);
+
+  const fetchSettingList = useCallback((params: PaginationParameters, type?: string) => {
+    dispatch({
+      type: 'products/getProductSettings',
+      payload: {
+        productName: product,
+        params,
+        type,
+      }
+    })
+  }, [dispatch, product]);
+
+  const handleSettingModifyOk = (values: FieldsValue) => {
+    dispatch({
+      type: 'products/updateProductSettings',
+      payload: {
+        params: values,
+        productName: product,
+        cb: (record: SettingDeclare) => {
+          setCurentSetting(record);
+          fetchSettingList({
+            pageSize,
+          }, 'del');
+          changeSettingModifyVisible(false);
+        },
+      },
+    });
+  };
+  const handleOfflineSetting = () => {
+    dispatch({
+      type: 'products/offlineProductSettings',
+      payload: {
+        productName: product,
+        module: curentSetting?.module,
+        setting: curentSetting?.name,
+        cb: () => {
+          fetchSettingList({
+            pageSize,
+          }, 'del');
+          changeSettingModifyVisible(false);
+          changeSettingDetailVisible(false);
+        },
+      },
+    });
+  };
   return (
     <Modal width={DEFAULT_MODAL_WIDTH} title={renderModalTitle()} visible={visible} onCancel={onCancel} footer={null}>
       <ContentDetail content={moduleContentDetail}></ContentDetail>
@@ -191,6 +252,29 @@ const ModuleDetailModal: React.FC<ModuleDetailModalComponentProps> = (props) => 
           onOk={handleSettingModifyModalOk}
           module={moduleInfo?.name}
         />
+      }
+      {/* 弹窗 */}
+      {
+        settingModifyVisible && <SettingModifyModal
+          visible={settingModifyVisible}
+          isEdit={!!curentSetting}
+          defaultValue={curentSetting}
+          onOffline={handleOfflineSetting}
+          onOk={handleSettingModifyOk}
+          onCancel={() => changeSettingModifyVisible(false)}
+        />
+      }
+      {
+        settingDetailVisible && (
+          <SettingDetailModal
+            visible={settingDetailVisible}
+            settingInfo={curentSetting}
+            title="配置项"
+            product={product}
+            onSettingEdit={() => changeSettingModifyVisible(true)}
+            onCancel={() => changeSettingDetailVisible(false)}
+          />
+        )
       }
     </Modal>
   );

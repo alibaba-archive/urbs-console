@@ -161,7 +161,6 @@ export enum TagTabsKey {
 export interface SettingDetailComponentProps extends ModalProps {
   product: string;
   onSettingEdit: () => void;
-  dispatch: Dispatch<AnyAction>;
   settingInfo?: Setting;
   onGotoGroups?: () => void;
   onGotoUsers?: () => void;

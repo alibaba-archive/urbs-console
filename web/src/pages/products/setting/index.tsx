@@ -38,11 +38,11 @@ const Settings: React.FC<SettingComponentProps> = (props) => {
       pageSize,
       q: settingSearchWord,
     });
-  }, [fetchSettingList, pageSize]);
+  }, [fetchSettingList, pageSize, settingSearchWord]);
 
   const handleOnRow = (record: Setting) => {
     return {
-      onDoubleClick: () => {
+      onClick: () => {
         setCurentSetting(record);
         changeSettingDetailVisible(true);
       }
@@ -114,17 +114,17 @@ const Settings: React.FC<SettingComponentProps> = (props) => {
     }, 'del');
   };
   return (
-    <div className={ styleNames.normal }>
+    <div className={styleNames.normal}>
       <TableTitle
         plusTitle="添加配置项"
-        handlePlusClick={ handlePlusClick }
-        handleSearch={ handleSettingSearch }
-        handleWordChange={ handleSettingSearchWordChange }
+        handlePlusClick={handlePlusClick}
+        handleSearch={handleSettingSearch}
+        handleWordChange={handleSettingSearchWordChange}
       />
       <SettingTable
         hideColumns={['action']}
-        onRow={ handleOnRow }
-        dataSource={ productSettingsList }
+        onRow={handleOnRow}
+        dataSource={productSettingsList}
         paginationProps={
           {
             pageSize,
@@ -152,25 +152,25 @@ const Settings: React.FC<SettingComponentProps> = (props) => {
       {/* 弹窗 */}
       {
         settingModifyVisible && <SettingModifyModal
-          visible={ settingModifyVisible }
-          isEdit={ !!curentSetting }
-          defaultValue={ curentSetting }
-          onOffline={ handleOfflineSetting }
-          onOk={ handleSettingModifyOk }
-          onCancel={ () => changeSettingModifyVisible(false) }
+          visible={settingModifyVisible}
+          isEdit={!!curentSetting}
+          defaultValue={curentSetting}
+          onOffline={handleOfflineSetting}
+          onOk={handleSettingModifyOk}
+          onCancel={() => changeSettingModifyVisible(false)}
         />
       }
       {
         settingDetailVisible && (
           <SettingDetailModal
-            visible={ settingDetailVisible }
-            settingInfo={ curentSetting }
+            visible={settingDetailVisible}
+            settingInfo={curentSetting}
             title="配置项"
-            product={ productName }
-            onSettingEdit={ () => changeSettingModifyVisible(true) }
-            onCancel={ () => changeSettingDetailVisible(false) }
-            onGotoGroups={ () => history.push('/group') }
-            onGotoUsers={ () => history.push('/user') }
+            product={productName}
+            onSettingEdit={() => changeSettingModifyVisible(true)}
+            onCancel={() => changeSettingDetailVisible(false)}
+            onGotoGroups={() => history.push('/group')}
+            onGotoUsers={() => history.push('/user')}
           />
         )
       }

@@ -128,7 +128,7 @@ func (a *Label) Delete(ctx context.Context, product, label string) (*tpl.BoolRes
 	return a.services.UrbsSetting.LabelDelete(ctx, product, label)
 }
 
-// Recall 批量撤销对用户或群组设置的产品灰度标签
+// Recall 批量撤销对用户或群组设置的产品环境标签
 func (a *Label) Recall(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.RecallBody) (*tpl.BoolRes, error) {
 	logID := service.HIDToID(body.HID, "log")
 	log, err := daos.OperationLog.FindOneByID(ctx, logID)

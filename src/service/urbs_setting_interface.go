@@ -38,7 +38,7 @@ type UrbsSettingInterface interface {
 	SettingListByProduct(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.SettingsInfoRes, error)
 	// 读取指定产品功能模块的配置项列表
 	SettingList(ctx context.Context, args *tpl.ProductModuleURL) (*tpl.SettingsInfoRes, error)
-	//  返回产品下灰度标签的用户列表
+	//  返回产品下环境标签的用户列表
 	SettingListUsers(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.SettingUsersInfoRes, error)
 	//  返回产品下功能配置项的群组列表
 	SettingListGroups(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.SettingGroupsInfoRes, error)
@@ -73,33 +73,33 @@ type UrbsSettingInterface interface {
 	SettingRollbackGroupSetting(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error)
 
 	// ***** label ******
-	// 读取指定产品灰度标签
+	// 读取指定产品环境标签
 	LabelList(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.LabelsInfoRes, error)
-	// 返回产品下灰度标签的用户列表
+	// 返回产品下环境标签的用户列表
 	LabelListUsers(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.LabelUsersInfoRes, error)
-	// 返回产品下灰度标签的群组列表
+	// 返回产品下环境标签的群组列表
 	LabelListGroups(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.LabelGroupsInfoRes, error)
-	// 给指定产品创建灰度标签
+	// 给指定产品创建环境标签
 	LabelCreate(ctx context.Context, product string, body *tpl.LabelBody) (*tpl.LabelInfoRes, error)
 	// 创建指定产品功能模块配置项的灰度发布规则
 	LabelCreateRule(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.LabelRuleBody) (*tpl.LabelRuleInfoRes, error)
-	// 读取指定产品灰度标签的灰度发布规则列表
+	// 读取指定产品环境标签的灰度发布规则列表
 	LabelListRule(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.LabelRulesInfoRes, error)
 	// 更新指定产品功能模块配置项的指定灰度发布规则
 	LabelUpdateRule(ctx context.Context, args *tpl.ProductLabelHIDURL, body *tpl.LabelRuleBody) (*tpl.LabelRuleInfoRes, error)
 	// 创建指定产品功能模块配置项的灰度发布规则
 	LabelDeleteRule(ctx context.Context, args *tpl.ProductLabelHIDURL) (*tpl.BoolRes, error)
-	// 更新指定产品灰度标签
+	// 更新指定产品环境标签
 	LabelUpdate(ctx context.Context, product string, label string, body *tpl.LabelUpdateBody) (*tpl.LabelInfoRes, error)
-	// 删除指定产品灰度标签
+	// 删除指定产品环境标签
 	LabelDelete(ctx context.Context, product string, label string) (*tpl.BoolRes, error)
-	// 下线指定产品灰度标签
+	// 下线指定产品环境标签
 	LabelOffline(ctx context.Context, product string, label string) (*tpl.BoolRes, error)
-	// 批量为用户或群组设置产品灰度标签
+	// 批量为用户或群组设置产品环境标签
 	LabelAssign(ctx context.Context, product string, label string, body *tpl.UsersGroupsBody) (*tpl.LabelReleaseInfoRes, error)
-	// 批量撤销对用户或群组设置的产品灰度标签
+	// 批量撤销对用户或群组设置的产品环境标签
 	LabelRecall(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.RecallBody) (*tpl.BoolRes, error)
-	// 删除指定用户的指定灰度标签
+	// 删除指定用户的指定环境标签
 	LabelDeleteUser(ctx context.Context, args *tpl.ProductLabelUIDURL) (*tpl.BoolRes, error)
 	// 删除指定用户的配置项
 	LabelDeleteGroup(ctx context.Context, args *tpl.ProductLabelUIDURL) (*tpl.BoolRes, error)
@@ -107,9 +107,9 @@ type UrbsSettingInterface interface {
 	// ***** user ******
 	// 读取用户列表，支持条件筛选
 	UserList(ctx context.Context, args *tpl.Pagination) (*tpl.UsersRes, error)
-	// 读取指定用户的灰度标签，支持条件筛选
+	// 读取指定用户的环境标签，支持条件筛选
 	UserListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MyLabelsRes, error)
-	// 强制刷新指定用户的灰度标签列表缓存
+	// 强制刷新指定用户的环境标签列表缓存
 	UserRefreshCached(ctx context.Context, uid string) (*tpl.UserRes, error)
 	// 读取指定用户的功能配置项，支持条件筛选
 	UserListSettings(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MySettingsRes, error)
@@ -121,7 +121,7 @@ type UrbsSettingInterface interface {
 	UserBatchAdd(ctx context.Context, users []string) (*tpl.BoolRes, error)
 
 	// ***** group ******
-	// 读取指定群组的灰度标签，支持条件筛选
+	// 读取指定群组的环境标签，支持条件筛选
 	GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MyLabelsRes, error)
 	// 读取指定群组的功能配置项，支持条件筛选
 	GroupListSettings(ctx context.Context, args *tpl.MySettingsQueryURL) (*tpl.MySettingsRes, error)

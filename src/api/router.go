@@ -121,38 +121,38 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	routerV1.Delete("/products/:product", checkSuperAdmin, apis.Product.Delete)
 
 	// ***** label ******
-	// 读取指定产品灰度标签
+	// 读取指定产品环境标签
 	routerV1.Get("/products/:product/labels", checkViewer, apis.Label.List)
 	// 读取指定产品下标签发布记录
 	routerV1.Get("/products/:product/labels/:label/logs", checkViewer, apis.Label.Logs)
 	// 获取标签下群组
 	routerV1.Get("/products/:product/labels/:label/groups", checkViewer, apis.Label.ListGroups)
-	// 移除指定群组的指定灰度标签
+	// 移除指定群组的指定环境标签
 	routerV1.Delete("/products/:product/labels/:label/groups/:uid", apis.Label.DeleteGroup)
 	// 获取标签下用户
 	routerV1.Get("/products/:product/labels/:label/users", checkViewer, apis.Label.ListUsers)
-	// 移除指定用户的指定灰度标签
+	// 移除指定用户的指定环境标签
 	routerV1.Delete("/products/:product/labels/:label/users/:uid", apis.Label.DeleteUser)
 
-	// 创建指定产品灰度标签
+	// 创建指定产品环境标签
 	routerV1.Post("/products/:product/labels", apis.Label.Create)
-	// 更新指定产品灰度标签
+	// 更新指定产品环境标签
 	routerV1.Put("/products/:product/labels/:label", apis.Label.Update)
-	// 删除指定产品灰度标签
+	// 删除指定产品环境标签
 	routerV1.Delete("/products/:product/labels/:label", apis.Label.Delete)
-	// 下线指定产品灰度标签
+	// 下线指定产品环境标签
 	routerV1.Put("/products/:product/labels/:label+:offline", apis.Label.Offline)
-	// 批量为用户或群组设置产品灰度标签
+	// 批量为用户或群组设置产品环境标签
 	routerV1.Post("/products/:product/labels/:label+:assign", apis.Label.Assign)
-	// 批量撤销对用户或群组设置的产品灰度标签
+	// 批量撤销对用户或群组设置的产品环境标签
 	routerV1.Post("/products/:product/labels/:label+:recall", apis.Label.Recall)
-	// 创建指定产品灰度标签的灰度发布规则
+	// 创建指定产品环境标签的灰度发布规则
 	routerV1.Post("/products/:product/labels/:label/rules", apis.Label.CreateRule)
-	// 读取指定产品灰度标签的灰度发布规则列表
+	// 读取指定产品环境标签的灰度发布规则列表
 	routerV1.Get("/products/:product/labels/:label/rules", checkViewer, apis.Label.ListRules)
-	// 更新指定产品灰度标签的指定灰度发布规则
+	// 更新指定产品环境标签的指定灰度发布规则
 	routerV1.Put("/products/:product/labels/:label/rules/:hid", apis.Label.UpdateRule)
-	// 删除指定产品灰度标签的指定灰度发布规则
+	// 删除指定产品环境标签的指定灰度发布规则
 	routerV1.Delete("/products/:product/labels/:label/rules/:hid", apis.Label.DeleteRule)
 
 	// ***** module ******
@@ -208,11 +208,11 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	// ***** user ******
 	// 读取用户列表，支持条件筛选
 	routerV1.Get("/users", checkViewer, apis.User.List)
-	// 读取指定用户的灰度标签，支持条件筛选
+	// 读取指定用户的环境标签，支持条件筛选
 	routerV1.Get("/users/:uid/labels", checkViewer, apis.User.ListLables)
 	// 读取指定用户的功能配置项，支持条件筛选
 	routerV1.Get("/users/:uid/settings", checkViewer, apis.User.ListSettings)
-	// 强制刷新指定用户的灰度标签列表缓存
+	// 强制刷新指定用户的环境标签列表缓存
 	routerV1.Put("/users/:uid/labels:cache", checkViewer, apis.User.RefreshCachedLables)
 	// 批量添加用户
 	routerV1.Post("/users:batch", checkSuperAdmin, apis.User.BatchAdd)
@@ -220,7 +220,7 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	// ***** group ******
 	// 读取群组列表，支持条件筛选
 	routerV1.Get("/groups", checkViewer, apis.Group.List)
-	// 读取指定群组的灰度标签，支持条件筛选
+	// 读取指定群组的环境标签，支持条件筛选
 	routerV1.Get("/groups/:uid/labels", checkViewer, apis.Group.ListLables)
 	// 读取指定群组的功能配置项，支持条件筛选
 	routerV1.Get("/groups/:uid/settings", checkViewer, apis.Group.ListSettings)

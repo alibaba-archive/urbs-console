@@ -213,7 +213,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
 
   const handleOnRow = (record: Group) => {
     return {
-      onDoubleClick: () => {
+      onClick: () => {
         fetchLabelList({
           pageSize: labelsPageSize,
           q: tabsSearchWord,
@@ -308,7 +308,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
 
   const tabsConfig = [{
     key: TagTabsKey.label,
-    title: '灰度标签',
+    title: '环境标签',
     content: (
       <GrayscaleTag
         hideColumns={['users', 'status', 'release', 'updatedAt']}

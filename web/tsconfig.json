@@ -13,9 +13,14 @@
       "node_modules/@types"
     ],
     "paths": {
-      "@/*": ["src/*"],
-      "@tmp/*": ["src/pages/.umi/*"]
+      "@/*": [
+        "src/*"
+      ],
+      "@tmp/*": [
+        "src/pages/.umi/*"
+      ]
     },
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,
   },
 }

@@ -34,7 +34,7 @@ const Products: React.FC<ProductsComponentProps> = (props) => {
     } = productStatistics;
     return [{
       key: 'label',
-      label: '灰度标签数',
+      label: '环境标签数',
       count: labels,
     }, {
       key: 'module',
@@ -81,7 +81,7 @@ const Products: React.FC<ProductsComponentProps> = (props) => {
       type: `products/${type}Product`,
       payload: {
         cb: () => {
-          message.success(`产品${ operationTitle[type] }成功`);
+          message.success(`产品${operationTitle[type]}成功`);
           setProductEditVisible(false);
           dispatch({
             type: 'products/getProducts',
@@ -89,7 +89,7 @@ const Products: React.FC<ProductsComponentProps> = (props) => {
           });
           if (OperationType.offline === type) {
             const products = productList.find(product => product.name !== productName);
-            history.push(`/products/${ products ? `${products.name}` : '/help' }`)
+            history.push(`/products/${products ? `${products.name}` : '/help'}`)
           }
           if (OperationType.update === type) {
             dispatch({
@@ -105,7 +105,7 @@ const Products: React.FC<ProductsComponentProps> = (props) => {
             });
           }
         },
-        params:{
+        params: {
           name,
           desc,
           uids,
@@ -114,16 +114,16 @@ const Products: React.FC<ProductsComponentProps> = (props) => {
     });
   };
   return (
-    <div className={ styles.normal }>
-      <ul className={ styles['product-detail-wrap'] }>
+    <div className={styles.normal}>
+      <ul className={styles['product-detail-wrap']}>
         <li>
           <div>
             {currentProductDetail?.name}
           </div>
           {
-            productCanEdit && <div className={ styles['product-detail-desc'] }>
-              <Tooltip placement="right" title={ DEFAULT_TITLE }>
-                <Icon type="setting" onClick={ () => setProductEditVisible(true) }></Icon>
+            productCanEdit && <div className={styles['product-detail-desc']}>
+              <Tooltip placement="right" title={DEFAULT_TITLE}>
+                <Icon type="setting" onClick={() => setProductEditVisible(true)}></Icon>
               </Tooltip>
             </div>
           }
@@ -132,7 +132,7 @@ const Products: React.FC<ProductsComponentProps> = (props) => {
           <div>
             负责人 :
           </div>
-          <div className={ styles['product-detail-desc'] }>
+          <div className={styles['product-detail-desc']}>
             {
               currentProductDetail?.users ? currentProductDetail.users.map(user => user.name).join('，') : ''
             }
@@ -142,22 +142,22 @@ const Products: React.FC<ProductsComponentProps> = (props) => {
           <div>
             描述 :
           </div>
-          <div className={ styles['product-detail-desc'] }>
+          <div className={styles['product-detail-desc']}>
             {
               currentProductDetail?.desc
             }
           </div>
         </li>
       </ul>
-      <ul className={ styles['product-counts-wrap'] }>
+      <ul className={styles['product-counts-wrap']}>
         {
           currentProductStatistics.map(item => (
-            <li key={ item.key }>
-              <div className={ styles.counts }>
-                { item.count }
+            <li key={item.key}>
+              <div className={styles.counts}>
+                {item.count}
               </div>
-              <div className={ styles['counts-desc'] }>
-                { item.label }
+              <div className={styles['counts-desc']}>
+                {item.label}
               </div>
             </li>
           ))
@@ -166,12 +166,12 @@ const Products: React.FC<ProductsComponentProps> = (props) => {
       {/* 弹窗 */}
       {
         productEditVisible && (<ProductModifyModal
-          visible={ productEditVisible }
-          productInfo={ currentProductDetail }
-          onCancel={ () => setProductEditVisible(false) }
-          onOk={ (name, desc, uids) => operatingProduct(name, desc, uids, OperationType.update) }
-          onOffline={ (name, desc, uids) => operatingProduct(name, desc, uids, OperationType.offline) }
-          onDelete={ (name, desc, uids) => operatingProduct(name, desc, uids, OperationType.delete) }
+          visible={productEditVisible}
+          productInfo={currentProductDetail}
+          onCancel={() => setProductEditVisible(false)}
+          onOk={(name, desc, uids) => operatingProduct(name, desc, uids, OperationType.update)}
+          onOffline={(name, desc, uids) => operatingProduct(name, desc, uids, OperationType.offline)}
+          onDelete={(name, desc, uids) => operatingProduct(name, desc, uids, OperationType.delete)}
         />)
       }
     </div>

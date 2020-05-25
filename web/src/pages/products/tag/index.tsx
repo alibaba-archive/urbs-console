@@ -49,7 +49,7 @@ const Tag: React.FC<TagComponentProps> = (props) => {
   }
   const handleOnRow = (record: Label) => {
     return {
-      onDoubleClick: () => {
+      onClick: () => {
         setCurentLabel(record);
         changeProductTagModalVisible(true);
       }
@@ -131,7 +131,7 @@ const Tag: React.FC<TagComponentProps> = (props) => {
       pageSize,
       q: tagsSearchWord,
     });
-  }, [productName, pageSize, fetchProductTags]);
+  }, [productName, pageSize, fetchProductTags, tagsSearchWord]);
   const gotoGroups = () => {
     history.push('/group')
   };
@@ -141,15 +141,15 @@ const Tag: React.FC<TagComponentProps> = (props) => {
   return (
     <div>
       <TableTitle
-        plusTitle="添加灰度标签"
-        handlePlusClick={ handlePlusClick }
-        handleWordChange={ handleTagsSearchWordChange }
-        handleSearch={ handleTagsSearch }
+        plusTitle="添加环境标签"
+        handlePlusClick={handlePlusClick}
+        handleWordChange={handleTagsSearchWordChange}
+        handleSearch={handleTagsSearch}
       />
       <GrayscaleTag
-        hideColumns={ ['product', 'action'] }
-        onRow={ handleOnRow }
-        dataSource={ productTagsList }
+        hideColumns={['product', 'action']}
+        onRow={handleOnRow}
+        dataSource={productTagsList}
         paginationProps={
           {
             pageSize,
@@ -177,25 +177,25 @@ const Tag: React.FC<TagComponentProps> = (props) => {
       {/* 弹窗 */}
       {
         productTagModalVisible && <TagDetailModal
-          product={ productName }
-          labelInfo={ curentLabel }
-          visible={ productTagModalVisible }
-          onCancel={ () => changeProductTagModalVisible(false) }
-          onSettingEdit={ () => setGrayscaleTagModalVisible(true) }
-          onGotoGroups={ gotoGroups }
-          onGotoUsers={ gotoUsers }
+          product={productName}
+          labelInfo={curentLabel}
+          visible={productTagModalVisible}
+          onCancel={() => changeProductTagModalVisible(false)}
+          onSettingEdit={() => setGrayscaleTagModalVisible(true)}
+          onGotoGroups={gotoGroups}
+          onGotoUsers={gotoUsers}
         ></TagDetailModal>
       }
       {
         grayscaleTagModalVisible && (
           <GrayscaleTagModifyModal
-            visible={ grayscaleTagModalVisible }
-            isEdit={ !!curentLabel }
-            labelInfo={ curentLabel }
-            onOk={ handleTagModifyOk }
-            onOffline={ handleTagOffline }
-            onDelete={ handleTagDelete }
-            onCancel={ () => setGrayscaleTagModalVisible(false) }
+            visible={grayscaleTagModalVisible}
+            isEdit={!!curentLabel}
+            labelInfo={curentLabel}
+            onOk={handleTagModifyOk}
+            onOffline={handleTagOffline}
+            onDelete={handleTagDelete}
+            onCancel={() => setGrayscaleTagModalVisible(false)}
           />
         )
       }
