@@ -64,7 +64,7 @@ func addRequestId(ctx context.Context, header http.Header) {
 	}
 	requestId, _ := ctx.Value(gear.HeaderXRequestID).(string)
 	if requestId == "" {
-		if gearCtx, ok := ctx.(*gear.Context); ok {
+		if gearCtx, ok := ctx.(*gear.Context); ok && gearCtx != nil {
 			requestId = gearCtx.GetHeader(gear.HeaderXRequestID)
 			if requestId == "" {
 				requestId = gearCtx.Res.Header().Get(gear.HeaderXRequestID)

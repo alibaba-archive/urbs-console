@@ -3,16 +3,18 @@ tls:
     cert_path: ""
     key_path: ""
 urbs_setting:
-    addr: "http://127.0.0.1:8081"
+    addr: "mock"
     key: "a29b3a29b3a29b30x1a29b38"
 logger:
-    level: "info"
+    level: "debug"
 thrid:
     key: "a29b3a29b3a29b30x1a29b38"
     user_auth: 
-        url: "http://127.0.0.1:mock"
+        url: "mock"
         cookie_key: ""
     group_member: 
+        url: ""
+    notifaction: 
         url: ""
 mysql:
     host: localhost:3306
