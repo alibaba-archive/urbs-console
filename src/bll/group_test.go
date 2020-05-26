@@ -21,7 +21,7 @@ func TestGroup(t *testing.T) {
 	usMock := mock_service.NewMockUrbsSettingInterface(ctrl)
 	groupMock := mock_service.NewMockGroupMemberInterface(ctrl)
 
-	group := &Group{services: service.NewServices(), daos: daos}
+	group := &Group{services: service.NewServices(), daos: testDaos}
 	group.services.UrbsSetting = usMock
 	group.services.GroupMember = groupMock
 

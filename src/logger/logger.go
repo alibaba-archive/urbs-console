@@ -45,7 +45,7 @@ func GetRequestId(ctx context.Context) string {
 		return ""
 	}
 	gearCtx, ok := ctx.(*gear.Context)
-	if !ok {
+	if !ok || gearCtx == nil {
 		return ""
 	}
 	if s := gearCtx.GetHeader(gear.HeaderXRequestID); s != "" {

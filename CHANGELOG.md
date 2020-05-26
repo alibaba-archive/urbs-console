@@ -9,8 +9,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 **Change:**
 
+- Support hook
+
+## [v0.4.0] - 2020-05-26
+
+**Change:**
+
 - Add ac API.
 - Add test on github.
 - Add lock for sync group members.
 - Add ac UI.
-- support more query for user and group' settings API.
+- Support more query for user and group' settings API.

@@ -52,6 +52,8 @@ type Thrid struct {
 	UserAuth UserAuth `json:"user_auth" yaml:"user_auth"`
 	// 群组成员接口
 	GroupMember GroupMember `json:"group_member" yaml:"group_member"`
+	// 变更通知
+	Hook Hook `json:"hook" yaml:"hook"`
 }
 
 // UserAuth ...
@@ -62,6 +64,11 @@ type UserAuth struct {
 
 // GroupMember ...
 type GroupMember struct {
+	URL string `json:"url" yaml:"url"`
+}
+
+// Hook ...
+type Hook struct {
 	URL string `json:"url" yaml:"url"`
 }
 
