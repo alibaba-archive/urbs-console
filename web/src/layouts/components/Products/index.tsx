@@ -30,10 +30,6 @@ const Products = ({ dispatch, productList, isRootRoute, history, onActiveKeyChan
   const handleItemClick = (key: string) => {
     onActiveKeyChange(key);
   };
-  const handleModuleClick = (key: string) => {
-    history.push(`/products/${key}/module`);
-    onActiveKeyChange(`/products/${key}/module`);
-  };
 
   if (productList && productList.length > 0) {
     const menus = productList.map(elem => {
@@ -47,17 +43,16 @@ const Products = ({ dispatch, productList, isRootRoute, history, onActiveKeyChan
             环境标签
             </Link>
         </Menu.Item>
-        <SubMenu
-          key={`/products/${elem.name}/module`}
-          title="功能模块"
-          onTitleClick={() => handleModuleClick(elem.name)}
-        >
-          <Menu.Item key={`/products/${elem.name}/setting`}>
-            <Link to={`/products/${elem.name}/setting`}>
-              配置项
+        <Menu.Item key={`/products/${elem.name}/module`}>
+          <Link to={`/products/${elem.name}/module`}>
+            功能模块
             </Link>
-          </Menu.Item>
-        </SubMenu>
+        </Menu.Item>
+        <Menu.Item key={`/products/${elem.name}/setting`}>
+          <Link to={`/products/${elem.name}/setting`}>
+            所有配置项
+            </Link>
+        </Menu.Item>
       </SubMenu>
     });
     return (

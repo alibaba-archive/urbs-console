@@ -2,6 +2,7 @@ package bll
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/teambition/gear"
@@ -125,7 +126,7 @@ func (a *Setting) Offline(ctx context.Context, args *tpl.ProductModuleSettingURL
 		Name:       args.Setting,
 		AssignedAt: time.Now().UTC(),
 	}
-	a.PushAllAsync(ctx, mySetting)
+	a.PushAllAsync(ctx, service.EventSettingOffline, mySetting)
 	return res, nil
 }
 
@@ -144,7 +145,7 @@ func (a *Setting) Assign(ctx context.Context, args *tpl.ProductModuleSettingURL,
 		Value:      body.Value,
 		AssignedAt: time.Now().UTC(),
 	}
-	a.PushAsync(ctx, mySetting.JsonString(ctx), body.Users, body.Groups)
+	a.PushAsync(ctx, service.EventSettingPublish, mySetting.JsonString(ctx), body.Users, body.Groups)
 
 	object := args.Product + args.Module + args.Setting
 	logContent := &dto.OperationLogContent{
@@ -186,7 +187,7 @@ func (a *Setting) Recall(ctx context.Context, args *tpl.ProductModuleSettingURL,
 		Name:       args.Setting,
 		AssignedAt: time.Now().UTC(),
 	}
-	a.PushAsync(ctx, mySetting.JsonString(ctx), item.Users, item.Groups)
+	a.PushAsync(ctx, service.EventSettingRecall, mySetting.JsonString(ctx), item.Users, item.Groups)
 
 	err = a.daos.OperationLog.DeleteByObject(ctx, logID)
 	if err != nil {
@@ -249,7 +250,7 @@ func (a *Setting) DeleteUser(ctx context.Context, args *tpl.ProductModuleSetting
 		Name:       args.Setting,
 		AssignedAt: time.Now().UTC(),
 	}
-	a.PushAsync(ctx, mySetting.JsonString(ctx), []string{args.UID}, nil)
+	a.PushAsync(ctx, service.EventSettingRemove, mySetting.JsonString(ctx), []string{args.UID}, nil)
 
 	return res, nil
 }
@@ -267,7 +268,7 @@ func (a *Setting) DeleteGroup(ctx context.Context, args *tpl.ProductModuleSettin
 		Name:       args.Setting,
 		AssignedAt: time.Now().UTC(),
 	}
-	a.PushAsync(ctx, mySetting.JsonString(ctx), nil, []string{args.UID})
+	a.PushAsync(ctx, service.EventSettingRemove, mySetting.JsonString(ctx), nil, []string{args.UID})
 
 	return res, nil
 }
@@ -283,50 +284,50 @@ func (a *Setting) RollbackUserSetting(ctx context.Context, args *tpl.ProductModu
 }
 
 // PushAllAsync ...
-func (a *Setting) PushAllAsync(ctx context.Context, mySetting *dto.MySetting) {
-	if conf.Config.Thrid.Hook.URL == "" {
+func (a *Setting) PushAllAsync(ctx context.Context, event string, mySetting *dto.MySetting) {
+	if conf.Config.Thrid.Hook.URL == "" || !util.StringSliceHas(conf.Config.Thrid.Hook.Events, event) {
 		return
 	}
-	go a.PushAll(ctx, mySetting)
-}
+	push := func() {
+		object := mySetting.Product + mySetting.Module + mySetting.Name
 
-// PushAll ...
-func (a *Setting) PushAll(ctx context.Context, mySetting *dto.MySetting) {
-	object := mySetting.Product + mySetting.Module + mySetting.Name
+		handler := func(log *schema.OperationLog) {
 
-	handler := func(log *schema.OperationLog) {
-
-		item := &tpl.OperationLogListItem{}
-		parseLogContent(log.Content, item)
-		mySetting := &dto.MySetting{
-			Product:    mySetting.Product,
-			Module:     mySetting.Module,
-			Name:       mySetting.Name,
-			AssignedAt: time.Now().UTC(),
+			item := &tpl.OperationLogListItem{}
+			parseLogContent(log.Content, item)
+			mySetting := &dto.MySetting{
+				Product:    mySetting.Product,
+				Module:     mySetting.Module,
+				Name:       mySetting.Name,
+				AssignedAt: time.Now().UTC(),
+			}
+			a.Push(ctx, event, mySetting.JsonString(ctx), item.Users, item.Groups)
 		}
-		a.Push(ctx, mySetting.JsonString(ctx), item.Users, item.Groups)
-	}
 
-	err := a.daos.OperationLog.FindByObjectWithHandler(ctx, object, handler)
-	if err != nil {
-		logger.Err(ctx, err.Error())
-	} else {
-		logger.Info(ctx, "pushAll", "product", mySetting.Product, "module", mySetting.Module, "setting", mySetting.Name)
+		err := a.daos.OperationLog.FindByObjectWithHandler(ctx, object, handler)
+		if err != nil {
+			logger.Err(ctx, err.Error())
+		} else {
+			logger.Info(ctx, "pushAll", "product", mySetting.Product, "module", mySetting.Module, "setting", mySetting.Name)
+		}
 	}
+	go push()
 }
 
 // PushAsync ...
-func (a *Setting) PushAsync(ctx context.Context, content string, users []string, groups []string) {
-	if conf.Config.Thrid.Hook.URL == "" {
+func (a *Setting) PushAsync(ctx context.Context, event, content string, users []string, groups []string) {
+	fmt.Println(!util.StringSliceHas(conf.Config.Thrid.Hook.Events, event))
+	if conf.Config.Thrid.Hook.URL == "" || !util.StringSliceHas(conf.Config.Thrid.Hook.Events, event) {
 		return
 	}
-	go a.Push(ctx, content, users, groups)
+	go a.Push(ctx, event, content, users, groups)
 }
 
 // Push ...
-func (a *Setting) Push(ctx context.Context, content string, users []string, groups []string) {
+func (a *Setting) Push(ctx context.Context, event, content string, users []string, groups []string) {
 	if len(users) > 0 {
 		temp := &thrid.HookSendReq{
+			Event:   event,
 			Users:   users,
 			Content: content,
 		}
@@ -351,6 +352,7 @@ func (a *Setting) Push(ctx context.Context, content string, users []string, grou
 				users[i] = r.User
 			}
 			notif := &thrid.HookSendReq{
+				Event:   event,
 				Users:   users,
 				Content: content,
 			}

@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"net"
 	"net/http"
 	"time"
 
@@ -41,6 +42,9 @@ func ThridHeader(ctx context.Context) http.Header {
 
 // HanderResponse ...
 func HanderResponse(response *request.Response, err error) error {
+	if err, ok := err.(net.Error); ok && err.Timeout() {
+		return gear.ErrGatewayTimeout.WithMsg(err.Error())
+	}
 	if err != nil {
 		return gear.ErrBadRequest.WithMsg(err.Error())
 	}

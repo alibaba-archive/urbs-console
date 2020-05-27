@@ -470,6 +470,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
     content: (
       <Users
         dataSource={membersList}
+        hideColumns={["assignedAt"]}
         onAction={
           (record: GroupMember) => ({
             onDelete: () => {
@@ -580,7 +581,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
       />
       <UserGroup
         onRow={handleOnRow}
-        hideColumns={['action', 'group']}
+        hideColumns={['action', 'group', 'assignedAt']}
         dataSource={groupList}
         paginationProps={{
           pageSize,

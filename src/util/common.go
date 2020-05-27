@@ -31,7 +31,7 @@ func init() {
 		TLSClientConfig:     &tls.Config{InsecureSkipVerify: true},
 	}
 	httpClient = &http.Client{
-		Timeout:   time.Second * 3,
+		Timeout:   time.Second * 10,
 		Transport: tr,
 	}
 

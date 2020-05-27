@@ -298,7 +298,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
     content: (
       <UserGroup
         dataSource={settingGroupsList}
-        hideColumns={["uid"]}
+        hideColumns={["uid", "createdAt"]}
         paginationProps={
           {
             total: settingGroupsPageTotal,
@@ -345,6 +345,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
     title: '用户',
     content: (
       <Users
+        hideColumns={["createdAt"]}
         dataSource={settingUsersList}
         paginationProps={
           {
