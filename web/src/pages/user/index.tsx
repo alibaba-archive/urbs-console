@@ -4,7 +4,7 @@ import { Form, Modal, Table, Input, Button, message } from 'antd';
 import { connect } from 'dva';
 import { Label, UsersComponentProps, DEFAULT_MODAL_WIDTH, DEFAULT_FORM_ITEM_LAYOUT, DEFAULT_PAGE_SIZE, PaginationParameters, CanaryUser, Setting as SettingData } from '../declare';
 import { Pagination, TableTitle, ContentTabs, ContentDetail, Setting, GrayscaleTag } from '../components';
-import { formatTableTime } from '../utils/format';
+import { formatTableTime, formatTimestamp } from '../utils/format';
 
 enum TagTabsKey {
   label = 'label',
@@ -205,7 +205,7 @@ const Users: React.FC<UsersComponentProps> = (props) => {
       content: `${currentUser.uid}`,
     }, {
       title: '活跃时间',
-      content: `${formatTableTime(currentUser.activeAt)}`,
+      content: `${formatTimestamp(currentUser.activeAt)}`,
     }, {
       title: '创建时间',
       content: `${formatTableTime(currentUser.createdAt)}`,
@@ -232,8 +232,8 @@ const Users: React.FC<UsersComponentProps> = (props) => {
     title: '活跃时间',
     dataIndex: 'activeAt',
     key: 'activeAt',
-    render: (time: string) => {
-      return formatTableTime(time);
+    render: (time: number) => {
+      return formatTimestamp(time);
     },
   }, {
     title: '创建时间',
