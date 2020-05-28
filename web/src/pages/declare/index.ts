@@ -191,7 +191,7 @@ export interface ProductsComponentProps extends BaseContainerComponentProps {
 export interface CanaryUser {
   uid: string;
   createdAt: string;
-  activeAt: string;
+  activeAt: number;
   labels: string;
 }
 
@@ -297,7 +297,7 @@ export interface Group {
   kind: string;
   desc: string;
   status: number;
-  syncAt: string;
+  syncAt: number;
   updatedAt: string;
   createdAt: string;
 }

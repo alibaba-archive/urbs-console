@@ -3,7 +3,7 @@ import { Icon, Modal, Button, Input, Form, message } from 'antd';
 import { connect } from 'dva';
 import { GrayscaleTag, Setting, Users, UserGroup, TableTitle, GroupModifyModal, ContentTabs, ContentDetail } from '../components';
 import { DEFAULT_FORM_ITEM_LAYOUT, DEFAULT_PAGE_SIZE, PaginationParameters, Group, GroupsComponentProps, FieldsValue, Label, GroupMember, Setting as SettingData } from '../declare';
-import { formatTableTime } from '../utils/format';
+import { formatTableTime, formatTimestamp } from '../utils/format';
 import styleNames from '../components/style/base.less';
 
 enum TagTabsKey {
@@ -561,7 +561,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
       title: '同步时间',
       content: (
         <div style={{ display: 'flex', position: 'relative', top: '-5px' }}>
-          <Button style={{ padding: '0' }} disabled type="link">{formatTableTime(currentGroup.syncAt || '')}</Button>
+          <Button style={{ padding: '0' }} disabled type="link">{formatTimestamp(currentGroup.syncAt)}</Button>
           <Button icon="reload" type="link" onClick={handleSyncGroup}>重新同步</Button>
         </div>
       ),
