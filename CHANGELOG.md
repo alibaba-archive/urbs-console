@@ -9,7 +9,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 **Change:**
 
-- Support hook
+- Support hook.
+- Fix search.
 
 ## [v0.4.0] - 2020-05-26
 

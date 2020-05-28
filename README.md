@@ -37,6 +37,8 @@ make run
 
 [API 文档](https://github.com/teambition/urbs-console/blob/develop/doc/api.md)
 
-[客户端使用文档](https://github.com/teambition/urbs-console/blob/develop/doc/client_usage.md)
+[管控后台帮助文档](https://github.com/teambition/urbs-console/blob/develop/doc/help.md)
 
-[集成到现有系统文档](https://github.com/teambition/urbs-console/blob/develop/doc/adapter.md)
+[前端接入文档](https://github.com/teambition/urbs-console/blob/develop/doc/client_usage.md)
+
+[集成已有系统和扩展灰度能力文档](https://github.com/teambition/urbs-console/blob/develop/doc/adapter.md)

@@ -161,14 +161,13 @@ type MySettingsRes struct {
 
 // MySetting ...
 type MySetting struct {
-	ID         int64     `json:"-"`
 	HID        string    `json:"hid,omitempty"`
 	Product    string    `json:"product"`
 	Module     string    `json:"module"`
 	Name       string    `json:"name"`
 	Desc       string    `json:"desc,omitempty"`
 	Value      string    `json:"value"`
-	LastValue  string    `json:"lastValue"`
+	LastValue  string    `json:"lastValue,omitempty"`
 	Release    int64     `json:"release,omitempty"`
 	AssignedAt time.Time `json:"assignedAt"`
 
