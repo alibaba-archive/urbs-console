@@ -69,7 +69,7 @@ const GrayscaleTagModifyModal: React.FC<Props> = (props) => {
           {
             isEdit && (<div>
               <Button onClick={handleOffline} className={styleNames['offline-btn--color']}>下线</Button>
-              <Button onClick={handleDelete} type="danger">删除</Button>
+              {/* <Button onClick={handleDelete} type="danger">删除</Button> */}
             </div>)
           }
           <div>

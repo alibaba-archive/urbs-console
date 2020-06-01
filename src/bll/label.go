@@ -123,11 +123,15 @@ func (a *Label) Assign(ctx context.Context, args *tpl.ProductLabelURL, body *tpl
 
 // Delete 物理删除标签
 func (a *Label) Delete(ctx context.Context, product, label string) (*tpl.BoolRes, error) {
-	err := a.daos.UrbsAcAcl.DeleteByObject(ctx, product+label)
+	res, err := a.services.UrbsSetting.LabelDelete(ctx, product, label)
+	if err != nil {
+		return nil, err
+	}
+	err = a.daos.UrbsAcAcl.DeleteByObject(ctx, product+label)
 	if err != nil {
 		logger.Err(ctx, err.Error())
 	}
-	return a.services.UrbsSetting.LabelDelete(ctx, product, label)
+	return res, nil
 }
 
 // Recall 批量撤销对用户或群组设置的产品环境标签
