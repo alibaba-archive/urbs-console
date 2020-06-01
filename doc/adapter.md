@@ -1,10 +1,8 @@
 # 身份验证
 
-Urbs 支持三方实现用户的身份验证，便于集成到现有用户体系中。
+Urbs 支持三方实现用户的身份验证，便于集成到现有用户体系中；主要分二块：
 
-主要分二块：
-
-1. 获取用户配置项的身份验证。
+1. 获取用户配置项的身份验证；
 2. 访问灰度管控后台的身份验证、权限控制。
 
 其 1 和 2 的身份验证是同一套用户体系，管控后台多了操作权限控制。
@@ -15,8 +13,8 @@ Urbs 没有单独的用户登录模块，主要考虑的是接入方一般都有
 
 验证流程：
 
-1. 访问 Urbs API，比如 urbs.teambition.com/v1/users/settings:unionAll。
-2. Urbs API携带身份（cookie）通过 http 的方式请求接入方实现的接口。
+1. 访问 Urbs API，比如 urbs.teambition.com/v1/users/settings:unionAll；
+2. Urbs API携带身份（cookie）通过 http 的方式请求接入方实现的接口；
 3. 接口验证身份（cookie）成功则返回用户信息，失败返回错误表示验证失败。
 
 ### 使用步骤
@@ -77,10 +75,10 @@ A 可以指定 B 为模块1 负责人，然后 B 可以更新模块、创建配�
 
 Urbs 提供订阅的事件有：
 
-- 发布配置项：`setting.publish`
-- 撤回配置项发布记录：`setting.recall`
-- 配置项中移除群组或成员： `setting.remove`
-- 下线配置项：`setting.offline`
+- 发布配置项：`setting.publish`；
+- 撤回配置项发布记录：`setting.recall`；
+- 配置项中移除群组或成员： `setting.remove`；
+- 下线配置项：`setting.offline`。
 
 推送的内容和通过 API 拉取的配置项保持一致，Urbs 使用 POST 方式请求 API。body 是 json 格式，字段格式如下：
 

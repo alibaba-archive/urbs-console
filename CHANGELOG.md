@@ -5,12 +5,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 -----
 
-## [v0.5.0] - 2020-05-
+## [v0.5.0] - 2020-06-03
 
 **Change:**
 
 - Support hook.
 - Fix search.
+- Remove delete label button.
 
 ## [v0.4.0] - 2020-05-26
 

@@ -15,6 +15,9 @@ const Users: React.FC<TableComponentProps<any>> = (props) => {
     title: '创建时间',
     dataIndex: 'createdAt',
     key: 'createdAt',
+    render: (time: string) => {
+      return formatTableTime(time);
+    },
   },
   {
     title: '分配时间',

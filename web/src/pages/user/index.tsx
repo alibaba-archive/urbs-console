@@ -117,7 +117,9 @@ const Users: React.FC<UsersComponentProps> = (props) => {
         params: {
           uid: currentUser?.uid,
         },
-        cb: (user: CanaryUser) => setCurrentUser(user),
+        cb: (user: CanaryUser) => {
+          setCurrentUser(user)
+        },
       },
     });
   }, [currentUser, dispatch]);
@@ -213,7 +215,7 @@ const Users: React.FC<UsersComponentProps> = (props) => {
       title: '缓存标签',
       content: (
         <div style={{ display: 'flex' }}>
-          <Input.TextArea defaultValue={currentUser.labels} disabled></Input.TextArea>
+          <Input.TextArea value={currentUser.labels} disabled></Input.TextArea>
           <Button icon="reload" type="link" onClick={handleRefreshLabels}>刷新缓存</Button>
         </div>
       ),
