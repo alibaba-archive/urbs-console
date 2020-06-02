@@ -26,6 +26,14 @@ const UserGroup: React.FC<TableComponentProps<Group>> = (props) => {
     title: '成员数量',
     dataIndex: 'status',
     key: 'status',
+  },
+  {
+    title: '创建时间',
+    dataIndex: 'createdAt',
+    key: 'createdAt',
+    render: (time: string) => {
+      return formatTableTime(time);
+    },
   }, {
     title: '分配时间',
     dataIndex: 'assignedAt',

@@ -70,8 +70,8 @@ func (a *OperationLog) FindOneByObject(ctx context.Context, object string) (*sch
 	return log, nil
 }
 
-// FindAllByObject ...
-func (a *OperationLog) FindAllByObject(ctx context.Context) ([]schema.OperationLog, error) {
+// FindAll ...
+func (a *OperationLog) FindAll(ctx context.Context) ([]schema.OperationLog, error) {
 	sql := "select * from operation_log limit 10"
 
 	logs := []schema.OperationLog{}
@@ -96,4 +96,23 @@ func (a *OperationLog) CountByObject(ctx context.Context, object string) (int, e
 	res := &schema.CountResult{}
 	err := a.DB.Raw(sql, object).Scan(res).Error
 	return res.Count, err
+}
+
+// FindByObjectWithHandler ...
+func (a *OperationLog) FindByObjectWithHandler(ctx context.Context, object string, handler func(*schema.OperationLog)) error {
+	sql := "select * from operation_log where object = ?"
+	cursor, err := a.DB.Raw(sql, object).Rows()
+	if err != nil {
+		return err
+	}
+	defer cursor.Close()
+	for cursor.Next() {
+		log := &schema.OperationLog{}
+		err := cursor.Scan(log)
+		if err != nil {
+			return err
+		}
+		handler(log)
+	}
+	return nil
 }

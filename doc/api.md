@@ -123,10 +123,7 @@ Authorization: string
       "product": "teambition",
       "module": "task",
       "name": "task-share",
-      "desc": "string",
       "value": "disable",
-      "lastValue": "",
-      "release": 1,
       "assignedAt": "2020-03-25T06:24:25Z"
     }
   ]
@@ -151,10 +148,7 @@ Status Code **200**
 |»» product|string|false|none|配置项所属的产品名称|
 |»» module|string|false|none|配置项所属的功能模块名称|
 |»» name|string|false|none|配置项名称|
-|»» desc|string|false|none|配置项描述，|
 |»» value|string|false|none|配置项值|
-|»» lastValue|string|false|none|配置项值|
-|»» release|integer(int64)|false|none|被设置批次|
 |»» assignedAt|string(date-time)|false|none|被设置时间|
 
 <aside class="success">
@@ -242,10 +236,7 @@ totalSize
   "product": "teambition",
   "module": "task",
   "name": "task-share",
-  "desc": "string",
   "value": "disable",
-  "lastValue": "",
-  "release": 1,
   "assignedAt": "2020-03-25T06:24:25Z"
 }
 
@@ -259,9 +250,6 @@ totalSize
 |product|string|false|none|配置项所属的产品名称|
 |module|string|false|none|配置项所属的功能模块名称|
 |name|string|false|none|配置项名称|
-|desc|string|false|none|配置项描述，|
 |value|string|false|none|配置项值|
-|lastValue|string|false|none|配置项值|
-|release|integer(int64)|false|none|被设置批次|
 |assignedAt|string(date-time)|false|none|被设置时间|
 

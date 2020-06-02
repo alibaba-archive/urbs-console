@@ -5,7 +5,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 -----
 
-## [v0.4.0] - 2020-05-
+## [v0.5.0] - 2020-06-03
+
+**Change:**
+
+- Support hook.
+- Fix search.
+- Remove delete label button.
+
+## [v0.4.0] - 2020-05-26
 
 **Change:**
 
@@ -13,4 +21,4 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Add test on github.
 - Add lock for sync group members.
 - Add ac UI.
-- support more query for user and group' settings API.
+- Support more query for user and group' settings API.

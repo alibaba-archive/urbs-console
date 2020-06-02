@@ -51,18 +51,26 @@ type Thrid struct {
 	// 验证调用者身份接口
 	UserAuth UserAuth `json:"user_auth" yaml:"user_auth"`
 	// 群组成员接口
-	GroupMember GroupMember `json:"group_member" yaml:"group_member"`
+	GroupMember ThridService `json:"group_member" yaml:"group_member"`
+	// 变更通知
+	Hook HookService `json:"hook" yaml:"hook"`
+}
+
+// ThridService ...
+type ThridService struct {
+	URL string `json:"url" yaml:"url"`
+}
+
+// HookService ...
+type HookService struct {
+	URL    string   `json:"url" yaml:"url"`
+	Events []string `json:"events" yaml:"events"`
 }
 
 // UserAuth ...
 type UserAuth struct {
 	URL       string `json:"url" yaml:"url"`
 	CookieKey string `json:"cookie_key" yaml:"cookie_key"`
-}
-
-// GroupMember ...
-type GroupMember struct {
-	URL string `json:"url" yaml:"url"`
 }
 
 // SQL ...

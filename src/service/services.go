@@ -5,6 +5,7 @@ type Services struct {
 	UrbsSetting UrbsSettingInterface
 	UserAuth    UserAuthInterface
 	GroupMember GroupMemberInterface
+	Hook        HookInterface
 }
 
 // NewServices ...
@@ -13,6 +14,7 @@ func NewServices() *Services {
 		GroupMember: &GroupMember{},
 		UrbsSetting: &UrbsSetting{},
 		UserAuth:    &UserAuth{},
+		Hook:        &Hook{},
 	}
 	return s
 }

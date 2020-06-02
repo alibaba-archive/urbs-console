@@ -14,6 +14,9 @@ thrid:
         cookie_key: ""
     group_member: 
         url: ""
+    hook: 
+        url: ""
+        events: ["setting.offline"]
 mysql:
     host: localhost:3306
     user: root

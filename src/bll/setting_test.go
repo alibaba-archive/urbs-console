@@ -6,13 +6,13 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 	"github.com/teambition/urbs-console/src/dto"
+	"github.com/teambition/urbs-console/src/dto/thrid"
 	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/service/mock_service"
 	"github.com/teambition/urbs-console/src/tpl"
 )
 
 func TestSetting(t *testing.T) {
-	require := require.New(t)
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -28,10 +28,12 @@ func TestSetting(t *testing.T) {
 		Release: 1,
 	}
 	err := blls.OperationLog.Add(getUidContext(uid), object, actionCreate, logContent)
-	require.Nil(err)
+	require.Nil(t, err)
 
-	t.Run("recall", func(t *testing.T) {
-		setting := &Setting{services: service.NewServices()}
+	t.Run("recall error", func(t *testing.T) {
+		require := require.New(t)
+
+		setting := &Setting{services: service.NewServices(), daos: testDaos}
 
 		// 1
 		args := &tpl.ProductModuleSettingURL{}
@@ -42,7 +44,7 @@ func TestSetting(t *testing.T) {
 		require.NotNil(err)
 
 		// 2
-		log1, err := daos.OperationLog.FindOneByObject(nil, object)
+		log1, err := testDaos.OperationLog.FindOneByObject(nil, object)
 		require.Nil(err)
 
 		body = &tpl.RecallBody{
@@ -54,11 +56,13 @@ func TestSetting(t *testing.T) {
 	})
 
 	t.Run("recall", func(t *testing.T) {
-		setting := &Setting{services: service.NewServices()}
+		require := require.New(t)
+
+		setting := &Setting{services: service.NewServices(), daos: testDaos}
 		setting.services.UrbsSetting = usMock
 
 		args := &tpl.ProductModuleSettingURL{}
-		log1, err := daos.OperationLog.FindOneByObject(nil, object)
+		log1, err := testDaos.OperationLog.FindOneByObject(nil, object)
 		require.Nil(err)
 
 		body := &tpl.RecallBody{
@@ -71,8 +75,40 @@ func TestSetting(t *testing.T) {
 		_, err = setting.Recall(getUidContext(uid), args, body)
 		require.Nil(err)
 
-		_, err = daos.OperationLog.FindOneByObject(nil, object)
+		_, err = testDaos.OperationLog.FindOneByObject(nil, object)
 		require.NotNil(err)
 	})
 
+	hookMock := mock_service.NewMockHookInterface(ctrl)
+
+	t.Run("push", func(t *testing.T) {
+
+		setting := &Setting{services: service.NewServices(), daos: testDaos}
+		setting.services.UrbsSetting = usMock
+		setting.services.Hook = hookMock
+
+		// 1
+		body := &thrid.HookSendReq{
+			Event:   service.EventSettingOffline,
+			Users:   []string{uid},
+			Content: "content",
+		}
+		hookMock.EXPECT().SendAsync(nil, body).Return()
+		setting.Push(nil, service.EventSettingOffline, "content", []string{uid}, nil)
+
+		// 2
+		args := &tpl.UIDPaginationURL{}
+		args.PageSize = 1000
+		args.UID = uid
+
+		res := &tpl.GroupMembersRes{
+			Result: []tpl.GroupMember{{User: uid}},
+		}
+
+		usMock.EXPECT().GroupListMembers(nil, args).Return(res, nil)
+
+		hookMock.EXPECT().SendAsync(nil, body).Return()
+
+		setting.Push(nil, service.EventSettingOffline, "content", nil, []string{uid})
+	})
 }
