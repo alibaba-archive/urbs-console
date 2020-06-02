@@ -147,6 +147,7 @@ func (a *User) ListSettingsUnionAllClient(ctx *gear.Context) error {
 	for _, item := range res.Result {
 		item.Desc = ""
 		item.Release = 0
+		item.LastValue = ""
 		item.UpdatedAt = item.AssignedAt
 	}
 	return ctx.OkJSON(res)

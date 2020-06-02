@@ -33,7 +33,7 @@ func TestAPIsAuth(t *testing.T) {
 		{Method: http.MethodDelete, URL: "/api/v1/products/product/labels/label/users/123"},
 		{Method: http.MethodPost, URL: "/api/v1/products/product/labels", Body: `{"name":"name","uids":["123"]}`},
 		{Method: http.MethodPut, URL: "/api/v1/products/product/labels/label", Body: `{"desc":"name"}`},
-		{Method: http.MethodDelete, URL: "/api/v1/products/product/labels/label"},
+		// {Method: http.MethodDelete, URL: "/api/v1/products/product/labels/label"},
 		{Method: http.MethodPut, URL: "/api/v1/products/product/labels/label:offline"},
 		{Method: http.MethodPost, URL: "/api/v1/products/product/labels/label:assign", Body: `{"users":["123"]}`},
 		{Method: http.MethodPost, URL: "/api/v1/products/product/labels/label:recall", Body: `{"hid":"123"}`},

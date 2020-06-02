@@ -6,7 +6,7 @@ import { AcUserSelectComponentProps, User } from '../declare';
 
 const AcUserSelect: React.FC<AcUserSelectComponentProps> = (props) => {
   const { dispatch, onChange, defaultSelectedUser = [] } = props;
-  const [selectedUser, setSelectedUser] = useState(defaultSelectedUser.map(user => user.uid));
+  const [selectedUser, setSelectedUser] = useState(defaultSelectedUser.map(user => `${ user.uid }/${ user.name }`));
   const [fetching, setFetching] = useState(false);
   const [userList, setUserList] = useState<User[]>([]);
   useEffect(() => {
@@ -48,7 +48,8 @@ const AcUserSelect: React.FC<AcUserSelectComponentProps> = (props) => {
   }, 800);
   const handleChange = (value: string[]) => {
     if (onChange) {
-      onChange(value);
+      const users = value.map(user => user.split('/')[0])
+      onChange(users);
     }
     setSelectedUser(value);
   };
@@ -67,9 +68,9 @@ const AcUserSelect: React.FC<AcUserSelectComponentProps> = (props) => {
           return (
             <Select.Option
               key={ user.uid }
-              value={ user.uid }
+              value={ `${ user.uid }/${ user.name }` }
             >
-              { user.name }
+              { `${ user.name }` }
             </Select.Option>
           )
         })

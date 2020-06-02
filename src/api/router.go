@@ -138,8 +138,8 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	routerV1.Post("/products/:product/labels", apis.Label.Create)
 	// 更新指定产品环境标签
 	routerV1.Put("/products/:product/labels/:label", apis.Label.Update)
-	// 删除指定产品环境标签
-	routerV1.Delete("/products/:product/labels/:label", apis.Label.Delete)
+	// // 删除指定产品环境标签
+	// routerV1.Delete("/products/:product/labels/:label", apis.Label.Delete)
 	// 下线指定产品环境标签
 	routerV1.Put("/products/:product/labels/:label+:offline", apis.Label.Offline)
 	// 批量为用户或群组设置产品环境标签

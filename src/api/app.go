@@ -19,22 +19,11 @@ func NewApp() *gear.App {
 	app := gear.New()
 
 	app.Set(gear.SetTrustedProxy, true)
-	app.Set(gear.SetBodyParser, gear.DefaultBodyParser(2<<22)) // 8MB
-	// ignore TLS handshake error
-	app.Set(gear.SetLogger, log.New(gear.DefaultFilterWriter(), "", 0))
+	app.Set(gear.SetBodyParser, gear.DefaultBodyParser(2<<22))          // 8MB
+	app.Set(gear.SetLogger, log.New(gear.DefaultFilterWriter(), "", 0)) // ignore TLS handshake error
 
-	app.Set(gear.SetParseError, func(err error) gear.HTTPError {
-		msg := err.Error()
+	app.Set(gear.SetParseError, parseError)
 
-		if gorm.IsRecordNotFoundError(err) {
-			return gear.ErrNotFound.WithMsg(msg)
-		}
-		if strings.Contains(msg, "Error 1062: Duplicate") {
-			return gear.ErrConflict.WithMsg(msg)
-		}
-
-		return gear.ParseError(err)
-	})
 	app.Use(middleware.Version)
 
 	var staticServer gear.Middleware = nil
@@ -63,4 +52,17 @@ func NewApp() *gear.App {
 	}
 
 	return app
+}
+
+func parseError(err error) gear.HTTPError {
+	msg := err.Error()
+
+	if gorm.IsRecordNotFoundError(err) {
+		return gear.ErrNotFound.WithMsg(msg)
+	}
+	if strings.Contains(msg, "Error 1062: Duplicate") {
+		return gear.ErrConflict.WithMsg(msg)
+	}
+
+	return gear.ParseError(err)
 }

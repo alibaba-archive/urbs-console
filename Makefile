@@ -28,6 +28,8 @@ test:
 mock:
 	mockgen -source=./src/service/urbs_setting_interface.go -destination=./src/service/mock_service/urbs_setting__mock.go
 	mockgen -source=./src/service/group.go -destination=./src/service/mock_service/group__mock.go
+	mockgen -source=./src/service/user_auth.go -destination=./src/service/mock_service/user_auth__mock.go
+	mockgen -source=./src/service/hook.go -destination=./src/service/mock_service/hook__mock.go
 
 
 .PHONY: misspell-check

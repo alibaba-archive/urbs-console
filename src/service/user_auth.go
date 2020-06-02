@@ -10,6 +10,11 @@ import (
 	"github.com/teambition/urbs-console/src/tpl"
 )
 
+// UserAuthInterface ...
+type UserAuthInterface interface {
+	Verify(ctx context.Context, body *thrid.UserVerifyReq) (string, error)
+}
+
 // UserAuth ...
 type UserAuth struct {
 }

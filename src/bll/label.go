@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/teambition/gear"
+	"github.com/teambition/urbs-console/src/dao"
 	"github.com/teambition/urbs-console/src/dto"
 	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/service"
@@ -14,6 +15,7 @@ import (
 // Label ...
 type Label struct {
 	services *service.Services
+	daos     *dao.Daos
 }
 
 // ListGroups ...
@@ -99,7 +101,7 @@ func (a *Label) Offline(ctx context.Context, product, label string) (*tpl.BoolRe
 
 // Assign 把标签批量分配给用户或群组
 func (a *Label) Assign(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.UsersGroupsBody) (*tpl.LabelReleaseInfoRes, error) {
-	AddUserAndOrg(ctx, body.Users, body.Groups)
+	blls.AddUserAndOrg(ctx, body.Users, body.Groups)
 	res, err := a.services.UrbsSetting.LabelAssign(ctx, args.Product, args.Label, body)
 	if err != nil {
 		return nil, err
@@ -121,17 +123,21 @@ func (a *Label) Assign(ctx context.Context, args *tpl.ProductLabelURL, body *tpl
 
 // Delete 物理删除标签
 func (a *Label) Delete(ctx context.Context, product, label string) (*tpl.BoolRes, error) {
-	err := daos.UrbsAcAcl.DeleteByObject(ctx, product+label)
+	res, err := a.services.UrbsSetting.LabelDelete(ctx, product, label)
+	if err != nil {
+		return nil, err
+	}
+	err = a.daos.UrbsAcAcl.DeleteByObject(ctx, product+label)
 	if err != nil {
 		logger.Err(ctx, err.Error())
 	}
-	return a.services.UrbsSetting.LabelDelete(ctx, product, label)
+	return res, nil
 }
 
 // Recall 批量撤销对用户或群组设置的产品环境标签
 func (a *Label) Recall(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.RecallBody) (*tpl.BoolRes, error) {
 	logID := service.HIDToID(body.HID, "log")
-	log, err := daos.OperationLog.FindOneByID(ctx, logID)
+	log, err := a.daos.OperationLog.FindOneByID(ctx, logID)
 	if err != nil {
 		return nil, err
 	}
@@ -144,7 +150,7 @@ func (a *Label) Recall(ctx context.Context, args *tpl.ProductLabelURL, body *tpl
 	if err != nil {
 		return nil, err
 	}
-	err = daos.OperationLog.DeleteByObject(ctx, logID)
+	err = a.daos.OperationLog.DeleteByObject(ctx, logID)
 	if err != nil {
 		return nil, err
 	}

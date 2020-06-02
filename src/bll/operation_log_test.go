@@ -50,7 +50,7 @@ func TestOperationLog(t *testing.T) {
 		require.Equal(body.Value, res.Result[0].Value)
 		require.Equal(2, res.Result[0].Percent)
 
-		totalSize, err := daos.OperationLog.CountByObject(ctx, object)
+		totalSize, err := testDaos.OperationLog.CountByObject(ctx, object)
 		require.Nil(err)
 		require.True(totalSize > 0)
 	})
@@ -69,7 +69,7 @@ func TestOperationLog(t *testing.T) {
 		err := blls.OperationLog.Add(ctx, object, constant.OperationCreate, logContent)
 		require.Nil(err)
 
-		log, err := daos.OperationLog.FindOneByObject(ctx, object)
+		log, err := testDaos.OperationLog.FindOneByObject(ctx, object)
 		require.Nil(err)
 		require.Equal(logContent.Desc, log.Desc)
 
@@ -88,9 +88,9 @@ func TestOperationLog(t *testing.T) {
 		require.Equal(2, item.Percent)
 	})
 
-	t.Run("FindAllByObject", func(t *testing.T) {
+	t.Run("FindAll", func(t *testing.T) {
 		require := require.New(t)
-		logs, err := daos.OperationLog.FindAllByObject(nil)
+		logs, err := testDaos.OperationLog.FindAll(nil)
 		require.Nil(err)
 		require.True(len(logs) > 0, len(logs))
 	})
