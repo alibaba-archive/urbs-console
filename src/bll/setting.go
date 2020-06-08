@@ -120,13 +120,6 @@ func (a *Setting) Offline(ctx context.Context, args *tpl.ProductModuleSettingURL
 	if err != nil {
 		return nil, err
 	}
-	mySetting := &dto.MySetting{
-		Product:    args.Product,
-		Module:     args.Module,
-		Name:       args.Setting,
-		AssignedAt: time.Now().UTC(),
-	}
-	a.PushAllAsync(ctx, service.EventSettingOffline, mySetting)
 	return res, nil
 }
 
@@ -207,7 +200,7 @@ func (a *Setting) CreateRule(ctx context.Context, args *tpl.ProductModuleSetting
 	object := args.Product + args.Module + args.Setting
 	logContent := &dto.OperationLogContent{
 		Desc:    body.Desc,
-		Percent: body.Rule.Value,
+		Percent: &body.Rule.Value,
 		Value:   body.Value,
 	}
 	err := blls.OperationLog.Add(ctx, object, actionCreate, logContent)
@@ -222,7 +215,7 @@ func (a *Setting) UpdateRule(ctx context.Context, args *tpl.ProductModuleSetting
 	object := args.Product + args.Module + args.Setting
 	logContent := &dto.OperationLogContent{
 		Desc:    body.Desc,
-		Percent: body.Rule.Value,
+		Percent: &body.Rule.Value,
 		Value:   body.Value,
 	}
 	err := blls.OperationLog.Add(ctx, object, actionUpdate, logContent)

@@ -261,3 +261,17 @@ func (a *UrbsSetting) SettingRollbackGroupSetting(ctx context.Context, args *tpl
 	}
 	return result, nil
 }
+
+// SettingCleanUp ...
+func (a *UrbsSetting) SettingCleanUp(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s:cleanup", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting)
+
+	result := new(tpl.BoolRes)
+
+	resp, err := request.Delete(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}

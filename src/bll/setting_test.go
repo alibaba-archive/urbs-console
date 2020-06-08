@@ -89,12 +89,12 @@ func TestSetting(t *testing.T) {
 
 		// 1
 		body := &thrid.HookSendReq{
-			Event:   service.EventSettingOffline,
+			Event:   service.EventSettingPublish,
 			Users:   []string{uid},
 			Content: "content",
 		}
 		hookMock.EXPECT().SendAsync(nil, body).Return()
-		setting.Push(nil, service.EventSettingOffline, "content", []string{uid}, nil)
+		setting.Push(nil, service.EventSettingPublish, "content", []string{uid}, nil)
 
 		// 2
 		args := &tpl.UIDPaginationURL{}
@@ -109,6 +109,6 @@ func TestSetting(t *testing.T) {
 
 		hookMock.EXPECT().SendAsync(nil, body).Return()
 
-		setting.Push(nil, service.EventSettingOffline, "content", nil, []string{uid})
+		setting.Push(nil, service.EventSettingPublish, "content", nil, []string{uid})
 	})
 }

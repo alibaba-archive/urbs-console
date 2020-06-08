@@ -60,7 +60,7 @@ type OperationLogListItem struct {
 	Value string `json:"value,omitempty"`
 
 	Kind    string `json:"kind"`
-	Percent int    `json:"percent,omitempty"` // 灰度百分比
+	Percent *int   `json:"percent,omitempty"` // 灰度百分比
 }
 
 // LogProductLabelPaginationURL ...

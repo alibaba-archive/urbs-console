@@ -163,7 +163,7 @@ func (a *Label) CreateRule(ctx context.Context, args *tpl.ProductLabelURL, body 
 	object := args.Product + args.Label
 	logContent := &dto.OperationLogContent{
 		Desc:    body.Desc,
-		Percent: body.Rule.Value,
+		Percent: &body.Rule.Value,
 	}
 	err := blls.OperationLog.Add(ctx, object, actionCreate, logContent)
 	if err != nil {
@@ -182,7 +182,7 @@ func (a *Label) UpdateRule(ctx context.Context, args *tpl.ProductLabelHIDURL, bo
 	object := args.Product + args.Label
 	logContent := &dto.OperationLogContent{
 		Desc:    body.Desc,
-		Percent: body.Rule.Value,
+		Percent: &body.Rule.Value,
 	}
 	err := blls.OperationLog.Add(ctx, object, actionUpdate, logContent)
 	if err != nil {
