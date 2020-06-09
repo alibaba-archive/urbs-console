@@ -11,7 +11,7 @@ require (
 	github.com/jinzhu/gorm v1.9.12
 	github.com/mushroomsir/logger v1.5.0
 	github.com/mushroomsir/request v0.1.0
-	github.com/mushroomsir/tcc v0.1.0
+	github.com/mushroomsir/tcc v0.1.1
 	github.com/opentracing/opentracing-go v1.1.0 // indirect
 	github.com/stretchr/testify v1.5.1
 	github.com/teambition/gear v1.21.1

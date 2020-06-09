@@ -337,3 +337,20 @@ func (a *Setting) DeleteRule(ctx *gear.Context) error {
 	}
 	return ctx.OkJSON(res)
 }
+
+// CleanUp ..
+func (a *Setting) CleanUp(ctx *gear.Context) error {
+	req := tpl.ProductModuleSettingURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Module+req.Setting)
+	if err != nil {
+		return err
+	}
+	res, err := a.blls.Setting.CleanUp(ctx, &req)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}

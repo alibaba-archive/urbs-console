@@ -76,6 +76,8 @@ github.com/mushroomsir/request v0.1.0 h1:h6kmTaP741XYQx41K4AikzIlE+2QwRIZoBWw53M
 github.com/mushroomsir/request v0.1.0/go.mod h1:3HOSds9MvFIOsAMZeZugToLvo1dyGpM7NaoQFtAhgaI=
 github.com/mushroomsir/tcc v0.1.0 h1:urw0qRfyCariidVVJYh5EZAfsnXoTivBhAb99+JRivc=
 github.com/mushroomsir/tcc v0.1.0/go.mod h1:BNNjwbm8IIdQYjD3uRexwEB1SpMqCrMVFN6/8Jjrm9Q=
+github.com/mushroomsir/tcc v0.1.1 h1:BdWAioJ2iUaZoSO+nWF8eoqLTOD8AEnpa78DjywX4VY=
+github.com/mushroomsir/tcc v0.1.1/go.mod h1:BNNjwbm8IIdQYjD3uRexwEB1SpMqCrMVFN6/8Jjrm9Q=
 github.com/opentracing/opentracing-go v1.1.0 h1:pWlfV3Bxv7k65HYwkikxat0+s3pV4bsqf19k25Ur8rU=
 github.com/opentracing/opentracing-go v1.1.0/go.mod h1:UkNAQd3GIcIGf0SeVgPpRdFStlNbqXla1AfSYxPUl2o=
 github.com/pelletier/go-toml v1.4.0/go.mod h1:PN7xzY2wHTK0K9p34ErDQMlFxa51Fk0OUruD3k1mMwo=

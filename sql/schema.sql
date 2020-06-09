@@ -54,8 +54,8 @@ CREATE TABLE IF NOT EXISTS `urbs_console`.`tcc_async_task` (
 
 CREATE TABLE IF NOT EXISTS `urbs_console`.`tcc_lock` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `key` varchar(127) NOT NULL,
+  `name` varchar(127) NOT NULL,
   `expire_at` datetime(3) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_key` (`key`)
+  UNIQUE KEY `uk_name` (`name`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;
