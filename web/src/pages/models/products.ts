@@ -30,11 +30,11 @@ const products: Model = {
     setStateByPayload(state, { payload }: AnyAction) {
       return { ...state, ...payload };
     },
-    setProductStatistics (state, { payload }: AnyAction) {
+    setProductStatistics(state, { payload }: AnyAction) {
       const { productStatistics } = payload;
-      return {...state, productStatistics};
+      return { ...state, productStatistics };
     },
-    setProductsList (state, { payload }: AnyAction) {
+    setProductsList(state, { payload }: AnyAction) {
       return { ...state, productList: payload.productList };
     },
   },
@@ -44,7 +44,7 @@ const products: Model = {
       const { pageToken } = params;
       const { labelGroupsPrePageTokens } = yield select(state => state.products);
       const preLen = labelGroupsPrePageTokens.length;
-      const { result, nextPageToken, totalSize } = yield call(productsService.getLabelGroups, product, label, params);      
+      const { result, nextPageToken, totalSize } = yield call(productsService.getLabelGroups, product, label, params);
       if (type === 'next') labelGroupsPrePageTokens.push(pageToken);
       if (type === 'pre') labelGroupsPrePageTokens.pop();
       if (type === 'del') labelGroupsPrePageTokens.splice(0);
@@ -65,7 +65,7 @@ const products: Model = {
       const { pageToken } = params;
       const { labelUsersPrePageTokens } = yield select(state => state.products);
       const preLen = labelUsersPrePageTokens.length;
-      const { result, nextPageToken, totalSize } = yield call(productsService.getLabelUsers, product, label, params);      
+      const { result, nextPageToken, totalSize } = yield call(productsService.getLabelUsers, product, label, params);
       if (type === 'next') labelUsersPrePageTokens.push(pageToken);
       if (type === 'pre') labelUsersPrePageTokens.pop();
       if (type === 'del') labelUsersPrePageTokens.splice(0);
@@ -86,7 +86,7 @@ const products: Model = {
       const { pageToken } = params;
       const { prePageTokens } = yield select(state => state.products);
       const preLen = prePageTokens.length;
-      const { result, nextPageToken, totalSize } = yield call(productsService.getProductsTag, productName, params);      
+      const { result, nextPageToken, totalSize } = yield call(productsService.getProductsTag, productName, params);
       if (type === 'next') prePageTokens.push(pageToken);
       if (type === 'pre') prePageTokens.pop();
       if (type === 'del') prePageTokens.splice(0);
@@ -104,14 +104,14 @@ const products: Model = {
     },
     *updateProductTags({ payload }: AnyAction, { call }: EffectsCommandMap) {
       const { params, productName, cb } = payload;
-      const { result } = yield call(productsService.updateProductsTag, productName, params);      
+      const { result } = yield call(productsService.updateProductsTag, productName, params);
       if (result) {
         cb(result);
       }
     },
     *addProductTags({ payload }: AnyAction, { call }: EffectsCommandMap) {
       const { params, productName, cb } = payload;
-      const { result } = yield call(productsService.addProductsTag, productName, params);      
+      const { result } = yield call(productsService.addProductsTag, productName, params);
       if (result) {
         cb();
       }
@@ -182,19 +182,19 @@ const products: Model = {
     },
     *offlineProductTags({ payload }: AnyAction, { call }: EffectsCommandMap) {
       const { label, productName, cb } = payload;
-      const { result } = yield call(productsService.offlineProductsTag, productName, label);      
+      const { result } = yield call(productsService.offlineProductsTag, productName, label);
       if (result) {
         cb();
       }
     },
     *deleteProductTags({ payload }: AnyAction, { call }: EffectsCommandMap) {
       const { label, productName, cb } = payload;
-      const { result } = yield call(productsService.deleteProductsTag, productName, label);      
+      const { result } = yield call(productsService.deleteProductsTag, productName, label);
       if (result) {
         cb();
       }
     },
-    *getProductStatistics ({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+    *getProductStatistics({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
       const { result } = yield call(productsService.getProductStatistics, payload.params.productName);
       yield put({
         type: 'setProductStatistics',
@@ -203,12 +203,12 @@ const products: Model = {
         }
       });
     },
-    *getProductModules ({ payload }: AnyAction, { call, put, select }: EffectsCommandMap) {
+    *getProductModules({ payload }: AnyAction, { call, put, select }: EffectsCommandMap) {
       const { params, type, productName } = payload;
       const { pageToken } = params;
       const { modulePrePageTokens } = yield select(state => state.products);
       const preLen = modulePrePageTokens.length;
-      const { result, nextPageToken, totalSize } = yield call(productsService.getProductsModule, productName, params);      
+      const { result, nextPageToken, totalSize } = yield call(productsService.getProductsModule, productName, params);
       if (type === 'next') modulePrePageTokens.push(pageToken);
       if (type === 'pre') modulePrePageTokens.pop();
       if (type === 'del') modulePrePageTokens.splice(0);
@@ -226,31 +226,31 @@ const products: Model = {
     },
     *updateProductModules({ payload }: AnyAction, { call }: EffectsCommandMap) {
       const { params, productName, cb } = payload;
-      const { result } = yield call(productsService.updateProductsModule, productName, params);      
+      const { result } = yield call(productsService.updateProductsModule, productName, params);
       if (result) {
         cb(result);
       }
     },
     *addProductModules({ payload }: AnyAction, { call }: EffectsCommandMap) {
       const { params, productName, cb } = payload;
-      const { result } = yield call(productsService.addProductsModule, productName, params);      
+      const { result } = yield call(productsService.addProductsModule, productName, params);
       if (result) {
         cb();
       }
     },
     *offlineProductModules({ payload }: AnyAction, { call }: EffectsCommandMap) {
       const { module, productName, cb } = payload;
-      const { result } = yield call(productsService.offlineProductsModule, productName, module);      
+      const { result } = yield call(productsService.offlineProductsModule, productName, module);
       if (result) {
         cb();
       }
     },
-    *getProductSettings ({ payload }: AnyAction, { call, put, select }: EffectsCommandMap) {
+    *getProductSettings({ payload }: AnyAction, { call, put, select }: EffectsCommandMap) {
       const { params, type, productName } = payload;
       const { pageToken } = params;
       const { settingPrePageTokens } = yield select(state => state.products);
       const preLen = settingPrePageTokens.length;
-      const { result, nextPageToken, totalSize } = yield call(productsService.getProductsSetting, productName, params);      
+      const { result, nextPageToken, totalSize } = yield call(productsService.getProductsSetting, productName, params);
       if (type === 'next') settingPrePageTokens.push(pageToken);
       if (type === 'pre') settingPrePageTokens.pop();
       if (type === 'del') settingPrePageTokens.splice(0);
@@ -266,12 +266,12 @@ const products: Model = {
         },
       });
     },
-    *getModuleSettings ({ payload }: AnyAction, { call, put, select }: EffectsCommandMap) {
+    *getModuleSettings({ payload }: AnyAction, { call, put, select }: EffectsCommandMap) {
       const { params, type, productName, module } = payload;
       const { pageToken } = params;
       const { moduleSettingPrePageTokens } = yield select(state => state.products);
       const preLen = moduleSettingPrePageTokens.length;
-      const { result, nextPageToken, totalSize } = yield call(productsService.getModuleSetting, productName, module, params);      
+      const { result, nextPageToken, totalSize } = yield call(productsService.getModuleSetting, productName, module, params);
       if (type === 'next') moduleSettingPrePageTokens.push(pageToken);
       if (type === 'pre') moduleSettingPrePageTokens.pop();
       if (type === 'del') moduleSettingPrePageTokens.splice(0);
@@ -289,21 +289,21 @@ const products: Model = {
     },
     *updateProductSettings({ payload }: AnyAction, { call }: EffectsCommandMap) {
       const { params, productName, cb } = payload;
-      const { result } = yield call(productsService.updateProductsSetting, productName, params);      
+      const { result } = yield call(productsService.updateProductsSetting, productName, params);
       if (result) {
         cb(result);
       }
     },
     *addProductSettings({ payload }: AnyAction, { call }: EffectsCommandMap) {
       const { params, productName, cb } = payload;
-      const { result } = yield call(productsService.addProductsSetting, productName, params);      
+      const { result } = yield call(productsService.addProductsSetting, productName, params);
       if (result) {
         cb();
       }
     },
     *offlineProductSettings({ payload }: AnyAction, { call }: EffectsCommandMap) {
       const { setting, module, productName, cb } = payload;
-      const { result } = yield call(productsService.offlineProductsSetting, productName, module, setting);      
+      const { result } = yield call(productsService.offlineProductsSetting, productName, module, setting);
       if (result) {
         cb();
       }
@@ -313,7 +313,7 @@ const products: Model = {
       const { pageToken } = params;
       const { settingGroupsPrePageTokens } = yield select(state => state.products);
       const preLen = settingGroupsPrePageTokens.length;
-      const { result, nextPageToken, totalSize } = yield call(productsService.getSettingGroups, product, module, setting, params);      
+      const { result, nextPageToken, totalSize } = yield call(productsService.getSettingGroups, product, module, setting, params);
       if (type === 'next') settingGroupsPrePageTokens.push(pageToken);
       if (type === 'pre') settingGroupsPrePageTokens.pop();
       if (type === 'del') settingGroupsPrePageTokens.splice(0);
@@ -334,7 +334,7 @@ const products: Model = {
       const { pageToken } = params;
       const { settingUsersPrePageTokens } = yield select(state => state.products);
       const preLen = settingUsersPrePageTokens.length;
-      const { result, nextPageToken, totalSize } = yield call(productsService.getSettingUsers, product, module, setting, params);      
+      const { result, nextPageToken, totalSize } = yield call(productsService.getSettingUsers, product, module, setting, params);
       if (type === 'next') settingUsersPrePageTokens.push(pageToken);
       if (type === 'pre') settingUsersPrePageTokens.pop();
       if (type === 'del') settingUsersPrePageTokens.splice(0);
@@ -350,7 +350,7 @@ const products: Model = {
         },
       });
     },
-    *getProducts ({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+    *getProducts({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
       const { needRedirect, redirectTo } = payload;
       const { result } = yield call(productsService.getProductList);
       yield put({
@@ -363,7 +363,7 @@ const products: Model = {
         redirectTo(result[0].name)
       }
     },
-    *updateProduct ({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+    *updateProduct({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
       const { params, cb } = payload;
       const { name, desc, uids } = params;
       const { result } = yield call(productsService.updateProduct, name, desc, uids);
@@ -371,7 +371,7 @@ const products: Model = {
         cb();
       }
     },
-    *createProduct ({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+    *createProduct({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
       const { params, cb } = payload;
       const { name, desc, uids } = params;
       const { result } = yield call(productsService.createProduct, name, desc, uids);
@@ -379,7 +379,7 @@ const products: Model = {
         cb();
       }
     },
-    *offlineProduct ({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+    *offlineProduct({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
       const { params, cb } = payload;
       const { name } = params;
       const { result } = yield call(productsService.offlineProduct, name);
@@ -387,7 +387,7 @@ const products: Model = {
         cb();
       }
     },
-    *deleteProduct ({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+    *deleteProduct({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
       const { params, cb } = payload;
       const { name } = params;
       const { result } = yield call(productsService.deleteProduct, name);
@@ -395,50 +395,64 @@ const products: Model = {
         cb();
       }
     },
-    *getPermission ({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+    *getPermission({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
       const { cb, params } = payload;
       const { result } = yield call(productsService.getPermission, params);
       if (cb) {
         cb(result);
       }
     },
-    *recallLabelLogs ({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-      const {cb, product, label, hid} = payload;
+    *recallLabelLogs({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+      const { cb, product, label, hid } = payload;
       const { result } = yield call(productsService.recallLabelLogs, product, label, hid);
       if (result) {
         cb();
       }
     },
-    *deleteLabeUser ({ payload }: AnyAction, { call }: EffectsCommandMap) {
-      const {cb, product, label, uid} = payload;
+    *deleteLabeUser({ payload }: AnyAction, { call }: EffectsCommandMap) {
+      const { cb, product, label, uid } = payload;
       const { result } = yield call(productsService.deleteLabeUser, product, label, uid);
       if (result) {
         cb();
       }
     },
-    *deleteLabelGroup ({ payload }: AnyAction, { call }: EffectsCommandMap) {
-      const {cb, product, label, uid} = payload;
+    *deleteLabelGroup({ payload }: AnyAction, { call }: EffectsCommandMap) {
+      const { cb, product, label, uid } = payload;
       const { result } = yield call(productsService.deleteLabelGroup, product, label, uid);
       if (result) {
         cb();
       }
     },
-    *recallSettingLogs ({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-      const {cb, product, module, setting, hid} = payload;
+    *cleanUpLabel({ payload }: AnyAction, { call }: EffectsCommandMap) {
+      const { cb, product, label } = payload;
+      const { result } = yield call(productsService.cleanUpLabel, product, label);
+      if (result) {
+        cb();
+      }
+    },
+    *recallSettingLogs({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+      const { cb, product, module, setting, hid } = payload;
       const { result } = yield call(productsService.recallSettingLogs, product, module, setting, hid);
       if (result) {
         cb();
       }
     },
-    *deleteSettingUser ({ payload }: AnyAction, { call }: EffectsCommandMap) {
-      const {cb, product, module, setting, uid} = payload;
+    *cleanUpSetting({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+      const { cb, product, module, setting } = payload;
+      const { result } = yield call(productsService.cleanUpSetting, product, module, setting);
+      if (result) {
+        cb();
+      }
+    },
+    *deleteSettingUser({ payload }: AnyAction, { call }: EffectsCommandMap) {
+      const { cb, product, module, setting, uid } = payload;
       const { result } = yield call(productsService.deleteSettingUser, product, module, setting, uid);
       if (result) {
         cb();
       }
     },
-    *deleteSettingGroup ({ payload }: AnyAction, { call }: EffectsCommandMap) {
-      const {cb, product, module, setting, uid} = payload;
+    *deleteSettingGroup({ payload }: AnyAction, { call }: EffectsCommandMap) {
+      const { cb, product, module, setting, uid } = payload;
       const { result } = yield call(productsService.deleteSettingGroup, product, module, setting, uid);
       if (result) {
         cb();

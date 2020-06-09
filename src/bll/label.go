@@ -199,3 +199,8 @@ func (a *Label) UpdateRule(ctx context.Context, args *tpl.ProductLabelHIDURL, bo
 func (a *Label) DeleteRule(ctx context.Context, args *tpl.ProductLabelHIDURL) (*tpl.BoolRes, error) {
 	return a.services.UrbsSetting.LabelDeleteRule(ctx, args)
 }
+
+// CleanUp ...
+func (a *Label) CleanUp(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.BoolRes, error) {
+	return a.services.UrbsSetting.LabelCleanUp(ctx, args)
+}

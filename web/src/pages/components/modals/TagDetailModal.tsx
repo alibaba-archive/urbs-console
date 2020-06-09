@@ -227,6 +227,25 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
       },
     });
   };
+  const handleCleanUp = () => {
+    Modal.confirm({
+      title: '操作不可逆，请再次确认',
+      content: '确认删除全部用户？',
+      onOk: () => {
+        dispatch({
+          type: 'products/cleanUpLabel',
+          payload: {
+            product,
+            label: labelInfo?.name,
+            cb: () => {
+              message.success('删除成功');
+            },
+          },
+        });
+      },
+    });
+  };
+
   const handleDeleteUser = (uid: string) => {
     Modal.confirm({
       title: '操作不可逆，请再次确认',
@@ -272,14 +291,24 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
       />
     ),
     action: grayscaleTagCanEdit && (
-      <Button
-        type="link"
-        icon="plus"
-        block
-        onClick={handleOpenPublishTagModal}
-      >
-        添加灰度发布
+      <div>
+        <Button
+          type="link"
+          icon="plus"
+          block
+          onClick={handleOpenPublishTagModal}
+        >
+          添加灰度发布
       </Button>
+        <Button
+          type="link"
+          icon="delete"
+          block
+          onClick={handleCleanUp}
+        >
+          删除全部用户
+        </Button>
+      </div>
     ),
   }, {
     key: TagTabsKey.Group,
@@ -418,7 +447,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
     ]);
   }, [labelInfo, product]);
   return (
-    <Modal width={DEFAULT_MODAL_WIDTH} title={renderModalTitle()} visible={visible} onCancel={onCancel} footer={null}>
+    <Modal width={DEFAULT_MODAL_WIDTH} title={renderModalTitle()} visible={visible} onCancel={onCancel} footer={null} >
       <ContentDetail content={labelContentDetail}></ContentDetail>
       <ContentTabs
         activeKey={tabsActiveKey}
@@ -445,7 +474,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
         onCancel={() => setGrayscaleTagModalVisible(false)}
         onOk={() => setGrayscaleTagModalVisible(false)}
       ></GrayscaleTagModifyModal>
-    </Modal>
+    </Modal >
   );
 };
 

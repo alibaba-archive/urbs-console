@@ -346,7 +346,7 @@ func (a *Setting) Push(ctx context.Context, event, content string, users []strin
 			Content: content,
 		}
 		a.services.Hook.SendAsync(ctx, temp)
-		logger.Info(ctx, "pushSetting", "users", users)
+		logger.Info(ctx, "pushSetting", "users", users, "event", event)
 	}
 	for _, group := range groups {
 		pageToken := ""
@@ -371,7 +371,7 @@ func (a *Setting) Push(ctx context.Context, event, content string, users []strin
 				Content: content,
 			}
 			a.services.Hook.SendAsync(ctx, notif)
-			logger.Info(ctx, "pushSetting", "group", group)
+			logger.Info(ctx, "pushSetting", "group", group, "event", event)
 
 			pageToken = res.NextPageToken
 			if pageToken != "" {
@@ -380,4 +380,9 @@ func (a *Setting) Push(ctx context.Context, event, content string, users []strin
 			break
 		}
 	}
+}
+
+// CleanUp ...
+func (a *Setting) CleanUp(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.BoolRes, error) {
+	return a.services.UrbsSetting.SettingCleanUp(ctx, args)
 }
