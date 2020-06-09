@@ -18,22 +18,22 @@ func TestSetting(t *testing.T) {
 	defer ctrl.Finish()
 	usMock := mock_service.NewMockUrbsSettingInterface(ctrl)
 
-	uid := tpl.RandUID()
-	object := tpl.RandUID()
-	logContent := &dto.OperationLogContent{
-		Users:   []string{tpl.RandUID()},
-		Groups:  []string{tpl.RandUID()},
-		Desc:    "desc",
-		Value:   "true",
-		Release: 1,
-	}
-	err := blls.OperationLog.Add(getUidContext(uid), object, actionCreate, logContent)
-	require.Nil(t, err)
-
 	t.Run("recall error", func(t *testing.T) {
 		require := require.New(t)
 
-		setting := &Setting{services: service.NewServices(), daos: testDaos}
+		uid := tpl.RandUID()
+		object := tpl.RandUID()
+		logContent := &dto.OperationLogContent{
+			Users:   []string{tpl.RandUID()},
+			Groups:  []string{tpl.RandUID()},
+			Desc:    "desc",
+			Value:   "true",
+			Release: 1,
+		}
+		err := testBlls.OperationLog.Add(getUidContext(uid), object, actionCreate, logContent)
+		require.Nil(err)
+
+		setting := &Setting{services: service.NewServices(testDB), daos: testDaos}
 
 		// 1
 		args := &tpl.ProductModuleSettingURL{}
@@ -56,9 +56,21 @@ func TestSetting(t *testing.T) {
 	})
 
 	t.Run("recall", func(t *testing.T) {
+		uid := tpl.RandUID()
+		object := tpl.RandUID()
+		logContent := &dto.OperationLogContent{
+			Users:   []string{tpl.RandUID()},
+			Groups:  []string{tpl.RandUID()},
+			Desc:    "desc",
+			Value:   "true",
+			Release: 1,
+		}
+		err := testBlls.OperationLog.Add(getUidContext(uid), object, actionCreate, logContent)
+		require.Nil(t, err)
+
 		require := require.New(t)
 
-		setting := &Setting{services: service.NewServices(), daos: testDaos}
+		setting := &Setting{services: service.NewServices(testDB), daos: testDaos}
 		setting.services.UrbsSetting = usMock
 
 		args := &tpl.ProductModuleSettingURL{}
@@ -79,11 +91,12 @@ func TestSetting(t *testing.T) {
 		require.NotNil(err)
 	})
 
-	hookMock := mock_service.NewMockHookInterface(ctrl)
-
 	t.Run("push", func(t *testing.T) {
+		hookMock := mock_service.NewMockHookInterface(ctrl)
 
-		setting := &Setting{services: service.NewServices(), daos: testDaos}
+		uid := tpl.RandUID()
+
+		setting := &Setting{services: service.NewServices(testDB), daos: testDaos}
 		setting.services.UrbsSetting = usMock
 		setting.services.Hook = hookMock
 

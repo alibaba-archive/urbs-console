@@ -19,7 +19,7 @@ func TestUrbsAcACL(t *testing.T) {
 		testAddUrbsAcUser(tt, uid)
 		testAddUrbsAcAcl(tt, uid)
 
-		err := blls.UrbsAcAcl.CheckViewer(getUidContext(uid))
+		err := testBlls.UrbsAcAcl.CheckViewer(getUidContext(uid))
 		require.Nil(err)
 	})
 
@@ -30,7 +30,7 @@ func TestUrbsAcACL(t *testing.T) {
 		res := testAddUrbsAcAcl(tt, uid)
 		object := res.Product + res.Label
 
-		err := blls.UrbsAcAcl.CheckAdmin(getUidContext(uid), object)
+		err := testBlls.UrbsAcAcl.CheckAdmin(getUidContext(uid), object)
 		require.Nil(err)
 	})
 
@@ -46,10 +46,10 @@ func TestUrbsAcACL(t *testing.T) {
 		body := tpl.UidsBody{
 			Uids: []string{uid2},
 		}
-		err := blls.UrbsAcAcl.Update(context.Background(), &body, object)
+		err := testBlls.UrbsAcAcl.Update(context.Background(), &body, object)
 		require.Nil(err)
 
-		err = blls.UrbsAcAcl.CheckAdmin(getUidContext(uid), object)
+		err = testBlls.UrbsAcAcl.CheckAdmin(getUidContext(uid), object)
 		require.NotNil(err)
 	})
 
@@ -60,7 +60,7 @@ func TestUrbsAcACL(t *testing.T) {
 		res := testAddUrbsAcAcl(tt, uid)
 		object := res.Product + res.Label
 
-		users, err := blls.UrbsAcAcl.FindUsersByObject(context.Background(), object)
+		users, err := testBlls.UrbsAcAcl.FindUsersByObject(context.Background(), object)
 		require.Nil(err)
 		require.Equal(1, len(users))
 		require.Equal(uid, users[0].Uid)
@@ -70,7 +70,7 @@ func TestUrbsAcACL(t *testing.T) {
 	t.Run("check empty admin", func(t *testing.T) {
 		uid := tpl.RandUID()
 		object := ""
-		err := blls.UrbsAcAcl.CheckAdmin(getUidContext(uid), object)
+		err := testBlls.UrbsAcAcl.CheckAdmin(getUidContext(uid), object)
 		require.NotNil(err)
 	})
 }
@@ -85,7 +85,7 @@ func testAddUrbsAcAcl(tt *TestTools, uid string) *tpl.UrbsAcAclAddBody {
 	body.Label = tpl.RandLabel()
 	body.Permission = constant.PermissionAll
 
-	err := blls.UrbsAcAcl.AddByReq(context.Background(), args, body)
+	err := testBlls.UrbsAcAcl.AddByReq(context.Background(), args, body)
 	tt.Require.Nil(err)
 	return body
 }

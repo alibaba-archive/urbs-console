@@ -34,7 +34,7 @@ func TestOperationLog(t *testing.T) {
 			Value:   body.Value,
 			Percent: &percent,
 		}
-		err := blls.OperationLog.Add(ctx, object, constant.OperationCreate, logContent)
+		err := testBlls.OperationLog.Add(ctx, object, constant.OperationCreate, logContent)
 		require.Nil(t, err)
 	})
 
@@ -43,7 +43,7 @@ func TestOperationLog(t *testing.T) {
 		// 获取操作日志
 		page := &tpl.ConsolePagination{}
 		page.Validate()
-		res, err := blls.OperationLog.List(ctx, object, page)
+		res, err := testBlls.OperationLog.List(ctx, object, page)
 		require.Nil(err)
 
 		require.Equal(body.Users, res.Result[0].Users)
@@ -70,7 +70,7 @@ func TestOperationLog(t *testing.T) {
 			Percent: &percent,
 			Release: 111,
 		}
-		err := blls.OperationLog.Add(ctx, object, constant.OperationCreate, logContent)
+		err := testBlls.OperationLog.Add(ctx, object, constant.OperationCreate, logContent)
 		require.Nil(err)
 
 		log, err := testDaos.OperationLog.FindOneByObject(ctx, object)

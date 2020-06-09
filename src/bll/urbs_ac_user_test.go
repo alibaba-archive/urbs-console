@@ -21,7 +21,7 @@ func TestUrbsAcUser(t *testing.T) {
 	t.Run("urbsAcUser pagination", func(t *testing.T) {
 		args := new(tpl.ConsolePagination)
 		args.PageSize = 1
-		res, err := blls.UrbsAcUser.List(context.Background(), args)
+		res, err := testBlls.UrbsAcUser.List(context.Background(), args)
 		require.Nil(err)
 		require.Equal(1, len(res.Result))
 		require.NotEmpty(res.NextPageToken)
@@ -31,7 +31,7 @@ func TestUrbsAcUser(t *testing.T) {
 		args2.Validate()
 		require.Equal(1, args2.Skip)
 
-		res2, err := blls.UrbsAcUser.List(context.Background(), args2)
+		res2, err := testBlls.UrbsAcUser.List(context.Background(), args2)
 		require.Nil(err)
 		require.Equal(1, len(res2.Result))
 		require.NotEmpty(res2.NextPageToken)
@@ -42,7 +42,7 @@ func TestUrbsAcUser(t *testing.T) {
 		uid := tpl.RandUID()
 		testAddUrbsAcUser(tt, uid)
 
-		res3, err := blls.UrbsAcUser.Search(context.Background(), uid)
+		res3, err := testBlls.UrbsAcUser.Search(context.Background(), uid)
 		require.Nil(err)
 		require.Equal(uid, res3.Result[0].Name)
 	})
@@ -51,14 +51,14 @@ func TestUrbsAcUser(t *testing.T) {
 		uid := tpl.RandUID()
 		testAddUrbsAcUser(tt, uid)
 
-		res, err := blls.UrbsAcUser.Search(context.Background(), uid)
+		res, err := testBlls.UrbsAcUser.Search(context.Background(), uid)
 		require.Nil(err)
 		require.Equal(uid, res.Result[0].Name)
 
-		err = blls.UrbsAcUser.DeleteByUID(context.Background(), uid)
+		err = testBlls.UrbsAcUser.DeleteByUID(context.Background(), uid)
 		require.Nil(err)
 
-		res, err = blls.UrbsAcUser.Search(context.Background(), uid)
+		res, err = testBlls.UrbsAcUser.Search(context.Background(), uid)
 		require.Nil(err)
 		require.Equal(0, len(res.Result))
 	})
@@ -68,10 +68,10 @@ func TestUrbsAcUser(t *testing.T) {
 		testAddUrbsAcUser(tt, uid)
 
 		name := tpl.RandName()
-		err := blls.UrbsAcUser.UpdateByUID(context.Background(), name, uid)
+		err := testBlls.UrbsAcUser.UpdateByUID(context.Background(), name, uid)
 		require.Nil(err)
 
-		res, err := blls.UrbsAcUser.Search(context.Background(), uid)
+		res, err := testBlls.UrbsAcUser.Search(context.Background(), uid)
 		require.Nil(err)
 		require.Equal(name, res.Result[0].Name)
 	})
@@ -86,6 +86,6 @@ func testAddUrbsAcUser(tt *TestTools, uid string) {
 			},
 		},
 	}
-	err := blls.UrbsAcUser.Add(context.Background(), userBody)
+	err := testBlls.UrbsAcUser.Add(context.Background(), userBody)
 	tt.Require.Nil(err)
 }
