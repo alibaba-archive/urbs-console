@@ -1,11 +1,17 @@
 package bll
 
-import "github.com/teambition/urbs-console/src/util"
+import (
+	"github.com/teambition/urbs-console/src/dto"
+	"github.com/teambition/urbs-console/src/tpl"
+)
 
-func init() {
-	util.DigProvide(NewBlls)
+type operationLogAdd struct {
+	Object  string                   `json:"object"`
+	Content *dto.OperationLogContent `json:"content"`
+	Action  string                   `json:"Action"`
 }
 
-var (
-	blls *Blls
-)
+type settingRecallReq struct {
+	Args *tpl.ProductModuleSettingURL `json:"args"`
+	Body *tpl.RecallBody              `json:"body"`
+}

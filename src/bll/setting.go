@@ -2,9 +2,9 @@ package bll
 
 import (
 	"context"
-	"fmt"
 	"time"
 
+	"github.com/mushroomsir/tcc"
 	"github.com/teambition/gear"
 	"github.com/teambition/urbs-console/src/conf"
 	"github.com/teambition/urbs-console/src/dao"
@@ -19,8 +19,11 @@ import (
 
 // Setting ...
 type Setting struct {
-	services *service.Services
-	daos     *dao.Daos
+	services     *service.Services
+	daos         *dao.Daos
+	urbsAcAcl    *UrbsAcAcl
+	operationLog *OperationLog
+	group        *Group
 }
 
 // ListByProduct ...
@@ -33,7 +36,7 @@ func (a *Setting) ListByProduct(ctx context.Context, args *tpl.ProductPagination
 	for i, setting := range ress.Result {
 		objects[i] = args.Product + setting.Module + setting.Name
 	}
-	subjects, err := blls.UrbsAcAcl.FindUsersByObjects(ctx, objects)
+	subjects, err := a.urbsAcAcl.FindUsersByObjects(ctx, objects)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +56,7 @@ func (a *Setting) List(ctx context.Context, args *tpl.ProductModuleURL) (*tpl.Se
 	for i, setting := range ress.Result {
 		objects[i] = args.Product + args.Module + setting.Name
 	}
-	subjects, err := blls.UrbsAcAcl.FindUsersByObjects(ctx, objects)
+	subjects, err := a.urbsAcAcl.FindUsersByObjects(ctx, objects)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +84,7 @@ func (a *Setting) ListUsers(ctx context.Context, args *tpl.ProductModuleSettingU
 // Create 创建指定产品功能模块配置项
 func (a *Setting) Create(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.SettingBody) (*tpl.SettingInfoRes, error) {
 	object := args.Product + args.Module + body.Name
-	err := blls.UrbsAcAcl.AddDefaultPermission(ctx, body.Uids, object)
+	err := a.urbsAcAcl.AddDefaultPermission(ctx, body.Uids, object)
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +92,7 @@ func (a *Setting) Create(ctx context.Context, args *tpl.ProductModuleURL, body *
 	if err != nil {
 		return nil, err
 	}
-	res.Result.Users, err = blls.UrbsAcAcl.FindUsersByObject(ctx, object)
+	res.Result.Users, err = a.urbsAcAcl.FindUsersByObject(ctx, object)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +102,7 @@ func (a *Setting) Create(ctx context.Context, args *tpl.ProductModuleURL, body *
 // Update 更新指定产品功能模块配置项
 func (a *Setting) Update(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingUpdateBody) (*tpl.SettingInfoRes, error) {
 	object := args.Product + args.Module + args.Setting
-	err := blls.UrbsAcAcl.Update(ctx, body.UidsBody, object)
+	err := a.urbsAcAcl.Update(ctx, body.UidsBody, object)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +110,7 @@ func (a *Setting) Update(ctx context.Context, args *tpl.ProductModuleSettingURL,
 	if err != nil {
 		return nil, err
 	}
-	res.Result.Users, err = blls.UrbsAcAcl.FindUsersByObject(ctx, object)
+	res.Result.Users, err = a.urbsAcAcl.FindUsersByObject(ctx, object)
 	if err != nil {
 		return nil, err
 	}
@@ -125,8 +128,24 @@ func (a *Setting) Offline(ctx context.Context, args *tpl.ProductModuleSettingURL
 
 // Assign 批量为用户或群组设置产品功能模块配置项
 func (a *Setting) Assign(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.UsersGroupsBody) (*tpl.SettingReleaseInfoRes, error) {
-	blls.AddUserAndOrg(ctx, body.Users, body.Groups)
+	a.group.AddUserAndOrg(ctx, body.Users, body.Groups)
+
 	res, err := a.services.UrbsSetting.SettingAssign(ctx, args, body)
+	if err != nil {
+		return nil, err
+	}
+
+	obj := &operationLogAdd{}
+	obj.Object = args.Product + args.Module + args.Setting
+	obj.Action = actionCreate
+	obj.Content = &dto.OperationLogContent{
+		Users:   body.Users,
+		Groups:  body.Groups,
+		Desc:    body.Desc,
+		Value:   body.Value,
+		Release: res.Result.Release,
+	}
+	err = a.operationLog.AddItem(ctx, obj)
 	if err != nil {
 		return nil, err
 	}
@@ -139,19 +158,6 @@ func (a *Setting) Assign(ctx context.Context, args *tpl.ProductModuleSettingURL,
 		AssignedAt: time.Now().UTC(),
 	}
 	a.PushAsync(ctx, service.EventSettingPublish, mySetting.JsonString(ctx), body.Users, body.Groups)
-
-	object := args.Product + args.Module + args.Setting
-	logContent := &dto.OperationLogContent{
-		Users:   body.Users,
-		Groups:  body.Groups,
-		Desc:    body.Desc,
-		Value:   body.Value,
-		Release: res.Result.Release,
-	}
-	err = blls.OperationLog.Add(ctx, object, actionCreate, logContent)
-	if err != nil {
-		return nil, err
-	}
 	return res, nil
 }
 
@@ -167,9 +173,31 @@ func (a *Setting) Recall(ctx context.Context, args *tpl.ProductModuleSettingURL,
 		return nil, gear.ErrBadRequest.WithMsgf("invalid release %d", release)
 	}
 	body.Release = release
-	recallRes, err := a.services.UrbsSetting.SettingRecall(ctx, args, body)
+
+	value := &settingRecallReq{
+		Args: args,
+		Body: body,
+	}
+	tx := a.services.TCC.NewTransaction(TccSettingRecall)
+	msgSql := tx.TryPlan(tcc.ObjToJSON(value))
+
+	err = a.daos.OperationLog.TxDelete(ctx, logID, msgSql)
 	if err != nil {
 		return nil, err
+	}
+	logger.Info(ctx, "settingRecall", "operator", util.GetUid(ctx), "log", log.String())
+
+	recallRes, err := a.services.UrbsSetting.SettingRecall(ctx, args, body)
+	if err != nil {
+		txErr := tx.Confirm()
+		if txErr != nil {
+			logger.Info(ctx, txErr.Error())
+		}
+		return nil, err
+	}
+	txErr := tx.Cancel()
+	if txErr != nil {
+		logger.Warning(ctx, txErr.Error())
 	}
 
 	item := &tpl.OperationLogListItem{}
@@ -181,12 +209,6 @@ func (a *Setting) Recall(ctx context.Context, args *tpl.ProductModuleSettingURL,
 		AssignedAt: time.Now().UTC(),
 	}
 	a.PushAsync(ctx, service.EventSettingRecall, mySetting.JsonString(ctx), item.Users, item.Groups)
-
-	err = a.daos.OperationLog.DeleteByObject(ctx, logID)
-	if err != nil {
-		return nil, err
-	}
-	logger.Info(ctx, "settingRecall", "operator", util.GetUid(ctx), "log", log.String())
 	return recallRes, nil
 }
 
@@ -203,7 +225,7 @@ func (a *Setting) CreateRule(ctx context.Context, args *tpl.ProductModuleSetting
 		Percent: &body.Rule.Value,
 		Value:   body.Value,
 	}
-	err := blls.OperationLog.Add(ctx, object, actionCreate, logContent)
+	err := a.operationLog.Add(ctx, object, actionCreate, logContent)
 	if err != nil {
 		return nil, err
 	}
@@ -218,7 +240,7 @@ func (a *Setting) UpdateRule(ctx context.Context, args *tpl.ProductModuleSetting
 		Percent: &body.Rule.Value,
 		Value:   body.Value,
 	}
-	err := blls.OperationLog.Add(ctx, object, actionUpdate, logContent)
+	err := a.operationLog.Add(ctx, object, actionUpdate, logContent)
 	if err != nil {
 		return nil, err
 	}
@@ -309,7 +331,6 @@ func (a *Setting) PushAllAsync(ctx context.Context, event string, mySetting *dto
 
 // PushAsync ...
 func (a *Setting) PushAsync(ctx context.Context, event, content string, users []string, groups []string) {
-	fmt.Println(!util.StringSliceHas(conf.Config.Thrid.Hook.Events, event))
 	if conf.Config.Thrid.Hook.URL == "" || !util.StringSliceHas(conf.Config.Thrid.Hook.Events, event) {
 		return
 	}

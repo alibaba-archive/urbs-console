@@ -16,6 +16,10 @@ import (
 type Label struct {
 	services *service.Services
 	daos     *dao.Daos
+
+	operationLog *OperationLog
+	urbsAcAcl    *UrbsAcAcl
+	group        *Group
 }
 
 // ListGroups ...
@@ -41,7 +45,7 @@ func (a *Label) DeleteUser(ctx context.Context, args *tpl.ProductLabelUIDURL) (*
 // Create ...
 func (a *Label) Create(ctx context.Context, product string, args *tpl.LabelBody) (*tpl.LabelInfoRes, error) {
 	aclObject := product + args.Name
-	err := blls.UrbsAcAcl.AddDefaultPermission(ctx, args.Uids, aclObject)
+	err := a.urbsAcAcl.AddDefaultPermission(ctx, args.Uids, aclObject)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +53,7 @@ func (a *Label) Create(ctx context.Context, product string, args *tpl.LabelBody)
 	if err != nil {
 		return nil, err
 	}
-	res.Result.Users, err = blls.UrbsAcAcl.FindUsersByObject(ctx, aclObject)
+	res.Result.Users, err = a.urbsAcAcl.FindUsersByObject(ctx, aclObject)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +70,7 @@ func (a *Label) List(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.
 	for i, label := range labels.Result {
 		objects[i] = args.Product + label.Name
 	}
-	subjects, err := blls.UrbsAcAcl.FindUsersByObjects(ctx, objects)
+	subjects, err := a.urbsAcAcl.FindUsersByObjects(ctx, objects)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +83,7 @@ func (a *Label) List(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.
 // Update ...
 func (a *Label) Update(ctx context.Context, product, label string, body *tpl.LabelUpdateBody) (*tpl.LabelInfoRes, error) {
 	aclObject := product + label
-	err := blls.UrbsAcAcl.Update(ctx, body.UidsBody, product+label)
+	err := a.urbsAcAcl.Update(ctx, body.UidsBody, product+label)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +91,7 @@ func (a *Label) Update(ctx context.Context, product, label string, body *tpl.Lab
 	if err != nil {
 		return nil, err
 	}
-	res.Result.Users, err = blls.UrbsAcAcl.FindUsersByObject(ctx, aclObject)
+	res.Result.Users, err = a.urbsAcAcl.FindUsersByObject(ctx, aclObject)
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +105,7 @@ func (a *Label) Offline(ctx context.Context, product, label string) (*tpl.BoolRe
 
 // Assign 把标签批量分配给用户或群组
 func (a *Label) Assign(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.UsersGroupsBody) (*tpl.LabelReleaseInfoRes, error) {
-	blls.AddUserAndOrg(ctx, body.Users, body.Groups)
+	a.group.AddUserAndOrg(ctx, body.Users, body.Groups)
 	res, err := a.services.UrbsSetting.LabelAssign(ctx, args.Product, args.Label, body)
 	if err != nil {
 		return nil, err
@@ -114,7 +118,7 @@ func (a *Label) Assign(ctx context.Context, args *tpl.ProductLabelURL, body *tpl
 		Value:   body.Value,
 		Release: res.Result.Release,
 	}
-	err = blls.OperationLog.Add(ctx, object, actionCreate, logContent)
+	err = a.operationLog.Add(ctx, object, actionCreate, logContent)
 	if err != nil {
 		return nil, err
 	}
@@ -150,7 +154,7 @@ func (a *Label) Recall(ctx context.Context, args *tpl.ProductLabelURL, body *tpl
 	if err != nil {
 		return nil, err
 	}
-	err = a.daos.OperationLog.DeleteByObject(ctx, logID)
+	err = a.daos.OperationLog.Delete(ctx, logID)
 	if err != nil {
 		return nil, err
 	}
@@ -165,7 +169,7 @@ func (a *Label) CreateRule(ctx context.Context, args *tpl.ProductLabelURL, body 
 		Desc:    body.Desc,
 		Percent: &body.Rule.Value,
 	}
-	err := blls.OperationLog.Add(ctx, object, actionCreate, logContent)
+	err := a.operationLog.Add(ctx, object, actionCreate, logContent)
 	if err != nil {
 		return nil, err
 	}
@@ -184,7 +188,7 @@ func (a *Label) UpdateRule(ctx context.Context, args *tpl.ProductLabelHIDURL, bo
 		Desc:    body.Desc,
 		Percent: &body.Rule.Value,
 	}
-	err := blls.OperationLog.Add(ctx, object, actionUpdate, logContent)
+	err := a.operationLog.Add(ctx, object, actionUpdate, logContent)
 	if err != nil {
 		return nil, err
 	}

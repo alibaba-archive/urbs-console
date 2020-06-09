@@ -56,6 +56,11 @@ func (a *OperationLog) List(ctx context.Context, object string, req *tpl.Console
 	return res, nil
 }
 
+// AddItem ...
+func (a *OperationLog) AddItem(ctx context.Context, obj *operationLogAdd) error {
+	return a.Add(ctx, obj.Object, obj.Action, obj.Content)
+}
+
 // Add ...
 func (a *OperationLog) Add(ctx context.Context, object string, action string, body *dto.OperationLogContent) error {
 	log := &schema.OperationLog{

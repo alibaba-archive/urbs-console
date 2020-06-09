@@ -11,13 +11,14 @@ import (
 
 // Product ...
 type Product struct {
-	services *service.Services
-	daos     *dao.Daos
+	services  *service.Services
+	daos      *dao.Daos
+	urbsAcAcl *UrbsAcAcl
 }
 
 // Create 创建产品
 func (a *Product) Create(ctx context.Context, args *tpl.NameDescBody) (*tpl.ProductRes, error) {
-	err := blls.UrbsAcAcl.AddDefaultPermission(ctx, args.Uids, args.Name)
+	err := a.urbsAcAcl.AddDefaultPermission(ctx, args.Uids, args.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -25,7 +26,7 @@ func (a *Product) Create(ctx context.Context, args *tpl.NameDescBody) (*tpl.Prod
 	if err != nil {
 		return nil, err
 	}
-	res.Result.Users, err = blls.UrbsAcAcl.FindUsersByObject(ctx, args.Name)
+	res.Result.Users, err = a.urbsAcAcl.FindUsersByObject(ctx, args.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +43,7 @@ func (a *Product) List(ctx context.Context, args *tpl.Pagination) (*tpl.Products
 	for i, product := range products.Result {
 		objects[i] = product.Name
 	}
-	subjects, err := blls.UrbsAcAcl.FindUsersByObjects(ctx, objects)
+	subjects, err := a.urbsAcAcl.FindUsersByObjects(ctx, objects)
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +55,7 @@ func (a *Product) List(ctx context.Context, args *tpl.Pagination) (*tpl.Products
 
 // Update ...
 func (a *Product) Update(ctx context.Context, product string, body *tpl.ProductUpdateBody) (*tpl.ProductRes, error) {
-	err := blls.UrbsAcAcl.Update(ctx, body.UidsBody, product)
+	err := a.urbsAcAcl.Update(ctx, body.UidsBody, product)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +63,7 @@ func (a *Product) Update(ctx context.Context, product string, body *tpl.ProductU
 	if err != nil {
 		return nil, err
 	}
-	res.Result.Users, err = blls.UrbsAcAcl.FindUsersByObject(ctx, product)
+	res.Result.Users, err = a.urbsAcAcl.FindUsersByObject(ctx, product)
 	if err != nil {
 		return nil, err
 	}

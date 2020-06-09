@@ -10,6 +10,8 @@ import (
 // Module ...
 type Module struct {
 	services *service.Services
+
+	urbsAcAcl *UrbsAcAcl
 }
 
 // List 读取指定产品的功能模块
@@ -22,7 +24,7 @@ func (a *Module) List(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl
 	for i, module := range ress.Result {
 		objects[i] = args.Product + module.Name
 	}
-	subjects, err := blls.UrbsAcAcl.FindUsersByObjects(ctx, objects)
+	subjects, err := a.urbsAcAcl.FindUsersByObjects(ctx, objects)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +36,7 @@ func (a *Module) List(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl
 
 // Create 指定产品创建功能模块
 func (a *Module) Create(ctx context.Context, product string, body *tpl.NameDescBody) (*tpl.ModuleInfoRes, error) {
-	err := blls.UrbsAcAcl.AddDefaultPermission(ctx, body.Uids, product+body.Name)
+	err := a.urbsAcAcl.AddDefaultPermission(ctx, body.Uids, product+body.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +44,7 @@ func (a *Module) Create(ctx context.Context, product string, body *tpl.NameDescB
 	if err != nil {
 		return nil, err
 	}
-	res.Result.Users, err = blls.UrbsAcAcl.FindUsersByObject(ctx, product+body.Name)
+	res.Result.Users, err = a.urbsAcAcl.FindUsersByObject(ctx, product+body.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +53,7 @@ func (a *Module) Create(ctx context.Context, product string, body *tpl.NameDescB
 
 // Update 更新指定产品功能模块
 func (a *Module) Update(ctx context.Context, product string, module string, body *tpl.ModuleUpdateBody) (*tpl.ModuleInfoRes, error) {
-	err := blls.UrbsAcAcl.Update(ctx, body.UidsBody, product+module)
+	err := a.urbsAcAcl.Update(ctx, body.UidsBody, product+module)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +61,7 @@ func (a *Module) Update(ctx context.Context, product string, module string, body
 	if err != nil {
 		return nil, err
 	}
-	res.Result.Users, err = blls.UrbsAcAcl.FindUsersByObject(ctx, product+module)
+	res.Result.Users, err = a.urbsAcAcl.FindUsersByObject(ctx, product+module)
 	if err != nil {
 		return nil, err
 	}

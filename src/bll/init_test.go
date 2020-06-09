@@ -13,11 +13,15 @@ import (
 
 var (
 	testDaos *dao.Daos
+	testDB   *service.SQL
+	testBlls *Blls
 )
 
 func TestMain(m *testing.M) {
+	testDB = service.NewDB()
 	testDaos = dao.NewDaos(service.NewDB())
-	blls = NewBlls(service.NewServices(), testDaos)
+
+	testBlls = NewBlls(service.NewServices(testDB), testDaos)
 	os.Exit(m.Run())
 }
 
