@@ -7,10 +7,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [v0.6.0] - 2020-06-10
 
 **Change:**
-- Support cleanup all rules, users and groups on the setting and label.
-- Fix recall.
-- Update hook event. 
 - Add tcc.
+- Support cleanup all rules, users and groups on the setting and label.
+- Support recall all release records.
+- Update hook event. 
+- Fix recall.
 
 ## [v0.5.0] - 2020-06-03
 
