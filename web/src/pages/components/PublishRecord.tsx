@@ -28,14 +28,16 @@ const PublishRecord: React.FC<Props> = (props) => {
       return `${users ? `用户 ${users.join(',')}；` : ''}${groups ? `群组 ${groups.join(',')}；` : ''}`;
     }
   };
-  const handleReback = () => {
-    const { onReback, publishRecordList } = props;
-    if (onReback && publishRecordList.length) {
-      Modal.confirm({
-        title: '操作不可逆，请再次确认',
-        content: '确认撤回？',
-        onOk: () => onReback(publishRecordList[0].hid),
-      });
+  const handleReback = (item: PublishRecordItem) => {
+    return () => {
+      const { onReback, publishRecordList } = props;
+      if (onReback && publishRecordList.length) {
+        Modal.confirm({
+          title: '操作不可逆，请再次确认',
+          content: '确认撤回？',
+          onOk: () => onReback(item.hid),
+        });
+      }
     }
   };
   return (
@@ -52,7 +54,7 @@ const PublishRecord: React.FC<Props> = (props) => {
                 <div>{formatTableTime(item.createdAt)}, {item.operatorName}</div>
                 <Divider style={{ margin: '5px 0' }}></Divider>
                 <div className={styleNames['publish-record-action-wrap']}>
-                  {index === 0 ? <Button type="link" block onClick={handleReback}>撤回</Button> : null}
+                  {!('percent' in item) ? <Button type="link" block onClick={handleReback(item)}>撤回</Button> : null}
                 </div>
                 <ul>
                   <li>

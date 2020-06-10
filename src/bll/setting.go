@@ -189,16 +189,10 @@ func (a *Setting) Recall(ctx context.Context, args *tpl.ProductModuleSettingURL,
 
 	recallRes, err := a.services.UrbsSetting.SettingRecall(ctx, args, body)
 	if err != nil {
-		txErr := tx.Confirm()
-		if txErr != nil {
-			logger.Info(ctx, txErr.Error())
-		}
+		tx.Confirm()
 		return nil, err
 	}
-	txErr := tx.Cancel()
-	if txErr != nil {
-		logger.Warning(ctx, txErr.Error())
-	}
+	tx.Cancel()
 
 	item := &tpl.OperationLogListItem{}
 	parseLogContent(log.Content, item)
