@@ -3,6 +3,7 @@ package bll
 import (
 	"context"
 
+	"github.com/mushroomsir/tcc"
 	"github.com/teambition/gear"
 	"github.com/teambition/urbs-console/src/dao"
 	"github.com/teambition/urbs-console/src/dto"
@@ -150,14 +151,26 @@ func (a *Label) Recall(ctx context.Context, args *tpl.ProductLabelURL, body *tpl
 		return nil, gear.ErrBadRequest.WithMsgf("invalid release %d", release)
 	}
 	body.Release = release
+
+	value := &labelRecallReq{
+		Args: args,
+		Body: body,
+	}
+	tx := a.services.TCC.NewTransaction(TccSettingRecall)
+	msgSql := tx.TryPlan(tcc.ObjToJSON(value))
+
+	err = a.daos.OperationLog.TxDelete(ctx, logID, msgSql)
+	if err != nil {
+		return nil, err
+	}
+
 	recallRes, err := a.services.UrbsSetting.LabelRecall(ctx, args, body)
 	if err != nil {
+		tx.Confirm()
 		return nil, err
 	}
-	err = a.daos.OperationLog.Delete(ctx, logID)
-	if err != nil {
-		return nil, err
-	}
+	tx.Cancel()
+
 	logger.Info(ctx, "labelRecall", "operator", util.GetUid(ctx), "log", log.String)
 	return recallRes, nil
 }

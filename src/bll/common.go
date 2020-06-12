@@ -15,3 +15,8 @@ type settingRecallReq struct {
 	Args *tpl.ProductModuleSettingURL `json:"args"`
 	Body *tpl.RecallBody              `json:"body"`
 }
+
+type labelRecallReq struct {
+	Args *tpl.ProductLabelURL `json:"args"`
+	Body *tpl.RecallBody      `json:"body"`
+}

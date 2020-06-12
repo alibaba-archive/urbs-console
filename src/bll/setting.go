@@ -185,7 +185,6 @@ func (a *Setting) Recall(ctx context.Context, args *tpl.ProductModuleSettingURL,
 	if err != nil {
 		return nil, err
 	}
-	logger.Info(ctx, "settingRecall", "operator", util.GetUid(ctx), "log", log.String())
 
 	recallRes, err := a.services.UrbsSetting.SettingRecall(ctx, args, body)
 	if err != nil {
@@ -193,6 +192,8 @@ func (a *Setting) Recall(ctx context.Context, args *tpl.ProductModuleSettingURL,
 		return nil, err
 	}
 	tx.Cancel()
+
+	logger.Info(ctx, "settingRecall", "operator", util.GetUid(ctx), "log", log.String())
 
 	item := &tpl.OperationLogListItem{}
 	parseLogContent(log.Content, item)
