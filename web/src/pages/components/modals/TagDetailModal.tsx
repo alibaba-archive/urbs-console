@@ -230,7 +230,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
   const handleCleanUp = () => {
     Modal.confirm({
       title: '操作不可逆，请再次确认',
-      content: '确认删除全部用户？',
+      content: '确认清空全部用户？',
       onOk: () => {
         dispatch({
           type: 'products/cleanUpLabel',
@@ -306,7 +306,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
           block
           onClick={handleCleanUp}
         >
-          删除全部用户
+          清空全部用户
         </Button>
       </div>
     ),
