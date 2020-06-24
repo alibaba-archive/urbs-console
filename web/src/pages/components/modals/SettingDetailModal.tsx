@@ -299,6 +299,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
       <PublishRecord
         publishRecordList={settingLogsList}
         onReback={handleSettingLogReback}
+        canRecall={settingCanEdit}
       />
     ),
     action: settingCanEdit && (
