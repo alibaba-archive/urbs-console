@@ -288,6 +288,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
       <PublishRecord
         publishRecordList={labelLogsList}
         onReback={handleLabelLogReback}
+        canRecall={grayscaleTagCanEdit}
       />
     ),
     action: grayscaleTagCanEdit && (
