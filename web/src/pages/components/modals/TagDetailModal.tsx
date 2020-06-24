@@ -422,6 +422,10 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
         content: Array.isArray(labelInfo.users) ? labelInfo.users.map(item => item.name).join(',') : '',
       },
       {
+        title: '描述',
+        content: labelInfo.desc,
+      },
+      {
         title: '版本通道',
         content: Array.isArray(labelInfo.channels) ? labelInfo.channels.join(',') : '空',
       },
