@@ -46,7 +46,7 @@ func (a *Label) DeleteUser(ctx context.Context, args *tpl.ProductLabelUIDURL) (*
 // Create ...
 func (a *Label) Create(ctx context.Context, product string, args *tpl.LabelBody) (*tpl.LabelInfoRes, error) {
 	aclObject := product + args.Name
-	err := a.urbsAcAcl.AddDefaultPermission(ctx, args.Uids, aclObject)
+	err := a.urbsAcAcl.Update(ctx, &tpl.UidsBody{Uids: args.Uids}, aclObject)
 	if err != nil {
 		return nil, err
 	}

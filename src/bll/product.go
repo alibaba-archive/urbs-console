@@ -18,7 +18,7 @@ type Product struct {
 
 // Create 创建产品
 func (a *Product) Create(ctx context.Context, args *tpl.NameDescBody) (*tpl.ProductRes, error) {
-	err := a.urbsAcAcl.AddDefaultPermission(ctx, args.Uids, args.Name)
+	err := a.urbsAcAcl.Update(ctx, &tpl.UidsBody{Uids: args.Uids}, args.Name)
 	if err != nil {
 		return nil, err
 	}

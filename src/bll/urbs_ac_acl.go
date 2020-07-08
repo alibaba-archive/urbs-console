@@ -23,17 +23,6 @@ func (a *UrbsAcAcl) AddByReq(ctx context.Context, args *tpl.UrbsAcAclURL, req *t
 	return a.Add(ctx, args.Uid, object, req.Permission)
 }
 
-// AddDefaultPermission ...
-func (a *UrbsAcAcl) AddDefaultPermission(ctx context.Context, subjects []string, object string) error {
-	for _, subject := range subjects {
-		err := a.Add(ctx, subject, object, constant.PermissionAll)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // Add ...
 func (a *UrbsAcAcl) Add(ctx context.Context, subject string, object string, permission string) error {
 	obj := &schema.UrbsAcAcl{

@@ -84,7 +84,8 @@ func (a *Setting) ListUsers(ctx context.Context, args *tpl.ProductModuleSettingU
 // Create 创建指定产品功能模块配置项
 func (a *Setting) Create(ctx context.Context, args *tpl.ProductModuleURL, body *tpl.SettingBody) (*tpl.SettingInfoRes, error) {
 	object := args.Product + args.Module + body.Name
-	err := a.urbsAcAcl.AddDefaultPermission(ctx, body.Uids, object)
+
+	err := a.urbsAcAcl.Update(ctx, &tpl.UidsBody{Uids: body.Uids}, object)
 	if err != nil {
 		return nil, err
 	}
