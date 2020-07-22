@@ -18,7 +18,7 @@ func TestUser(t *testing.T) {
 	defer ctrl.Finish()
 	usMock := mock_service.NewMockUrbsSettingInterface(ctrl)
 
-	user := &User{services: service.NewServices()}
+	user := &User{services: service.NewServices(testDB)}
 	user.services.UrbsSetting = usMock
 
 	mockReturn := new(tpl.BoolRes)
@@ -30,7 +30,7 @@ func TestUser(t *testing.T) {
 }
 
 func testUserBatchCreate(tt *TestTools, uid string) {
-	_, err := blls.User.BatchAdd(context.Background(), []string{uid})
+	_, err := testBlls.User.BatchAdd(context.Background(), []string{uid})
 
 	tt.Require.Nil(err)
 }
@@ -39,7 +39,7 @@ func testUserListLables(tt *TestTools, uid string, count int) {
 	args := &tpl.UIDPaginationURL{
 		UID: uid,
 	}
-	res, err := blls.User.ListLables(getUidContext(), args)
+	res, err := testBlls.User.ListLables(getUidContext(), args)
 
 	tt.Require.Nil(err)
 	tt.Require.Equal(count, len(res.Result))

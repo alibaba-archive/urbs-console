@@ -20,6 +20,7 @@ var thirdJwt *authjwt.JWT
 
 func init() {
 	util.DigProvide(NewServices)
+
 	urbsSettingJwt = authjwt.New([]byte(conf.Config.UrbsSetting.Key))
 	thirdJwt = authjwt.New([]byte(conf.Config.Thrid.Key))
 }

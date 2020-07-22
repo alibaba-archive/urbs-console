@@ -62,6 +62,8 @@ type UrbsSettingInterface interface {
 	SettingAssign(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.UsersGroupsBody) (*tpl.SettingReleaseInfoRes, error)
 	// Recall 撤销指定批次的用户或群组的配置项
 	SettingRecall(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.RecallBody) (*tpl.BoolRes, error)
+	// SettingCleanUp 清除指定产品功能模块配置项下所有的用户、群组和百分比规则
+	SettingCleanUp(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.BoolRes, error)
 
 	// 删除指定用户的配置项
 	SettingDeleteUser(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error)
@@ -103,6 +105,8 @@ type UrbsSettingInterface interface {
 	LabelDeleteUser(ctx context.Context, args *tpl.ProductLabelUIDURL) (*tpl.BoolRes, error)
 	// 删除指定用户的配置项
 	LabelDeleteGroup(ctx context.Context, args *tpl.ProductLabelUIDURL) (*tpl.BoolRes, error)
+	// 清除产品环境标签下所有的用户、群组和百分比规则
+	LabelCleanUp(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.BoolRes, error)
 
 	// ***** user ******
 	// 读取用户列表，支持条件筛选

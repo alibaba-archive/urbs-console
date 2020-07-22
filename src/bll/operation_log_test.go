@@ -25,14 +25,16 @@ func TestOperationLog(t *testing.T) {
 	testAddUrbsAcUser(tt, uid)
 
 	t.Run("add operationLog", func(t *testing.T) {
+		percent := 2
+
 		logContent := &dto.OperationLogContent{
 			Users:   body.Users,
 			Groups:  body.Groups,
 			Desc:    body.Desc,
 			Value:   body.Value,
-			Percent: 2,
+			Percent: &percent,
 		}
-		err := blls.OperationLog.Add(ctx, object, constant.OperationCreate, logContent)
+		err := testBlls.OperationLog.Add(ctx, object, constant.OperationCreate, logContent)
 		require.Nil(t, err)
 	})
 
@@ -41,14 +43,14 @@ func TestOperationLog(t *testing.T) {
 		// 获取操作日志
 		page := &tpl.ConsolePagination{}
 		page.Validate()
-		res, err := blls.OperationLog.List(ctx, object, page)
+		res, err := testBlls.OperationLog.List(ctx, object, page)
 		require.Nil(err)
 
 		require.Equal(body.Users, res.Result[0].Users)
 		require.Equal(body.Groups, res.Result[0].Groups)
 		require.Equal(body.Desc, res.Result[0].Desc)
 		require.Equal(body.Value, res.Result[0].Value)
-		require.Equal(2, res.Result[0].Percent)
+		require.Equal(2, *res.Result[0].Percent)
 
 		totalSize, err := testDaos.OperationLog.CountByObject(ctx, object)
 		require.Nil(err)
@@ -56,6 +58,8 @@ func TestOperationLog(t *testing.T) {
 	})
 
 	t.Run("operationLog content", func(t *testing.T) {
+		percent := 2
+
 		require := require.New(t)
 		object := tpl.RandName()
 		logContent := &dto.OperationLogContent{
@@ -63,10 +67,10 @@ func TestOperationLog(t *testing.T) {
 			Groups:  body.Groups,
 			Desc:    tpl.RandName(),
 			Value:   body.Value,
-			Percent: 2,
+			Percent: &percent,
 			Release: 111,
 		}
-		err := blls.OperationLog.Add(ctx, object, constant.OperationCreate, logContent)
+		err := testBlls.OperationLog.Add(ctx, object, constant.OperationCreate, logContent)
 		require.Nil(err)
 
 		log, err := testDaos.OperationLog.FindOneByObject(ctx, object)
@@ -85,7 +89,7 @@ func TestOperationLog(t *testing.T) {
 		require.Equal(body.Groups, item.Groups)
 		require.Equal(body.Value, item.Value)
 		require.Equal("userPercent", item.Kind)
-		require.Equal(2, item.Percent)
+		require.Equal(2, *item.Percent)
 	})
 
 	t.Run("FindAll", func(t *testing.T) {

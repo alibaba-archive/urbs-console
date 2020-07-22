@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file starting fro
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 -----
+## [v0.7.0] - 2020-07-10
+
+**Change:**
+- Add label tcc.
+- Support multiple recall records.
+- Support serach group.
+- use transaction to update AC user.
+
+## [v0.6.0] - 2020-06-10
+
+**Change:**
+- Add tcc.
+- Support cleanup all rules, users and groups on the setting and label.
+- Support recall all release records.
+- Update hook event. 
+- Fix recall.
 
 ## [v0.5.0] - 2020-06-03
 

@@ -33,6 +33,7 @@ func TestAPIsAuth(t *testing.T) {
 		{Method: http.MethodDelete, URL: "/api/v1/products/product/labels/label/users/123"},
 		{Method: http.MethodPost, URL: "/api/v1/products/product/labels", Body: `{"name":"name","uids":["123"]}`},
 		{Method: http.MethodPut, URL: "/api/v1/products/product/labels/label", Body: `{"desc":"name"}`},
+		{Method: http.MethodDelete, URL: "/api/v1/products/product/labels/label:cleanup"},
 		// {Method: http.MethodDelete, URL: "/api/v1/products/product/labels/label"},
 		{Method: http.MethodPut, URL: "/api/v1/products/product/labels/label:offline"},
 		{Method: http.MethodPost, URL: "/api/v1/products/product/labels/label:assign", Body: `{"users":["123"]}`},
@@ -66,6 +67,8 @@ func TestAPIsAuth(t *testing.T) {
 		{Method: http.MethodGet, URL: "/api/v1/products/product/modules/module/settings/setting/rules", Body: `{"kind":"userPercent"}`},
 		{Method: http.MethodPut, URL: "/api/v1/products/product/modules/module/settings/setting/rules/AwAAAAAAAAB25V_QnbhCuRwF", Body: `{"kind":"userPercent"}`},
 		{Method: http.MethodDelete, URL: "/api/v1/products/product/modules/module/settings/setting/rules/AwAAAAAAAAB25V_QnbhCuRwF"},
+		{Method: http.MethodDelete, URL: "/api/v1/products/product/modules/module/settings/setting:cleanup"},
+
 		// ***** user ******
 		{Method: http.MethodGet, URL: "/api/v1/users"},
 		{Method: http.MethodGet, URL: "/api/v1/users/uid/labels"},

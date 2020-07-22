@@ -31,7 +31,7 @@ func Verify(services *service.Services) func(ctx *gear.Context) error {
 		var uid string
 		xToken := util.XAuthExtractor(ctx)
 		if xToken != "" && Auther != nil {
-			claims, err := Auther.FromCtx(ctx)
+			claims, err := Auther.JWT().Verify(xToken)
 			if err != nil {
 				return gear.ErrUnauthorized.WithMsg(err.Error())
 			}

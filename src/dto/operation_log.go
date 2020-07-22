@@ -14,7 +14,7 @@ type OperationLogContent struct {
 	Groups  []string
 	Desc    string
 	Value   string
-	Percent int
+	Percent *int
 
 	Release int64
 }
