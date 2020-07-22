@@ -24,3 +24,15 @@
       responses:
         '200':
           $ref: "#/components/responses/MySettingsRes"
+  /api/v1/users/labels:
+    get:
+      tags:
+        - User
+      summary: 获取 user 的所有 labels 信息
+      parameters:
+        - $ref: '#/components/parameters/HeaderAuthorization'
+        - $ref: "#/components/parameters/QueryPageSize"
+        - $ref: "#/components/parameters/QueryPageToken"           
+      responses:
+        '200':
+          $ref: "#/components/responses/MyLabelsRes"

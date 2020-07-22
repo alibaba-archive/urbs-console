@@ -84,6 +84,8 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	// ***** client ******
 	// 读取指定用户的功能配置项，支持条件筛选，数据用于客户端
 	routerV1.Get("/users/settings:unionAll", apis.User.ListSettingsUnionAllClient)
+	// 读取指定用户的标签，支持条件筛选，数据用于客户端
+	routerV1.Get("/users/labels", apis.User.ListLablesForClient)
 
 	checkSuperAdmin := middleware.CheckSuperAdmin(blls)
 

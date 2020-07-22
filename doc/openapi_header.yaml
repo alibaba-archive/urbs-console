@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: Urbs 灰度平台管控后台应用
-  version: 0.1.0
+  version: 0.8.0
   title: urbs-console
 servers:
   - url: http://urbs-console:8080
@@ -114,8 +114,28 @@ components:
         assignedAt:
           type: string
           format: date-time
-          description: 被设置时间
+          description: 配置项被设置时间
           example: 2020-03-25T06:24:25Z
+    MyLabel:
+      type: object
+      properties:
+        hid:
+          type: string
+          description: 标签的 hid
+          example: AwAAAAAAAAB25V_QnbhCuRwF
+        product:
+          type: string
+          description: 标签所属的产品名称
+          example: teambition
+        name:
+          type: string
+          description: 标签名称
+          example: gray
+        assignedAt:
+          type: string
+          format: date-time
+          description: 标签被设置时间
+          example: 2020-03-25T06:24:25Z      
   responses:
     MySettingsRes:
       description: 用户或群组被指派的配置项列表返回结果
@@ -130,6 +150,19 @@ components:
                 type: array
                 items:
                   $ref: "#/components/schemas/MySetting"
+    MyLabelsRes:
+      description: 用户或群组被指派的标签列表返回结果
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              nextPageToken:
+                $ref: "#/components/schemas/NextPageToken"
+              result:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MyLabel"
     BoolRes:
       description: 标准 Boolean 类返回结果
       content:
