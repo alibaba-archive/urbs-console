@@ -196,6 +196,25 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
   const handleOpenPublishTagModalCancel = () => {
     changePublishTagModalVisible(false);
   };
+  const handleCleanUp = () => {
+    Modal.confirm({
+      title: '操作不可逆，请再次确认',
+      content: '确认清空全部用户？',
+      onOk: () => {
+        dispatch({
+          type: 'products/cleanUpSetting',
+          payload: {
+            product,
+            module: settingInfo?.module,
+            setting: settingInfo?.name,
+            cb: () => {
+              message.success('删除成功');
+            },
+          },
+        });
+      },
+    });
+  };
   const handleSettingLogReback = (hid: string) => {
     dispatch({
       type: 'products/recallSettingLogs',
@@ -280,17 +299,28 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
       <PublishRecord
         publishRecordList={settingLogsList}
         onReback={handleSettingLogReback}
+        canRecall={settingCanEdit}
       />
     ),
     action: settingCanEdit && (
-      <Button
-        type="link"
-        icon="plus"
-        block
-        onClick={handleOpenPublishTagModal}
-      >
-        添加灰度发布
-      </Button>
+      <div>
+        <Button
+          type="link"
+          icon="plus"
+          block
+          onClick={handleOpenPublishTagModal}
+        >
+          添加灰度发布
+        </Button>
+        <Button
+          type="link"
+          icon="delete"
+          block
+          onClick={handleCleanUp}
+        >
+          清空全部用户
+        </Button>
+      </div>
     ),
   }, {
     key: TagTabsKey.Group,

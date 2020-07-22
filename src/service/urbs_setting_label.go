@@ -222,3 +222,17 @@ func (a *UrbsSetting) LabelDeleteGroup(ctx context.Context, args *tpl.ProductLab
 	}
 	return result, nil
 }
+
+// LabelCleanUp ...
+func (a *UrbsSetting) LabelCleanUp(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/labels/%s:cleanup", conf.Config.UrbsSetting.Addr, args.Product, args.Label)
+
+	result := new(tpl.BoolRes)
+
+	resp, err := request.Delete(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}

@@ -77,8 +77,7 @@ Urbs 提供订阅的事件有：
 
 - 发布配置项：`setting.publish`；
 - 撤回配置项发布记录：`setting.recall`；
-- 配置项中移除群组或成员： `setting.remove`；
-- 下线配置项：`setting.offline`。
+- 配置项中移除群组或成员： `setting.remove`。
 
 推送的内容和通过 API 拉取的配置项保持一致，Urbs 使用 POST 方式请求 API。body 是 json 格式，字段格式如下：
 
@@ -98,7 +97,7 @@ Urbs 提供订阅的事件有：
 thrid:
    hook:
       url: "hook 地址，如 http://localhost:8081/v1/urbs/setting/hooks"
-      events: ["setting.publish","setting.offline","setting.recall","setting.remove"]  
+      events: ["setting.publish","setting.recall","setting.remove"]  
 ```
 
 ## 自定义灰度

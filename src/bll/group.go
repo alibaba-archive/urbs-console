@@ -140,3 +140,30 @@ func (a *Group) BatchAddMembers(ctx context.Context, groupId string, users []str
 func (a *Group) RemoveMembers(ctx context.Context, args *tpl.GroupMembersURL) (*tpl.BoolRes, error) {
 	return a.services.UrbsSetting.GroupRemoveMembers(ctx, args)
 }
+
+// AddUserAndOrg ...
+func (a *Group) AddUserAndOrg(ctx context.Context, users []string, groups []string) {
+	if len(users) > 0 {
+		_, err := a.services.UrbsSetting.UserBatchAdd(ctx, users)
+		if err != nil {
+			logger.Err(ctx, "userBatchAdd", "error", err.Error())
+		} else {
+			logger.Info(ctx, "userBatchAdd", "users", users)
+		}
+	}
+	if len(groups) > 0 {
+		groupBody := []tpl.GroupBody{}
+		for _, g := range groups {
+			groupBody = append(groupBody, tpl.GroupBody{
+				UID:  g,
+				Kind: "organization",
+			})
+		}
+		err := a.BatchAdd(ctx, groupBody)
+		if err != nil {
+			logger.Err(ctx, "groupBatchAdd", "error", err.Error())
+		} else {
+			logger.Info(ctx, "groupBatchAdd", "groups", groupBody)
+		}
+	}
+}

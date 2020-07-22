@@ -295,3 +295,20 @@ func (a *Label) DeleteRule(ctx *gear.Context) error {
 	}
 	return ctx.OkJSON(res)
 }
+
+// CleanUp ..
+func (a *Label) CleanUp(ctx *gear.Context) error {
+	req := tpl.ProductLabelURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Label)
+	if err != nil {
+		return err
+	}
+	res, err := a.blls.Label.CleanUp(ctx, &req)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}

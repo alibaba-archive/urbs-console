@@ -7,7 +7,11 @@ import (
 	"github.com/teambition/urbs-console/src/service"
 )
 
+var (
+	testDaos *Daos
+)
+
 func TestMain(m *testing.M) {
-	daos = NewDaos(service.NewDB())
+	testDaos = NewDaos(service.NewDB())
 	os.Exit(m.Run())
 }

@@ -82,10 +82,26 @@ func (a *OperationLog) FindAll(ctx context.Context) ([]schema.OperationLog, erro
 	return logs, nil
 }
 
-// DeleteByObject ...
-func (a *OperationLog) DeleteByObject(ctx context.Context, id int64) error {
-	sql := "delete from operation_log where id = ?"
+// TxDelete ...
+func (a *OperationLog) TxDelete(ctx context.Context, id int64, msgSql string) error {
+	err := a.DB.Transaction(func(tx *gorm.DB) error {
+		err := tx.Exec(msgSql).Error
+		if err != nil {
+			return err
+		}
+		sql := "delete from operation_log where id = ?"
+		err = tx.Exec(sql, id).Error
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	return err
+}
 
+// Delete ...
+func (a *OperationLog) Delete(ctx context.Context, id int64) error {
+	sql := "delete from operation_log where id = ?"
 	return a.DB.Exec(sql, id).Error
 }
 

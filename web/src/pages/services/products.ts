@@ -230,6 +230,10 @@ export function recallLabelLogs(product: string, label: string, hid: string) {
   });
 };
 
+export function cleanUpLabel(product: string, label: string) {
+  return request.delete(`${serviceApiPrefix}/products/${product}/labels/${label}:cleanup`);
+};
+
 export function deleteLabelGroup(product: string, label: string, gid: string) {
   return request.delete(`${serviceApiPrefix}/products/${product}/labels/${label}/groups/${gid}`);
 };
@@ -253,4 +257,8 @@ export function deleteSettingGroup(product: string, module: string, setting: str
 
 export function deleteSettingUser(product: string, module: string, setting: string, uid: string) {
   return request.delete(`${serviceApiPrefix}/products/${product}/modules/${module}/settings/${setting}/users/${uid}`);
+};
+
+export function cleanUpSetting(product: string, module: string, setting: string) {
+  return request.delete(`${serviceApiPrefix}/products/${product}/modules/${module}/settings/${setting}:cleanup`);
 };

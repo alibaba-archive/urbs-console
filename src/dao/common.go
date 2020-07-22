@@ -5,10 +5,6 @@ import (
 	"github.com/teambition/urbs-console/src/util"
 )
 
-var (
-	daos *Daos
-)
-
 func init() {
 	util.DigProvide(NewDaos)
 }
@@ -23,7 +19,7 @@ type Daos struct {
 
 // NewDaos ...
 func NewDaos(sql *service.SQL) *Daos {
-	daos = &Daos{
+	daos := &Daos{
 		OperationLog: &OperationLog{DB: sql.DB},
 		UrbsAcAcl:    &UrbsAcAcl{DB: sql.DB},
 		UrbsAcUser:   &UrbsAcUser{DB: sql.DB},

@@ -395,6 +395,21 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) SettingRecall(ctx, args, body in
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SettingRecall", reflect.TypeOf((*MockUrbsSettingInterface)(nil).SettingRecall), ctx, args, body)
 }
 
+// SettingCleanUp mocks base method
+func (m *MockUrbsSettingInterface) SettingCleanUp(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.BoolRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SettingCleanUp", ctx, args)
+	ret0, _ := ret[0].(*tpl.BoolRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SettingCleanUp indicates an expected call of SettingCleanUp
+func (mr *MockUrbsSettingInterfaceMockRecorder) SettingCleanUp(ctx, args interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SettingCleanUp", reflect.TypeOf((*MockUrbsSettingInterface)(nil).SettingCleanUp), ctx, args)
+}
+
 // SettingDeleteUser mocks base method
 func (m *MockUrbsSettingInterface) SettingDeleteUser(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
@@ -678,6 +693,21 @@ func (m *MockUrbsSettingInterface) LabelDeleteGroup(ctx context.Context, args *t
 func (mr *MockUrbsSettingInterfaceMockRecorder) LabelDeleteGroup(ctx, args interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LabelDeleteGroup", reflect.TypeOf((*MockUrbsSettingInterface)(nil).LabelDeleteGroup), ctx, args)
+}
+
+// LabelCleanUp mocks base method
+func (m *MockUrbsSettingInterface) LabelCleanUp(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.BoolRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LabelCleanUp", ctx, args)
+	ret0, _ := ret[0].(*tpl.BoolRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LabelCleanUp indicates an expected call of LabelCleanUp
+func (mr *MockUrbsSettingInterfaceMockRecorder) LabelCleanUp(ctx, args interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LabelCleanUp", reflect.TypeOf((*MockUrbsSettingInterface)(nil).LabelCleanUp), ctx, args)
 }
 
 // UserList mocks base method
