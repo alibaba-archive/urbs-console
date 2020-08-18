@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file starting fro
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 -----
+## [v0.9.0] - 2020-08-18
+
+**Change:**
+- Support virtual setting with label
+
 ## [v0.8.0] - 2020-07-10
 
 **Change:**

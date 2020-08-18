@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/teambition/gear"
+	"github.com/teambition/urbs-setting/src/schema"
 )
 
 // LabelBody ...
@@ -137,4 +138,11 @@ type MyLabel struct {
 type MyLabelsRes struct {
 	SuccessResponseType
 	Result []*MyLabel `json:"result"` // 空数组也保留
+}
+
+// CacheLabelsInfoRes ...
+type CacheLabelsInfoRes struct {
+	SuccessResponseType
+	Timestamp int64                   `json:"timestamp"` // labels 数组生成时间
+	Result    []schema.UserCacheLabel `json:"result"`    // 空数组也保留
 }

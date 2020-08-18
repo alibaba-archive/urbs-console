@@ -62,7 +62,7 @@ func newRouterV1(apis *APIs) *gear.Router {
 	routerV1 := gear.NewRouter(gear.RouterOptions{
 		Root: "/v1",
 	})
-	routerV1.Use(tracing.New())
+	routerV1.Use(tracing.New("urbs-console"))
 
 	routerV1.Get("/canary", apis.Canary.Get)
 
@@ -78,7 +78,7 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	routerV1 := gear.NewRouter(gear.RouterOptions{
 		Root: "/api/v1",
 	})
-	routerV1.Use(tracing.New())
+	routerV1.Use(tracing.New("urbs-console"))
 	routerV1.Use(middleware.Verify(services))
 
 	// ***** client ******
