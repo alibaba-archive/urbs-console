@@ -2,6 +2,7 @@ package bll
 
 import (
 	"context"
+	"time"
 
 	"github.com/teambition/gear"
 	"github.com/teambition/urbs-console/src/service"
@@ -35,7 +36,39 @@ func (a *User) ListSettings(ctx context.Context, args *tpl.UIDPaginationURL) (*t
 
 // ListSettingsUnionAll ...
 func (a *User) ListSettingsUnionAll(ctx *gear.Context, args *tpl.MySettingsQueryURL) (*tpl.MySettingsRes, error) {
-	return a.services.UrbsSetting.UserListSettingsUnionAll(ctx, args)
+	mySettingsRes, mySettingsErr := a.services.UrbsSetting.UserListSettingsUnionAll(ctx, args)
+	if mySettingsErr != nil {
+		return nil, mySettingsErr
+	}
+	if args.Setting != "" {
+		return mySettingsRes, nil
+	}
+	res, err := a.services.UrbsSetting.LabelsCache(ctx, args.Product, args.UID)
+	if err != nil {
+		return nil, err
+	}
+	var label string
+	for _, val := range res.Result {
+		if !MatchClient(val.Clients, args.Client) {
+			continue
+		}
+		if !MatchChannel(val.Clients, args.Channel) {
+			continue
+		}
+		label = val.Label
+		break
+	}
+	if label != "" {
+		temp := []*tpl.MySetting{{
+			Product:    args.Product,
+			Module:     "urbs",
+			Name:       label,
+			Value:      "true",
+			AssignedAt: time.Now().UTC(),
+		}}
+		mySettingsRes.Result = append(temp, mySettingsRes.Result...)
+	}
+	return mySettingsRes, nil
 }
 
 // CheckExists ...
@@ -46,4 +79,30 @@ func (a *User) CheckExists(ctx context.Context, uid string) (*tpl.BoolRes, error
 // BatchAdd 批量添加用户
 func (a *User) BatchAdd(ctx context.Context, users []string) (*tpl.BoolRes, error) {
 	return a.services.UrbsSetting.UserBatchAdd(ctx, users)
+}
+
+// MatchClient ...
+func MatchClient(clients []string, client string) bool {
+	if len(clients) == 0 || client == "" {
+		return true
+	}
+	for _, c := range clients {
+		if c == client {
+			return true
+		}
+	}
+	return false
+}
+
+// MatchChannel ...
+func MatchChannel(channels []string, channel string) bool {
+	if len(channels) == 0 || channel == "" {
+		return true
+	}
+	for _, c := range channels {
+		if c == channel {
+			return true
+		}
+	}
+	return false
 }

@@ -109,3 +109,16 @@ func (a *UrbsSetting) UserBatchAdd(ctx context.Context, users []string) (*tpl.Bo
 	}
 	return result, nil
 }
+
+// LabelsCache ...
+func (a *UrbsSetting) LabelsCache(ctx context.Context, product, uid string) (*tpl.CacheLabelsInfoRes, error) {
+	url := fmt.Sprintf("%s/users/%s/labels:cache?product=%s", conf.Config.UrbsSetting.Addr, uid, product)
+
+	result := new(tpl.CacheLabelsInfoRes)
+
+	resp, err := request.Get(url).Header(UrbsSettingHeader(ctx)).Result(result).Do()
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}

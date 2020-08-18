@@ -815,6 +815,21 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) UserBatchAdd(ctx, users interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserBatchAdd", reflect.TypeOf((*MockUrbsSettingInterface)(nil).UserBatchAdd), ctx, users)
 }
 
+// LabelsCache mocks base method
+func (m *MockUrbsSettingInterface) LabelsCache(ctx context.Context, product, uid string) (*tpl.CacheLabelsInfoRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LabelsCache", ctx, product, uid)
+	ret0, _ := ret[0].(*tpl.CacheLabelsInfoRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LabelsCache indicates an expected call of LabelsCache
+func (mr *MockUrbsSettingInterfaceMockRecorder) LabelsCache(ctx, product, uid interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LabelsCache", reflect.TypeOf((*MockUrbsSettingInterface)(nil).LabelsCache), ctx, product, uid)
+}
+
 // GroupListLables mocks base method
 func (m *MockUrbsSettingInterface) GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MyLabelsRes, error) {
 	m.ctrl.T.Helper()
