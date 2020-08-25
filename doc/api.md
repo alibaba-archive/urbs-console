@@ -1,5 +1,5 @@
 ---
-title: urbs-console v0.1.0
+title: urbs-console v0.8.0
 language_tabs:
   - shell: Shell
   - http: HTTP
@@ -16,7 +16,7 @@ headingLevel: 2
 
 <!-- Generator: Widdershins v4.0.0 -->
 
-<h1 id="urbs-console">urbs-console v0.1.0</h1>
+<h1 id="urbs-console">urbs-console v0.8.0</h1>
 
 > Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
 
@@ -149,7 +149,78 @@ Status Code **200**
 |»» module|string|false|none|配置项所属的功能模块名称|
 |»» name|string|false|none|配置项名称|
 |»» value|string|false|none|配置项值|
-|»» assignedAt|string(date-time)|false|none|被设置时间|
+|»» assignedAt|string(date-time)|false|none|配置项被设置时间|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## 获取 user 的所有 labels 信息
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET http://urbs-console:8080/api/v1/users/labels \
+  -H 'Accept: application/json' \
+  -H 'Authorization: string'
+
+```
+
+```http
+GET http://urbs-console:8080/api/v1/users/labels HTTP/1.1
+Host: urbs-console:8080
+Accept: application/json
+Authorization: string
+
+```
+
+`GET /api/v1/users/labels`
+
+<h3 id="获取-user-的所有-labels-信息-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|Authorization|header|string|true|用户 Token, 格式如: `Bearer xxx`；header 不存在，尝试从 cookie 中读取|
+|pageSize|query|integer(int32)|false|分页大小，默认为 10，(1-1000]|
+|pageToken|query|string|false|分页请求标记，来自于响应结果的 nextPageToken|
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "nextPageToken": "",
+  "result": [
+    {
+      "hid": "AwAAAAAAAAB25V_QnbhCuRwF",
+      "product": "teambition",
+      "name": "gray",
+      "assignedAt": "2020-03-25T06:24:25Z"
+    }
+  ]
+}
+```
+
+<h3 id="获取-user-的所有-labels-信息-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|用户或群组被指派的标签列表返回结果|Inline|
+
+<h3 id="获取-user-的所有-labels-信息-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» nextPageToken|[NextPageToken](#schemanextpagetoken)|false|none|用于分页查询时用于获取下一页数据的 token，当为空值时表示没有下一页了|
+|» result|[[MyLabel](#schemamylabel)]|false|none|none|
+|»» hid|string|false|none|标签的 hid|
+|»» product|string|false|none|标签所属的产品名称|
+|»» name|string|false|none|标签名称|
+|»» assignedAt|string(date-time)|false|none|标签被设置时间|
 
 <aside class="success">
 This operation does not require authentication
@@ -251,5 +322,31 @@ totalSize
 |module|string|false|none|配置项所属的功能模块名称|
 |name|string|false|none|配置项名称|
 |value|string|false|none|配置项值|
-|assignedAt|string(date-time)|false|none|被设置时间|
+|assignedAt|string(date-time)|false|none|配置项被设置时间|
+
+<h2 id="tocS_MyLabel">MyLabel</h2>
+<!-- backwards compatibility -->
+<a id="schemamylabel"></a>
+<a id="schema_MyLabel"></a>
+<a id="tocSmylabel"></a>
+<a id="tocsmylabel"></a>
+
+```json
+{
+  "hid": "AwAAAAAAAAB25V_QnbhCuRwF",
+  "product": "teambition",
+  "name": "gray",
+  "assignedAt": "2020-03-25T06:24:25Z"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|hid|string|false|none|标签的 hid|
+|product|string|false|none|标签所属的产品名称|
+|name|string|false|none|标签名称|
+|assignedAt|string(date-time)|false|none|标签被设置时间|
 

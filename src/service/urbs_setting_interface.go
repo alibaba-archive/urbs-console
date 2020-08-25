@@ -123,6 +123,8 @@ type UrbsSettingInterface interface {
 	UserCheckExists(ctx context.Context, uid string) (*tpl.BoolRes, error)
 	// 批量添加用户
 	UserBatchAdd(ctx context.Context, users []string) (*tpl.BoolRes, error)
+	// 读取指定用户的环境标签，包括继承自群组的标签，返回轻量级 labels，
+	LabelsCache(ctx context.Context, product, uid string) (*tpl.CacheLabelsInfoRes, error)
 
 	// ***** group ******
 	// 读取指定群组的环境标签，支持条件筛选

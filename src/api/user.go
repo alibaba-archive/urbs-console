@@ -152,3 +152,17 @@ func (a *User) ListSettingsUnionAllClient(ctx *gear.Context) error {
 	}
 	return ctx.OkJSON(res)
 }
+
+// ListLablesForClient 返回 user 的 labels，按照 label 指派时间正序，支持分页
+func (a *User) ListLablesForClient(ctx *gear.Context) error {
+	req := new(tpl.UIDPaginationURL)
+	if err := ctx.ParseURL(req); err != nil {
+		return err
+	}
+	req.UID = util.GetUid(ctx)
+	res, err := a.blls.User.ListLables(ctx, req)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}
