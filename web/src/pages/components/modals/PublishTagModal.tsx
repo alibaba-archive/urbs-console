@@ -164,7 +164,7 @@ const PublishTagModal: React.FC<Props> = (props) => {
             </>
           ) : (
               <Form.Item
-                label="比例添加"
+                label="比例更新到"
                 style={{
                   margin: '0',
                 }}
@@ -180,7 +180,7 @@ const PublishTagModal: React.FC<Props> = (props) => {
                     }
                   </Col>
                   <Col span={9} push={1}>
-                    %，本次新增比例用户
+                    %，更新用户比例到
                   </Col>
                 </Row>
               </Form.Item>
