@@ -316,7 +316,7 @@ const Users: React.FC<UsersComponentProps> = (props) => {
     content: (
       <Setting
         dataSource={settingsList}
-        hideColumns={['users', 'desc', 'status', 'release']}
+        hideColumns={['users', 'desc', 'status', 'release', 'createdAt']}
         onAction={
           (record: SettingData) => ({
             onRollback: () => {
