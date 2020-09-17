@@ -81,28 +81,14 @@ func (a *User) BatchAdd(ctx context.Context, users []string) (*tpl.BoolRes, erro
 	return a.services.UrbsSetting.UserBatchAdd(ctx, users)
 }
 
-// MatchClient ...
-func MatchClient(clients []string, client string) bool {
-	if len(clients) == 0 || client == "" {
-		return true
+// ApplyRules ...
+func (a *User) ApplyRules(ctx context.Context, product string, body *tpl.ApplyRulesBody) (*tpl.BoolRes, error) {
+	res, err := a.services.UrbsSetting.UserBatchAdd(ctx, body.Users)
+	if err != nil {
+		return nil, err
 	}
-	for _, c := range clients {
-		if c == client {
-			return true
-		}
-	}
-	return false
-}
-
-// MatchChannel ...
-func MatchChannel(channels []string, channel string) bool {
-	if len(channels) == 0 || channel == "" {
-		return true
-	}
-	for _, c := range channels {
-		if c == channel {
-			return true
-		}
-	}
-	return false
+	settingBody := &tpl.ApplyRulesBody{Kind: body.Kind}
+	settingBody.Users = body.Users
+	res, err = a.services.UrbsSetting.ProductApplyRule(ctx, product, settingBody)
+	return res, err
 }

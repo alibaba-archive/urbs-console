@@ -20,6 +20,9 @@ interface Props extends FormComponentProps {
   onGotoGroups?: () => void;
   onGotoUsers?: () => void;
   defauleRule?: UserPercentRule;
+  newUserPercentRule?: UserPercentRule;
+  childLabelUserPercentRule?: UserPercentRule;
+  isChildLabel?: boolean;
   title: string | React.ReactNode;
   grayscale?: string[];
 }
@@ -35,6 +38,9 @@ const PublishTagModal: React.FC<Props> = (props) => {
     onGotoGroups,
     onGotoUsers,
     defauleRule,
+    newUserPercentRule,
+    childLabelUserPercentRule,
+    isChildLabel,
     title,
     module,
     grayscale,
@@ -52,10 +58,123 @@ const PublishTagModal: React.FC<Props> = (props) => {
         value: values.percent ? +values.percent : undefined,
       }
     }
+    if (kind === 'newUserPercent') {
+      values.rule = {
+        value: values.newUserPercent ? +values.newUserPercent : undefined,
+      }
+    }
+    if (kind === 'childLabelUserPercent') {
+      values.rule = {
+        value: values.childLabelUserPercent ? +values.childLabelUserPercent : undefined,
+      }
+    }
     if (onOk) {
       onOk(values);
     }
   };
+  const renderKind = (kind: string) => {
+    if (kind === 'batch') {
+      return <>
+        <Form.Item
+          label="批量群组"
+          style={{
+            margin: '0',
+          }}
+        >
+          {
+            getFieldDecorator('groups', {
+              initialValue: ''
+            })(
+              <Input placeholder="输入多个使用英文 , 分隔"></Input>
+            )
+          }
+        </Form.Item>
+        <Form.Item
+          label="批量用户"
+          style={{
+            margin: '0',
+          }}
+        >
+          {
+            getFieldDecorator('users', {
+              initialValue: ''
+            })(
+              <Input placeholder="输入多个使用英文 , 分隔"></Input>
+            )
+          }
+        </Form.Item>
+      </>
+    }
+    if (kind === 'userPercent') {
+      return <Form.Item
+        label="设置比例到"
+        style={{
+          margin: '0',
+        }}
+      >
+        <Row>
+          <Col span={8}>
+            {
+              getFieldDecorator('percent', {
+                initialValue: defauleRule ? defauleRule.rule.value : undefined
+              })(
+                <InputNumber style={{ width: '100%' }} min={0} max={100} placeholder="请输入1～100"></InputNumber>
+              )
+            }
+          </Col>
+          <Col span={9} push={1}>
+            %，设置用户比例到
+          </Col>
+        </Row>
+      </Form.Item>
+    }
+    if (kind === 'newUserPercent') {
+      return <Form.Item
+        label="设置比例到"
+        style={{
+          margin: '0',
+        }}
+      >
+        <Row>
+          <Col span={8}>
+            {
+              getFieldDecorator('newUserPercent', {
+                initialValue: newUserPercentRule ? newUserPercentRule.rule.value : undefined
+              })(
+                <InputNumber style={{ width: '100%' }} min={0} max={100} placeholder="请输入1～100"></InputNumber>
+              )
+            }
+          </Col>
+          <Col span={9} push={1}>
+            %，设置新用户比例到
+          </Col>
+        </Row>
+      </Form.Item>
+    }
+    if (kind === 'childLabelUserPercent') {
+      return <Form.Item
+        label="设置比例到"
+        style={{
+          margin: '0',
+        }}
+      >
+        <Row>
+          <Col span={8}>
+            {
+              getFieldDecorator('childLabelUserPercent', {
+                initialValue: childLabelUserPercentRule ? childLabelUserPercentRule.rule.value : undefined
+              })(
+                <InputNumber style={{ width: '100%' }} min={0} max={100} placeholder="请输入1～100"></InputNumber>
+              )
+            }
+          </Col>
+          <Col span={9} push={1}>
+            %，灰中灰用户比例
+          </Col>
+        </Row>
+      </Form.Item>
+    }
+  }
   return (
     <Modal
       title={title}
@@ -126,65 +245,14 @@ const PublishTagModal: React.FC<Props> = (props) => {
               <Radio.Group>
                 <Radio value="batch">批量</Radio>
                 <Radio value="userPercent">比例</Radio>
+                {isChildLabel ? <Radio value="childLabelUserPercent">灰中灰比例</Radio> : <></>}
+                <Radio value="newUserPercent">新用户比例</Radio>
               </Radio.Group>
             )
           }
         </Form.Item>
         {
-          getFieldValue('kind') === 'batch' ? (
-            <>
-              <Form.Item
-                label="批量群组"
-                style={{
-                  margin: '0',
-                }}
-              >
-                {
-                  getFieldDecorator('groups', {
-                    initialValue: ''
-                  })(
-                    <Input placeholder="输入多个使用英文 , 分隔"></Input>
-                  )
-                }
-              </Form.Item>
-              <Form.Item
-                label="批量用户"
-                style={{
-                  margin: '0',
-                }}
-              >
-                {
-                  getFieldDecorator('users', {
-                    initialValue: ''
-                  })(
-                    <Input placeholder="输入多个使用英文 , 分隔"></Input>
-                  )
-                }
-              </Form.Item>
-            </>
-          ) : (
-              <Form.Item
-                label="比例更新到"
-                style={{
-                  margin: '0',
-                }}
-              >
-                <Row>
-                  <Col span={8}>
-                    {
-                      getFieldDecorator('percent', {
-                        initialValue: defauleRule ? defauleRule.rule.value : undefined
-                      })(
-                        <InputNumber style={{ width: '100%' }} min={0} max={100} placeholder="请输入1～100"></InputNumber>
-                      )
-                    }
-                  </Col>
-                  <Col span={9} push={1}>
-                    %，更新用户比例到
-                  </Col>
-                </Row>
-              </Form.Item>
-            )
+          renderKind(getFieldValue('kind'))
         }
         <Form.Item
           label="发布说明"
@@ -208,10 +276,16 @@ export default Form.create<Props>({
     const { kind } = fields;
     const { form } = props;
     if (kind === 'batch') {
-      form.resetFields(['percent']);
+      form.resetFields(['percent', 'newUserPercent', 'childLabelUserPercent']);
     }
     if (kind === 'userPercent') {
-      form.resetFields(['groups', 'users']);
+      form.resetFields(['groups', 'users', 'newUserPercent', 'childLabelUserPercent']);
+    }
+    if (kind === 'newUserPercent') {
+      form.resetFields(['groups', 'users', 'percent', 'childLabelUserPercent']);
+    }
+    if (kind === 'childLabelUserPercent') {
+      form.resetFields(['groups', 'users', 'percent', 'newUserPercent']);
     }
   },
 })(PublishTagModal);

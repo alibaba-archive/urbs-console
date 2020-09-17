@@ -264,3 +264,17 @@ func (t *ProductModuleSettingUIDURL) Validate() error {
 	}
 	return nil
 }
+
+// ApplyRulesBody ...
+type ApplyRulesBody struct {
+	UsersBody
+	Kind string `json:"kind"`
+}
+
+// Validate 实现 gear.BodyTemplate。
+func (t *ApplyRulesBody) Validate() error {
+	if err := t.UsersBody.Validate(); err != nil {
+		return err
+	}
+	return nil
+}

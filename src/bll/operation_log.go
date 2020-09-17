@@ -85,7 +85,7 @@ func genContent(body *dto.OperationLogContent) string {
 		content += "03" + body.Value + "\r\n"
 	}
 	if body.Percent != nil {
-		content += "04" + strconv.Itoa(*body.Percent) + "\r\n"
+		content += "04" + body.Kind + "-" + strconv.Itoa(*body.Percent) + "\r\n"
 	}
 	if body.Release > 0 {
 		content += "05" + strconv.FormatInt(body.Release, 10) + "\r\n"
@@ -103,7 +103,7 @@ func getRelease(content string) int64 {
 		kind := item[0:2]
 		content := item[2:]
 		switch kind {
-		case "05": // percent
+		case "05":
 			release, _ := strconv.ParseInt(content, 10, 64)
 			return release
 		}
@@ -129,10 +129,19 @@ func parseLogContent(content string, log *tpl.OperationLogListItem) {
 		case "03":
 			log.Value = content
 		case "04": // percent
-			log.Kind = "userPercent"
-			percent, err := strconv.Atoi(content)
-			if err == nil {
-				log.Percent = &percent
+			rules := strings.Split(content, "-")
+			if len(rules) > 1 {
+				log.Kind = rules[0]
+				percent, err := strconv.Atoi(rules[1])
+				if err == nil {
+					log.Percent = &percent
+				}
+			} else {
+				log.Kind = "userPercent"
+				percent, err := strconv.Atoi(content)
+				if err == nil {
+					log.Percent = &percent
+				}
 			}
 		}
 	}

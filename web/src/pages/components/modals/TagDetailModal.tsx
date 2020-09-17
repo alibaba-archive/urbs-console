@@ -33,6 +33,8 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
   const [labelGroupPageSize, changeLabelGroupPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [labelUserPageSize, changeLabelUserPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [userPercentRule, changeUserPercentRule] = useState<UserPercentRule>();
+  const [newUserPercentRule, changeNewUserPercentRule] = useState<UserPercentRule>();
+  const [childLabelUserPercentRule, changeChildLabelUserPercentRule] = useState<UserPercentRule>();
   const [tabsActiveKey, setTabsActiveKey] = useState(String(TagTabsKey.Publish));
   const [tabsSearchWord, setTabsSearchWord] = useState('');
   const [publishTagModalVisible, setPublishTagModalVisible] = useState(false);
@@ -50,6 +52,7 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
       },
     });
   }, [dispatch, labelInfo, product]);
+  const isChildLabel = labelInfo?.name.indexOf('-') > 0
   const fetchLabelGroups = useCallback((params: PaginationParameters, type?: string) => {
     dispatch({
       type: 'products/getLabelGroups',
@@ -150,29 +153,49 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
       payload: {
         product,
         label: labelInfo?.name,
-        cb: (rule?: UserPercentRule) => {
-          changeUserPercentRule(rule);
+        cb: (rules?: UserPercentRule[]) => {
+          if (!Array.isArray(rules)) return;
+          for (const rule of rules) {
+            if (rule?.kind === 'userPercent') {
+              changeUserPercentRule(rule)
+            } else if (rule?.kind === 'newUserPercent') {
+              changeNewUserPercentRule(rule)
+            } else if (rule?.kind === 'childLabelUserPercent') {
+              changeChildLabelUserPercentRule(rule)
+            }
+          }
           changePublishTagModalVisible(true);
         }
       }
     });
   };
+
+  const updateProductTagRule = (rule: UserPercentRule, values: FieldsValue) => {
+    dispatch({
+      type: 'products/updateProductTagRule',
+      payload: {
+        product,
+        label: labelInfo?.name,
+        rule: rule.hid,
+        params: values,
+        cb: () => {
+          fetchLabelLogs();
+          changePublishTagModalVisible(false);
+        }
+      },
+    });
+  }
   const handleOpenPublishTagModalOk = (values: FieldsValue) => {
+    if (newUserPercentRule && values.kind === 'newUserPercent') {
+      updateProductTagRule(newUserPercentRule, values)
+    }
+    if (childLabelUserPercentRule && values.kind === 'childLabelUserPercent') {
+      updateProductTagRule(childLabelUserPercentRule, values)
+    }
     if (userPercentRule && values.kind === 'userPercent') {
-      dispatch({
-        type: 'products/updateProductTagRule',
-        payload: {
-          product,
-          label: labelInfo?.name,
-          rule: userPercentRule.hid,
-          params: values,
-          cb: () => {
-            fetchLabelLogs();
-            changePublishTagModalVisible(false);
-          }
-        },
-      });
-    } else {
+      updateProductTagRule(userPercentRule, values)
+    }
+    if (values.kind === 'batch' || (!newUserPercentRule && values.kind === 'newUserPercent') || (!userPercentRule && values.kind === 'userPercent') || (!childLabelUserPercentRule && values.kind === 'childLabelUserPercent')) {
       dispatch({
         type: 'products/publishProductTags',
         payload: {
@@ -470,6 +493,9 @@ const TagDetailModal: React.FC<TagDetailComponentProps> = (props) => {
           product={product}
           onGotoGroups={onGotoGroups}
           onGotoUsers={onGotoUsers}
+          newUserPercentRule={newUserPercentRule}
+          childLabelUserPercentRule={childLabelUserPercentRule}
+          isChildLabel={isChildLabel}
           defauleRule={userPercentRule}
         ></PublishTagModal>
       }

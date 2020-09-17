@@ -22,6 +22,7 @@ type UrbsSettingInterface interface {
 	ProductOffline(ctx context.Context, product string) (*tpl.BoolRes, error)
 	// 删除指定产品
 	ProductDelete(ctx context.Context, product string) (*tpl.BoolRes, error)
+	ProductApplyRule(ctx context.Context, product string, body *tpl.ApplyRulesBody) (*tpl.BoolRes, error)
 
 	// ***** module ******
 	// 读取指定产品的功能模块
