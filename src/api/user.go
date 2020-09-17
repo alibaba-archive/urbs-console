@@ -166,3 +166,20 @@ func (a *User) ListLablesForClient(ctx *gear.Context) error {
 	}
 	return ctx.OkJSON(res)
 }
+
+// ApplyRules ..
+func (a *User) ApplyRules(ctx *gear.Context) error {
+	req := &tpl.ProductURL{}
+	if err := ctx.ParseURL(req); err != nil {
+		return err
+	}
+	body := &tpl.ApplyRulesBody{}
+	if err := ctx.ParseBody(body); err != nil {
+		return err
+	}
+	res, err := a.blls.User.ApplyRules(ctx, req.Product, body)
+	if err != nil {
+		return err
+	}
+	return ctx.OkJSON(res)
+}

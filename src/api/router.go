@@ -242,6 +242,7 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	routerV1.Post("/groups/:uid/members:batch", checkSuperAdmin, apis.Group.BatchAddMembers)
 	// 指定群组根据条件清理成员
 	routerV1.Delete("/groups/:uid/members", checkSuperAdmin, apis.Group.RemoveMembers)
-
+	// 添加用户，并触发和应用规则
+	routerV1.Post("/products/:product/users/rules:apply", checkSuperAdmin, apis.User.ApplyRules)
 	return routerV1
 }

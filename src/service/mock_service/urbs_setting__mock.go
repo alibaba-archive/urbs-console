@@ -125,6 +125,21 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) ProductDelete(ctx, product inter
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ProductDelete", reflect.TypeOf((*MockUrbsSettingInterface)(nil).ProductDelete), ctx, product)
 }
 
+// ProductApplyRule mocks base method
+func (m *MockUrbsSettingInterface) ProductApplyRule(ctx context.Context, product string, body *tpl.ApplyRulesBody) (*tpl.BoolRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ProductApplyRule", ctx, product, body)
+	ret0, _ := ret[0].(*tpl.BoolRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ProductApplyRule indicates an expected call of ProductApplyRule
+func (mr *MockUrbsSettingInterfaceMockRecorder) ProductApplyRule(ctx, product, body interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ProductApplyRule", reflect.TypeOf((*MockUrbsSettingInterface)(nil).ProductApplyRule), ctx, product, body)
+}
+
 // ModuleList mocks base method
 func (m *MockUrbsSettingInterface) ModuleList(ctx context.Context, args *tpl.ProductPaginationURL) (*tpl.ModulesInfoRes, error) {
 	m.ctrl.T.Helper()

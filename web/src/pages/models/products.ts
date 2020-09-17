@@ -134,16 +134,14 @@ const products: Model = {
       const { product, label, cb } = payload;
       const { result } = yield call(productsService.getPublishRules, product, label);
       if (result) {
-        const userPercentRule = result.find(item => item.kind === 'userPercent');
-        cb(userPercentRule);
+        cb(result);
       }
     },
     *getPublishSettingRules({ payload }: AnyAction, { call }: EffectsCommandMap) {
       const { product, module, setting, cb } = payload;
       const { result } = yield call(productsService.getPublishSettingRules, product, module, setting);
       if (result) {
-        const userPercentRule = result.find(item => item.kind === 'userPercent');
-        cb(userPercentRule);
+        cb(result);
       }
     },
     *updateProductTagRule({ payload }: AnyAction, { call }: EffectsCommandMap) {
