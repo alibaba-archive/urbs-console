@@ -16,9 +16,6 @@ type PercentRule struct {
 
 // Validate ...
 func (r *PercentRule) Validate() error {
-	if r.Kind != "userPercent" {
-		return fmt.Errorf("invalid kind: %s", r.Kind)
-	}
 	if r.Rule.Value < 0 || r.Rule.Value > 100 {
 		return fmt.Errorf("invalid percent rule value: %d", r.Rule.Value)
 	}
