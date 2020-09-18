@@ -1,6 +1,9 @@
 package conf
 
 import (
+	"context"
+
+	"github.com/teambition/gear"
 	"github.com/teambition/gear/logging"
 	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/util"
@@ -12,10 +15,12 @@ func init() {
 	if err := p.Validate(); err != nil {
 		panic(err)
 	}
+	p.GlobalCtx = gear.ContextWithSignal(context.Background())
 }
 
 // ConfigTpl ...
 type ConfigTpl struct {
+	GlobalCtx     context.Context
 	SrvAddr       string      `json:"addr" yaml:"addr"`
 	TLS           TlsConfig   `json:"tls" yaml:"tls"`
 	Logger        Logger      `json:"logger" yaml:"logger"`
@@ -26,6 +31,7 @@ type ConfigTpl struct {
 	SuperAdmins   []string    `json:"superAdmins" yaml:"superAdmins"`
 	HIDKey        string      `json:"hid_key" yaml:"hid_key"`
 	AuthKeys      []string    `json:"auth_keys" yaml:"auth_keys"`
+	OpenTrust     OpenTrust   `json:"open_trust" yaml:"open_trust"`
 }
 
 // TlsConfig the config struct for creating tls.Config.
@@ -42,7 +48,7 @@ type Logger struct {
 // UrbsSetting ...
 type UrbsSetting struct {
 	Addr string `json:"addr" yaml:"addr"`
-	Key  string `json:"key" yaml:"key"`
+	OTID string `json:"otid" yaml:"otid"`
 }
 
 // Thrid ...
@@ -82,6 +88,14 @@ type SQL struct {
 	Parameters   string `json:"parameters" yaml:"parameters"`
 	MaxIdleConns int    `json:"max_idle_conns" yaml:"max_idle_conns"`
 	MaxOpenConns int    `json:"max_open_conns" yaml:"max_open_conns"`
+}
+
+// OpenTrust ...
+type OpenTrust struct {
+	OTID             string   `json:"otid" yaml:"otid"`
+	OTVIDs           []string `json:"otvids" yaml:"otvids"`
+	PrivateKeys      []string `json:"private_keys" yaml:"private_keys"`
+	DomainPublicKeys []string `json:"domain_public_keys" yaml:"domain_public_keys"`
 }
 
 // Config ...

@@ -10,8 +10,9 @@ require (
 	github.com/mushroomsir/logger v1.5.0
 	github.com/mushroomsir/request v0.1.0
 	github.com/mushroomsir/tcc v0.1.2
+	github.com/open-trust/ot-go-lib v0.3.0
 	github.com/stretchr/testify v1.5.1
-	github.com/teambition/gear v1.21.4
+	github.com/teambition/gear v1.21.6
 	github.com/teambition/gear-auth v1.7.0
 	github.com/teambition/gear-tracing v1.1.1
 	github.com/teambition/urbs-setting v1.7.1
