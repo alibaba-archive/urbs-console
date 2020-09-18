@@ -1,10 +1,8 @@
 package main
 
 import (
-	"context"
 	"flag"
 
-	"github.com/teambition/gear"
 	"github.com/teambition/urbs-console/src/api"
 	"github.com/teambition/urbs-console/src/conf"
 	"github.com/teambition/urbs-console/src/logger"
@@ -21,7 +19,7 @@ func main() {
 	}
 
 	app := api.NewApp()
-	ctx := gear.ContextWithSignal(context.Background())
+	ctx := conf.Config.GlobalCtx
 	host := "http://" + conf.Config.SrvAddr
 	if conf.Config.TLS.CertPath != "" && conf.Config.TLS.KeyPath != "" {
 		host = "https://" + conf.Config.SrvAddr
