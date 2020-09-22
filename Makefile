@@ -16,11 +16,11 @@ doc:
 buildweb:
 	web/build.sh
 
-dev:
+run:
 	@CONFIG_FILE_PATH=${PWD}/config/dev.yml APP_ENV=development go run main.go
 
-run:
-	@CONFIG_FILE_PATH=${PWD}/config/test.yml APP_ENV=development go run main.go
+dev:
+	@CONFIG_FILE_PATH=${PWD}/config/default.yml APP_ENV=development go run main.go
 	
 test: 
 	@CONFIG_FILE_PATH=${PWD}/config/test.yml STATIC_FILE_PATH=${PWD}/static APP_ENV=test go test ./...
