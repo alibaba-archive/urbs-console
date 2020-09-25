@@ -121,7 +121,7 @@ func (a *Label) Update(ctx *gear.Context) error {
 		return err
 	}
 
-	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product)
+	err := a.blls.UrbsAcAcl.CheckAdmin(ctx, req.Product+req.Label)
 	if err != nil {
 		return err
 	}

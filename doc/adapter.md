@@ -102,42 +102,37 @@ thrid:
 
 ## 自定义灰度
 
-Urbs 支持用户、群组、百分比的灰度方式，如需要扩展更多的灰度方式，可以通过调用管控后台的 API 配合自身的用户体系实现。
+Urbs 是面向开源来设计开发的，不依赖特定的用户身份体系、特定的业务逻辑。在与自身产品内部系统集成时，可以开发适配应用，主要用来：
 
-### 来源灰度
+- 在获取用户配置项时、访问管控后台的身份验证；
+- 存量用户数据导入 Urbs 系统，增量用户可以通过监听内部系统的 Webhook、MQ 添加到 Urbs 系统；
+- 除了 Urbs 系统本身支持的用户、群组、百分比、新用户百分比的灰度方式，如需要扩展更多的灰度方式，可以通过调用 Urbs-setting API 配合自身的用户体系实现。
 
-使用场景，希望对 ios 来源的用户进行灰度。可以在添加用户到 Urbs 系统时，检查用户来源，符合规则的话，发布配置项到这个用户上。
-
-伪代码：
-
-```go
-user := watch.DB.Users()
-// 添加用户到 Urbs 系统
-request.Post("/api/v1/users:batch", user)
-// 检查用户来源
-if user.IsIos() {
-    // 发布配置项到用户上
-   request.Post("/api/v1/products/product/modules/module/settings/setting:assign", user)
-}
-```
-
-### 新用户灰度
-
-使用场景，希望某个功能模块只针对新用户灰度，或新用户按比例灰度。
+比如以用户自身属性的进行多维度的灰度，如下伪代码：
 
 ```go
-user := watch.DB.Users()
+user := watch.Users()
 // 添加用户到 Urbs 系统
 request.Post("/api/v1/users:batch", user)
-// 检查是否新用户
-if user.IsNew() {
-    // 发布配置项到用户上
-   request.Post("/api/v1/products/product/modules/module/settings/setting:assign", user)
+
+if IsChild(User) { // 针对特定的人群进行灰度
+   Assign(User)
 }
-// 或新用户按比例灰度
-if user.IsInPercent(50%) {
-    // 发布配置项到用户上
+if IsChina(User) {  // 针对地区进行灰度
+   Assign(User)
+}
+if IsLevel3(User) {  // 针对用户会员级别进行灰度
+   Assign(User)
+}
+if IsIos(User) {  // 针对 IOS 用户进行灰度
+   Assign(User)
+}
+// 及其他维度
+
+func Assign(user User){
+   // 发布配置项到用户上
    request.Post("/api/v1/products/product/modules/module/settings/setting:assign", user)
+   // 或发布标签到用户上
+   request.Post("/api/v1/products/product/label/label:assign", user)
 }
 ```
-

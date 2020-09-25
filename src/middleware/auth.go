@@ -10,6 +10,7 @@ import (
 	"github.com/teambition/urbs-console/src/bll"
 	"github.com/teambition/urbs-console/src/conf"
 	"github.com/teambition/urbs-console/src/dto/thrid"
+	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/util"
 )
@@ -19,6 +20,8 @@ func init() {
 	if len(keys) > 0 {
 		Auther = auth.New(authjwt.StrToKeys(keys...)...)
 		Auther.JWT().SetExpiresIn(time.Minute * 10)
+	} else {
+		logger.Default.Warningf("`auth_keys` is empty, Auth middleware will not be executed.")
 	}
 }
 
@@ -29,26 +32,30 @@ var Auther *auth.Auth
 func Verify(services *service.Services) func(ctx *gear.Context) error {
 	return func(ctx *gear.Context) error {
 		var uid string
-		xToken := util.XAuthExtractor(ctx)
-		if xToken != "" && Auther != nil {
-			claims, err := Auther.JWT().Verify(xToken)
-			if err != nil {
-				return gear.ErrUnauthorized.WithMsg(err.Error())
+		if Auther != nil {
+			xToken := util.XAuthExtractor(ctx)
+			if xToken != "" {
+				claims, err := Auther.JWT().Verify(xToken)
+				if err != nil {
+					return gear.ErrUnauthorized.WithMsg(err.Error())
+				}
+				uid = claims.Get("uid").(string)
+			} else {
+				body := &thrid.UserVerifyReq{}
+				body.Cookie, _ = ctx.Cookies.Get(conf.Config.Thrid.UserAuth.CookieKey)
+				body.Singed, _ = ctx.Cookies.Get(conf.Config.Thrid.UserAuth.CookieKey + ".sig")
+				body.Token = util.AuthorizationExtractor(ctx)
+				if body.Cookie == "" && body.Token == "" {
+					return gear.ErrUnauthorized.WithMsg("invalid authorization")
+				}
+				var err error
+				uid, err = services.UserAuth.Verify(ctx, body)
+				if err != nil {
+					return gear.ErrUnauthorized.WithMsg(err.Error())
+				}
 			}
-			uid = claims.Get("uid").(string)
-		} else {
-			body := &thrid.UserVerifyReq{}
-			body.Cookie, _ = ctx.Cookies.Get(conf.Config.Thrid.UserAuth.CookieKey)
-			body.Singed, _ = ctx.Cookies.Get(conf.Config.Thrid.UserAuth.CookieKey + ".sig")
-			body.Token = util.AuthorizationExtractor(ctx)
-			if body.Cookie == "" && body.Token == "" {
-				return gear.ErrUnauthorized.WithMsg("invalid authorization")
-			}
-			var err error
-			uid, err = services.UserAuth.Verify(ctx, body)
-			if err != nil {
-				return gear.ErrUnauthorized.WithMsg(err.Error())
-			}
+		} else if len(conf.Config.SuperAdmins) > 0 {
+			uid = conf.Config.SuperAdmins[0]
 		}
 		if uid == "" {
 			return gear.ErrUnauthorized.WithMsg("invalid uid")

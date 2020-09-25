@@ -24,7 +24,11 @@ const PublishRecord: React.FC<Props> = (props) => {
   }, []);
   const getActionDesc = (kind: string, percent?: number, users?: string[], groups?: string[]) => {
     if (kind === 'userPercent') {
-      return `比例到 ${percent}%`
+      return `用户比例到 ${percent}%`
+    } else if (kind === 'newUserPercent') {
+      return `新用户比例到 ${percent}%`
+    } else if (kind === 'childLabelUserPercent') {
+      return `灰中灰用户比例到 ${percent}%`
     } else {
       return `${users ? `用户 ${users.join(',')}；` : ''}${groups ? `群组 ${groups.join(',')}；` : ''}`;
     }

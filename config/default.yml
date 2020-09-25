@@ -3,7 +3,7 @@ tls:
     cert_path: ""
     key_path: ""
 urbs_setting:
-    addr: "mock"
+    addr: "http://localhost:8080"
     otid: "otid:ot.example.com:service:urbs-setting"
 logger:
     level: "debug"
@@ -25,9 +25,8 @@ mysql:
     parameters: loc=UTC&readTimeout=10s&writeTimeout=10s&timeout=10s&multiStatements=true
     max_idle_conns: 8
     max_open_conns: 64
-superAdmins: []
-auth_keys:
-    - kqGuLsiKT1J5ANFDKXUHc2lAYfdzWBnriL1iHgBbYQ
+superAdmins: ["uid-b619300252ad390d"]
+auth_keys: []
 open_trust:
     otid: "otid:ot.example.com:app:urbs-console"
     otvids:
