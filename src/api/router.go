@@ -1,12 +1,17 @@
 package api
 
 import (
+	"context"
+
 	"github.com/teambition/gear"
 	tracing "github.com/teambition/gear-tracing"
 
 	"github.com/teambition/urbs-console/src/bll"
+	"github.com/teambition/urbs-console/src/conf"
+	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/middleware"
 	"github.com/teambition/urbs-console/src/service"
+	"github.com/teambition/urbs-console/src/tpl"
 	"github.com/teambition/urbs-console/src/util"
 )
 
@@ -51,6 +56,7 @@ func newAPIs(b *bll.Blls, s *service.Services) *APIs {
 		UrbsAcAcl:  &UrbsAcAcl{blls: blls},
 		UrbsAcUser: &UrbsAcUser{blls: blls},
 	}
+	initUser(b)
 	return apis
 }
 
@@ -242,6 +248,22 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	routerV1.Post("/groups/:uid/members:batch", checkSuperAdmin, apis.Group.BatchAddMembers)
 	// 指定群组根据条件清理成员
 	routerV1.Delete("/groups/:uid/members", checkSuperAdmin, apis.Group.RemoveMembers)
-
+	// 添加用户，并触发和应用规则
+	routerV1.Post("/products/:product/users/rules:apply", checkSuperAdmin, apis.User.ApplyRules)
 	return routerV1
+}
+
+func initUser(b *bll.Blls) {
+	body := &tpl.UrbsAcUsersBody{}
+	body.Users = []*tpl.UrbsAcUserBody{}
+	for _, user := range conf.Config.SuperAdmins {
+		body.Users = append(body.Users, &tpl.UrbsAcUserBody{
+			Uid:  user,
+			Name: "admin",
+		})
+	}
+	err := b.UrbsAcUser.Add(context.Background(), body)
+	if err != nil {
+		logger.Default.Err(err)
+	}
 }

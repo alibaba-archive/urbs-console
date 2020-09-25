@@ -13,7 +13,6 @@
 ## Depends
 - urbs-setting >= 1.3.0
 
-
 ## Get Started
 
 编译前端文件:
@@ -25,12 +24,12 @@ make budilweb
 启动应用：
 
 ```shell
-make run
+make dev
 ```
 
 浏览器访问：
 
->  http://localhost:8080
+>  http://localhost:8081
 
 
 ## Documentation

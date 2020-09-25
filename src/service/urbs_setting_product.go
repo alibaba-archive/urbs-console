@@ -92,3 +92,17 @@ func (a *UrbsSetting) ProductDelete(ctx context.Context, product string) (*tpl.B
 	}
 	return result, nil
 }
+
+// ProductApplyRule ...
+func (a *UrbsSetting) ProductApplyRule(ctx context.Context, product string, body *tpl.ApplyRulesBody) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/products/%s/users/rules:apply", conf.Config.UrbsSetting.Addr, product)
+
+	result := new(tpl.BoolRes)
+
+	resp, err := request.Post(url).Header(UrbsSettingHeader(ctx)).Body(body).Result(result).Do()
+
+	if err := HanderResponse(resp, err); err != nil {
+		return nil, err
+	}
+	return result, nil
+}

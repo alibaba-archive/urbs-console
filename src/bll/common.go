@@ -20,3 +20,29 @@ type labelRecallReq struct {
 	Args *tpl.ProductLabelURL `json:"args"`
 	Body *tpl.RecallBody      `json:"body"`
 }
+
+// MatchClient ...
+func MatchClient(clients []string, client string) bool {
+	if len(clients) == 0 || client == "" {
+		return true
+	}
+	for _, c := range clients {
+		if c == client {
+			return true
+		}
+	}
+	return false
+}
+
+// MatchChannel ...
+func MatchChannel(channels []string, channel string) bool {
+	if len(channels) == 0 || channel == "" {
+		return true
+	}
+	for _, c := range channels {
+		if c == channel {
+			return true
+		}
+	}
+	return false
+}

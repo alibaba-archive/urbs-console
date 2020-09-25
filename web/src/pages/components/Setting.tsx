@@ -38,9 +38,9 @@ const Settings: React.FC<TableComponentProps<Setting>> = (props) => {
     dataIndex: 'release',
     key: 'release',
   }, {
-    title: '更新时间',
-    dataIndex: 'updatedAt',
-    key: 'updatedAt',
+    title: '设置时间',
+    dataIndex: 'assignedAt',
+    key: 'assignedAt',
     render: (time: string) => {
       return `${formatTableTime(time)}`;
     },
@@ -60,7 +60,7 @@ const Settings: React.FC<TableComponentProps<Setting>> = (props) => {
       return (
         <>
           <a onClick={onRollback}>回滚</a>
-          <a onClick={onDelete} style={{marginLeft: '5px'}}>移除</a>
+          <a onClick={onDelete} style={{ marginLeft: '5px' }}>移除</a>
         </>
       )
     }

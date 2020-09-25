@@ -69,6 +69,7 @@ func TestOperationLog(t *testing.T) {
 			Value:   body.Value,
 			Percent: &percent,
 			Release: 111,
+			Kind:    "userPercent",
 		}
 		err := testBlls.OperationLog.Add(ctx, object, constant.OperationCreate, logContent)
 		require.Nil(err)

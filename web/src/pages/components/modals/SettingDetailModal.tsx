@@ -32,6 +32,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
   const [settingUserPageSize, changeSettingUserPageSize] = useState(DEFAULT_PAGE_SIZE);
 
   const [userPercentRule, changeUserPercentRule] = useState<UserPercentRule>();
+  const [newUserPercentRule, changeNewUserPercentRule] = useState<UserPercentRule>();
   const [tabsActiveKey, setTabsActiveKey] = useState(String(TagTabsKey.Publish));
   const [tabsSearchWord, setTabsSearchWord] = useState('');
   const [publishTagModalVisible, setPublishTagModalVisible] = useState(false);
@@ -154,14 +155,39 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
         product,
         module: settingInfo?.module,
         setting: settingInfo?.name,
-        cb: (rule?: UserPercentRule) => {
-          changeUserPercentRule(rule);
+        cb: (rules?: UserPercentRule[]) => {
+          if (!Array.isArray(rules)) return;
+          for (const rule of rules) {
+            if (rule?.kind === 'userPercent') {
+              changeUserPercentRule(rule);
+            } else if (rule?.kind === 'newUserPercent') {
+              changeNewUserPercentRule(rule)
+            }
+
+          }
           changePublishTagModalVisible(true);
         }
       }
     });
   };
   const handleOpenPublishTagModalOk = (values: FieldsValue) => {
+    if (newUserPercentRule && values.kind === 'newUserPercent') {
+      dispatch({
+        type: 'products/updateProductSettingRule',
+        payload: {
+          product,
+          module: settingInfo?.module,
+          setting: settingInfo?.name,
+          rule: newUserPercentRule.hid,
+          params: values,
+          cb: () => {
+            fetchSettingLogs();
+            changePublishTagModalVisible(false);
+          }
+        },
+      });
+    }
+
     if (userPercentRule && values.kind === 'userPercent') {
       dispatch({
         type: 'products/updateProductSettingRule',
@@ -177,7 +203,8 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
           }
         },
       });
-    } else {
+    }
+    if (values.kind === 'batch' || (!newUserPercentRule && values.kind === 'newUserPercent') || (!userPercentRule && values.kind === 'userPercent')) {
       dispatch({
         type: 'products/publishProductSettings',
         payload: {
@@ -492,6 +519,7 @@ const SettingDetailModal: React.FC<SettingDetailComponentProps> = (props) => {
           grayscale={settingInfo?.values}
           onGotoGroups={onGotoGroups}
           onGotoUsers={onGotoUsers}
+          newUserPercentRule={newUserPercentRule}
           defauleRule={userPercentRule}
         ></PublishTagModal>
       }

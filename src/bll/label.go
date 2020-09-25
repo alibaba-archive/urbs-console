@@ -200,6 +200,7 @@ func (a *Label) UpdateRule(ctx context.Context, args *tpl.ProductLabelHIDURL, bo
 	logContent := &dto.OperationLogContent{
 		Desc:    body.Desc,
 		Percent: &body.Rule.Value,
+		Kind:    body.Kind,
 	}
 	err := a.operationLog.Add(ctx, object, actionUpdate, logContent)
 	if err != nil {
