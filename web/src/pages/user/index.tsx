@@ -252,7 +252,7 @@ const Users: React.FC<UsersComponentProps> = (props) => {
     content: (
       <GrayscaleTag
         dataSource={labelsList}
-        hideColumns={['users', 'release', 'status', 'updatedAt']}
+        hideColumns={['users', 'release', 'status', 'updatedAt', 'desc']}
         onAction={
           (record: Label) => ({
             onDelete: () => {

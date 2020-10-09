@@ -23,7 +23,7 @@ dev:
 	@CONFIG_FILE_PATH=${PWD}/config/default.yml APP_ENV=development go run main.go
 	
 test: 
-	@CONFIG_FILE_PATH=${PWD}/config/test_on_github.yml STATIC_FILE_PATH=${PWD}/static APP_ENV=test go test ./...
+	@CONFIG_FILE_PATH=${PWD}/config/test.yml STATIC_FILE_PATH=${PWD}/static APP_ENV=test go test ./...
 
 mock:
 	mockgen -source=./src/service/urbs_setting_interface.go -destination=./src/service/mock_service/urbs_setting__mock.go

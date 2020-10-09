@@ -171,7 +171,7 @@ type MySetting struct {
 	Release    int64     `json:"release,omitempty"`
 	AssignedAt time.Time `json:"assignedAt"`
 
-	UpdatedAt time.Time `json:"updated_at"` //兼容
+	UpdatedAt time.Time `json:"updated_at,omitempty"` //兼容
 }
 
 // SettingBody ...

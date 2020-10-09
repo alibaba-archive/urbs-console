@@ -22,6 +22,13 @@ components:
       required: true
       schema:
         type: string
+    HeaderAuthorizationOpenTrust:
+      in: header
+      name: Authorization
+      description: 'OTVID, 格式如: `Bearer OTVID`'
+      required: true
+      schema:
+        type: string
     QueryProduct:
       in: query
       name: product
@@ -58,6 +65,13 @@ components:
         title: q
         type: string
         default: ""
+    PathProduct:
+      in: path
+      name: product
+      description: 产品名称
+      required: true
+      schema:
+        type: string
   schemas:
     NextPageToken:
       title: nextPageToken
@@ -137,7 +151,27 @@ components:
           type: string
           format: date-time
           description: 标签被设置时间
-          example: 2020-03-25T06:24:25Z      
+          example: 2020-03-25T06:24:25Z   
+  requestBodies:          
+    ApplyRulesBody:
+      required: true
+      description: 触发用户应用规则
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              users:
+                type: array
+                description: 用户 uid 数组，必须符合正则 /^[0-9A-Za-z._=-]{3,63}$/
+                required: true
+                example: ["50c32afae8cf1439d35a87e6", "5e69a9bd6ac3cd00213ea969"]
+                items:
+                  type: string
+              kind:
+                type: string
+                description: 规则类型
+                example: newUserPercent 
   responses:
     MySettingsRes:
       description: 用户或群组被指派的配置项列表返回结果
