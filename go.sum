@@ -97,6 +97,8 @@ github.com/mozillazg/request v0.8.0 h1:TbXeQUdBWr1J1df5Z+lQczDFzX9JD71kTCl7Zu/9r
 github.com/mozillazg/request v0.8.0/go.mod h1:weoQ/mVFNbWgRBtivCGF1tUT9lwneFesues+CleXMWc=
 github.com/mushroomsir/logger v1.5.0 h1:VBV5xXk56z9f9Q2Sqsaw1svv9oCS1QfG2si24YIdunw=
 github.com/mushroomsir/logger v1.5.0/go.mod h1:ON3fJFd0erGjzGCJbT9/Cnrovy3dMaqbtENzMYRS740=
+github.com/mushroomsir/logger v1.6.0 h1:/10V4l3KdDFxiaaacx+7UlJHg63qYns37l03YGjvXKc=
+github.com/mushroomsir/logger v1.6.0/go.mod h1:ON3fJFd0erGjzGCJbT9/Cnrovy3dMaqbtENzMYRS740=
 github.com/mushroomsir/request v0.1.0 h1:h6kmTaP741XYQx41K4AikzIlE+2QwRIZoBWw53MhoQ4=
 github.com/mushroomsir/request v0.1.0/go.mod h1:3HOSds9MvFIOsAMZeZugToLvo1dyGpM7NaoQFtAhgaI=
 github.com/mushroomsir/tcc v0.1.2 h1:8Cro+HOroOK6lnZ0yqOFE43tw0RyHToaX+yx2RP0yqE=

@@ -183,3 +183,23 @@ func (a *User) ApplyRules(ctx *gear.Context) error {
 	}
 	return ctx.OkJSON(res)
 }
+
+// ListSettingsUnionAllBackend 返回 user 的 settings，按照 setting 设置时间反序，支持分页
+// 包含了 user 从属的 group 的 settings
+func (a *User) ListSettingsUnionAllBackend(ctx *gear.Context) error {
+	req := tpl.MySettingsQueryURL{}
+	if err := ctx.ParseURL(&req); err != nil {
+		return err
+	}
+	res, err := a.blls.User.ListSettingsUnionAll(ctx, &req)
+	if err != nil {
+		return err
+	}
+	for _, item := range res.Result {
+		item.Desc = ""
+		item.Release = 0
+		item.LastValue = ""
+		item.UpdatedAt = item.AssignedAt
+	}
+	return ctx.OkJSON(res)
+}

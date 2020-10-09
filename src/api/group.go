@@ -65,7 +65,11 @@ func (a *Group) ListSettings(ctx *gear.Context) error {
 	if err != nil {
 		return err
 	}
-
+	for _, item := range res.Result {
+		item.Desc = ""
+		item.Release = 0
+		item.LastValue = ""
+	}
 	return ctx.OkJSON(res)
 }
 

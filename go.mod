@@ -7,7 +7,7 @@ require (
 	github.com/go-http-utils/cookie v1.3.1
 	github.com/golang/mock v1.4.3
 	github.com/jinzhu/gorm v1.9.16
-	github.com/mushroomsir/logger v1.5.0
+	github.com/mushroomsir/logger v1.6.0
 	github.com/mushroomsir/request v0.1.0
 	github.com/mushroomsir/tcc v0.1.2
 	github.com/open-trust/ot-go-lib v0.3.0
