@@ -31,7 +31,7 @@ const GrayscaleTag: React.FC<TableComponentProps<any>> = (props) => {
     key: 'status',
     render: (status: number) => {
       const len = String(status).length;
-      return `小于${ Math.pow(10, len) }`;
+      return `小于${Math.pow(10, len)}`;
     },
   }, {
     title: '发布次数',
@@ -46,8 +46,8 @@ const GrayscaleTag: React.FC<TableComponentProps<any>> = (props) => {
     },
   }, {
     title: '设置时间',
-    dataIndex: 'createdAt',
-    key: 'createdAt',
+    dataIndex: 'assignedAt',
+    key: 'assignedAt',
     render: (time: string) => {
       return formatTableTime(time);
     },
@@ -58,7 +58,7 @@ const GrayscaleTag: React.FC<TableComponentProps<any>> = (props) => {
     render: (_, record: Label) => {
       const { onDelete } = onAction ? onAction(record) : ({} as ActionEventListeners);
       return (
-        <a onClick={ onDelete }>移除</a>
+        <a onClick={onDelete}>移除</a>
       );
     },
   }];
@@ -70,9 +70,9 @@ const GrayscaleTag: React.FC<TableComponentProps<any>> = (props) => {
   };
   return (
     <div>
-      <Table rowKey="hid" { ...props } columns={ generateTableColumns() } pagination={ false }></Table>
+      <Table rowKey="hid" {...props} columns={generateTableColumns()} pagination={false}></Table>
       {
-        paginationProps && (<Pagination { ...paginationProps }></Pagination>)
+        paginationProps && (<Pagination {...paginationProps}></Pagination>)
       }
     </div>
   );

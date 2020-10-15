@@ -88,8 +88,11 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	routerV1.Use(middleware.Verify(services))
 
 	// ***** client ******
-	// 读取指定用户的功能配置项，支持条件筛选，数据用于客户端
+	// 读取指定用户的功能配置项，包含 group，支持条件筛选，数据用于客户端
 	routerV1.Get("/users/settings:unionAll", apis.User.ListSettingsUnionAllClient)
+	// 读取指定用户的功能配置项，包含 group，支持条件筛选，数据用于服务端
+	routerV1.Get("/users/:uid/settings:unionAll", apis.User.ListSettingsUnionAllBackend)
+
 	// 读取指定用户的标签，支持条件筛选，数据用于客户端
 	routerV1.Get("/users/labels", apis.User.ListLablesForClient)
 
