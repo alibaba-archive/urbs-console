@@ -2,13 +2,17 @@ addr: ":8081"
 tls:
     cert_path: ""
     key_path: ""
+logger:
+    level: "debug"
 urbs_setting:
     addr: "mock"
     otid: "otid:ot.example.com:service:urbs-setting"
-logger:
-    level: "debug"
+    otvids:
+    - eyJhbGciOiJQUzI1NiIsImtpZCI6IjRQYmxOWllTbk9zeThzRDZTSFpQRWw2RENxRWVycGdmaV9zUHh0aEhwV00iLCJ0eXAiOiJKV1QifQ.eyJhdWQiOlsib3RpZDpvdC5leGFtcGxlLmNvbTpzZXJ2aWNlOnVyYnMtc2V0dGluZyJdLCJleHAiOjE5NjA0MjMyMDIsImlhdCI6MTYwMDQyMzIwMiwiaXNzIjoib3RpZDpvdC5leGFtcGxlLmNvbSIsInN1YiI6Im90aWQ6b3QuZXhhbXBsZS5jb206YXBwOnVyYnMtY29uc29sZSJ9.oXbUxH6FLZ0_25RBfumXCTtZRXdN7IPN3Hrw7Mhuck72z62W4xwMeVY2IloXTBhgkw-SX33L5wzkNUoQSqffqiQlTCV042-5mbiLLH7LyKW1IaPn7H_l_lekNjnZz3xxoaHck0yGrEwIYlmvh5le4czDgn5kFHLDgripjw-pgkUlEQtIWu7xw427Mx2P137ANm0rybDHvkrCivLNx9wP0VRrvo4ssk00impiq17qRMSFub3ijTXz2ndlVx70A3FSa0iyS8u6TzVlOImpOJ778mLULINWweCUnHN8RmfERKZP8mLmk4hMbh6cUUd6PGztH3dvo023SX06yI7VdyageQ
 thrid:
-    key: "a29b3a29b3a29b30x1a29b38"
+    otid: "otid:ot.example.com:agent:urbs-console-adapter"
+    otvids:
+    - eyJhbGciOiJQUzI1NiIsImtpZCI6IjRQYmxOWllTbk9zeThzRDZTSFpQRWw2RENxRWVycGdmaV9zUHh0aEhwV00iLCJ0eXAiOiJKV1QifQ.eyJhdWQiOlsib3RpZDpvdC5leGFtcGxlLmNvbTpzZXJ2aWNlOnVyYnMtc2V0dGluZyJdLCJleHAiOjE5NjA0MjMyMDIsImlhdCI6MTYwMDQyMzIwMiwiaXNzIjoib3RpZDpvdC5leGFtcGxlLmNvbSIsInN1YiI6Im90aWQ6b3QuZXhhbXBsZS5jb206YXBwOnVyYnMtY29uc29sZSJ9.oXbUxH6FLZ0_25RBfumXCTtZRXdN7IPN3Hrw7Mhuck72z62W4xwMeVY2IloXTBhgkw-SX33L5wzkNUoQSqffqiQlTCV042-5mbiLLH7LyKW1IaPn7H_l_lekNjnZz3xxoaHck0yGrEwIYlmvh5le4czDgn5kFHLDgripjw-pgkUlEQtIWu7xw427Mx2P137ANm0rybDHvkrCivLNx9wP0VRrvo4ssk00impiq17qRMSFub3ijTXz2ndlVx70A3FSa0iyS8u6TzVlOImpOJ778mLULINWweCUnHN8RmfERKZP8mLmk4hMbh6cUUd6PGztH3dvo023SX06yI7VdyageQ
     user_auth:
         url: "mock"
         cookie_key: ""
@@ -30,7 +34,6 @@ auth_keys:
     - kqGuLsiKT1J5ANFDKXUHc2lAYfdzWBnriL1iHgBbYQ
 open_trust:
     otid: "otid:ot.example.com:app:urbs-console"
-    otvids:
-    - eyJhbGciOiJQUzI1NiIsImtpZCI6IjRQYmxOWllTbk9zeThzRDZTSFpQRWw2RENxRWVycGdmaV9zUHh0aEhwV00iLCJ0eXAiOiJKV1QifQ.eyJhdWQiOlsib3RpZDpvdC5leGFtcGxlLmNvbTpzZXJ2aWNlOnVyYnMtc2V0dGluZyJdLCJleHAiOjE5NjA0MjMyMDIsImlhdCI6MTYwMDQyMzIwMiwiaXNzIjoib3RpZDpvdC5leGFtcGxlLmNvbSIsInN1YiI6Im90aWQ6b3QuZXhhbXBsZS5jb206YXBwOnVyYnMtY29uc29sZSJ9.oXbUxH6FLZ0_25RBfumXCTtZRXdN7IPN3Hrw7Mhuck72z62W4xwMeVY2IloXTBhgkw-SX33L5wzkNUoQSqffqiQlTCV042-5mbiLLH7LyKW1IaPn7H_l_lekNjnZz3xxoaHck0yGrEwIYlmvh5le4czDgn5kFHLDgripjw-pgkUlEQtIWu7xw427Mx2P137ANm0rybDHvkrCivLNx9wP0VRrvo4ssk00impiq17qRMSFub3ijTXz2ndlVx70A3FSa0iyS8u6TzVlOImpOJ778mLULINWweCUnHN8RmfERKZP8mLmk4hMbh6cUUd6PGztH3dvo023SX06yI7VdyageQ
+    legacy_otid: "otid:ot.example.com:app:old.urbs-console"
     private_keys: []
     domain_public_keys: ['{"kty":"EC","alg":"ES256","crv":"P-256","kid":"1u2DGQj3gKRehQcey4viaBOr-81iWtZWjeJYLO4C0tA","x":"b_rpu4i6bsrFIIDqTivxSwqRY9cIZXmXWwHJ_wqSTZI","y":"Nti_KGVQ9tUyvs3En5v6bV26UahJX3PJb5ST6KeD0y8"}']

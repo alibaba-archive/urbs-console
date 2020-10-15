@@ -34,10 +34,10 @@ make dev
 
 ## Documentation
 
-[API 文档](https://github.com/teambition/urbs-console/blob/develop/doc/api.md)
+[API 文档](https://github.com/teambition/urbs-console/blob/master/doc/api.md)
 
-[管控后台帮助文档](https://github.com/teambition/urbs-console/blob/develop/doc/help.md)
+[管控后台帮助文档](https://github.com/teambition/urbs-console/blob/master/doc/help.md)
 
-[前端接入文档](https://github.com/teambition/urbs-console/blob/develop/doc/client_usage.md)
+[前端接入文档](https://github.com/teambition/urbs-console/blob/master/doc/client_usage.md)
 
-[集成已有系统和扩展灰度能力文档](https://github.com/teambition/urbs-console/blob/develop/doc/adapter.md)
+[集成已有系统和扩展灰度能力文档](https://github.com/teambition/urbs-console/blob/master/doc/adapter.md)
