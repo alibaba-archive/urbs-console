@@ -311,7 +311,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
     title: '环境标签',
     content: (
       <GrayscaleTag
-        hideColumns={['users', 'status', 'release', 'updatedAt']}
+        hideColumns={['users', 'status', 'release', 'updatedAt', 'desc']}
         dataSource={labelsList}
         onAction={
           (record: Label) => ({
@@ -378,7 +378,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
     title: '配置项',
     content: (
       <Setting
-        hideColumns={['users', 'desc', 'status', 'release']}
+        hideColumns={['users', 'desc', 'status', 'release', 'createdAt']}
         dataSource={settingsList}
         onAction={
           (record: SettingData) => ({
