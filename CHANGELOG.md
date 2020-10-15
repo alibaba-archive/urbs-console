@@ -4,10 +4,15 @@ All notable changes to this project will be documented in this file starting fro
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 -----
+## [v1.0.0] - 2020-10-15
+
+**Change:**
+- Use Open Trust identity.
+
 ## [v0.12.0] - 2020-10-10
 
 **Change:**
-- Support Open Trust.
+- Support Open Trust verify.
 
 ## [v0.11.0] - 2020-09-22
 

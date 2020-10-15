@@ -50,8 +50,16 @@ const (
 	HeaderAuthorizeOAuth2 = "OAuth2 "
 )
 
-// AuthorizationExtractor ...
-func AuthorizationExtractor(ctx *gear.Context) (token string) {
+// ExtractBearerToken ...
+func ExtractBearerToken(ctx *gear.Context) (token string) {
+	if val := ctx.Get(HeaderAuthorize); strings.HasPrefix(val, HeaderAuthorizeBearer) {
+		token = val[7:]
+	}
+	return
+}
+
+// ExtractToken ...
+func ExtractToken(ctx *gear.Context) (token string) {
 	if val := ctx.Get(HeaderAuthorize); strings.HasPrefix(val, HeaderAuthorizeBearer) {
 		token = val[7:]
 	} else if val := ctx.Get(HeaderAuthorize); strings.HasPrefix(val, HeaderAuthorizeOAuth2) {

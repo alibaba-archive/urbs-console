@@ -18,6 +18,21 @@ func init() {
 	p.GlobalCtx = gear.ContextWithSignal(context.Background())
 }
 
+// Config ...
+var Config ConfigTpl
+
+// Validate 用于完成基本的配置验证和初始化工作。
+func (c *ConfigTpl) Validate() error {
+	if len(c.SrvAddr) == 0 {
+		c.SrvAddr = ":8080"
+	}
+	logger.SetLevel(c.Logger.Level)
+	logger.SetJSONLog()
+
+	logging.Default().SetJSONLog().SetLevel(logging.Level(logger.Level()))
+	return nil
+}
+
 // ConfigTpl ...
 type ConfigTpl struct {
 	GlobalCtx     context.Context
@@ -47,13 +62,15 @@ type Logger struct {
 
 // UrbsSetting ...
 type UrbsSetting struct {
-	Addr string `json:"addr" yaml:"addr"`
-	OTID string `json:"otid" yaml:"otid"`
+	Addr   string   `json:"addr" yaml:"addr"`
+	OTID   string   `json:"otid" yaml:"otid"`
+	OTVIDs []string `json:"otvids" yaml:"otvids"`
 }
 
 // Thrid ...
 type Thrid struct {
-	Key string `json:"key" yaml:"key"`
+	OTID   string   `json:"otid" yaml:"otid"`
+	OTVIDs []string `json:"otvids" yaml:"otvids"`
 	// 验证调用者身份接口
 	UserAuth UserAuth `json:"user_auth" yaml:"user_auth"`
 	// 群组成员接口
@@ -93,22 +110,7 @@ type SQL struct {
 // OpenTrust ...
 type OpenTrust struct {
 	OTID             string   `json:"otid" yaml:"otid"`
-	OTVIDs           []string `json:"otvids" yaml:"otvids"`
+	LegacyOTID       string   `json:"legacy_otid" yaml:"legacy_otid"`
 	PrivateKeys      []string `json:"private_keys" yaml:"private_keys"`
 	DomainPublicKeys []string `json:"domain_public_keys" yaml:"domain_public_keys"`
-}
-
-// Config ...
-var Config ConfigTpl
-
-// Validate 用于完成基本的配置验证和初始化工作。
-func (c *ConfigTpl) Validate() error {
-	if len(c.SrvAddr) == 0 {
-		c.SrvAddr = ":8080"
-	}
-	logger.SetLevel(c.Logger.Level)
-	logger.SetJSONLog()
-
-	logging.Default().SetJSONLog().SetLevel(logging.Level(logger.Level()))
-	return nil
 }

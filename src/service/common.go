@@ -6,45 +6,53 @@ import (
 	"fmt"
 	"net"
 	"net/http"
-	"time"
 
 	"github.com/mushroomsir/request"
 	otgo "github.com/open-trust/ot-go-lib"
 	"github.com/teambition/gear"
-	authjwt "github.com/teambition/gear-auth/jwt"
 	"github.com/teambition/urbs-console/src/conf"
 	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/util"
 )
 
-var thirdJwt *authjwt.JWT
-var otHolder *otgo.Holder
+var thirdOTID otgo.OTID
 var urbsSettingOTID otgo.OTID
+var otHolder *otgo.Holder
 
 func init() {
 	util.DigProvide(NewServices)
 
-	thirdJwt = authjwt.New([]byte(conf.Config.Thrid.Key))
-
 	otConf := conf.Config.OpenTrust
-	otid, err := otgo.ParseOTID(otConf.OTID)
-	if err != nil {
-		panic(fmt.Errorf("Parse Open Trust config otid failed: %s", err))
-	}
+	otHolder = genHolder(otConf)
 
-	urbsSettingOTID, err = otgo.ParseOTID(conf.Config.UrbsSetting.OTID)
+	addOTVIDTokens(otHolder, conf.Config.UrbsSetting.OTVIDs)
+	addOTVIDTokens(otHolder, conf.Config.Thrid.OTVIDs)
+
+	urbsSettingOTID = parseOTID(conf.Config.UrbsSetting.OTID)
+	thirdOTID = parseOTID(conf.Config.Thrid.OTID)
+}
+
+func parseOTID(otidStr string) otgo.OTID {
+	otid, err := otgo.ParseOTID(otidStr)
 	if err != nil {
 		panic(fmt.Errorf("Parse Urbs Setting config otid failed: %s", err))
 	}
+	return otid
+}
 
-	otHolder, err = otgo.NewHolder(conf.Config.GlobalCtx, otid, otConf.PrivateKeys...)
+func genHolder(otConf conf.OpenTrust) *otgo.Holder {
+	otid := parseOTID(otConf.OTID)
+	otHolder, err := otgo.NewHolder(context.Background(), otid, otConf.PrivateKeys...)
 	if err != nil {
 		panic(fmt.Errorf("Parse Open Trust config failed: %s", err))
 	}
-	if len(otConf.OTVIDs) > 0 {
-		if err = otHolder.AddOTVIDTokens(otConf.OTVIDs...); err != nil {
-			panic(fmt.Errorf("Parse Open Trust config otvids failed: %s", err))
-		}
+	return otHolder
+}
+
+func addOTVIDTokens(otHolder *otgo.Holder, otvids []string) {
+	err := otHolder.AddOTVIDTokens(otvids...)
+	if err != nil {
+		panic(fmt.Errorf("Parse Open Trust config otvids failed: %s", err))
 	}
 }
 
@@ -64,7 +72,11 @@ func UrbsSettingHeader(ctx context.Context) http.Header {
 func ThridHeader(ctx context.Context) http.Header {
 	header := http.Header{}
 	addRequestId(ctx, header)
-	otgo.AddTokenToHeader(header, genToken(thirdJwt))
+	token, err := otHolder.GetOTVIDToken(thirdOTID)
+	if err != nil {
+		panic(err)
+	}
+	otgo.AddTokenToHeader(header, token)
 	return header
 }
 
@@ -110,14 +122,4 @@ func addRequestId(ctx context.Context, header http.Header) {
 	if requestId != "" {
 		header.Set(gear.HeaderXRequestID, requestId)
 	}
-}
-
-func genToken(j *authjwt.JWT) string {
-	m := make(map[string]interface{})
-	m["name"] = "urbs-console"
-	token, err := j.Sign(m, time.Hour)
-	if err != nil {
-		panic(err)
-	}
-	return token
 }

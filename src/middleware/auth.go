@@ -25,25 +25,36 @@ func init() {
 	}
 	otConf := conf.Config.OpenTrust
 	if otConf.OTID != "" {
-		var err error
-		otid, err := otgo.ParseOTID(otConf.OTID)
-		if err != nil {
-			logger.Default.Panicf("Parse Open Trust config failed: %s", err)
-		}
-
-		otVerifier, err = otgo.NewVerifier(conf.Config.GlobalCtx, otid, false, otConf.DomainPublicKeys...)
-		if err != nil {
-			logger.Default.Panicf("Parse Open Trust config failed: %s", err)
+		otVerifier = newVerifier(otConf.OTID, otConf.DomainPublicKeys)
+		if otConf.LegacyOTID != "" {
+			otLegacyVerifier = newVerifier(otConf.LegacyOTID, otConf.DomainPublicKeys)
 		}
 	}
-	if otVerifier == nil || Auther == nil {
+	if otVerifier == nil {
+		logger.Default.Warningf("`open_trust` is empty, Auth middleware will not be executed.")
+	}
+	if Auther == nil {
 		logger.Default.Warningf("`auth_keys` is empty, Auth middleware will not be executed.")
 	}
+}
+
+func newVerifier(otidStr string, publicKeys []string) *otgo.Verifier {
+	otid, err := otgo.ParseOTID(otidStr)
+	if err != nil {
+		logger.Default.Panicf("Parse Open Trust config failed: %s", err)
+	}
+
+	otVerifier, err := otgo.NewVerifier(conf.Config.GlobalCtx, otid, false, publicKeys...)
+	if err != nil {
+		logger.Default.Panicf("Parse Open Trust config failed: %s", err)
+	}
+	return otVerifier
 }
 
 // Auther 是基于 JWT 的身份验证，当 config.auth_keys 配置了才会启用
 var Auther *auth.Auth
 var otVerifier *otgo.Verifier
+var otLegacyVerifier *otgo.Verifier
 
 // Verify ...
 func Verify(services *service.Services) func(ctx *gear.Context) error {
@@ -58,9 +69,12 @@ func Verify(services *service.Services) func(ctx *gear.Context) error {
 			}
 			uid = claims.Get("uid").(string)
 		} else {
-			token := util.AuthorizationExtractor(ctx)
+			token := util.ExtractBearerToken(ctx)
 			if otVerifier != nil && len(token) > 0 {
 				vid, err := otVerifier.ParseOTVID(token)
+				if err != nil {
+					vid, err = otLegacyVerifier.ParseOTVID(token)
+				}
 				if err == nil {
 					isOpenTrust = true
 					if len(conf.Config.SuperAdmins) > 0 { // open-trust 不需要从用户身份中提取用 UID，默认拥有超级管理员权限
@@ -71,11 +85,12 @@ func Verify(services *service.Services) func(ctx *gear.Context) error {
 					logger.Warning(ctx, err.Error())
 				}
 			}
+			token = util.ExtractToken(ctx)
 			if !isOpenTrust { // open-trust 验证失败，走用户验证
 				body := &thrid.UserVerifyReq{}
 				body.Cookie, _ = ctx.Cookies.Get(conf.Config.Thrid.UserAuth.CookieKey)
 				body.Singed, _ = ctx.Cookies.Get(conf.Config.Thrid.UserAuth.CookieKey + ".sig")
-				body.Token = util.AuthorizationExtractor(ctx)
+				body.Token = token
 				if body.Cookie == "" && body.Token == "" {
 					return gear.ErrUnauthorized.WithMsg("invalid authorization")
 				}
