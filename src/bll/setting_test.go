@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/teambition/urbs-console/src/dto"
 	"github.com/teambition/urbs-console/src/dto/thrid"
+	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/service/mock_service"
 	"github.com/teambition/urbs-console/src/tpl"
@@ -122,6 +123,6 @@ func TestSetting(t *testing.T) {
 
 		hookMock.EXPECT().SendAsync(nil, body).Return()
 
-		setting.Push(nil, service.EventSettingPublish, "content", nil, []string{uid})
+		setting.Push(nil, service.EventSettingPublish, "content", nil, []*urbssetting.GroupKindUID{{UID: uid, Kind: dto.GroupOrgKind}})
 	})
 }

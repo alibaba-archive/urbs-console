@@ -11,8 +11,8 @@ import (
 )
 
 // GroupListLables ...
-func (a *UrbsSetting) GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MyLabelsRes, error) {
-	url := fmt.Sprintf("%s/v1/groups/%s/labels?skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Q)
+func (a *UrbsSetting) GroupListLables(ctx context.Context, args *tpl.GroupPaginationURL) (*tpl.MyLabelsRes, error) {
+	url := fmt.Sprintf("%s/v1/groups/%s/labels?skip=%d&pageSize=%d&pageToken=%s&q=%s&kind=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Q, args.Kind)
 
 	result := new(tpl.MyLabelsRes)
 
@@ -32,7 +32,8 @@ func (a *UrbsSetting) GroupListSettings(ctx context.Context, args *tpl.MySetting
 	path += "&setting=%s"
 	path += "&client=%s"
 	path += "&channel=%s"
-	url := fmt.Sprintf(path, conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Q, args.Product, args.Module, args.Setting, args.Client, args.Channel)
+	path += "&kind=%s"
+	url := fmt.Sprintf(path, conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Q, args.Product, args.Module, args.Setting, args.Client, args.Channel, args.Kind)
 
 	result := new(tpl.MySettingsRes)
 
@@ -59,8 +60,8 @@ func (a *UrbsSetting) GroupList(ctx context.Context, args *tpl.GroupsURL) (*tpl.
 }
 
 // GroupCheckExists ...
-func (a *UrbsSetting) GroupCheckExists(ctx context.Context, uid string) (*tpl.BoolRes, error) {
-	url := fmt.Sprintf("%s/v1/groups/%s:exists", conf.Config.UrbsSetting.Addr, uid)
+func (a *UrbsSetting) GroupCheckExists(ctx context.Context, kind, uid string) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/groups/%s:exists?kind=%s", conf.Config.UrbsSetting.Addr, uid, kind)
 
 	result := new(tpl.BoolRes)
 
@@ -89,8 +90,8 @@ func (a *UrbsSetting) GroupBatchAdd(ctx context.Context, groups []tpl.GroupBody)
 }
 
 // GroupUpdate ...
-func (a *UrbsSetting) GroupUpdate(ctx context.Context, uid string, body *urbssetting.GroupUpdateBody) (*tpl.GroupRes, error) {
-	url := fmt.Sprintf("%s/v1/groups/%s", conf.Config.UrbsSetting.Addr, uid)
+func (a *UrbsSetting) GroupUpdate(ctx context.Context, kind, uid string, body *urbssetting.GroupUpdateBody) (*tpl.GroupRes, error) {
+	url := fmt.Sprintf("%s/v1/groups/%s?kind=%s", conf.Config.UrbsSetting.Addr, uid, kind)
 
 	result := new(tpl.GroupRes)
 
@@ -102,8 +103,8 @@ func (a *UrbsSetting) GroupUpdate(ctx context.Context, uid string, body *urbsset
 }
 
 // GroupDelete ...
-func (a *UrbsSetting) GroupDelete(ctx context.Context, uid string) (*tpl.BoolRes, error) {
-	url := fmt.Sprintf("%s/v1/groups/%s", conf.Config.UrbsSetting.Addr, uid)
+func (a *UrbsSetting) GroupDelete(ctx context.Context, kind, uid string) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/groups/%s?kind=%s", conf.Config.UrbsSetting.Addr, uid, kind)
 
 	result := new(tpl.BoolRes)
 
@@ -115,8 +116,8 @@ func (a *UrbsSetting) GroupDelete(ctx context.Context, uid string) (*tpl.BoolRes
 }
 
 // GroupListMembers ...
-func (a *UrbsSetting) GroupListMembers(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.GroupMembersRes, error) {
-	url := fmt.Sprintf("%s/v1/groups/%s/members?skip=%d&pageSize=%d&pageToken=%s&q=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Q)
+func (a *UrbsSetting) GroupListMembers(ctx context.Context, args *tpl.GroupPaginationURL) (*tpl.GroupMembersRes, error) {
+	url := fmt.Sprintf("%s/v1/groups/%s/members?skip=%d&pageSize=%d&pageToken=%s&q=%s&kind=%s", conf.Config.UrbsSetting.Addr, args.UID, args.Skip, args.PageSize, args.PageToken, args.Q, args.Kind)
 
 	result := new(tpl.GroupMembersRes)
 
@@ -128,8 +129,8 @@ func (a *UrbsSetting) GroupListMembers(ctx context.Context, args *tpl.UIDPaginat
 }
 
 // GroupBatchAddMembers ...
-func (a *UrbsSetting) GroupBatchAddMembers(ctx context.Context, groupId string, users []string) (*tpl.BoolRes, error) {
-	url := fmt.Sprintf("%s/v1/groups/%s/members:batch", conf.Config.UrbsSetting.Addr, groupId)
+func (a *UrbsSetting) GroupBatchAddMembers(ctx context.Context, kind, uid string, users []string) (*tpl.BoolRes, error) {
+	url := fmt.Sprintf("%s/v1/groups/%s/members:batch?kind=%s", conf.Config.UrbsSetting.Addr, uid, kind)
 
 	body := new(tpl.UsersBody)
 	body.Users = users
@@ -145,7 +146,7 @@ func (a *UrbsSetting) GroupBatchAddMembers(ctx context.Context, groupId string, 
 
 // GroupRemoveMembers ...
 func (a *UrbsSetting) GroupRemoveMembers(ctx context.Context, args *tpl.GroupMembersURL) (*tpl.BoolRes, error) {
-	url := fmt.Sprintf("%s/v1/groups/%s/members?syncLt=%d&user=%s", conf.Config.UrbsSetting.Addr, args.UID, args.SyncLt, args.User)
+	url := fmt.Sprintf("%s/v1/groups/%s/members?syncLt=%d&user=%s&kind=%s", conf.Config.UrbsSetting.Addr, args.UID, args.SyncLt, args.User, args.Kind)
 
 	result := new(tpl.BoolRes)
 

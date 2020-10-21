@@ -19,7 +19,7 @@ type Group struct {
 }
 
 // ListLables ...
-func (a *Group) ListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MyLabelsRes, error) {
+func (a *Group) ListLables(ctx context.Context, args *tpl.GroupPaginationURL) (*tpl.MyLabelsRes, error) {
 	return a.services.UrbsSetting.GroupListLables(ctx, args)
 }
 
@@ -34,8 +34,8 @@ func (a *Group) ListSettings(ctx context.Context, args *tpl.MySettingsQueryURL) 
 }
 
 // CheckExists ...
-func (a *Group) CheckExists(ctx context.Context, uid string) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.GroupCheckExists(ctx, uid)
+func (a *Group) CheckExists(ctx context.Context, kind, uid string) (*tpl.BoolRes, error) {
+	return a.services.UrbsSetting.GroupCheckExists(ctx, kind, uid)
 }
 
 // BatchAdd ...
@@ -44,29 +44,29 @@ func (a *Group) BatchAdd(ctx context.Context, groups []tpl.GroupBody) error {
 	if err != nil {
 		return err
 	}
-	for i := range groups {
-		go func(group tpl.GroupBody) {
+	go func() {
+		for _, group := range groups {
 			err := a.daos.UrbsLock.Lock(ctx, group.Kind+group.UID, 30*time.Minute)
 			if err == nil {
-				a.BatchAddMember(ctx, group.UID)
+				a.BatchAddMember(ctx, group.Kind, group.UID)
 				a.daos.UrbsLock.Unlock(ctx, group.Kind+group.UID)
 			} else {
 				logger.Warning(ctx, "batchAddLock", "error", err.Error())
 			}
-		}(groups[i])
-	}
+		}
+	}()
 	return nil
 }
 
 // BatchAddMember ...
-func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
+func (a *Group) BatchAddMember(ctx context.Context, kind, uid string) error {
 	pageSize := 1000
 	count := 0
 	now := time.Now().Unix()
 	// 更新同步时间
 	groupUpdateBody := new(urbssetting.GroupUpdateBody)
 	groupUpdateBody.SyncAt = &now
-	_, err := a.services.UrbsSetting.GroupUpdate(ctx, uid, groupUpdateBody)
+	_, err := a.services.UrbsSetting.GroupUpdate(ctx, kind, uid, groupUpdateBody)
 	if err != nil {
 		logger.Err(ctx, err.Error())
 		return err
@@ -90,7 +90,7 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 		for i, r := range resp.Members {
 			users[i] = r.UID
 		}
-		_, err = a.services.UrbsSetting.GroupBatchAddMembers(ctx, uid, users)
+		_, err = a.services.UrbsSetting.GroupBatchAddMembers(ctx, kind, uid, users)
 		if err != nil {
 			logger.Err(ctx, err.Error(), "groupId", uid)
 			return err
@@ -114,26 +114,26 @@ func (a *Group) BatchAddMember(ctx context.Context, uid string) error {
 }
 
 // Update ...
-func (a *Group) Update(ctx context.Context, uid string, body *tpl.GroupUpdateBody) (*tpl.GroupRes, error) {
+func (a *Group) Update(ctx context.Context, kind, uid string, body *tpl.GroupUpdateBody) (*tpl.GroupRes, error) {
 	b := &urbssetting.GroupUpdateBody{
 		Desc: body.Desc,
 	}
-	return a.services.UrbsSetting.GroupUpdate(ctx, uid, b)
+	return a.services.UrbsSetting.GroupUpdate(ctx, kind, uid, b)
 }
 
 // Delete ...
-func (a *Group) Delete(ctx context.Context, uid string) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.GroupDelete(ctx, uid)
+func (a *Group) Delete(ctx context.Context, kind, uid string) (*tpl.BoolRes, error) {
+	return a.services.UrbsSetting.GroupDelete(ctx, kind, uid)
 }
 
 // ListMembers ...
-func (a *Group) ListMembers(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.GroupMembersRes, error) {
+func (a *Group) ListMembers(ctx context.Context, args *tpl.GroupPaginationURL) (*tpl.GroupMembersRes, error) {
 	return a.services.UrbsSetting.GroupListMembers(ctx, args)
 }
 
 // BatchAddMembers 批量给群组添加成员，如果用户未加入系统，则会自动加入
-func (a *Group) BatchAddMembers(ctx context.Context, groupId string, users []string) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.GroupBatchAddMembers(ctx, groupId, users)
+func (a *Group) BatchAddMembers(ctx context.Context, kind, uid string, users []string) (*tpl.BoolRes, error) {
+	return a.services.UrbsSetting.GroupBatchAddMembers(ctx, kind, uid, users)
 }
 
 // RemoveMembers ...
@@ -154,9 +154,11 @@ func (a *Group) AddUserAndOrg(ctx context.Context, users []string, groups []stri
 	if len(groups) > 0 {
 		groupBody := []tpl.GroupBody{}
 		for _, g := range groups {
+			kind, uid := parseGroupUID(g)
 			groupBody = append(groupBody, tpl.GroupBody{
-				UID:  g,
-				Kind: "organization",
+				Kind: kind,
+				UID:  uid,
+				Desc: "urbs-console",
 			})
 		}
 		err := a.BatchAdd(ctx, groupBody)

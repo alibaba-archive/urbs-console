@@ -271,6 +271,7 @@ export interface AcUserSelectComponentProps {
 export interface PaginationParameters {
   pageSize: number;
   pageToken?: string;
+  kind?: string,
   q?: string;
 }
 

@@ -130,11 +130,6 @@ func (t *UsersGroupsBody) Validate() error {
 			return gear.ErrBadRequest.WithMsgf("invalid user: %s", uid)
 		}
 	}
-	for _, uid := range t.Groups {
-		if !validIDReg.MatchString(uid) {
-			return gear.ErrBadRequest.WithMsgf("invalid group: %s", uid)
-		}
-	}
 	if t.Value != "" && !validValueReg.MatchString(t.Value) {
 		return gear.ErrBadRequest.WithMsgf("invalid value: %s", t.Value)
 	}

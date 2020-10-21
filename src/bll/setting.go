@@ -10,6 +10,7 @@ import (
 	"github.com/teambition/urbs-console/src/dao"
 	"github.com/teambition/urbs-console/src/dto"
 	"github.com/teambition/urbs-console/src/dto/thrid"
+	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/schema"
 	"github.com/teambition/urbs-console/src/service"
@@ -131,7 +132,12 @@ func (a *Setting) Offline(ctx context.Context, args *tpl.ProductModuleSettingURL
 func (a *Setting) Assign(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.UsersGroupsBody) (*tpl.SettingReleaseInfoRes, error) {
 	a.group.AddUserAndOrg(ctx, body.Users, body.Groups)
 
-	res, err := a.services.UrbsSetting.SettingAssign(ctx, args, body)
+	groupBody := &urbssetting.UsersGroupsBody{
+		Users:  body.Users,
+		Groups: parseGroupUIDs(body.Groups),
+		Value:  body.Value,
+	}
+	res, err := a.services.UrbsSetting.SettingAssign(ctx, args, groupBody)
 	if err != nil {
 		return nil, err
 	}
@@ -158,7 +164,8 @@ func (a *Setting) Assign(ctx context.Context, args *tpl.ProductModuleSettingURL,
 		Value:      body.Value,
 		AssignedAt: time.Now().UTC(),
 	}
-	a.PushAsync(ctx, service.EventSettingPublish, mySetting.JsonString(ctx), body.Users, body.Groups)
+	groups := parseGroupUIDs(body.Groups)
+	a.PushAsync(ctx, service.EventSettingPublish, mySetting.JsonString(ctx), body.Users, groups)
 	return res, nil
 }
 
@@ -204,7 +211,8 @@ func (a *Setting) Recall(ctx context.Context, args *tpl.ProductModuleSettingURL,
 		Name:       args.Setting,
 		AssignedAt: time.Now().UTC(),
 	}
-	a.PushAsync(ctx, service.EventSettingRecall, mySetting.JsonString(ctx), item.Users, item.Groups)
+	groups := parseGroupUIDs(item.Groups)
+	a.PushAsync(ctx, service.EventSettingRecall, mySetting.JsonString(ctx), item.Users, groups)
 	return recallRes, nil
 }
 
@@ -279,7 +287,9 @@ func (a *Setting) DeleteGroup(ctx context.Context, args *tpl.ProductModuleSettin
 		Name:       args.Setting,
 		AssignedAt: time.Now().UTC(),
 	}
-	a.PushAsync(ctx, service.EventSettingRemove, mySetting.JsonString(ctx), nil, []string{args.UID})
+	groups := []*urbssetting.GroupKindUID{{Kind: args.Kind, UID: args.UID}}
+
+	a.PushAsync(ctx, service.EventSettingRemove, mySetting.JsonString(ctx), nil, groups)
 
 	return res, nil
 }
@@ -312,7 +322,8 @@ func (a *Setting) PushAllAsync(ctx context.Context, event string, mySetting *dto
 				Name:       mySetting.Name,
 				AssignedAt: time.Now().UTC(),
 			}
-			a.Push(ctx, event, mySetting.JsonString(ctx), item.Users, item.Groups)
+			groups := parseGroupUIDs(item.Groups)
+			a.Push(ctx, event, mySetting.JsonString(ctx), item.Users, groups)
 		}
 
 		err := a.daos.OperationLog.FindByObjectWithHandler(ctx, object, handler)
@@ -326,7 +337,7 @@ func (a *Setting) PushAllAsync(ctx context.Context, event string, mySetting *dto
 }
 
 // PushAsync ...
-func (a *Setting) PushAsync(ctx context.Context, event, content string, users []string, groups []string) {
+func (a *Setting) PushAsync(ctx context.Context, event, content string, users []string, groups []*urbssetting.GroupKindUID) {
 	if conf.Config.Thrid.Hook.URL == "" || !util.StringSliceHas(conf.Config.Thrid.Hook.Events, event) {
 		return
 	}
@@ -334,7 +345,7 @@ func (a *Setting) PushAsync(ctx context.Context, event, content string, users []
 }
 
 // Push ...
-func (a *Setting) Push(ctx context.Context, event, content string, users []string, groups []string) {
+func (a *Setting) Push(ctx context.Context, event, content string, users []string, groups []*urbssetting.GroupKindUID) {
 	if len(users) > 0 {
 		temp := &thrid.HookSendReq{
 			Event:   event,
@@ -347,9 +358,10 @@ func (a *Setting) Push(ctx context.Context, event, content string, users []strin
 	for _, group := range groups {
 		pageToken := ""
 		for {
-			args := &tpl.UIDPaginationURL{}
+			args := &tpl.GroupPaginationURL{}
 			args.PageSize = 1000
-			args.UID = group
+			args.Kind = group.Kind
+			args.UID = group.UID
 			args.PageToken = pageToken
 			res, err := a.services.UrbsSetting.GroupListMembers(ctx, args)
 			if err != nil {

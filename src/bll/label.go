@@ -7,6 +7,7 @@ import (
 	"github.com/teambition/gear"
 	"github.com/teambition/urbs-console/src/dao"
 	"github.com/teambition/urbs-console/src/dto"
+	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/service"
 	"github.com/teambition/urbs-console/src/tpl"
@@ -107,7 +108,12 @@ func (a *Label) Offline(ctx context.Context, product, label string) (*tpl.BoolRe
 // Assign 把标签批量分配给用户或群组
 func (a *Label) Assign(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.UsersGroupsBody) (*tpl.LabelReleaseInfoRes, error) {
 	a.group.AddUserAndOrg(ctx, body.Users, body.Groups)
-	res, err := a.services.UrbsSetting.LabelAssign(ctx, args.Product, args.Label, body)
+	groupBody := &urbssetting.UsersGroupsBody{
+		Users:  body.Users,
+		Groups: parseGroupUIDs(body.Groups),
+		Value:  body.Value,
+	}
+	res, err := a.services.UrbsSetting.LabelAssign(ctx, args.Product, args.Label, groupBody)
 	if err != nil {
 		return nil, err
 	}

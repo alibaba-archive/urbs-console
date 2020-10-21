@@ -57,7 +57,7 @@ const groups: Model = {
     },
     *deleteGroups({ payload }: AnyAction, { call }: EffectsCommandMap) {
       const { params, cb } = payload;
-      const { result } = yield call(groupsService.deleteGroups, params.uid);
+      const { result } = yield call(groupsService.deleteGroups, params.kind, params.uid);
       if (result) {
         cb();
       }
@@ -84,8 +84,8 @@ const groups: Model = {
       });
     },
     *deleteGroupLabel({ payload }: AnyAction, { call }: EffectsCommandMap) {
-      const { uid, product, label, cb } = payload;
-      const { result } = yield call(groupsService.deleteGroupLabel, product, label, uid);
+      const { kind, uid, product, label, cb } = payload;
+      const { result } = yield call(groupsService.deleteGroupLabel, product, label, kind, uid);
       if (result && cb) {
         cb();
       }
@@ -112,8 +112,8 @@ const groups: Model = {
       });
     },
     *deleteGroupSetting({ payload }: AnyAction, { call }: EffectsCommandMap) {
-      const { uid, product, module, setting, cb } = payload;
-      const { result } = yield call(groupsService.deleteGroupSetting, product, module, setting, uid);
+      const { kind, uid, product, module, setting, cb } = payload;
+      const { result } = yield call(groupsService.deleteGroupSetting, product, module, setting, kind, uid);
       if (result && cb) {
         cb();
       }
@@ -140,27 +140,27 @@ const groups: Model = {
       });
     },
     *addGroupMembers({ payload }: AnyAction, { call }: EffectsCommandMap) {
-      const { uid, params, cb } = payload;
-      const { result } = yield call(groupsService.addGroupMembers, uid, params.users);
+      const { kind, uid, params, cb } = payload;
+      const { result } = yield call(groupsService.addGroupMembers, kind, uid, params.users);
       if (result && cb) {
         cb();
       }
     },
     *deleteGroupMembers({ payload }: AnyAction, { call }: EffectsCommandMap) {
-      const { uid, params, cb } = payload;
-      const { result } = yield call(groupsService.deleteGroupMembers, uid, params.user);
+      const { kind, uid, params, cb } = payload;
+      const { result } = yield call(groupsService.deleteGroupMembers, kind, uid, params.user);
       if (result && cb) {
         cb();
       }
     },
     *rollbackGroupSetting({ payload }: AnyAction, { call }: EffectsCommandMap) {
-      const { uid, product, module, setting, cb } = payload;
-      const { result } = yield call(groupsService.rollbackGroupSetting, product, module, setting, uid);
+      const { kind, uid, product, module, setting, cb } = payload;
+      const { result } = yield call(groupsService.rollbackGroupSetting, product, module, setting, kind, uid);
       if (result && cb) {
         cb();
       }
     },
-    *getPermission ({ payload }: AnyAction, { call }: EffectsCommandMap) {
+    *getPermission({ payload }: AnyAction, { call }: EffectsCommandMap) {
       const { cb } = payload;
       const { result } = yield call(groupsService.getPermission);
       if (cb) {

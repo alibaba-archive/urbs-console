@@ -177,6 +177,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
     dispatch({
       type: 'groups/addGroupMembers',
       payload: {
+        kind: currentGroup?.kind,
         uid: currentGroup?.uid,
         cb: () => {
           message.success('添加用户成功');
@@ -184,6 +185,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
           fetchMemberList({
             pageSize,
             q: tabsSearchWord,
+            kind: currentGroup?.kind,
           }, currentGroup?.uid as string, 'del');
         },
         params: {
@@ -217,14 +219,17 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
         fetchLabelList({
           pageSize: labelsPageSize,
           q: tabsSearchWord,
+          kind: record.kind,
         }, record.uid);
         fetchMemberList({
           pageSize: membersPageSize,
           q: tabsSearchWord,
+          kind: record.kind,
         }, record.uid);
         fetchSettingList({
           pageSize: settingsPageSize,
           q: tabsSearchWord,
+          kind: record.kind,
         }, record.uid);
         setCurrentGroup(record);
         changeGroupDetailVisible(true);
@@ -248,18 +253,21 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
         fetchLabelList({
           pageSize: settingsPageSize,
           q: searchWord,
+          kind: currentGroup?.kind
         }, (currentGroup?.uid) as string, 'del');
         break;
       case TagTabsKey.user:
         fetchMemberList({
           pageSize: membersPageSize,
           q: searchWord,
+          kind: currentGroup?.kind
         }, (currentGroup?.uid) as string, 'del');
         break;
       case TagTabsKey.setting:
         fetchSettingList({
           pageSize: membersPageSize,
           q: searchWord,
+          kind: currentGroup?.kind
         }, (currentGroup?.uid) as string, 'del');
         break;
       default:
@@ -285,16 +293,19 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
       case TagTabsKey.label:
         fetchLabelList({
           pageSize: settingsPageSize,
+          kind: currentGroup?.kind
         }, (currentGroup?.uid) as string, 'del');
         break;
       case TagTabsKey.user:
         fetchMemberList({
           pageSize: membersPageSize,
+          kind: currentGroup?.kind
         }, (currentGroup?.uid) as string, 'del');
         break;
       case TagTabsKey.setting:
         fetchSettingList({
           pageSize: membersPageSize,
+          kind: currentGroup?.kind
         }, (currentGroup?.uid) as string, 'del');
         break;
       default:
@@ -323,6 +334,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
                   dispatch({
                     type: 'groups/deleteGroupLabel',
                     payload: {
+                      kind: currentGroup?.kind,
                       uid: currentGroup?.uid,
                       product: record.product,
                       label: record.name,
@@ -330,6 +342,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
                         fetchLabelList({
                           pageSize: labelsPageSize,
                           q: tabsSearchWord,
+                          kind: currentGroup?.kind,
                         }, (currentGroup?.uid) as string, 'del');
                       }
                     }
@@ -350,6 +363,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
               fetchLabelList({
                 pageSize: size,
                 q: tabsSearchWord,
+                kind: currentGroup?.kind,
               }, currentGroup?.uid as string, 'del');
             },
             onTokenChange: (type: string, token?: string) => {
@@ -357,6 +371,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
                 pageSize: labelsPageSize,
                 pageToken: token,
                 q: tabsSearchWord,
+                kind: currentGroup?.kind,
               }, currentGroup?.uid as string, type);
             },
           }
@@ -390,6 +405,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
                   dispatch({
                     type: 'groups/rollbackGroupSetting',
                     payload: {
+                      kind: currentGroup?.kind,
                       uid: currentGroup?.uid,
                       product: record.product,
                       module: record.module,
@@ -398,6 +414,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
                         fetchSettingList({
                           pageSize: labelsPageSize,
                           q: tabsSearchWord,
+                          kind: currentGroup?.kind
                         }, (currentGroup?.uid) as string, 'del');
                       }
                     }
@@ -413,6 +430,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
                   dispatch({
                     type: 'groups/deleteGroupSetting',
                     payload: {
+                      kind: currentGroup?.kind,
                       uid: currentGroup?.uid,
                       product: record.product,
                       module: record.module,
@@ -421,6 +439,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
                         fetchSettingList({
                           pageSize: labelsPageSize,
                           q: tabsSearchWord,
+                          kind: currentGroup?.kind,
                         }, (currentGroup?.uid) as string, 'del');
                       }
                     }
@@ -441,6 +460,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
               fetchSettingList({
                 pageSize: size,
                 q: tabsSearchWord,
+                kind: currentGroup?.kind,
               }, currentGroup?.uid as string, 'del');
             },
             onTokenChange: (type: string, token?: string) => {
@@ -448,6 +468,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
                 pageSize: settingsPageSize,
                 pageToken: token,
                 q: tabsSearchWord,
+                kind: currentGroup?.kind,
               }, currentGroup?.uid as string, type);
             },
           }
@@ -481,6 +502,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
                   dispatch({
                     type: 'groups/deleteGroupMembers',
                     payload: {
+                      kind: currentGroup?.kind,
                       uid: currentGroup?.uid,
                       params: {
                         user: record.user
@@ -489,6 +511,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
                         fetchMemberList({
                           pageSize: membersPageSize,
                           q: tabsSearchWord,
+                          kind: currentGroup?.kind,
                         }, (currentGroup?.uid) as string, 'del');
                         message.success('移除用户成功');
                       }
@@ -510,6 +533,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
               fetchMemberList({
                 pageSize: size,
                 q: tabsSearchWord,
+                kind: currentGroup?.kind,
               }, currentGroup?.uid as string, 'del');
             },
             onTokenChange: (type: string, token?: string) => {
@@ -517,6 +541,7 @@ const Groups: React.FC<GroupsComponentProps> = (props) => {
                 pageSize: membersPageSize,
                 pageToken: token,
                 q: tabsSearchWord,
+                kind: currentGroup?.kind,
               }, currentGroup?.uid as string, type);
             },
           }

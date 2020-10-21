@@ -234,7 +234,8 @@ func (t *ProductLabelHIDURL) Validate() error {
 // ProductLabelUIDURL ...
 type ProductLabelUIDURL struct {
 	ProductLabelURL
-	UID string `json:"uid" param:"uid"`
+	Kind string `json:"kind" query:"kind"`
+	UID  string `json:"uid" param:"uid"`
 }
 
 // Validate 实现 gear.BodyTemplate。
@@ -251,7 +252,8 @@ func (t *ProductLabelUIDURL) Validate() error {
 // ProductModuleSettingUIDURL ...
 type ProductModuleSettingUIDURL struct {
 	ProductModuleSettingURL
-	UID string `json:"uid" param:"uid"`
+	Kind string `json:"kind" query:"kind"`
+	UID  string `json:"uid" param:"uid"`
 }
 
 // Validate 实现 gear.BodyTemplate。

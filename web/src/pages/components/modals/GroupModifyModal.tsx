@@ -76,11 +76,9 @@ const ModuleModifyModal: React.FC<Props> = (props) => {
         <Form.Item label="类型">
           {
             getFieldDecorator('kind', {
-              initialValue: groupInfo ? groupInfo.kind : undefined
+              initialValue: groupInfo ? groupInfo.kind : 'organization'
             })(
-              <Select placeholder="请选择类型" disabled={isEdit}>
-                <Select.Option value="organization">organization</Select.Option>
-              </Select>
+              <Input disabled={isEdit} placeholder="请输入类型"></Input>
             )
           }
         </Form.Item>

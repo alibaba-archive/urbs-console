@@ -6,6 +6,7 @@ import (
 
 	"github.com/mushroomsir/request"
 	"github.com/teambition/urbs-console/src/conf"
+	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/tpl"
 )
 
@@ -94,8 +95,8 @@ func (a *UrbsSetting) SettingOffline(ctx context.Context, args *tpl.ProductModul
 }
 
 // SettingAssign ...
-func (a *UrbsSetting) SettingAssign(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.UsersGroupsBody) (*tpl.SettingReleaseInfoRes, error) {
-	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s:assign", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting)
+func (a *UrbsSetting) SettingAssign(ctx context.Context, args *tpl.ProductModuleSettingURL, body *urbssetting.UsersGroupsBody) (*tpl.SettingReleaseInfoRes, error) {
+	url := fmt.Sprintf("%s/v2/products/%s/modules/%s/settings/%s:assign", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting)
 
 	result := new(tpl.SettingReleaseInfoRes)
 
@@ -236,7 +237,7 @@ func (a *UrbsSetting) SettingRollbackUserSetting(ctx context.Context, args *tpl.
 
 // SettingDeleteGroup ...
 func (a *UrbsSetting) SettingDeleteGroup(ctx context.Context, args *tpl.ProductModuleSettingUIDURL) (*tpl.BoolRes, error) {
-	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/groups/%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting, args.UID)
+	url := fmt.Sprintf("%s/v1/products/%s/modules/%s/settings/%s/groups/%s?kind=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Module, args.Setting, args.UID, args.Kind)
 
 	result := new(tpl.BoolRes)
 

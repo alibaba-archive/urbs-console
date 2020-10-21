@@ -381,7 +381,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) SettingOffline(ctx, args interfa
 }
 
 // SettingAssign mocks base method
-func (m *MockUrbsSettingInterface) SettingAssign(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.UsersGroupsBody) (*tpl.SettingReleaseInfoRes, error) {
+func (m *MockUrbsSettingInterface) SettingAssign(ctx context.Context, args *tpl.ProductModuleSettingURL, body *urbssetting.UsersGroupsBody) (*tpl.SettingReleaseInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SettingAssign", ctx, args, body)
 	ret0, _ := ret[0].(*tpl.SettingReleaseInfoRes)
@@ -651,7 +651,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) LabelOffline(ctx, product, label
 }
 
 // LabelAssign mocks base method
-func (m *MockUrbsSettingInterface) LabelAssign(ctx context.Context, product, label string, body *tpl.UsersGroupsBody) (*tpl.LabelReleaseInfoRes, error) {
+func (m *MockUrbsSettingInterface) LabelAssign(ctx context.Context, product, label string, body *urbssetting.UsersGroupsBody) (*tpl.LabelReleaseInfoRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "LabelAssign", ctx, product, label, body)
 	ret0, _ := ret[0].(*tpl.LabelReleaseInfoRes)
@@ -846,7 +846,7 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) LabelsCache(ctx, product, uid in
 }
 
 // GroupListLables mocks base method
-func (m *MockUrbsSettingInterface) GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MyLabelsRes, error) {
+func (m *MockUrbsSettingInterface) GroupListLables(ctx context.Context, args *tpl.GroupPaginationURL) (*tpl.MyLabelsRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupListLables", ctx, args)
 	ret0, _ := ret[0].(*tpl.MyLabelsRes)
@@ -891,18 +891,18 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupList(ctx, args interface{})
 }
 
 // GroupCheckExists mocks base method
-func (m *MockUrbsSettingInterface) GroupCheckExists(ctx context.Context, uid string) (*tpl.BoolRes, error) {
+func (m *MockUrbsSettingInterface) GroupCheckExists(ctx context.Context, kind, uid string) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GroupCheckExists", ctx, uid)
+	ret := m.ctrl.Call(m, "GroupCheckExists", ctx, kind, uid)
 	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GroupCheckExists indicates an expected call of GroupCheckExists
-func (mr *MockUrbsSettingInterfaceMockRecorder) GroupCheckExists(ctx, uid interface{}) *gomock.Call {
+func (mr *MockUrbsSettingInterfaceMockRecorder) GroupCheckExists(ctx, kind, uid interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupCheckExists", reflect.TypeOf((*MockUrbsSettingInterface)(nil).GroupCheckExists), ctx, uid)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupCheckExists", reflect.TypeOf((*MockUrbsSettingInterface)(nil).GroupCheckExists), ctx, kind, uid)
 }
 
 // GroupBatchAdd mocks base method
@@ -921,37 +921,37 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupBatchAdd(ctx, groups interf
 }
 
 // GroupUpdate mocks base method
-func (m *MockUrbsSettingInterface) GroupUpdate(ctx context.Context, uid string, body *urbssetting.GroupUpdateBody) (*tpl.GroupRes, error) {
+func (m *MockUrbsSettingInterface) GroupUpdate(ctx context.Context, kind, uid string, body *urbssetting.GroupUpdateBody) (*tpl.GroupRes, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GroupUpdate", ctx, uid, body)
+	ret := m.ctrl.Call(m, "GroupUpdate", ctx, kind, uid, body)
 	ret0, _ := ret[0].(*tpl.GroupRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GroupUpdate indicates an expected call of GroupUpdate
-func (mr *MockUrbsSettingInterfaceMockRecorder) GroupUpdate(ctx, uid, body interface{}) *gomock.Call {
+func (mr *MockUrbsSettingInterfaceMockRecorder) GroupUpdate(ctx, kind, uid, body interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupUpdate", reflect.TypeOf((*MockUrbsSettingInterface)(nil).GroupUpdate), ctx, uid, body)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupUpdate", reflect.TypeOf((*MockUrbsSettingInterface)(nil).GroupUpdate), ctx, kind, uid, body)
 }
 
 // GroupDelete mocks base method
-func (m *MockUrbsSettingInterface) GroupDelete(ctx context.Context, uid string) (*tpl.BoolRes, error) {
+func (m *MockUrbsSettingInterface) GroupDelete(ctx context.Context, kind, uid string) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GroupDelete", ctx, uid)
+	ret := m.ctrl.Call(m, "GroupDelete", ctx, kind, uid)
 	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GroupDelete indicates an expected call of GroupDelete
-func (mr *MockUrbsSettingInterfaceMockRecorder) GroupDelete(ctx, uid interface{}) *gomock.Call {
+func (mr *MockUrbsSettingInterfaceMockRecorder) GroupDelete(ctx, kind, uid interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupDelete", reflect.TypeOf((*MockUrbsSettingInterface)(nil).GroupDelete), ctx, uid)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupDelete", reflect.TypeOf((*MockUrbsSettingInterface)(nil).GroupDelete), ctx, kind, uid)
 }
 
 // GroupListMembers mocks base method
-func (m *MockUrbsSettingInterface) GroupListMembers(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.GroupMembersRes, error) {
+func (m *MockUrbsSettingInterface) GroupListMembers(ctx context.Context, args *tpl.GroupPaginationURL) (*tpl.GroupMembersRes, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GroupListMembers", ctx, args)
 	ret0, _ := ret[0].(*tpl.GroupMembersRes)
@@ -966,18 +966,18 @@ func (mr *MockUrbsSettingInterfaceMockRecorder) GroupListMembers(ctx, args inter
 }
 
 // GroupBatchAddMembers mocks base method
-func (m *MockUrbsSettingInterface) GroupBatchAddMembers(ctx context.Context, groupId string, users []string) (*tpl.BoolRes, error) {
+func (m *MockUrbsSettingInterface) GroupBatchAddMembers(ctx context.Context, kind, uid string, users []string) (*tpl.BoolRes, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GroupBatchAddMembers", ctx, groupId, users)
+	ret := m.ctrl.Call(m, "GroupBatchAddMembers", ctx, kind, uid, users)
 	ret0, _ := ret[0].(*tpl.BoolRes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GroupBatchAddMembers indicates an expected call of GroupBatchAddMembers
-func (mr *MockUrbsSettingInterfaceMockRecorder) GroupBatchAddMembers(ctx, groupId, users interface{}) *gomock.Call {
+func (mr *MockUrbsSettingInterfaceMockRecorder) GroupBatchAddMembers(ctx, kind, uid, users interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupBatchAddMembers", reflect.TypeOf((*MockUrbsSettingInterface)(nil).GroupBatchAddMembers), ctx, groupId, users)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GroupBatchAddMembers", reflect.TypeOf((*MockUrbsSettingInterface)(nil).GroupBatchAddMembers), ctx, kind, uid, users)
 }
 
 // GroupRemoveMembers mocks base method

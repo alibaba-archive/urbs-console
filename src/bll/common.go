@@ -1,7 +1,10 @@
 package bll
 
 import (
+	"strings"
+
 	"github.com/teambition/urbs-console/src/dto"
+	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/tpl"
 )
 
@@ -45,4 +48,27 @@ func MatchChannel(channels []string, channel string) bool {
 		}
 	}
 	return false
+}
+
+func parseGroupUIDs(uids []string) []*urbssetting.GroupKindUID {
+	groups := []*urbssetting.GroupKindUID{}
+	for _, uid := range uids {
+		kindUID := strings.Split(uid, ":")
+		var group *urbssetting.GroupKindUID
+		if len(kindUID) > 0 {
+			group = &urbssetting.GroupKindUID{Kind: kindUID[0], UID: kindUID[1]}
+		} else {
+			group = &urbssetting.GroupKindUID{Kind: dto.GroupOrgKind, UID: uid}
+		}
+		groups = append(groups, group)
+	}
+	return groups
+}
+
+func parseGroupUID(uid string) (string, string) {
+	kindUID := strings.Split(uid, ":")
+	if len(kindUID) > 0 {
+		return kindUID[0], kindUID[1]
+	}
+	return dto.GroupOrgKind, uid
 }

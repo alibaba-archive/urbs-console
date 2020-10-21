@@ -6,6 +6,7 @@ import (
 
 	"github.com/mushroomsir/request"
 	"github.com/teambition/urbs-console/src/conf"
+	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/tpl"
 )
 
@@ -83,9 +84,9 @@ func (a *UrbsSetting) LabelOffline(ctx context.Context, product string, label st
 }
 
 // LabelAssign ...
-func (a *UrbsSetting) LabelAssign(ctx context.Context, product string, label string, body *tpl.UsersGroupsBody) (*tpl.LabelReleaseInfoRes, error) {
+func (a *UrbsSetting) LabelAssign(ctx context.Context, product string, label string, body *urbssetting.UsersGroupsBody) (*tpl.LabelReleaseInfoRes, error) {
 
-	url := fmt.Sprintf("%s/v1/products/%s/labels/%s:assign", conf.Config.UrbsSetting.Addr, product, label)
+	url := fmt.Sprintf("%s/v2/products/%s/labels/%s:assign", conf.Config.UrbsSetting.Addr, product, label)
 
 	result := new(tpl.LabelReleaseInfoRes)
 
@@ -211,7 +212,7 @@ func (a *UrbsSetting) LabelDeleteUser(ctx context.Context, args *tpl.ProductLabe
 
 // LabelDeleteGroup ...
 func (a *UrbsSetting) LabelDeleteGroup(ctx context.Context, args *tpl.ProductLabelUIDURL) (*tpl.BoolRes, error) {
-	url := fmt.Sprintf("%s/v1/products/%s/labels/%s/groups/%s", conf.Config.UrbsSetting.Addr, args.Product, args.Label, args.UID)
+	url := fmt.Sprintf("%s/v1/products/%s/labels/%s/groups/%s?kind=%s", conf.Config.UrbsSetting.Addr, args.Product, args.Label, args.UID, args.Kind)
 
 	result := new(tpl.BoolRes)
 

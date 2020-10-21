@@ -28,7 +28,7 @@ func (a *Group) List(ctx *gear.Context) error {
 
 // ListLables ..
 func (a *Group) ListLables(ctx *gear.Context) error {
-	req := tpl.UIDPaginationURL{}
+	req := tpl.GroupPaginationURL{}
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
@@ -42,7 +42,7 @@ func (a *Group) ListLables(ctx *gear.Context) error {
 
 // ListMembers ..
 func (a *Group) ListMembers(ctx *gear.Context) error {
-	req := tpl.UIDPaginationURL{}
+	req := tpl.GroupPaginationURL{}
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
@@ -75,7 +75,7 @@ func (a *Group) ListSettings(ctx *gear.Context) error {
 
 // CheckExists ..
 func (a *Group) CheckExists(ctx *gear.Context) error {
-	req := tpl.UIDURL{}
+	req := tpl.GroupURL{}
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
@@ -83,7 +83,7 @@ func (a *Group) CheckExists(ctx *gear.Context) error {
 	if err != nil {
 		return err
 	}
-	res, err := a.blls.Group.CheckExists(ctx, req.UID)
+	res, err := a.blls.Group.CheckExists(ctx, req.Kind, req.UID)
 	if err != nil {
 		return err
 	}
@@ -105,7 +105,7 @@ func (a *Group) BatchAdd(ctx *gear.Context) error {
 
 // Update ..
 func (a *Group) Update(ctx *gear.Context) error {
-	req := tpl.UIDURL{}
+	req := tpl.GroupURL{}
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
@@ -114,7 +114,7 @@ func (a *Group) Update(ctx *gear.Context) error {
 		return err
 	}
 
-	res, err := a.blls.Group.Update(ctx, req.UID, &body)
+	res, err := a.blls.Group.Update(ctx, req.Kind, req.UID, &body)
 	if err != nil {
 		return err
 	}
@@ -123,11 +123,11 @@ func (a *Group) Update(ctx *gear.Context) error {
 
 // Delete ..
 func (a *Group) Delete(ctx *gear.Context) error {
-	req := tpl.UIDURL{}
+	req := tpl.GroupURL{}
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
-	res, err := a.blls.Group.Delete(ctx, req.UID)
+	res, err := a.blls.Group.Delete(ctx, req.Kind, req.UID)
 	if err != nil {
 		return err
 	}
@@ -137,7 +137,7 @@ func (a *Group) Delete(ctx *gear.Context) error {
 
 // BatchAddMembers ..
 func (a *Group) BatchAddMembers(ctx *gear.Context) error {
-	req := tpl.UIDURL{}
+	req := tpl.GroupURL{}
 	if err := ctx.ParseURL(&req); err != nil {
 		return err
 	}
@@ -146,7 +146,7 @@ func (a *Group) BatchAddMembers(ctx *gear.Context) error {
 	if err := ctx.ParseBody(&body); err != nil {
 		return err
 	}
-	res, err := a.blls.Group.BatchAddMembers(ctx, req.UID, body.Users)
+	res, err := a.blls.Group.BatchAddMembers(ctx, req.Kind, req.UID, body.Users)
 	if err != nil {
 		return err
 	}

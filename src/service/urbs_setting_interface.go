@@ -60,7 +60,7 @@ type UrbsSettingInterface interface {
 	// 下线指定产品功能模块配置项
 	SettingOffline(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.BoolRes, error)
 	// 批量为用户或群组设置产品功能模块配置项
-	SettingAssign(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.UsersGroupsBody) (*tpl.SettingReleaseInfoRes, error)
+	SettingAssign(ctx context.Context, args *tpl.ProductModuleSettingURL, body *urbssetting.UsersGroupsBody) (*tpl.SettingReleaseInfoRes, error)
 	// Recall 撤销指定批次的用户或群组的配置项
 	SettingRecall(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.RecallBody) (*tpl.BoolRes, error)
 	// SettingCleanUp 清除指定产品功能模块配置项下所有的用户、群组和百分比规则
@@ -99,7 +99,7 @@ type UrbsSettingInterface interface {
 	// 下线指定产品环境标签
 	LabelOffline(ctx context.Context, product string, label string) (*tpl.BoolRes, error)
 	// 批量为用户或群组设置产品环境标签
-	LabelAssign(ctx context.Context, product string, label string, body *tpl.UsersGroupsBody) (*tpl.LabelReleaseInfoRes, error)
+	LabelAssign(ctx context.Context, product string, label string, body *urbssetting.UsersGroupsBody) (*tpl.LabelReleaseInfoRes, error)
 	// 批量撤销对用户或群组设置的产品环境标签
 	LabelRecall(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.RecallBody) (*tpl.BoolRes, error)
 	// 删除指定用户的指定环境标签
@@ -129,23 +129,23 @@ type UrbsSettingInterface interface {
 
 	// ***** group ******
 	// 读取指定群组的环境标签，支持条件筛选
-	GroupListLables(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.MyLabelsRes, error)
+	GroupListLables(ctx context.Context, args *tpl.GroupPaginationURL) (*tpl.MyLabelsRes, error)
 	// 读取指定群组的功能配置项，支持条件筛选
 	GroupListSettings(ctx context.Context, args *tpl.MySettingsQueryURL) (*tpl.MySettingsRes, error)
 	// 读取群组列表，支持条件筛选
 	GroupList(ctx context.Context, args *tpl.GroupsURL) (*tpl.GroupsRes, error)
 	// 查询指定群组是否存在
-	GroupCheckExists(ctx context.Context, uid string) (*tpl.BoolRes, error)
+	GroupCheckExists(ctx context.Context, kind, uid string) (*tpl.BoolRes, error)
 	// 批量添加群组
 	GroupBatchAdd(ctx context.Context, groups []tpl.GroupBody) (*tpl.BoolRes, error)
 	// 更新指定群组
-	GroupUpdate(ctx context.Context, uid string, body *urbssetting.GroupUpdateBody) (*tpl.GroupRes, error)
+	GroupUpdate(ctx context.Context, kind, uid string, body *urbssetting.GroupUpdateBody) (*tpl.GroupRes, error)
 	// 删除指定群组
-	GroupDelete(ctx context.Context, uid string) (*tpl.BoolRes, error)
+	GroupDelete(ctx context.Context, kind, uid string) (*tpl.BoolRes, error)
 	// 读取群组成员列表，支持条件筛选
-	GroupListMembers(ctx context.Context, args *tpl.UIDPaginationURL) (*tpl.GroupMembersRes, error)
+	GroupListMembers(ctx context.Context, args *tpl.GroupPaginationURL) (*tpl.GroupMembersRes, error)
 	// 指定群组批量添加成员
-	GroupBatchAddMembers(ctx context.Context, groupId string, users []string) (*tpl.BoolRes, error)
+	GroupBatchAddMembers(ctx context.Context, kind, uid string, users []string) (*tpl.BoolRes, error)
 	// 指定群组根据条件清理成员
 	GroupRemoveMembers(ctx context.Context, args *tpl.GroupMembersURL) (*tpl.BoolRes, error)
 }

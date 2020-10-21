@@ -72,6 +72,7 @@ func (t *GroupUpdateBody) Validate() error {
 
 // GroupMembersURL ...
 type GroupMembersURL struct {
+	Kind   string `json:"kind" query:"kind"`
 	UID    string `json:"uid" param:"uid"`
 	User   string `json:"user" query:"user"`     // 根据用户 uid 删除一个成员
 	SyncLt int64  `json:"syncLt" query:"syncLt"` // 或根据 syncLt 删除同步时间小于指定值的所有成员
@@ -121,4 +122,36 @@ type GroupMembersRes struct {
 type GroupRes struct {
 	SuccessResponseType
 	Result Group `json:"result"`
+}
+
+// GroupURL ...
+type GroupURL struct {
+	Kind string `json:"kind" query:"kind"`
+	UID  string `json:"uid" param:"uid"`
+}
+
+// Validate 实现 gear.BodyTemplate。
+func (t *GroupURL) Validate() error {
+	if !validIDReg.MatchString(t.UID) {
+		return gear.ErrBadRequest.WithMsgf("invalid uid: %s", t.UID)
+	}
+	return nil
+}
+
+// GroupPaginationURL ...
+type GroupPaginationURL struct {
+	Pagination
+	UID  string `json:"uid" param:"uid"`
+	Kind string `json:"kind" query:"kind"`
+}
+
+// Validate 实现 gear.BodyTemplate。
+func (t *GroupPaginationURL) Validate() error {
+	if !validIDReg.MatchString(t.UID) {
+		return gear.ErrBadRequest.WithMsgf("invalid uid: %s", t.UID)
+	}
+	if err := t.Pagination.Validate(); err != nil {
+		return err
+	}
+	return nil
 }
