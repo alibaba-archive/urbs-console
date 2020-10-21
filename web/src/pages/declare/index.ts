@@ -36,7 +36,11 @@ export const CLIENT_TYPE = [{
 }, {
   label: 'android',
   value: 'android',
+}, {
+  label: 'miniprogram',
+  value: 'miniprogram'
 }];
+
 export interface User {
   uid: string;
   name: string;
