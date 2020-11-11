@@ -111,9 +111,10 @@ func TestSetting(t *testing.T) {
 		setting.Push(nil, service.EventSettingPublish, "content", []string{uid}, nil)
 
 		// 2
-		args := &tpl.UIDPaginationURL{}
+		args := &tpl.GroupPaginationURL{}
 		args.PageSize = 1000
 		args.UID = uid
+		args.Kind = dto.GroupOrgKind
 
 		res := &tpl.GroupMembersRes{
 			Result: []tpl.GroupMember{{User: uid}},

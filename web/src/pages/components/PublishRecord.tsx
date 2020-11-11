@@ -18,6 +18,8 @@ const PublishRecord: React.FC<Props> = (props) => {
         return '增加';
       case 'update':
         return '更新';
+      case 'cleanup':
+        return '清空';
       default:
         return '';
     }

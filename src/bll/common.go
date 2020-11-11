@@ -55,7 +55,7 @@ func parseGroupUIDs(uids []string) []*urbssetting.GroupKindUID {
 	for _, uid := range uids {
 		kindUID := strings.Split(uid, ":")
 		var group *urbssetting.GroupKindUID
-		if len(kindUID) > 0 {
+		if len(kindUID) > 1 {
 			group = &urbssetting.GroupKindUID{Kind: kindUID[0], UID: kindUID[1]}
 		} else {
 			group = &urbssetting.GroupKindUID{Kind: dto.GroupOrgKind, UID: uid}

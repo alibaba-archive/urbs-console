@@ -223,32 +223,76 @@ func (a *Setting) ListRules(ctx context.Context, args *tpl.ProductModuleSettingU
 
 // CreateRule ...
 func (a *Setting) CreateRule(ctx context.Context, args *tpl.ProductModuleSettingURL, body *tpl.SettingRuleBody) (*tpl.SettingRuleInfoRes, error) {
+	res, err := a.services.UrbsSetting.SettingCreateRule(ctx, args, body)
+	if err != nil {
+		return nil, err
+	}
+
 	object := args.Product + args.Module + args.Setting
 	logContent := &dto.OperationLogContent{
 		Desc:    body.Desc,
 		Percent: &body.Rule.Value,
 		Value:   body.Value,
+		Kind:    body.Kind,
 	}
-	err := a.operationLog.Add(ctx, object, actionCreate, logContent)
+	err = a.operationLog.Add(ctx, object, actionCreate, logContent)
 	if err != nil {
-		return nil, err
+		logger.Err(ctx, "settingCreateRuleLog", "logContent", logContent, "object", object)
 	}
-	return a.services.UrbsSetting.SettingCreateRule(ctx, args, body)
+
+	hc := &dto.HookRule{
+		Product:  args.Product,
+		Module:   args.Module,
+		Setting:  args.Setting,
+		Kind:     body.Kind,
+		Percent:  &body.Rule.Value,
+		Desc:     body.Desc,
+		Operator: util.GetUid(ctx),
+	}
+	content := &thrid.HookSendReq{
+		Event:   service.EventRuleCreate,
+		Content: hc.Marshal(),
+	}
+	a.services.Hook.SendAsync(ctx, content)
+
+	return res, nil
 }
 
 // UpdateRule ...
 func (a *Setting) UpdateRule(ctx context.Context, args *tpl.ProductModuleSettingHIDURL, body *tpl.SettingRuleBody) (*tpl.SettingRuleInfoRes, error) {
+	res, err := a.services.UrbsSetting.SettingUpdateRule(ctx, args, body)
+	if err != nil {
+		return nil, err
+	}
+
 	object := args.Product + args.Module + args.Setting
 	logContent := &dto.OperationLogContent{
 		Desc:    body.Desc,
 		Percent: &body.Rule.Value,
 		Value:   body.Value,
+		Kind:    body.Kind,
 	}
-	err := a.operationLog.Add(ctx, object, actionUpdate, logContent)
+	err = a.operationLog.Add(ctx, object, actionUpdate, logContent)
 	if err != nil {
-		return nil, err
+		logger.Err(ctx, "settingUpdateRuleLog", "logContent", logContent, "object", object)
 	}
-	return a.services.UrbsSetting.SettingUpdateRule(ctx, args, body)
+
+	hc := &dto.HookRule{
+		Product:  args.Product,
+		Module:   args.Module,
+		Setting:  args.Setting,
+		Kind:     body.Kind,
+		Percent:  &body.Rule.Value,
+		Desc:     body.Desc,
+		Operator: util.GetUid(ctx),
+	}
+	content := &thrid.HookSendReq{
+		Event:   service.EventRuleUpdate,
+		Content: hc.Marshal(),
+	}
+	a.services.Hook.SendAsync(ctx, content)
+
+	return res, nil
 }
 
 // DeleteRule ...
@@ -392,5 +436,31 @@ func (a *Setting) Push(ctx context.Context, event, content string, users []strin
 
 // CleanUp ...
 func (a *Setting) CleanUp(ctx context.Context, args *tpl.ProductModuleSettingURL) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.SettingCleanUp(ctx, args)
+	res, err := a.services.UrbsSetting.SettingCleanUp(ctx, args)
+	if err != nil {
+		return nil, err
+	}
+
+	object := args.Product + args.Module + args.Setting
+	logContent := &dto.OperationLogContent{
+		Desc: actionCleanup,
+	}
+	err = a.operationLog.Add(ctx, object, actionCleanup, logContent)
+	if err != nil {
+		logger.Err(ctx, "settingCleanUp", "object", object)
+	}
+
+	hc := &dto.HookCleanup{
+		Product:  args.Product,
+		Module:   args.Module,
+		Setting:  args.Setting,
+		Operator: util.GetUid(ctx),
+	}
+	content := &thrid.HookSendReq{
+		Event:   service.EventCleanup,
+		Content: hc.Marshal(),
+	}
+	a.services.Hook.SendAsync(ctx, content)
+
+	return res, nil
 }

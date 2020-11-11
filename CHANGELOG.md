@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file starting fro
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 -----
+## [v1.1.0] - 2020-10-15
+
+**Change:**
+- Add cleanup operation log.
+- Add cleanup、rule.create、rule.update hook event
+
 ## [v1.0.0] - 2020-10-15
 
 **Change:**

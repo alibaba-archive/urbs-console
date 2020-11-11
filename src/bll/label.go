@@ -7,6 +7,7 @@ import (
 	"github.com/teambition/gear"
 	"github.com/teambition/urbs-console/src/dao"
 	"github.com/teambition/urbs-console/src/dto"
+	"github.com/teambition/urbs-console/src/dto/thrid"
 	"github.com/teambition/urbs-console/src/dto/urbssetting"
 	"github.com/teambition/urbs-console/src/logger"
 	"github.com/teambition/urbs-console/src/service"
@@ -183,16 +184,37 @@ func (a *Label) Recall(ctx context.Context, args *tpl.ProductLabelURL, body *tpl
 
 // CreateRule ...
 func (a *Label) CreateRule(ctx context.Context, args *tpl.ProductLabelURL, body *tpl.LabelRuleBody) (*tpl.LabelRuleInfoRes, error) {
+	res, err := a.services.UrbsSetting.LabelCreateRule(ctx, args, body)
+	if err != nil {
+		return nil, err
+	}
+
 	object := args.Product + args.Label
 	logContent := &dto.OperationLogContent{
 		Desc:    body.Desc,
 		Percent: &body.Rule.Value,
+		Kind:    body.Kind,
 	}
-	err := a.operationLog.Add(ctx, object, actionCreate, logContent)
+	err = a.operationLog.Add(ctx, object, actionCreate, logContent)
 	if err != nil {
-		return nil, err
+		logger.Err(ctx, "labelCreateRuleLog", "logContent", logContent, "object", object)
 	}
-	return a.services.UrbsSetting.LabelCreateRule(ctx, args, body)
+
+	hc := &dto.HookRule{
+		Product:  args.Product,
+		Label:    args.Label,
+		Kind:     body.Kind,
+		Percent:  &body.Rule.Value,
+		Desc:     body.Desc,
+		Operator: util.GetUid(ctx),
+	}
+	content := &thrid.HookSendReq{
+		Event:   service.EventRuleCreate,
+		Content: hc.Marshal(),
+	}
+	a.services.Hook.SendAsync(ctx, content)
+
+	return res, nil
 }
 
 // ListRules ...
@@ -202,17 +224,37 @@ func (a *Label) ListRules(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.
 
 // UpdateRule ...
 func (a *Label) UpdateRule(ctx context.Context, args *tpl.ProductLabelHIDURL, body *tpl.LabelRuleBody) (*tpl.LabelRuleInfoRes, error) {
+	res, err := a.services.UrbsSetting.LabelUpdateRule(ctx, args, body)
+	if err != nil {
+		return nil, err
+	}
+
 	object := args.Product + args.Label
 	logContent := &dto.OperationLogContent{
 		Desc:    body.Desc,
 		Percent: &body.Rule.Value,
 		Kind:    body.Kind,
 	}
-	err := a.operationLog.Add(ctx, object, actionUpdate, logContent)
+	err = a.operationLog.Add(ctx, object, actionUpdate, logContent)
 	if err != nil {
-		return nil, err
+		logger.Err(ctx, "labelUpdateRuleLog", "logContent", logContent, "object", object)
 	}
-	return a.services.UrbsSetting.LabelUpdateRule(ctx, args, body)
+
+	hc := &dto.HookRule{
+		Product:  args.Product,
+		Label:    args.Label,
+		Kind:     body.Kind,
+		Percent:  &body.Rule.Value,
+		Desc:     body.Desc,
+		Operator: util.GetUid(ctx),
+	}
+	content := &thrid.HookSendReq{
+		Event:   service.EventRuleUpdate,
+		Content: hc.Marshal(),
+	}
+	a.services.Hook.SendAsync(ctx, content)
+
+	return res, nil
 }
 
 // DeleteRule ...
@@ -222,5 +264,30 @@ func (a *Label) DeleteRule(ctx context.Context, args *tpl.ProductLabelHIDURL) (*
 
 // CleanUp ...
 func (a *Label) CleanUp(ctx context.Context, args *tpl.ProductLabelURL) (*tpl.BoolRes, error) {
-	return a.services.UrbsSetting.LabelCleanUp(ctx, args)
+	res, err := a.services.UrbsSetting.LabelCleanUp(ctx, args)
+	if err != nil {
+		return nil, err
+	}
+
+	object := args.Product + args.Label
+	logContent := &dto.OperationLogContent{
+		Desc: actionCleanup,
+	}
+	err = a.operationLog.Add(ctx, object, actionCleanup, logContent)
+	if err != nil {
+		logger.Err(ctx, "labelCleanUpLog", "logContent", logContent, "object", object)
+	}
+
+	hc := &dto.HookCleanup{
+		Product:  args.Product,
+		Label:    args.Label,
+		Operator: util.GetUid(ctx),
+	}
+	content := &thrid.HookSendReq{
+		Event:   service.EventCleanup,
+		Content: hc.Marshal(),
+	}
+	a.services.Hook.SendAsync(ctx, content)
+
+	return res, nil
 }

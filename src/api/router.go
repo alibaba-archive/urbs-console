@@ -165,7 +165,7 @@ func newRouterAPIV1(apis *APIs) *gear.Router {
 	routerV1.Put("/products/:product/labels/:label/rules/:hid", apis.Label.UpdateRule)
 	// 删除指定产品环境标签的指定灰度发布规则
 	routerV1.Delete("/products/:product/labels/:label/rules/:hid", apis.Label.DeleteRule)
-	// 删除指定产品环境标签的指定灰度发布规则
+	// 清除产品环境标签下所有的用户、群组和百分比规则
 	routerV1.Delete("/products/:product/labels/:label+:cleanup", apis.Label.CleanUp)
 
 	// ***** module ******

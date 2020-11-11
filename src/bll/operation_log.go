@@ -19,9 +19,10 @@ type OperationLog struct {
 }
 
 var (
-	actionCreate = "create"
-	actionUpdate = "update"
-	actionDelete = "delete"
+	actionCreate  = "create"
+	actionUpdate  = "update"
+	actionDelete  = "delete"
+	actionCleanup = "cleanup"
 )
 
 // List 返回操作日志列表
