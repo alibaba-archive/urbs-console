@@ -83,31 +83,32 @@ User 用户相关接口
 
 ```shell
 # You can also use wget
-curl -X GET http://urbs-console:8080/api/v1/users/{uid}/settings:unionAll?product=string \
+curl -X GET http://urbs-console:8080/api/v1/users/settings:unionAll?product=string \
   -H 'Accept: application/json' \
   -H 'Authorization: string'
 
 ```
 
 ```http
-GET http://urbs-console:8080/api/v1/users/{uid}/settings:unionAll?product=string HTTP/1.1
+GET http://urbs-console:8080/api/v1/users/settings:unionAll?product=string HTTP/1.1
 Host: urbs-console:8080
 Accept: application/json
 Authorization: string
 
 ```
 
-`GET /api/v1/users/{uid}/settings:unionAll`
+`GET /api/v1/users/settings:unionAll`
 
 <h3 id="获取-user-的所有-settings-信息-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|Authorization|header|string|true|JWT Token, 格式如: `Bearer xxx`|
+|Authorization|header|string|true|用户 Token, 格式如: `Bearer xxx`；header 不存在，尝试从 cookie 中读取|
 |product|query|string|true|产品名称|
-|uid|path|string|false|用户 uid|
 |client|query|string|false|客户端标识，例如 web、ios、android、desktop|
 |channel|query|string|false|客户端渠道，例如 stable、beta、dev|
+|module|query|string|false|模块名称|
+|setting|query|string|false|配置项名称|
 |pageSize|query|integer(int32)|false|分页大小，默认为 10，(1-1000]|
 |pageToken|query|string|false|分页请求标记，来自于响应结果的 nextPageToken|
 
@@ -222,6 +223,91 @@ Status Code **200**
 |»» product|string|false|none|标签所属的产品名称|
 |»» name|string|false|none|标签名称|
 |»» assignedAt|string(date-time)|false|none|标签被设置时间|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+<h1 id="urbs-console-service">Service</h1>
+
+服务端调用的 API
+
+## 获取指定 user 的所有 settings 信息
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X GET http://urbs-console:8080/api/v1/users/{uid}/settings:unionAll?product=string \
+  -H 'Accept: application/json' \
+  -H 'Authorization: string'
+
+```
+
+```http
+GET http://urbs-console:8080/api/v1/users/{uid}/settings:unionAll?product=string HTTP/1.1
+Host: urbs-console:8080
+Accept: application/json
+Authorization: string
+
+```
+
+`GET /api/v1/users/{uid}/settings:unionAll`
+
+<h3 id="获取指定-user-的所有-settings-信息-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|Authorization|header|string|true|JWT Token, 格式如: `Bearer xxx`|
+|uid|path|string|true|用户 uid|
+|product|query|string|true|产品名称|
+|client|query|string|false|客户端标识，例如 web、ios、android、desktop|
+|channel|query|string|false|客户端渠道，例如 stable、beta、dev|
+|module|query|string|false|模块名称|
+|setting|query|string|false|配置项名称|
+|pageSize|query|integer(int32)|false|分页大小，默认为 10，(1-1000]|
+|pageToken|query|string|false|分页请求标记，来自于响应结果的 nextPageToken|
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "nextPageToken": "",
+  "result": [
+    {
+      "hid": "AwAAAAAAAAB25V_QnbhCuRwF",
+      "product": "teambition",
+      "module": "task",
+      "name": "task-share",
+      "value": "disable",
+      "assignedAt": "2020-03-25T06:24:25Z"
+    }
+  ]
+}
+```
+
+<h3 id="获取指定-user-的所有-settings-信息-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|用户或群组被指派的配置项列表返回结果|Inline|
+
+<h3 id="获取指定-user-的所有-settings-信息-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» nextPageToken|[NextPageToken](#schemanextpagetoken)|false|none|用于分页查询时用于获取下一页数据的 token，当为空值时表示没有下一页了|
+|» result|[[MySetting](#schemamysetting)]|false|none|none|
+|»» hid|string|false|none|配置项的 hid|
+|»» product|string|false|none|配置项所属的产品名称|
+|»» module|string|false|none|配置项所属的功能模块名称|
+|»» name|string|false|none|配置项名称|
+|»» value|string|false|none|配置项值|
+|»» assignedAt|string(date-time)|false|none|配置项被设置时间|
 
 <aside class="success">
 This operation does not require authentication

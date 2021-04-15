@@ -11,6 +11,8 @@ tags:
     description: 获取 urbs-console 服务版本信息
   - name: User
     description: User 用户相关接口
+  - name: Service
+    description: 服务端调用的 API
 components:
   parameters:
     HeaderAuthorization:

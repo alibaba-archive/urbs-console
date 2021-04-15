@@ -13,6 +13,8 @@ tags:
     description: 获取 urbs-console 服务版本信息
   - name: User
     description: User 用户相关接口
+  - name: Service
+    description: 服务端调用的 API
 components:
   parameters:
     HeaderAuthorization:
@@ -252,6 +254,18 @@ paths:
           required: false
           schema:
             type: string
+        - in: query
+          name: module
+          description: 模块名称
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: setting
+          description: 配置项名称
+          required: false
+          schema:
+            type: string
         - $ref: "#/components/parameters/QueryPageSize"
         - $ref: "#/components/parameters/QueryPageToken"           
       responses:
@@ -268,21 +282,21 @@ paths:
         - $ref: "#/components/parameters/QueryPageToken"           
       responses:
         '200':
-          $ref: "#/components/responses/MyLabelsRes"
+          $ref: "#/components/responses/MyLabelsRes"  # Service API
   /api/v1/users/{uid}/settings:unionAll:
     get:
       tags:
-        - User
-      summary: 获取 user 的所有 settings 信息
+        - Service
+      summary: 获取指定 user 的所有 settings 信息
       parameters:
         - $ref: '#/components/parameters/HeaderAuthorizationService'
-        - $ref: "#/components/parameters/QueryProduct"
         - in: path
           name: uid
           description: 用户 uid
-          required: false
+          required: true
           schema:
             type: string
+        - $ref: "#/components/parameters/QueryProduct"
         - in: query
           name: client
           description: 客户端标识，例如 web、ios、android、desktop
@@ -292,6 +306,18 @@ paths:
         - in: query
           name: channel
           description: 客户端渠道，例如 stable、beta、dev
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: module
+          description: 模块名称
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: setting
+          description: 配置项名称
           required: false
           schema:
             type: string

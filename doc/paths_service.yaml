@@ -1,11 +1,17 @@
-  # User API
-  /api/v1/users/settings:unionAll:
+  # Service API
+  /api/v1/users/{uid}/settings:unionAll:
     get:
       tags:
-        - User
-      summary: 获取 user 的所有 settings 信息
+        - Service
+      summary: 获取指定 user 的所有 settings 信息
       parameters:
-        - $ref: '#/components/parameters/HeaderAuthorization'
+        - $ref: '#/components/parameters/HeaderAuthorizationService'
+        - in: path
+          name: uid
+          description: 用户 uid
+          required: true
+          schema:
+            type: string
         - $ref: "#/components/parameters/QueryProduct"
         - in: query
           name: client
@@ -36,15 +42,3 @@
       responses:
         '200':
           $ref: "#/components/responses/MySettingsRes"
-  /api/v1/users/labels:
-    get:
-      tags:
-        - User
-      summary: 获取 user 的所有 labels 信息
-      parameters:
-        - $ref: '#/components/parameters/HeaderAuthorization'
-        - $ref: "#/components/parameters/QueryPageSize"
-        - $ref: "#/components/parameters/QueryPageToken"           
-      responses:
-        '200':
-          $ref: "#/components/responses/MyLabelsRes"

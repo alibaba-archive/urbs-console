@@ -11,6 +11,7 @@ doc:
 	cat doc/openapi_header.yaml >> doc/openapi.yaml
 	cat doc/paths_version.yaml >> doc/openapi.yaml
 	cat doc/paths_user.yaml >> doc/openapi.yaml
+	cat doc/paths_service.yaml >> doc/openapi.yaml
 	widdershins --language_tabs 'shell:Shell' 'http:HTTP' --summary doc/openapi.yaml -o doc/api.md
 
 buildweb:
