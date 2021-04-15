@@ -43,6 +43,9 @@ func (a *User) ListSettingsUnionAll(ctx *gear.Context, args *tpl.MySettingsQuery
 	if args.Setting != "" {
 		return mySettingsRes, nil
 	}
+	if !args.WithLabel {
+		return mySettingsRes, nil
+	}
 	res, err := a.services.UrbsSetting.LabelsCache(ctx, args.Product, args.UID)
 	if err != nil {
 		return nil, err

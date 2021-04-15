@@ -9,13 +9,14 @@ import (
 // MySettingsQueryURL ...
 type MySettingsQueryURL struct {
 	Pagination
-	Kind    string `json:"kind" query:"kind"`
-	UID     string `json:"uid" param:"uid"`
-	Product string `json:"product" query:"product"`
-	Module  string `json:"module" query:"module"`
-	Setting string `json:"setting" query:"setting"`
-	Channel string `json:"channel" query:"channel"`
-	Client  string `json:"client" query:"client"`
+	Kind      string `json:"kind" query:"kind"`
+	UID       string `json:"uid" param:"uid"`
+	Product   string `json:"product" query:"product"`
+	Module    string `json:"module" query:"module"`
+	Setting   string `json:"setting" query:"setting"`
+	Channel   string `json:"channel" query:"channel"`
+	Client    string `json:"client" query:"client"`
+	WithLabel bool   `json:"withLabel" query:"withLabel"`
 }
 
 // Validate 实现 gear.BodyTemplate。

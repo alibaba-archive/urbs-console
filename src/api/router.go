@@ -80,14 +80,14 @@ func newRouterV1(apis *APIs) *gear.Router {
 }
 
 func newRouterServiceAPI(apis *APIs) *gear.Router {
-	routerV2 := gear.NewRouter(gear.RouterOptions{
+	router := gear.NewRouter(gear.RouterOptions{
 		Root: "/api/v1",
 	})
-	routerV2.Use(tracing.New("urbs-console"))
-	routerV2.Use(middleware.VerifyService(services))
+	router.Use(tracing.New("urbs-console"))
+	router.Use(middleware.VerifyService(services))
 	// 读取指定用户的功能配置项，包含 group，支持条件筛选，数据用于服务端
-	routerV2.Get("/users/:uid/settings:unionAll", apis.User.ListSettingsUnionAllBackend)
-	return routerV2
+	router.Get("/users/:uid/settings:unionAll", apis.User.ListSettingsUnionAllBackend)
+	return router
 }
 
 func newRouterAPIV1(apis *APIs) *gear.Router {
