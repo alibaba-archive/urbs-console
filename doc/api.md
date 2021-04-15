@@ -83,29 +83,30 @@ User 用户相关接口
 
 ```shell
 # You can also use wget
-curl -X GET http://urbs-console:8080/api/v1/users/settings:unionAll?product=string \
+curl -X GET http://urbs-console:8080/api/v1/users/{uid}/settings:unionAll?product=string \
   -H 'Accept: application/json' \
   -H 'Authorization: string'
 
 ```
 
 ```http
-GET http://urbs-console:8080/api/v1/users/settings:unionAll?product=string HTTP/1.1
+GET http://urbs-console:8080/api/v1/users/{uid}/settings:unionAll?product=string HTTP/1.1
 Host: urbs-console:8080
 Accept: application/json
 Authorization: string
 
 ```
 
-`GET /api/v1/users/settings:unionAll`
+`GET /api/v1/users/{uid}/settings:unionAll`
 
 <h3 id="获取-user-的所有-settings-信息-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|Authorization|header|string|true|用户 Token, 格式如: `Bearer xxx`；header 不存在，尝试从 cookie 中读取|
+|Authorization|header|string|true|JWT Token, 格式如: `Bearer xxx`|
 |product|query|string|true|产品名称|
-|client|query|string|false|客户端标识，例如 web、ios、android、windows、macos|
+|uid|path|string|false|用户 uid|
+|client|query|string|false|客户端标识，例如 web、ios、android、desktop|
 |channel|query|string|false|客户端渠道，例如 stable、beta、dev|
 |pageSize|query|integer(int32)|false|分页大小，默认为 10，(1-1000]|
 |pageToken|query|string|false|分页请求标记，来自于响应结果的 nextPageToken|

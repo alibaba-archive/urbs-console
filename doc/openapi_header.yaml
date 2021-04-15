@@ -20,6 +20,13 @@ components:
       required: true
       schema:
         type: string
+    HeaderAuthorizationService:
+      in: header
+      name: Authorization
+      description: 'JWT Token, 格式如: `Bearer xxx`'
+      required: true
+      schema:
+        type: string
     HeaderAuthorizationOpenTrust:
       in: header
       name: Authorization

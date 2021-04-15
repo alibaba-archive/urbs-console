@@ -39,6 +39,9 @@ export const CLIENT_TYPE = [{
 }, {
   label: 'miniprogram',
   value: 'miniprogram'
+}, {
+  label: 'desktop',
+  value: 'desktop'
 }];
 
 export interface User {

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file starting fro
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 -----
+## [v1.1.0] - 2021-4-15
+- Separate independent server-side API.
+- Add client type `desktop`.
+
 ## [v1.1.0] - 2020-10-15
 
 **Change:**

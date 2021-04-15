@@ -110,6 +110,18 @@ func Verify(services *service.Services) func(ctx *gear.Context) error {
 	}
 }
 
+// VerifyService ...
+func VerifyService(services *service.Services) func(ctx *gear.Context) error {
+	return func(ctx *gear.Context) error {
+		token := util.ExtractBearerToken(ctx)
+		_, err := Auther.JWT().Verify(token)
+		if err != nil {
+			return gear.ErrUnauthorized.WithMsg(err.Error())
+		}
+		return nil
+	}
+}
+
 // CheckSuperAdmin ...
 func CheckSuperAdmin(blls *bll.Blls) func(ctx *gear.Context) error {
 	return func(ctx *gear.Context) error {
