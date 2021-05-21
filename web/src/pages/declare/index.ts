@@ -42,6 +42,9 @@ export const CLIENT_TYPE = [{
 }, {
   label: 'desktop',
   value: 'desktop'
+}, {
+  label: 'service',
+  value: 'service'
 }];
 
 export interface User {

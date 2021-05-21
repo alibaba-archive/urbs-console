@@ -114,6 +114,9 @@ func Verify(services *service.Services) func(ctx *gear.Context) error {
 func VerifyService(services *service.Services) func(ctx *gear.Context) error {
 	return func(ctx *gear.Context) error {
 		token := util.ExtractBearerToken(ctx)
+		if token == "" {
+			token = util.XAuthExtractor(ctx)
+		}
 		_, err := Auther.JWT().Verify(token)
 		if err != nil {
 			return gear.ErrUnauthorized.WithMsg(err.Error())

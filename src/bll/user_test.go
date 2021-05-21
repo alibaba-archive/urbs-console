@@ -47,9 +47,10 @@ func TestUser(t *testing.T) {
 		value := tpl.RandName()
 
 		args := &tpl.MySettingsQueryURL{
-			UID:     uid,
-			Product: product,
-			Client:  "ios",
+			UID:       uid,
+			Product:   product,
+			Client:    "ios",
+			WithLabel: true,
 		}
 		mockReturn := &tpl.MySettingsRes{
 			Result: []*tpl.MySetting{{
